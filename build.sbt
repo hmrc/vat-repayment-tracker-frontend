@@ -111,3 +111,8 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(integrationTestSettings())
   .configs(IntegrationTest)
+  .settings(
+    scalacOptions ++= Seq(
+      "-Xfatal-warnings",
+      "-feature")
+  )

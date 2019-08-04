@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package config
+@import config.ViewConfig
+@import uk.gov.hmrc.play.views.html._
 
-import javax.inject.{Inject, Singleton}
-import play.api.i18n.MessagesApi
-import play.api.mvc.Request
-import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
-import views.html.error_template
+@this(
+mainTemplate: views.html.main_template
+)
 
-@Singleton
-class ErrorHandler @Inject() (val messagesApi: MessagesApi, implicit val appConfig: AppConfig) extends FrontendErrorHandler {
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
-    error_template(pageTitle, heading, message)
+@()(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+
+@mainTemplate(
+title = messages("heading"),
+bodyClasses = None) {
+
+<h1>@Messages("page1.message")</h1>
+
 }

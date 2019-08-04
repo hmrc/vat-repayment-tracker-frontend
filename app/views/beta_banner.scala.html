@@ -14,21 +14,11 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
+@(feedbackUrl: String)(implicit messages: Messages)
 
-@this(
-mainTemplate: views.html.main_template
-)
-
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
-
-
-
-@contentHeader = {
-  <h1>@heading</h1>
-}
-
-@mainTemplate(title = pageTitle, contentHeader = Some(contentHeader)) {
-<p>@message</p>
-
-}
+<div class="phase-banner">
+    <p>
+        <strong class="phase-tag">@messages("beta-banner.phase-tag")</strong>
+        <span>@{Html(messages("beta-banner.text", feedbackUrl))}</span>
+    </p>
+</div>

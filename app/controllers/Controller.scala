@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.ViewConfig
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -24,13 +24,12 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class Controller @Inject() (appConfig: AppConfig, mcc: MessagesControllerComponents)
+class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1)
   extends FrontendController(mcc) {
 
-  implicit val config: AppConfig = appConfig
+  def showResults: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(page1()))
 
-  def test: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("alive"))
   }
 
 }

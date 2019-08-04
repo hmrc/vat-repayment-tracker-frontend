@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package support
+package controllers
 
+import config.ViewConfig
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-
-import scala.concurrent.{ExecutionContext, Future}
+import play.api.i18n.MessagesApi
+import play.api.mvc.Request
+import play.twirl.api.Html
+import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 
 @Singleton
-class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext: ExecutionContext) {
-
-  val port = 19001
-
-  def showResults(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results")
-
+class ErrorHandler @Inject() (val messagesApi: MessagesApi, implicit val appConfig: ViewConfig, error_template: views.html.error_template) extends FrontendErrorHandler {
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
+    error_template(pageTitle, heading, message)
 }

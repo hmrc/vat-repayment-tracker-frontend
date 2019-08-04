@@ -20,8 +20,8 @@ import play.api.http.Status
 import support.ITSpec
 
 class ControllerSpec extends ITSpec {
-  "Get Test " in {
-    val result = connector.test.futureValue
+  "Get ShowResults " in {
+    val result = connector.showResults.futureValue
     result.status shouldBe Status.OK
   }
 }
