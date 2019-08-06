@@ -86,7 +86,7 @@ trait ITSpec
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .configure().build()
+    .configure( "microservice.services.auth.port" -> WireMockSupport.port).build()
 
   def injector: Injector = fakeApplication().injector
 
