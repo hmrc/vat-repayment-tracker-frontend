@@ -26,12 +26,7 @@ class ControllerSpec extends ITSpec {
     val result = connector.showResults.futureValue
     result.status shouldBe Status.OK
   }
-
-  "Get ShowResults not authorised" in {
-    WireMockResponses.authFailed
-    val result = connector.showResults.failed.futureValue
-    Logger.warn(result.getMessage)
-  }
+  
 
 
 }
