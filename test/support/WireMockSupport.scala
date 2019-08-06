@@ -25,6 +25,9 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   self: Suite =>
 
   implicit val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(WireMockSupport.port))
+  val wireMockHost = "localhost"
+
+  val wireMockBaseUrlAsString = s"http://$wireMockHost:$WireMockSupport.port"
 
   WireMock.configureFor(WireMockSupport.port)
 

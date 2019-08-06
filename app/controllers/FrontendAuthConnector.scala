@@ -16,22 +16,13 @@
 
 package controllers
 
-import play.api.Logger
-import play.api.http.Status
-import support.{ITSpec, WireMockResponses}
+import config.ViewConfig
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.auth.core.PlayAuthConnector
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class ControllerSpec extends ITSpec {
-  "Get ShowResults authorised" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    val result = connector.showResults.futureValue
-    result.status shouldBe Status.OK
-  }
+@Singleton
+class FrontendAuthConnector @Inject() (viewConfig: ViewConfig, val http: DefaultHttpClient) extends PlayAuthConnector {
 
-  "Get ShowResults not authorised" in {
-    WireMockResponses.authFailed
-    val result = connector.showResults.failed.futureValue
-    Logger.warn(result.getMessage)
-  }
-
-
+  override val serviceUrl: String = viewConfig.authUrl
 }

@@ -1,2 +1,4 @@
 heading=Vat Repayment Tracker
 page1.message=Some text blah blah
+unauthorised.title = You do not have access to this service
+unauthorised.heading = You do not have access to this service
