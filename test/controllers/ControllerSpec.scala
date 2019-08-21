@@ -26,7 +26,5 @@ class ControllerSpec extends ITSpec {
     val result = connector.showResults.futureValue
     result.status shouldBe Status.OK
   }
-  
-
 
 }
