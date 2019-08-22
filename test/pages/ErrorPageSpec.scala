@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.ViewConfig
+package pages
 
-@this(
-mainTemplate: views.html.main_template
-)
+import support.{ITSpec, WireMockResponses}
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+class ErrorPageSpec extends ITSpec {
 
+  val path = "/vat-repayment-tracker-frontend/show-results"
 
-@contentHeader = {
-<h1>@heading</h1>
-}
-
-@mainTemplate(title = pageTitle, contentHeader = Some(contentHeader)) {
-<p>@message</p>
-
+  "user is not authorised" in {
+    WireMockResponses.authFailed
+    goTo(path)
+    webDriver.getTitle shouldBe "You do not have access to this service"
+  }
 }

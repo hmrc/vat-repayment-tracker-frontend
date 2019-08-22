@@ -22,29 +22,29 @@ govUkWrapper: views.html.govuk_wrapper
 )
 
 @(title: String,
-  sidebarLinks: Option[Html] = None,
-  contentHeader: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  mainClass: Option[String] = None,
-  scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: ViewConfig)
+sidebarLinks: Option[Html] = None,
+contentHeader: Option[Html] = None,
+bodyClasses: Option[String] = None,
+mainClass: Option[String] = None,
+scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: ViewConfig)
 
 
 @serviceInfoContent = {}
 
 @sidebar = {
-    @if(sidebarLinks.isDefined) {
-        @uiSidebar(sidebarLinks.getOrElse(Html("")), Some("sidebar"))
-    }
+@if(sidebarLinks.isDefined) {
+@uiSidebar(sidebarLinks.getOrElse(Html("")), Some("sidebar"))
+}
 }
 
 
 @govUkWrapper(appConfig = appConfig,
-               title = title,
-               mainClass = mainClass,
-               bodyClasses = bodyClasses,
-               sidebar = sidebar,
-               contentHeader = contentHeader,
-               mainContent = mainContent,
-               serviceInfoContent = serviceInfoContent,
-               scriptElem = scriptElem
+title = title,
+mainClass = mainClass,
+bodyClasses = bodyClasses,
+sidebar = sidebar,
+contentHeader = contentHeader,
+mainContent = mainContent,
+serviceInfoContent = serviceInfoContent,
+scriptElem = scriptElem
 )

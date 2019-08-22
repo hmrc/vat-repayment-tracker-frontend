@@ -25,10 +25,7 @@ case class ViewConfig(
     analyticsToken:  String,
     analyticsHost:   String,
     authUrl:         String,
-    loginUrl:        String,
-    signOut:         String,
-    frontendBaseUrl: String,
-    loginBaseUrl:    String) {
+    frontendBaseUrl: String) {
 
   val reportAProblemPartialUrl = s"$frontendBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$frontendBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -41,9 +38,7 @@ case class ViewConfig(
     analyticsToken  = servicesConfig.getString(s"google-analytics.token"),
     analyticsHost   = servicesConfig.getString(s"google-analytics.host"),
     authUrl         = servicesConfig.baseUrl("auth"),
-    loginUrl        = servicesConfig.getString("urls.login"),
-    signOut         = servicesConfig.getString("urls.logout"),
-    frontendBaseUrl = servicesConfig.getString("frontend-base-url"),
-    loginBaseUrl    = if (runMode.env == "Dev") servicesConfig.getString("frontend-base-url") else "")
+    frontendBaseUrl = servicesConfig.getString("frontend-base-url")
+  )
 
 }

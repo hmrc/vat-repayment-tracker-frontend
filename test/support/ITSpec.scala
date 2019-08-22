@@ -36,6 +36,8 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZonedDateTime}
 
 import com.google.inject.AbstractModule
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfterEach, FreeSpecLike, Matchers}
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
@@ -75,26 +77,31 @@ trait ITSpec
   lazy val config = fakeApplication.injector.instanceOf[Configuration]
   lazy val env = fakeApplication.injector.instanceOf[Environment]
   val baseUrl: String = s"http://localhost:$WireMockSupport.port"
+  val webdriverUr: String = s"http://localhost:$port"
 
   override implicit val patienceConfig = PatienceConfig(
     timeout  = scaled(Span(3, Seconds)),
     interval = scaled(Span(300, Millis)))
 
   implicit val emptyHC = HeaderCarrier()
+  val connector = injector.instanceOf[TestConnector]
 
   def httpClient = fakeApplication().injector.instanceOf[HttpClient]
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
-    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .configure( "microservice.services.auth.port" -> WireMockSupport.port).build()
-
   def injector: Injector = fakeApplication().injector
 
-  val connector = injector.instanceOf[TestConnector]
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
+    .configure("microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.des.port" -> WireMockSupport.port
+    ).build()
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
 
   def status(of: Result) = of.header.status
+
+  protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
+
+  def goTo(path: String) = webDriver.get(s"$webdriverUr$path")
 
 }
 

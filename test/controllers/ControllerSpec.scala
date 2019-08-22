@@ -16,7 +16,6 @@
 
 package controllers
 
-import play.api.Logger
 import play.api.http.Status
 import support.{ITSpec, WireMockResponses}
 
@@ -26,7 +25,10 @@ class ControllerSpec extends ITSpec {
     val result = connector.showResults.futureValue
     result.status shouldBe Status.OK
   }
-  
 
+  "Get ShowResults unauthorised" in {
+    WireMockResponses.authFailed
+    val result = connector.showResults.failed.futureValue
+  }
 
 }
