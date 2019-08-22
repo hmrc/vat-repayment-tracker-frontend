@@ -20,12 +20,12 @@ import com.google.inject.Inject
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 case class ViewConfig(
-    appName:         String,
-    assetsPrefix:    String,
-    analyticsToken:  String,
-    analyticsHost:   String,
-    authUrl:         String,
-    frontendBaseUrl: String) {
+                       appName: String,
+                       assetsPrefix: String,
+                       analyticsToken: String,
+                       analyticsHost: String,
+                       authUrl: String,
+                       frontendBaseUrl: String) {
 
   val reportAProblemPartialUrl = s"$frontendBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$frontendBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -33,11 +33,11 @@ case class ViewConfig(
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
-    appName         = servicesConfig.getString("appName"),
-    assetsPrefix    = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
-    analyticsToken  = servicesConfig.getString(s"google-analytics.token"),
-    analyticsHost   = servicesConfig.getString(s"google-analytics.host"),
-    authUrl         = servicesConfig.baseUrl("auth"),
+    appName = servicesConfig.getString("appName"),
+    assetsPrefix = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
+    analyticsToken = servicesConfig.getString(s"google-analytics.token"),
+    analyticsHost = servicesConfig.getString(s"google-analytics.host"),
+    authUrl = servicesConfig.baseUrl("auth"),
     frontendBaseUrl = servicesConfig.getString("frontend-base-url")
   )
 

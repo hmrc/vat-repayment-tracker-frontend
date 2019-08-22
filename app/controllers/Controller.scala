@@ -19,29 +19,23 @@ package controllers
 import config.ViewConfig
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.mvc._
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages
+import play.api.mvc._
+import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-//AJER Remove this when implemented
-//https://github.com/hmrc/help-to-save-frontend
-//https://github.com/hmrc/auth-demo-frontend
-//http://localhost:9949/auth-login-stub/gg-sign-in
-//http://localhost:9863/vat-repayment-tracker-frontend/show-results
-
 @Singleton
-class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1,
-                            val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler)(implicit ec: ExecutionContext)
+class Controller @Inject()(mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1,
+                           val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler)(implicit ec: ExecutionContext)
 
   extends FrontendController(mcc) with AuthorisedFunctions {
 
   def showResults: Action[AnyContent] = Action.async { implicit request =>
     authorised() {
       Future.successful(Ok(page1()))
-    }.recoverWith{
+    }.recoverWith {
       case e: AuthorisationException =>
         Logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Future.successful(Unauthorized(

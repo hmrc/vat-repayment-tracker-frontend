@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(feedbackUrl: String)(implicit messages: Messages)
+package pages
 
-<div class="phase-banner">
-    <p>
-        <strong class="phase-tag">@messages("beta-banner.phase-tag")</strong>
-        <span>@{Html(messages("beta-banner.text", feedbackUrl))}</span>
-    </p>
-</div>
+import support.{ITSpec, WireMockResponses}
+
+class Page1Spec extends ITSpec {
+
+  val path = "/vat-repayment-tracker-frontend/show-results"
+
+  "user is authorised" in {
+    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    goTo(path)
+    webDriver.getTitle shouldBe "Vat Repayment Tracker"
+  }
+}

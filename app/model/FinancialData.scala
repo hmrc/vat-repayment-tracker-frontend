@@ -21,9 +21,9 @@ import java.time.LocalDate
 import play.api.libs.json.{Json, OFormat, Reads}
 
 /**
- * Case class representing a small subset of the DES 1166 API response
- * containing financial data for a VRN.
- */
+  * Case class representing a small subset of the DES 1166 API response
+  * containing financial data for a VRN.
+  */
 
 final case class FinancialData(idType: Option[String], idNumber: Option[String], regimeType: Option[String], processingDate: Option[String], financialTransactions: Option[Seq[Transaction]])
 
@@ -32,13 +32,13 @@ object FinancialData {
   implicit val format: OFormat[FinancialData] = Json.format[FinancialData]
 }
 
-final case class Transaction(periodKey:            Option[String],
+final case class Transaction(periodKey: Option[String],
                              periodKeyDescription: Option[String],
-                             taxPeriodFrom:        Option[LocalDate],
-                             taxPeriodTo:          Option[LocalDate],
-                             originalAmount:       Option[BigDecimal],
-                             outstandingAmount:    Option[BigDecimal],
-                             items:                Option[Seq[SubItem]])
+                             taxPeriodFrom: Option[LocalDate],
+                             taxPeriodTo: Option[LocalDate],
+                             originalAmount: Option[BigDecimal],
+                             outstandingAmount: Option[BigDecimal],
+                             items: Option[Seq[SubItem]])
 
 object Transaction {
 

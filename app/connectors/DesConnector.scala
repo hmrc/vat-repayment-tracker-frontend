@@ -20,7 +20,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
-import model.{FinancialData, VatObligations, CustomerInformation}
+import model.{CustomerInformation, FinancialData, VatObligations}
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClient, configuration: Configuration)(implicit ec: ExecutionContext) {
+class DesConnector @Inject()(servicesConfig: ServicesConfig, httpClient: HttpClient, configuration: Configuration)(implicit ec: ExecutionContext) {
 
   val serviceURL: String = servicesConfig.baseUrl("des")
   val authorisationToken: String = configuration.get[String]("microservice.services.des.authorization-token")
@@ -47,7 +47,7 @@ class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpCl
     Logger.debug(s"Calling des api 1330 for vrn ${vrn}, fromDate ${fromDate.toString}, toDate ${toDate.toString}")
     implicit val hc: HeaderCarrier = desHeaderCarrier
     val fullDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val getObligationsURL: String = s"$serviceURL$obligationsUrl/${vrn}/VATC?from=${fromDate.format(fullDate)}to=${toDate.format(fullDate)}&status=F"
+    val getObligationsURL: String = s"$serviceURL$obligationsUrl/${vrn}/VATC?from=${fromDate.format(fullDate)}&to=${toDate.format(fullDate)}&status=F"
     Logger.debug(s"""Calling des api 1330 with url ${getObligationsURL}""")
     httpClient.GET[VatObligations](getObligationsURL)
   }

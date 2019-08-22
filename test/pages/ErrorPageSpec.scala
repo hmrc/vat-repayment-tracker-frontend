@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package support
+package pages
 
-import org.scalatest._
-import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
+import support.{ITSpec, WireMockResponses}
 
-trait RichMatchers
-  extends Matchers
-    with DiagrammedAssertions
-    with TryValues
-    with EitherValues
-    with OptionValues
-    with AppendedClues
-    with ScalaFutures
-    with StreamlinedXml
-    with Inside
-    with Eventually
-    with IntegrationPatience
+class ErrorPageSpec extends ITSpec {
+
+  val path = "/vat-repayment-tracker-frontend/show-results"
+
+  "user is not authorised" in {
+    WireMockResponses.authFailed
+    goTo(path)
+    webDriver.getTitle shouldBe "You do not have access to this service"
+  }
+}

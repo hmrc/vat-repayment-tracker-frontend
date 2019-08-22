@@ -20,17 +20,18 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Format
 
 /**
- * Indicates whether a customer has chosen the Welsh correspondence and language option.
- * Stored in ETMP with their customer details and returned from the DES 1363 API
- */
+  * Indicates whether a customer has chosen the Welsh correspondence and language option.
+  * Stored in ETMP with their customer details and returned from the DES 1363 API
+  */
 sealed trait WelshIndicator {
   def isWelsh = this match {
-    case Welsh   => true
+    case Welsh => true
     case English => false
   }
 }
 
 case object Welsh extends WelshIndicator
+
 case object English extends WelshIndicator
 
 object WelshIndicator {
@@ -40,7 +41,7 @@ object WelshIndicator {
   implicit val format: Format[WelshIndicator] = implicitly[Format[Boolean]].inmap(
     welshIndicator => if (welshIndicator) Welsh else English,
     {
-      case Welsh   => true
+      case Welsh => true
       case English => false
     })
 }

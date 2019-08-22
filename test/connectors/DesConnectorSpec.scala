@@ -19,7 +19,6 @@ package connectors
 import java.time.LocalDate
 
 import model._
-import play.api.Logger
 import play.api.libs.json.Json
 import support.{ITSpec, WireMockResponses}
 
@@ -31,13 +30,14 @@ class DesConnectorSpec extends ITSpec {
     WireMockResponses.obligationsOk
     val response: VatObligations = desConnector.getObligations("968501689", LocalDate.now(), LocalDate.now()).futureValue
     response.obligations.head.obligationDetails.size shouldBe 4
-    Json.toJson(response.obligations.head.obligationDetails.last) shouldBe Json.parse(s"""{
-                   | "status": "O",
-                   | "inboundCorrespondenceFromDate": "2018-01-01",
-                   | "inboundCorrespondenceToDate": "2018-01-31",
-                   | "inboundCorrespondenceDateReceived": "2018-04-15",
-                   | "inboundCorrespondenceDueDate": "2018-03-07",
-                   | "periodKey": "18AA"
+    Json.toJson(response.obligations.head.obligationDetails.last) shouldBe Json.parse(
+      s"""{
+         | "status": "O",
+         | "inboundCorrespondenceFromDate": "2018-01-01",
+         | "inboundCorrespondenceToDate": "2018-01-31",
+         | "inboundCorrespondenceDateReceived": "2018-04-15",
+         | "inboundCorrespondenceDueDate": "2018-03-07",
+         | "periodKey": "18AA"
                 }""".stripMargin)
   }
 
@@ -51,21 +51,22 @@ class DesConnectorSpec extends ITSpec {
     WireMockResponses.financialsOk
     val response: FinancialData = desConnector.getFinancialData("968501689").futureValue
     response.financialTransactions.head.size shouldBe 5
-    Json.toJson(response.financialTransactions.head.last) shouldBe Json.parse(s"""{
-                                                                           |            "periodKey": "18AC",
-                                                                           |            "periodKeyDescription": "March 2018",
-                                                                           |            "taxPeriodFrom": "2018-03-01",
-                                                                           |            "taxPeriodTo": "2018-03-31",
-                                                                           |            "originalAmount": 5.56,
-                                                                           |            "outstandingAmount": 5.56,
-                                                                           |            "items": [
-                                                                           |                {
-                                                                           |                    "subItem": "000",
-                                                                           |                    "dueDate": "2018-08-24",
-                                                                           |                    "amount": 5.56
-                                                                           |                }
-                                                                           |            ]
-                                                                           |        }""".stripMargin)
+    Json.toJson(response.financialTransactions.head.last) shouldBe Json.parse(
+      s"""{
+         |            "periodKey": "18AC",
+         |            "periodKeyDescription": "March 2018",
+         |            "taxPeriodFrom": "2018-03-01",
+         |            "taxPeriodTo": "2018-03-31",
+         |            "originalAmount": 5.56,
+         |            "outstandingAmount": 5.56,
+         |            "items": [
+         |                {
+         |                    "subItem": "000",
+         |                    "dueDate": "2018-08-24",
+         |                    "amount": 5.56
+         |                }
+         |            ]
+         |        }""".stripMargin)
   }
 
   "transactions not found" in {

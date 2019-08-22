@@ -5,8 +5,6 @@ import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import wartremover.{Wart, wartremoverErrors, wartremoverExcluded, wartremoverWarnings}
 
-val appName = "vat-repayment-tracker-frontend"
-
 lazy val scalariformSettings = {
   // description of options found here -> https://github.com/scala-ide/scalariform
   ScalariformKeys.preferences := ScalariformKeys.preferences.value
@@ -78,21 +76,20 @@ lazy val scoverageSettings = {
     // Semicolon-separated list of regexs matching classes to exclude
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*BuildInfo.*;Reverse.*;app.Routes.*;prod.*;testOnlyDoNotUseInAppConf.*;forms.*;config.*",
     ScoverageKeys.coverageExcludedFiles := ".*microserviceGlobal.*;.*microserviceWiring.*",
-    ScoverageKeys.coverageMinimum := 10,
+    ScoverageKeys.coverageMinimum := 80,
     ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true
   )
 }
-
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .settings(
-    scalaVersion                                  :=  "2.11.11",
-    resolvers                                     ++= Seq(Resolver.bintrayRepo("hmrc", "releases"), Resolver.jcenterRepo),
-    libraryDependencies                           ++= AppDependencies.compile ++ AppDependencies.test,
-    retrieveManaged                               :=  true,
-    routesGenerator                               :=  InjectedRoutesGenerator,
-    evictionWarningOptions     in update          :=  EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+    scalaVersion := "2.11.11",
+    resolvers ++= Seq(Resolver.bintrayRepo("hmrc", "releases"), Resolver.jcenterRepo),
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    retrieveManaged := true,
+    routesGenerator := InjectedRoutesGenerator,
+    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
   )
   .settings(majorVersion := 0)
   .settings(scalariformSettings: _*)
@@ -116,3 +113,4 @@ lazy val microservice = Project(appName, file("."))
       "-Xfatal-warnings",
       "-feature")
   )
+val appName = "vat-repayment-tracker-frontend"
