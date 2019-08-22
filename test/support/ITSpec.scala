@@ -53,16 +53,16 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.ExecutionContext
 
 /**
-  * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
-  */
+ * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
+ */
 
 trait ITSpec
   extends FreeSpecLike
-    with RichMatchers
-    with BeforeAndAfterEach
-    with GuiceOneServerPerTest
-    with WireMockSupport
-    with Matchers {
+  with RichMatchers
+  with BeforeAndAfterEach
+  with GuiceOneServerPerTest
+  with WireMockSupport
+  with Matchers {
 
   lazy val frozenZonedDateTime: ZonedDateTime = {
     val formatter = DateTimeFormatter.ISO_DATE_TIME
@@ -80,7 +80,7 @@ trait ITSpec
   val webdriverUr: String = s"http://localhost:$port"
 
   override implicit val patienceConfig = PatienceConfig(
-    timeout = scaled(Span(3, Seconds)),
+    timeout  = scaled(Span(3, Seconds)),
     interval = scaled(Span(300, Millis)))
 
   implicit val emptyHC = HeaderCarrier()

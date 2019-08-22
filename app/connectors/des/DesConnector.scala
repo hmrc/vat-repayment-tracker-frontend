@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package connectors
+package connectors.des
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
-import model.{CustomerInformation, FinancialData, VatObligations}
+import model.des.{CustomerInformation, FinancialData, VatObligations}
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DesConnector @Inject()(servicesConfig: ServicesConfig, httpClient: HttpClient, configuration: Configuration)(implicit ec: ExecutionContext) {
+class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClient, configuration: Configuration)(implicit ec: ExecutionContext) {
 
   val serviceURL: String = servicesConfig.baseUrl("des")
   val authorisationToken: String = configuration.get[String]("microservice.services.des.authorization-token")

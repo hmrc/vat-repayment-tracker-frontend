@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package model
+package model.des
 
 import play.api.libs.json._
 
@@ -30,12 +30,12 @@ object VatObligation {
   implicit val format: OFormat[VatObligation] = Json.format[VatObligation]
 }
 
-final case class ObligationDetail(status: String,
-                                  inboundCorrespondenceFromDate: String,
-                                  inboundCorrespondenceToDate: String,
+final case class ObligationDetail(status:                            String,
+                                  inboundCorrespondenceFromDate:     String,
+                                  inboundCorrespondenceToDate:       String,
                                   inboundCorrespondenceDateReceived: Option[String],
-                                  inboundCorrespondenceDueDate: String,
-                                  periodKey: String)
+                                  inboundCorrespondenceDueDate:      String,
+                                  periodKey:                         String)
 
 object ObligationDetail {
 

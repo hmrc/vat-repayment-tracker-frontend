@@ -27,8 +27,8 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject()(mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1,
-                           val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler)(implicit ec: ExecutionContext)
+class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1,
+                            val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler)(implicit ec: ExecutionContext)
 
   extends FrontendController(mcc) with AuthorisedFunctions {
 

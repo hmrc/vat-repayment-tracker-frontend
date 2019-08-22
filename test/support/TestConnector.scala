@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TestConnector @Inject()(httpClient: HttpClient)(implicit executionContext: ExecutionContext) {
+class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext: ExecutionContext) {
 
   val port = 19001
 

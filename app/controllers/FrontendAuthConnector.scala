@@ -22,7 +22,7 @@ import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 @Singleton
-class FrontendAuthConnector @Inject()(viewConfig: ViewConfig, val http: DefaultHttpClient) extends PlayAuthConnector {
+class FrontendAuthConnector @Inject() (viewConfig: ViewConfig, val http: DefaultHttpClient) extends PlayAuthConnector {
 
   override val serviceUrl: String = viewConfig.authUrl
 }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package model
+package model.des
 
 import play.api.libs.json.{JsResult, JsValue, Reads}
 
 /**
-  * Case class representing a small subset of the DES 1363 API response
-  * containing customer data for a VRN.  Currently, we only extract the Welsh Indicator,
-  * but more data can be added in future
-  */
+ * Case class representing a small subset of the DES 1363 API response
+ * containing customer data for a VRN.  Currently, we only extract the Welsh Indicator,
+ * but more data can be added in future
+ */
 final case class CustomerInformation(welshIndicator: Option[WelshIndicator])
 
 object CustomerInformation {

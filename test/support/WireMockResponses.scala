@@ -27,7 +27,7 @@ object WireMockResponses {
 
   val headers: HttpHeaders = new HttpHeaders(
     new HttpHeader("WWW-Authenticate", s"""MDTP detail="$expectedDetail"""")
-    // new HttpHeader("Failing-Enrolment", "SA")
+  // new HttpHeader("Failing-Enrolment", "SA")
   )
 
   def obligationsOk = {

@@ -31,8 +31,8 @@ import scala.util.Random
 
 trait CommonPage
   extends WebBrowser
-    with PatienceConfiguration
-    with RichMatchers {
+  with PatienceConfiguration
+  with RichMatchers {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(10, Seconds)), scaled(Span(200, Millis)))
 
@@ -55,11 +55,11 @@ trait CommonPage
   def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
 
   /**
-    * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
-    * reports what was the page source
-    * and dumps page screenshot
-    * and fails assertion
-    */
+   * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
+   * reports what was the page source
+   * and dumps page screenshot
+   * and fails assertion
+   */
   def probing[A](probingF: WebDriver => A)(implicit driver: WebDriver): A = eventually(probingF(driver)).withClue {
     val maybeDumpedFile = takeADump()
     s"""
@@ -70,10 +70,10 @@ trait CommonPage
   }
 
   /**
-    * If can it will dump PNG image showing current page in browser.
-    *
-    * @return some uri of the dumped file or none
-    */
+   * If can it will dump PNG image showing current page in browser.
+   *
+   * @return some uri of the dumped file or none
+   */
   def takeADump()(implicit driver: WebDriver): Option[String] = {
     //original `capture to` relies on side effecting `targetDir`
     //this is safer implementation
