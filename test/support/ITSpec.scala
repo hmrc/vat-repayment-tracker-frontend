@@ -101,7 +101,7 @@ trait ITSpec
 
   protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
 
-  def goTo(path: String) = webDriver.get(s"$webdriverUr$path")
+  def goToViaPath(path: String) = webDriver.get(s"$webdriverUr$path")
 
 }
 

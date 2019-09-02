@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.{Inject, Singleton}
 import model.des.{CustomerInformation, FinancialData, VatObligations}
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -32,14 +32,14 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClient, configuration: Configuration)(implicit ec: ExecutionContext) {
 
-  val serviceURL: String = servicesConfig.baseUrl("des")
-  val authorisationToken: String = configuration.get[String]("microservice.services.des.authorization-token")
-  val serviceEnvironment: String = configuration.get[String]("microservice.services.des.environment")
-  val obligationsUrl: String = configuration.get[String]("microservice.services.des.obligations-url")
-  val financialsUrl: String = configuration.get[String]("microservice.services.des.financials-url")
-  val customerUrl: String = configuration.get[String]("microservice.services.des.customer-url")
+  private val serviceURL: String = servicesConfig.baseUrl("des")
+  private val authorisationToken: String = configuration.get[String]("microservice.services.des.authorization-token")
+  private val serviceEnvironment: String = configuration.get[String]("microservice.services.des.environment")
+  private val obligationsUrl: String = configuration.get[String]("microservice.services.des.obligations-url")
+  private val financialsUrl: String = configuration.get[String]("microservice.services.des.financials-url")
+  private val customerUrl: String = configuration.get[String]("microservice.services.des.customer-url")
 
-  val desHeaderCarrier: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(s"Bearer $authorisationToken")))
+  private val desHeaderCarrier: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(s"Bearer $authorisationToken")))
     .withExtraHeaders("Environment" -> serviceEnvironment)
 
   //may not need this one
@@ -52,12 +52,14 @@ class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpCl
     httpClient.GET[VatObligations](getObligationsURL)
   }
 
-  def getFinancialData(vrn: String): Future[FinancialData] = {
+  def getFinancialData(vrn: String): Future[Option[FinancialData]] = {
     Logger.debug(s"Calling des api 1166 for vrn ${vrn}")
     implicit val hc: HeaderCarrier = desHeaderCarrier
     val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn}/VATC?onlyOpenItems=true"
     Logger.debug(s"""Calling des api 1166 with url ${getFinancialURL}""")
-    httpClient.GET[FinancialData](getFinancialURL)
+    httpClient.GET[Option[FinancialData]](getFinancialURL).recover {
+      case _: NotFoundException => None
+    }
   }
 
   //this may only be needed for welsh indicator if needed

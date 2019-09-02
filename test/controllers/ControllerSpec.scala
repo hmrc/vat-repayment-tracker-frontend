@@ -22,13 +22,14 @@ import support.{ITSpec, WireMockResponses}
 class ControllerSpec extends ITSpec {
   "Get ShowResults authorised" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    val result = connector.showResults.futureValue
+    WireMockResponses.financialsOk
+    val result = connector.showResults("2345678890").futureValue
     result.status shouldBe Status.OK
   }
 
   "Get ShowResults unauthorised" in {
     WireMockResponses.authFailed
-    val result = connector.showResults.failed.futureValue
+    val result = connector.showResults("234567890").failed.futureValue
   }
 
 }

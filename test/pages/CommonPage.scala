@@ -31,7 +31,7 @@ import scala.util.Random
 
 trait CommonPage
   extends WebBrowser
-  with PatienceConfiguration
+  // with PatienceConfiguration
   with RichMatchers {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(10, Seconds)), scaled(Span(200, Millis)))
