@@ -16,19 +16,21 @@
 
 package pages
 
+import org.openqa.selenium.WebDriver
+import org.scalatest.Assertion
 import org.openqa.selenium.By
-import support.{ITSpec, WireMockResponses}
 
-class NoVatRepaymentsFoundSpec extends ITSpec with CommonPage {
+object Page1 extends CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/234567890"
+  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
-  "user is authorised and no financial data found" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsNotFound
-    goToViaPath(path)
-    webDriver.getTitle shouldBe "Vat Repayment Tracker"
-    probing(_.findElement(By.id("main-message")).getText) shouldBe "No VAT repayments in progress"
+  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
+
+  def readMainMessage()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
+
+  def assertPageIsDisplayed(vrn: String)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}${vrn}"""
+    readTitle shouldBe "Vat Repayment Tracker"
+    readMainMessage shouldBe "Some text blah blah"
   }
-
 }

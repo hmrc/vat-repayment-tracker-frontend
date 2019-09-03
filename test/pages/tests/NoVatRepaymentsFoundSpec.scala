@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package pages.tests
 
+import pages.NoVatRepaymentsFoundPage
 import support.{ITSpec, WireMockResponses}
 
-class ErrorPageSpec extends ITSpec {
+class NoVatRepaymentsFoundSpec extends ITSpec {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/2345678900"
+  val vrn = "234567890"
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
 
-  "user is not authorised" in {
-    WireMockResponses.authFailed
+  "user is authorised and no financial data found" in {
+    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    WireMockResponses.financialsNotFound
     goToViaPath(path)
-    webDriver.getTitle shouldBe "You do not have access to this service"
+    NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
+
   }
+
 }
