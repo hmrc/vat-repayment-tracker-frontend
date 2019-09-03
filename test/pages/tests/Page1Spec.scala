@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package pages.tests
 
-import org.openqa.selenium.By
+import pages.Page1
 import support.{ITSpec, WireMockResponses}
 
-class Page1Spec extends ITSpec with CommonPage {
+class Page1Spec extends ITSpec {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/234567890"
+  val vrn = "234567890"
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
 
   "user is authorised and financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     WireMockResponses.financialsOk
     goToViaPath(path)
-    webDriver.getTitle shouldBe "Vat Repayment Tracker"
-    probing(_.findElement(By.id("main-message")).getText) shouldBe "Some text blah blah"
+    Page1.assertPageIsDisplayed(vrn)
+
   }
+
 }
