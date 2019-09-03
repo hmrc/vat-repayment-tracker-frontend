@@ -28,7 +28,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1,
+class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, one_payment: views.html.one_payment,
                             val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler,
                             desConnector: DesConnector, no_vat_repayments: views.html.no_vat_repayments)(implicit ec: ExecutionContext)
 
@@ -40,7 +40,7 @@ class Controller @Inject() (mcc: MessagesControllerComponents, implicit val view
       for {
         financialData <- desConnector.getFinancialData(vrn)
         result <- financialData match {
-          case Some(data) => Future.successful(Ok(page1()))
+          case Some(data) => Future.successful(Ok(one_payment()))
           case None       => Future.successful(Ok(no_vat_repayments()))
         }
       } yield (result)

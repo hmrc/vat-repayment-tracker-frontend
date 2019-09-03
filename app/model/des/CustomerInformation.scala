@@ -16,27 +16,36 @@
 
 package model.des
 
-import play.api.libs.json.{JsResult, JsValue, Reads}
+import play.api.libs.json._
 
-/**
- * Case class representing a small subset of the DES 1363 API response
- * containing customer data for a VRN.  Currently, we only extract the Welsh Indicator,
- * but more data can be added in future
- */
-final case class CustomerInformation(welshIndicator: Option[WelshIndicator])
+final case class CustomerInformation(approvedInformation: Option[ApprovedInformation])
 
 object CustomerInformation {
-
-  val empty: CustomerInformation = CustomerInformation(None)
-
-  implicit val reads: Reads[CustomerInformation] = new Reads[CustomerInformation] {
-    override def reads(json: JsValue): JsResult[CustomerInformation] = {
-      for {
-        welshIndicator <- (json \ "approvedInformation" \ "customerDetails" \ "welshIndicator").validateOpt[WelshIndicator]
-      } yield {
-        CustomerInformation(welshIndicator)
-      }
-    }
-  }
+  implicit val reads: Reads[CustomerInformation] = Json.reads[CustomerInformation]
+  implicit val format: OFormat[CustomerInformation] = Json.format[CustomerInformation]
 }
 
+final case class ApprovedInformation(PPOB: Option[PPOB], bankDetails: Option[BankDetails])
+object ApprovedInformation {
+
+  implicit val reads: Reads[ApprovedInformation] = Json.reads[ApprovedInformation]
+  implicit val format: OFormat[ApprovedInformation] = Json.format[ApprovedInformation]
+}
+
+final case class PPOB(address: Address)
+object PPOB {
+  implicit val reads: Reads[PPOB] = Json.reads[PPOB]
+  implicit val format: OFormat[PPOB] = Json.format[PPOB]
+}
+
+final case class Address(line1: String, line2: String, line3: String, line4: String, postCode: String, countryCode: String)
+object Address {
+  implicit val reads: Reads[Address] = Json.reads[Address]
+  implicit val format: OFormat[Address] = Json.format[Address]
+}
+
+final case class BankDetails(accountHolderName: String, bankAccountNumber: String, sortCode: String)
+object BankDetails {
+  implicit val reads: Reads[BankDetails] = Json.reads[BankDetails]
+  implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
+}

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.ViewConfig
-@import uk.gov.hmrc.play.views.html._
+package pages.tests
 
-@this(
-mainTemplate: views.html.main_template
-)
+import pages.OnePayment
+import support.{ITSpec, WireMockResponses}
 
-@()(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+class OnePaymentSpec extends ITSpec {
 
-@mainTemplate(
-title = messages("heading"),
-bodyClasses = None) {
+  val vrn = "234567890"
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
 
-<h1 id="main-message">@Messages("page1.message")</h1>
+  "user is authorised and financial data found" in {
+    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    WireMockResponses.financialsOk
+    goToViaPath(path)
+    OnePayment.assertPageIsDisplayed(vrn)
+
+  }
 
 }

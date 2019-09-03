@@ -20,7 +20,7 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 import org.openqa.selenium.By
 
-object Page1 extends CommonPage {
+object OnePayment extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
@@ -31,6 +31,6 @@ object Page1 extends CommonPage {
   def assertPageIsDisplayed(vrn: String)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn}"""
     readTitle shouldBe "Vat Repayment Tracker"
-    readMainMessage shouldBe "Some text blah blah"
+    readMainMessage shouldBe "We are processing your VAT repayment"
   }
 }

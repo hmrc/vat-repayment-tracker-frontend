@@ -89,14 +89,27 @@ class DesConnectorSpec extends ITSpec {
 
   "find some customer data" in {
     WireMockResponses.customerDataOk
-    val response: CustomerInformation = desConnector.getCustomerData("968501689").futureValue
-    response.welshIndicator.getOrElse(English) shouldBe Welsh
+
+    val futureResponse: Option[CustomerInformation] = desConnector.getCustomerData("968501689").futureValue
+    futureResponse match {
+      case Some(response) => {
+        Json.toJson(response.approvedInformation) shouldBe Json.parse(
+          s"""{"PPOB":{"address":{"line1":"VAT PPOB Line1","line2":"VAT PPOB Line2","line3":"VAT PPOB Line3",
+             |"line4":"VAT PPOB Line4","postCode":"TF3 4ER","countryCode":"GB"}},
+             |"bankDetails":{"accountHolderName":"*********","bankAccountNumber":"****2490","sortCode":"40****"}}""".stripMargin)
+      }
+      case None => "did not find any customer data" shouldBe "test failed"
+    }
+
   }
 
   "customer data not found" in {
     WireMockResponses.customerNotFound
-    val response = desConnector.getCustomerData("968501689").failed.futureValue
-    response.getMessage contains "returned 404"
+    val futureResponse = desConnector.getCustomerData("968501689").futureValue
+    futureResponse match {
+      case Some(response) => "found customer data" shouldBe "test failed"
+      case None           => "None" shouldBe "None"
+    }
   }
 
 }

@@ -60,13 +60,12 @@ class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpCl
     httpClient.GET[Option[FinancialData]](getFinancialURL)
   }
 
-  //this may only be needed for welsh indicator if needed
-  def getCustomerData(vrn: String): Future[CustomerInformation] = {
+  def getCustomerData(vrn: String): Future[Option[CustomerInformation]] = {
     Logger.debug(s"Calling des api 1363 for vrn ${vrn}")
     implicit val hc: HeaderCarrier = desHeaderCarrier
     val getCustomerURL: String = s"$serviceURL$customerUrl/${vrn}/information:"
     Logger.debug(s"""Calling des api 1363 with url ${getCustomerURL}""")
-    httpClient.GET[CustomerInformation](getCustomerURL)
+    httpClient.GET[Option[CustomerInformation]](getCustomerURL)
   }
 
 }

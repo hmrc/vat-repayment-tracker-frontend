@@ -1,5 +1,13 @@
 heading=Vat Repayment Tracker
-page1.message=Some text blah blah
+one_payment.message=We are processing your VAT repayment
+one_payment.amount.claimed=Amount claimed
+one_payment.est.repayment.date=Estimated repayment date
+one_payment.date.recvd=VAT Return received on
+one_payment.period=VAT Return period
+one_payment.when=When we will repay you
+one_payment.when.desc=We will ususally repay you before the estimated repayment date, but it may take longer.  You do not need to contact us before this date.
+one_payment.repayment.details=Your repayment details
+one_payment.manage.link=Manage your repayment account
 unauthorised.title = You do not have access to this service
 unauthorised.heading = You do not have access to this service
 no_vrts.message=No VAT repayments in progress
