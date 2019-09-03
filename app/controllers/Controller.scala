@@ -17,6 +17,7 @@
 package controllers
 
 import config.ViewConfig
+import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.i18n.Messages
@@ -28,13 +29,22 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, page1: views.html.page1,
-                            val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler)(implicit ec: ExecutionContext)
+                            val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler,
+                            desConnector: DesConnector, no_vat_repayments: views.html.no_vat_repayments)(implicit ec: ExecutionContext)
 
   extends FrontendController(mcc) with AuthorisedFunctions {
 
-  def showResults: Action[AnyContent] = Action.async { implicit request =>
+  def showResults(vrn: String): Action[AnyContent] = Action.async { implicit request =>
     authorised() {
-      Future.successful(Ok(page1()))
+
+      for {
+        financialData <- desConnector.getFinancialData(vrn)
+        result <- financialData match {
+          case Some(data) => Future.successful(Ok(page1()))
+          case None       => Future.successful(Ok(no_vat_repayments()))
+        }
+      } yield (result)
+
     }.recoverWith {
       case e: AuthorisationException =>
         Logger.debug(s"Unauthorised because of ${e.reason}, $e")

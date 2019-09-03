@@ -51,30 +51,40 @@ class DesConnectorSpec extends ITSpec {
 
   "find some financial transactions" in {
     WireMockResponses.financialsOk
-    val response: FinancialData = desConnector.getFinancialData("968501689").futureValue
-    response.financialTransactions.head.size shouldBe 5
-    Json.toJson(response.financialTransactions.head.last) shouldBe Json.parse(
-      s"""{
-         |            "periodKey": "18AC",
-         |            "periodKeyDescription": "March 2018",
-         |            "taxPeriodFrom": "2018-03-01",
-         |            "taxPeriodTo": "2018-03-31",
-         |            "originalAmount": 5.56,
-         |            "outstandingAmount": 5.56,
-         |            "items": [
-         |                {
-         |                    "subItem": "000",
-         |                    "dueDate": "2018-08-24",
-         |                    "amount": 5.56
-         |                }
-         |            ]
-         |        }""".stripMargin)
+    val futureResponse: Option[FinancialData] = desConnector.getFinancialData("968501689").futureValue
+    futureResponse match {
+      case Some(response) => {
+        response.financialTransactions.head.size shouldBe 5
+        Json.toJson(response.financialTransactions.head.last) shouldBe Json.parse(
+          s"""{
+             |            "periodKey": "18AC",
+             |            "periodKeyDescription": "March 2018",
+             |            "taxPeriodFrom": "2018-03-01",
+             |            "taxPeriodTo": "2018-03-31",
+             |            "originalAmount": 5.56,
+             |            "outstandingAmount": 5.56,
+             |            "items": [
+             |                {
+             |                    "subItem": "000",
+             |                    "dueDate": "2018-08-24",
+             |                    "amount": 5.56
+             |                }
+             |            ]
+             |        }""".stripMargin)
+      }
+      case None => "did not find any financial data" shouldBe "test failed"
+    }
+
   }
 
   "transactions not found" in {
     WireMockResponses.financialsNotFound
-    val response = desConnector.getFinancialData("968501689").failed.futureValue
-    response.getMessage contains "returned 404"
+    val futureResponse = desConnector.getFinancialData("968501689").futureValue
+    futureResponse match {
+      case Some(response) => "found financial data" shouldBe "test failed"
+      case None           => "None" shouldBe "None"
+    }
+
   }
 
   "find some customer data" in {

@@ -16,15 +16,18 @@
 
 package pages
 
+import org.openqa.selenium.By
 import support.{ITSpec, WireMockResponses}
 
-class Page1Spec extends ITSpec {
+class Page1Spec extends ITSpec with CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/show-results"
+  val path = "/vat-repayment-tracker-frontend/show-results/vrn/234567890"
 
-  "user is authorised" in {
+  "user is authorised and financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    goTo(path)
+    WireMockResponses.financialsOk
+    goToViaPath(path)
     webDriver.getTitle shouldBe "Vat Repayment Tracker"
+    probing(_.findElement(By.id("main-message")).getText) shouldBe "Some text blah blah"
   }
 }

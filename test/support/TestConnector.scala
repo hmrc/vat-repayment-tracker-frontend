@@ -27,6 +27,6 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   val port = 19001
 
-  def showResults(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results")
+  def showResults(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn}")
 
 }

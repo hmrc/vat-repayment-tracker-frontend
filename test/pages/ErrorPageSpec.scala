@@ -20,11 +20,11 @@ import support.{ITSpec, WireMockResponses}
 
 class ErrorPageSpec extends ITSpec {
 
-  val path = "/vat-repayment-tracker-frontend/show-results"
+  val path = "/vat-repayment-tracker-frontend/show-results/vrn/2345678900"
 
   "user is not authorised" in {
     WireMockResponses.authFailed
-    goTo(path)
+    goToViaPath(path)
     webDriver.getTitle shouldBe "You do not have access to this service"
   }
 }

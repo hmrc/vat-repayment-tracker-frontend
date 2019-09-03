@@ -1,4 +1,3 @@
 # microservice specific routes
-GET         /assets/*file                                            @controllers.Assets.at(path="/public", file)
-
-GET        /show-results             controllers.Controller.showResults
+GET         /assets/*file                      @controllers.Assets.at(path="/public", file)
+GET         /show-results/vrn/:vrn             controllers.Controller.showResults(vrn : String)
