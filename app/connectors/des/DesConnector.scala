@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.{Inject, Singleton}
 import model.des.{CustomerInformation, FinancialData, VatObligations}
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier}
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -57,9 +57,7 @@ class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpCl
     implicit val hc: HeaderCarrier = desHeaderCarrier
     val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn}/VATC?onlyOpenItems=true"
     Logger.debug(s"""Calling des api 1166 with url ${getFinancialURL}""")
-    httpClient.GET[Option[FinancialData]](getFinancialURL).recover {
-      case _: NotFoundException => None
-    }
+    httpClient.GET[Option[FinancialData]](getFinancialURL)
   }
 
   //this may only be needed for welsh indicator if needed
