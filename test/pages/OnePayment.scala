@@ -28,9 +28,30 @@ object OnePayment extends CommonPage {
 
   def readMainMessage()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
 
+  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("amount")).getText)
+
+  def readRepayDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("repay-date")).getText)
+
+  def readReceivedDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("received-date")).getText)
+
+  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("period")).getText)
+
+  def readAccName()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
+
+  def readAccSortCode()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)
+
+  def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
+
   def assertPageIsDisplayed(vrn: String)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn}"""
     readTitle shouldBe "Vat Repayment Tracker"
     readMainMessage shouldBe "We are processing your VAT repayment"
+    readAmount shouldBe "£5.56"
+    readRepayDate shouldBe "2018-05-12"
+    readReceivedDate shouldBe "2018-04-12"
+    readPeriod shouldBe "March 2018"
+    readAccName shouldBe "Name on account: *********"
+    readAccSortCode shouldBe "Sort code: ****2490"
+    readAccNumber shouldBe "Account number: 40****"
   }
 }

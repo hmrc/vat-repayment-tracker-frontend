@@ -25,20 +25,19 @@ import play.api.libs.json.{Json, OFormat, Reads}
  * containing financial data for a VRN.
  */
 
-final case class FinancialData(idType: Option[String], idNumber: Option[String], regimeType: Option[String], processingDate: Option[String], financialTransactions: Option[Seq[Transaction]])
+final case class FinancialData(idType: String, idNumber: String, regimeType: String, processingDate: String, financialTransactions: Option[Seq[Transaction]])
 
 object FinancialData {
   implicit val reads: Reads[FinancialData] = Json.reads[FinancialData]
   implicit val format: OFormat[FinancialData] = Json.format[FinancialData]
 }
 
-final case class Transaction(periodKey:            Option[String],
-                             periodKeyDescription: Option[String],
-                             taxPeriodFrom:        Option[LocalDate],
-                             taxPeriodTo:          Option[LocalDate],
-                             originalAmount:       Option[BigDecimal],
-                             outstandingAmount:    Option[BigDecimal],
-                             items:                Option[Seq[SubItem]])
+final case class Transaction(periodKey:            String,
+                             periodKeyDescription: String,
+                             taxPeriodFrom:        LocalDate,
+                             taxPeriodTo:          LocalDate,
+                             originalAmount:       BigDecimal,
+                             outstandingAmount:    BigDecimal)
 
 object Transaction {
 
@@ -46,10 +45,3 @@ object Transaction {
   implicit val format: OFormat[Transaction] = Json.format[Transaction]
 }
 
-final case class SubItem(subItem: Option[String], dueDate: Option[LocalDate], amount: Option[BigDecimal])
-
-object SubItem {
-
-  implicit val reads: Reads[SubItem] = Json.reads[SubItem]
-  implicit val format: OFormat[SubItem] = Json.format[SubItem]
-}

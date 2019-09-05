@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package service
 
-import play.api.http.Status
-import support.{ITSpec, WireMockResponses}
+package service
 
-class ControllerSpec extends ITSpec {
-  "Get ShowResults authorised" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsOkSingle
-    WireMockResponses.customerDataOkWithBankDetails("2345678890")
-    val result = connector.showResults("2345678890").futureValue
-    result.status shouldBe Status.OK
+import support.ITSpec
+
+class CountriesServiceSpec extends ITSpec {
+
+  val countryService = fakeApplication.injector.instanceOf[CountriesService]
+  "countryService" - {
+
+    "should Return a country when Given  a code " in {
+
+      countryService.getCountry("GBR") shouldBe "United Kingdom"
+    }
   }
-
-  "Get ShowResults unauthorised" in {
-    WireMockResponses.authFailed
-    val result = connector.showResults("234567890").failed.futureValue
-  }
-
 }

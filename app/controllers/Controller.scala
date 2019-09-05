@@ -19,9 +19,11 @@ package controllers
 import config.ViewConfig
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
+import model.des.{ApprovedInformation, Transaction}
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc._
+import service.des.DesService
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -30,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, one_payment: views.html.one_payment,
                             val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler,
-                            desConnector: DesConnector, no_vat_repayments: views.html.no_vat_repayments)(implicit ec: ExecutionContext)
+                            desConnector: DesConnector, no_vat_repayments: views.html.no_vat_repayments, desService: DesService)(implicit ec: ExecutionContext)
 
   extends FrontendController(mcc) with AuthorisedFunctions {
 
@@ -38,10 +40,35 @@ class Controller @Inject() (mcc: MessagesControllerComponents, implicit val view
     authorised() {
 
       for {
-        financialData <- desConnector.getFinancialData(vrn)
-        result <- financialData match {
-          case Some(data) => Future.successful(Ok(one_payment()))
-          case None       => Future.successful(Ok(no_vat_repayments()))
+        futureFinancialData <- desConnector.getFinancialData(vrn)
+        futureCustomerData <- desConnector.getCustomerData(vrn)
+
+        //should not happen as we are logged in.
+        customerData: ApprovedInformation = futureCustomerData.getOrElse(throw new RuntimeException(s"""No Customer data found for VRN: ${vrn}""")).unWrap(vrn)
+
+        result <- futureFinancialData match {
+
+          case Some(data) => {
+            val transactions = data.financialTransactions.getOrElse(Seq[Transaction]())
+            transactions.size match {
+              case 0 => Future.successful(Ok(no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
+              case 1 => {
+                for {
+                  obligationDates <- desService.getObligations(vrn, transactions(0).periodKey)
+                } yield Ok(one_payment(transactions(0).originalAmount.toString(),
+                                       obligationDates,
+                                       transactions(0).periodKeyDescription,
+                                       customerData.bankDetailsExist,
+                                       customerData.bankDetails))
+              }
+              case _ => throw new RuntimeException("todo: implement multiple page")
+            }
+
+          }
+
+          case None => {
+            Future.successful(Ok(no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
+          }
         }
       } yield (result)
 

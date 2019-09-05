@@ -26,7 +26,9 @@ class OnePaymentSpec extends ITSpec {
 
   "user is authorised and financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsOk
+    WireMockResponses.financialsOkSingle
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
+    WireMockResponses.obligationsOk(vrn)
     goToViaPath(path)
     OnePayment.assertPageIsDisplayed(vrn)
 

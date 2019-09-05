@@ -16,10 +16,21 @@
 
 @import config.ViewConfig
 @import uk.gov.hmrc.play.views.html._
+@import model.des.BankDetails
+@import model.des.ObligationDates
 
 @this(
 mainTemplate: views.html.main_template
 )
+
+@(
+amountClaimed: String,
+obligationDates: ObligationDates,
+period: String,
+showBankDetails: Boolean,
+bankDetails: Option[BankDetails]
+)(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+
 
 @()(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
 
@@ -34,7 +45,13 @@ bodyClasses = None) {
   <td>@Messages("one_payment.amount.claimed")</td><td>@Messages("one_payment.est.repayment.date")</td>
  </tr>
  <tr>
+  <td id="amount">£@amountClaimed</td><td id="repay-date">@obligationDates.estimatedPaymentDate</td>
+ </tr>
+ <tr>
   <td>@Messages("one_payment.date.recvd")</td><td>@Messages("one_payment.period")</td>
+ </tr>
+ <tr>
+  <td id="received-date">@obligationDates.inboundCorrespondenceDateReceived</td><td id="period">@period</td>
  </tr>
 </table>
 </br>
@@ -42,6 +59,13 @@ bodyClasses = None) {
 <h2>@Messages("one_payment.when")</h2>
 <p>@Messages("one_payment.when.desc")</p>
 </br>
-<h2>@Messages("one_payment.repayment.details")</h2>
-<p><a href="www.changeme.com">@Messages("one_payment.manage.link")</a></p>
+<h2>@Messages("shared.repayment.details")</h2>
+@if(showBankDetails) {
+<p>@Messages("no_vrts.bank.line1")</p>
+<p id="acc-name">@Messages("no_vrts.bank.line2") @bankDetails.fold("")(_.accountHolderName)</p>
+<p id="acc-sort-code">@Messages("no_vrts.bank.line3") @bankDetails.fold("")(_.bankAccountNumber)</p>
+<p id="acc-number">@Messages("no_vrts.bank.line4") @bankDetails.fold("")(_.sortCode)</p>
+}
+
+<p><a href="www.changeme.com">@Messages("shared.manage.link")</a></p>
 }

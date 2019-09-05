@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-package pages
+package model
 
-import org.openqa.selenium.By
-import support.{ITSpec, WireMockResponses}
-
-class NoVatRepaymentsFoundSpec extends ITSpec with CommonPage {
-
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/234567890"
-
-  "user is authorised and no financial data found" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsNotFound
-    goToViaPath(path)
-    webDriver.getTitle shouldBe "Vat Repayment Tracker"
-    probing(_.findElement(By.id("main-message")).getText) shouldBe "No VAT repayments in progress"
-  }
-
-}
+final case class Country(name: String, code: String)

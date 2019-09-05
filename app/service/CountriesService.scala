@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package service
 
-import play.api.http.Status
-import support.{ITSpec, WireMockResponses}
+import javax.inject.{Inject, Singleton}
+import model.Country
+import play.api.Environment
 
-class ControllerSpec extends ITSpec {
-  "Get ShowResults authorised" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsOkSingle
-    WireMockResponses.customerDataOkWithBankDetails("2345678890")
-    val result = connector.showResults("2345678890").futureValue
-    result.status shouldBe Status.OK
-  }
+import scala.io.Source
 
-  "Get ShowResults unauthorised" in {
-    WireMockResponses.authFailed
-    val result = connector.showResults("234567890").failed.futureValue
-  }
+@Singleton
+class CountriesService @Inject() (env: Environment) {
+
+  private val pattern = "([A-Z]{3})=(.*)".r
+
+  def getCountry(countryCode: String): String =
+    Source.fromFile(env.getFile("conf/country-codes-en.properties")).getLines().map {
+      case pattern(code, name) => Country(name = name, code = code)
+    }.toSeq.filter(c => c.code.equals(countryCode)).headOption.getOrElse(throw new RuntimeException(s"""No Countrycode for ${countryCode}""")).name
 
 }
+

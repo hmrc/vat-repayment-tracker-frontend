@@ -30,7 +30,7 @@ object WireMockResponses {
   // new HttpHeader("Failing-Enrolment", "SA")
   )
 
-  def obligationsOk = {
+  def obligationsOk(vrn: String) = {
     stubFor(get(urlMatching("/enterprise/obligation-data/vrn/.*"))
       .willReturn(aResponse()
         .withStatus(200)
@@ -39,6 +39,9 @@ object WireMockResponses {
              {
                  "obligations": [
                      {
+                      "identification": {
+                          "incomeSourceType": "ITSA","referenceNumber": "${vrn}","referenceType": "VRN"
+                         },
                          "obligationDetails": [
                              {
                                  "status": "O",
@@ -80,7 +83,7 @@ object WireMockResponses {
 
   }
 
-  def financialsOk = {
+  def financialsOkMultiple = {
     stubFor(get(urlMatching("/enterprise/financial-data/VRN/.*"))
       .willReturn(aResponse()
         .withStatus(200)
@@ -240,8 +243,53 @@ object WireMockResponses {
 
   }
 
-  def customerDataOk = {
-    stubFor(get(urlMatching("/vat/customer/vrn/.*"))
+  def financialsOkSingle = {
+    stubFor(get(urlMatching("/enterprise/financial-data/VRN/.*"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          s"""
+             {
+                 "idType": "VRN",
+                 "idNumber": "999973804",
+                 "regimeType": "VATC",
+                 "processingDate": "2019-08-20T10:44:05Z",
+                 "financialTransactions": [
+                     {
+                         "chargeType": "VAT PA Default Interest",
+                         "mainType": "VAT PA Default Interest",
+                         "periodKey": "18AC",
+                         "periodKeyDescription": "March 2018",
+                         "taxPeriodFrom": "2018-03-01",
+                         "taxPeriodTo": "2018-03-31",
+                         "businessPartner": "0100113120",
+                         "contractAccountCategory": "33",
+                         "contractAccount": "091700000405",
+                         "contractObjectType": "ZVAT",
+                         "contractObject": "00000180000000000165",
+                         "sapDocumentNumber": "003360001206",
+                         "sapDocumentNumberItem": "0002",
+                         "chargeReference": "XV002616013469",
+                         "mainTransaction": "4708",
+                         "subTransaction": "1175",
+                         "originalAmount": 5.56,
+                         "outstandingAmount": 5.56,
+                         "items": [
+                             {
+                                 "subItem": "000",
+                                 "dueDate": "2018-08-24",
+                                 "amount": 5.56
+                             }
+                         ]
+                     }
+                 ]
+             }
+       """.stripMargin)))
+
+  }
+
+  def customerDataOkWithBankDetails(vrn: String) = {
+    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn}/information"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -340,6 +388,101 @@ object WireMockResponses {
 
   }
 
+  def customerDataOkWithoutBankDetails(vrn: String) = {
+    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn}/information"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          s"""
+             {
+                 "approvedInformation": {
+                     "customerDetails": {
+                         "nameIsReadOnly": true,
+                         "organisationName": "TAXPAYER NAME_1",
+                         "dataOrigin": "0001",
+                         "mandationStatus": "1",
+                         "registrationReason": "0001",
+                         "effectiveRegistrationDate": "2017-01-02",
+                         "businessStartDate": "2017-01-01",
+                         "welshIndicator": true,
+                         "partyType": "50",
+                         "optionToTax": true,
+                         "isPartialMigration": false,
+                         "isInsolvent": false,
+                         "overseasIndicator": true
+                     },
+                     "PPOB": {
+                         "address": {
+                             "line1": "VAT PPOB Line1",
+                             "line2": "VAT PPOB Line2",
+                             "line3": "VAT PPOB Line3",
+                             "line4": "VAT PPOB Line4",
+                             "postCode": "TF3 4ER",
+                             "countryCode": "GB"
+                         },
+                         "contactDetails": {
+                             "primaryPhoneNumber": "012345678901",
+                             "mobileNumber": "012345678902",
+                             "faxNumber": "012345678903",
+                             "emailAddress": "lewis.hay@digital.hmrc.gov.uk",
+                             "emailVerified": true
+                         },
+                         "websiteAddress": "www.tumbleweed.com"
+                     },
+                     "businessActivities": {
+                         "primaryMainCode": "10410",
+                         "mainCode2": "10611",
+                         "mainCode3": "10710",
+                         "mainCode4": "10720"
+                     },
+                     "flatRateScheme": {
+                         "FRSCategory": "003",
+                         "FRSPercentage": 59.99,
+                         "startDate": "0001-01-01",
+                         "endDate": "9999-12-31",
+                         "limitedCostTrader": true
+                     },
+                     "returnPeriod": {
+                         "stdReturnPeriod": "MM"
+                     }
+                 },
+                 "inFlightInformation": {
+                     "changeIndicators": {
+                         "organisationDetails": false,
+                         "PPOBDetails": false,
+                         "correspondenceContactDetails": false,
+                         "bankDetails": true,
+                         "returnPeriod": false,
+                         "flatRateScheme": false,
+                         "businessActivities": false,
+                         "deregister": false,
+                         "effectiveDateOfRegistration": false,
+                         "mandationStatus": true
+                     },
+                     "inFlightChanges": {
+                         "bankDetails": {
+                             "formInformation": {
+                                 "formBundle": "092000001020",
+                                 "dateReceived": "2019-03-04"
+                             },
+                             "accountHolderName": "******",
+                             "bankAccountNumber": "****2490",
+                             "sortCode": "****84"
+                         },
+                         "mandationStatus": {
+                             "formInformation": {
+                                 "formBundle": "092000002124",
+                                 "dateReceived": "2019-08-15"
+                             },
+                             "mandationStatus": "3"
+                         }
+                     }
+                 }
+             }
+       """.stripMargin)))
+
+  }
+
   def financialsNotFound = {
     stubFor(get(urlMatching("/enterprise/financial-data/VRN/.*"))
       .willReturn(aResponse()
@@ -357,19 +500,19 @@ object WireMockResponses {
   def obligationsNotFound = {
     stubFor(get(urlMatching("/enterprise/obligation-data/vrn/.*"))
       .willReturn(aResponse()
-        .withStatus(403)
+        .withStatus(404)
         .withBody(
           s"""
              {
-                 "code": "NOT_FOUND_BPKEY",
-                 "reason": "The remote endpoint has indicated that business partner key information cannot be found for the idNumber."
+                 "code": "NOT_FOUND",
+                 "reason": "The remote endpoint has indicated that no data can be found."
              }
        """.stripMargin)))
 
   }
 
-  def customerNotFound = {
-    stubFor(get(urlMatching("/vat/customer/vrn/.*"))
+  def customerNotFound(vrn: String) = {
+    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn}/information"""))
       .willReturn(aResponse()
         .withStatus(404)
         .withBody(

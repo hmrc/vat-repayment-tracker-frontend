@@ -27,6 +27,7 @@ class NoVatRepaymentsFoundSpec extends ITSpec {
   "user is authorised and no financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     WireMockResponses.financialsNotFound
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
 

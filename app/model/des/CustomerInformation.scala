@@ -18,30 +18,33 @@ package model.des
 
 import play.api.libs.json._
 
-final case class CustomerInformation(approvedInformation: Option[ApprovedInformation])
+final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
+  def unWrap(vrn: String): ApprovedInformation = {
+    approvedInformation match {
+      case None       => throw new RuntimeException(s"""No Customer data for VRN: ${vrn}""")
+      case Some(data) => data
+    }
+  }
+}
 
 object CustomerInformation {
   implicit val reads: Reads[CustomerInformation] = Json.reads[CustomerInformation]
   implicit val format: OFormat[CustomerInformation] = Json.format[CustomerInformation]
 }
 
-final case class ApprovedInformation(PPOB: Option[PPOB], bankDetails: Option[BankDetails])
+final case class ApprovedInformation(bankDetails: Option[BankDetails]) {
+
+  def bankDetailsExist: Boolean = {
+    bankDetails match {
+      case None    => false
+      case Some(x) => true
+    }
+  }
+}
 object ApprovedInformation {
 
   implicit val reads: Reads[ApprovedInformation] = Json.reads[ApprovedInformation]
   implicit val format: OFormat[ApprovedInformation] = Json.format[ApprovedInformation]
-}
-
-final case class PPOB(address: Address)
-object PPOB {
-  implicit val reads: Reads[PPOB] = Json.reads[PPOB]
-  implicit val format: OFormat[PPOB] = Json.format[PPOB]
-}
-
-final case class Address(line1: String, line2: String, line3: String, line4: String, postCode: String, countryCode: String)
-object Address {
-  implicit val reads: Reads[Address] = Json.reads[Address]
-  implicit val format: OFormat[Address] = Json.format[Address]
 }
 
 final case class BankDetails(accountHolderName: String, bankAccountNumber: String, sortCode: String)
@@ -49,3 +52,4 @@ object BankDetails {
   implicit val reads: Reads[BankDetails] = Json.reads[BankDetails]
   implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
 }
+

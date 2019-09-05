@@ -16,17 +16,32 @@
 
 @import config.ViewConfig
 @import uk.gov.hmrc.play.views.html._
+@import model.des.BankDetails
 
 @this(
 mainTemplate: views.html.main_template
 )
 
-@()(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+@(showBankDetails: Boolean, bankDetails: Option[BankDetails])(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
 
 @mainTemplate(
 title = messages("heading"),
 bodyClasses = None) {
 
 <h1 id="main-message">@Messages("no_vrts.message")</h1>
+<p>@Messages("no_vrts.line1")</p>
+<p>@Messages("no_vrts.line2")</p>
+<p><a href="www.fixme.com">@Messages("no_vrts.view.vat.acc")</a></p>
+<h2>@Messages("shared.repayment.details")</h2>
+@if(showBankDetails) {
+<p>@Messages("no_vrts.bank.line1")</p>
+<p id="acc-name">@Messages("no_vrts.bank.line2") @bankDetails.fold("")(_.accountHolderName)</p>
+<p id="acc-sort-code">@Messages("no_vrts.bank.line3") @bankDetails.fold("")(_.bankAccountNumber)</p>
+<p id="acc-number">@Messages("no_vrts.bank.line4") @bankDetails.fold("")(_.sortCode)</p>
+}
+
+
+<p><a href="www.fixme.com">@Messages("shared.manage.link")</a></p>
+
 
 }
