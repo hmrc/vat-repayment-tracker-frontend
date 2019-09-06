@@ -18,6 +18,7 @@ package controllers
 
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
+import langswitch.OnePayment
 import model.Vrn
 import model.des.{ApprovedInformation, Transaction}
 import play.api.Logger
@@ -37,6 +38,7 @@ class Controller @Inject() (cc:                ControllerComponents,
                             val views:         Views,
                             desConnector:      DesConnector,
                             desService:        DesService,
+                            onePayment:        OnePayment,
                             requestSupport:    RequestSupport)(
     implicit
     ec: ExecutionContext)

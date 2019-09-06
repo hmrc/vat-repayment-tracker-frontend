@@ -19,6 +19,6 @@ package langswitch
 class Example {
 
   class View(implicit lang: Language = Languages.English) {
-    val messageText: String = MessagesA.`Some Message`
+    val messageText: String = MessagesA.`Your repayment details`
   }
 }
