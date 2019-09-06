@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.ViewConfig
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import model.Vrn
@@ -24,24 +23,27 @@ import model.des.{ApprovedInformation, Transaction}
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc._
+import req.RequestSupport
 import service.des.DesService
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject() (mcc:               MessagesControllerComponents,
+class Controller @Inject() (cc:                ControllerComponents,
                             val authConnector: FrontendAuthConnector,
                             errorHandler:      ErrorHandler,
                             val views:         Views,
                             desConnector:      DesConnector,
-                            desService:        DesService)(
+                            desService:        DesService,
+                            requestSupport:    RequestSupport)(
     implicit
     ec: ExecutionContext)
 
-  extends FrontendController(mcc) with AuthorisedFunctions {
+  extends FrontendBaseController(cc) with AuthorisedFunctions {
+
+  import requestSupport._
 
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
     implicit request =>
