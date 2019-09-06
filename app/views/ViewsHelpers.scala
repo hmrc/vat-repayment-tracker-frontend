@@ -16,16 +16,12 @@
 
 package views
 
-import config.ViewConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.play.views.html.helpers._
 import uk.gov.hmrc.play.views.html.layouts._
 
 @Singleton
 class ViewsHelpers @Inject() (
-
-    val viewConfig: ViewConfig,
-
     //copied from uk.gov.hmrc.play.views.html.helpers
     val address:                    Address,
     val dateFields:                 DateFields,
@@ -61,12 +57,5 @@ class ViewsHelpers @Inject() (
     val optimizelySnippet: OptimizelySnippet,
     val gtmSnippet:        GTMSnippet,
     val serviceInfo:       ServiceInfo,
-    val sidebar:           Sidebar,
-
-    val govUkTemplate: _root_.views.html.layouts.GovUkTemplate,
-    val govUkWrapper:  _root_.views.html.govuk_wrapper,
-
-    //our partials
-
-    mainTemplate: _root_.views.html.main_template
+    val sidebar:           Sidebar
 )

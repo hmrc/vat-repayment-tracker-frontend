@@ -15,13 +15,12 @@
  *@
 
 @import config.ViewConfig
-@import uk.gov.hmrc.play.views.html._
 @import model.des.BankDetails
 @import model.des.ObligationDates
-import views.ViewsHelpers
 
 @this(
-  viewsHelpers: ViewsHelpers,
+  mainTemplate: views.html.main_template,
+  viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig
 )
 
@@ -37,7 +36,7 @@ import views.ViewsHelpers
 )
 
 
-@viewsHelpers.mainTemplate(
+@mainTemplate(
   title = messages("heading"),
   bodyClasses = None
 ) {

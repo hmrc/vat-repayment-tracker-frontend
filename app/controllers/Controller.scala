@@ -32,15 +32,16 @@ import views.views.Views
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject() (
-    mcc:           MessagesControllerComponents,
-    authConnector: FrontendAuthConnector,
-    errorHandler:  ErrorHandler,
-    desConnector:  DesConnector,
-    views:         Views,
-    desService:    DesService)(
+class Controller @Inject() (mcc:               MessagesControllerComponents,
+                            val authConnector: FrontendAuthConnector,
+                            errorHandler:      ErrorHandler,
+                            val views:         Views,
+                            desConnector:      DesConnector,
+                            desService:        DesService)(
     implicit
-    ec: ExecutionContext) extends FrontendController(mcc) with AuthorisedFunctions {
+    ec: ExecutionContext)
+
+  extends FrontendController(mcc) with AuthorisedFunctions {
 
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
     implicit request =>

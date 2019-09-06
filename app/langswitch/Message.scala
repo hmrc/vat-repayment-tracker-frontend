@@ -27,6 +27,7 @@ case class Message(
 
 object Message {
 
+  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def apply(english: String, welsh: String = null): Message = Message(english, Option(welsh))
 
   implicit def show(message: Message)(implicit lang: Language): String = lang match {
@@ -40,8 +41,4 @@ object MessagesA {
   val `Some Message`: Message = Message("someMessage")
   val `Pay your tax`: Message = Message("Pay your tax", "Talwch eich treth")
 
-}
-
-object MessagesB {
-  val `Pay your tax2`: Message = Message("Pay your tax2", "Talwch eich treth2")
 }

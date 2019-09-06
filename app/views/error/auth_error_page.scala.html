@@ -14,10 +14,9 @@
  * limitations under the License.
  *@
 
-@import views.ViewsHelpers
-
 @this(
-  viewsHelpers: ViewsHelpers
+  viewsHelpers: views.ViewsHelpers,
+    govUkWrapper: views.html.govuk_wrapper
 )
 
 @()(
@@ -37,7 +36,7 @@
 @serviceInfoContent = {}
 
 
-@viewsHelpers.govUkWrapper(
+@govUkWrapper(
   title = Messages("global.error.session"),
   mainClass = None,
   bodyClasses = None,

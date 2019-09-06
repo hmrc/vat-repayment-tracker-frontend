@@ -14,11 +14,10 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
-
 @this(
-  viewsHelpers: ViewsHelpers,
-  appConfig: ViewConfig
+  govUkWrapper: govuk_wrapper,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: config.ViewConfig
 )
 
 @(
@@ -42,7 +41,7 @@
 }
 
 
-@viewsHelpers.govUkWrapper(
+@govUkWrapper(
   title = title,
   mainClass = mainClass,
   bodyClasses = bodyClasses,

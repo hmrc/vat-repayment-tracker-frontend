@@ -15,9 +15,9 @@
  *@
 
 @import model.des.BankDetails
-
 @this(
-  viewsHelpers: ViewsHelpers
+  mainTemplate: views.html.main_template,
+  viewsHelpers: views.ViewsHelpers
 )
 
 @(
@@ -28,7 +28,7 @@
   messages: Messages
 )
 
-@viewsHelpers.mainTemplate(
+@mainTemplate(
   title = messages("heading"),
   bodyClasses = None
 ) {

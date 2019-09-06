@@ -14,13 +14,13 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
 @import play.twirl.api.HtmlFormat
 
 
 @this(
-  viewsHelpers: ViewsHelpers,
-  appConfig: ViewConfig
+  govUkTemplate: views.html.layouts.GovUkTemplate,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: config.ViewConfig
 )
 
 @(
@@ -69,7 +69,10 @@
 }
 
 @footerTop = {}
-@footerLinks = {}
+
+@footerLinks = {
+  @viewsHelpers.footerLinks(None)
+}
 
 @serviceInfo = {
   @viewsHelpers.serviceInfo(
@@ -102,7 +105,7 @@
   )
 }
 
-@viewsHelpers.govUkTemplate(
+@govUkTemplate(
   Some(title),
   bodyClasses)(
   head,
@@ -110,7 +113,7 @@
   insideHeader,
   afterHeader,
   footerTop,
-  Some(viewsHelpers.footerLinks),
+  Some(footerLinks),
   true)(
   content
 )
