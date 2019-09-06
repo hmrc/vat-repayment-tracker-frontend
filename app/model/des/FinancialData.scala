@@ -28,7 +28,6 @@ import play.api.libs.json.{Json, OFormat, Reads}
 final case class FinancialData(idType: String, idNumber: String, regimeType: String, processingDate: String, financialTransactions: Option[Seq[Transaction]])
 
 object FinancialData {
-  implicit val reads: Reads[FinancialData] = Json.reads[FinancialData]
   implicit val format: OFormat[FinancialData] = Json.format[FinancialData]
 }
 
@@ -40,8 +39,6 @@ final case class Transaction(periodKey:            String,
                              outstandingAmount:    BigDecimal)
 
 object Transaction {
-
-  implicit val reads: Reads[Transaction] = Json.reads[Transaction]
   implicit val format: OFormat[Transaction] = Json.format[Transaction]
 }
 

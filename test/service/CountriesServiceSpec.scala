@@ -22,7 +22,7 @@ import support.ITSpec
 
 class CountriesServiceSpec extends ITSpec {
 
-  val countryService = fakeApplication.injector.instanceOf[CountriesService]
+  val countryService = injector.instanceOf[CountriesService]
   "countryService" - {
 
     "should Return a country when Given  a code " in {

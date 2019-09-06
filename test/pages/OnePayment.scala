@@ -16,6 +16,7 @@
 
 package pages
 
+import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 import org.openqa.selenium.By
@@ -42,8 +43,8 @@ object OnePayment extends CommonPage {
 
   def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
-  def assertPageIsDisplayed(vrn: String)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn}"""
+  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Vat Repayment Tracker"
     readMainMessage shouldBe "We are processing your VAT repayment"
     readAmount shouldBe "£5.56"

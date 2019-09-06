@@ -16,6 +16,7 @@
 
 package pages.tests
 
+import model.Vrn
 import pages.OnePayment
 import support.{ITSpec, WireMockResponses}
 
@@ -27,10 +28,10 @@ class OnePaymentSpec extends ITSpec {
   "user is authorised and financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     WireMockResponses.financialsOkSingle
-    WireMockResponses.customerDataOkWithBankDetails(vrn)
-    WireMockResponses.obligationsOk(vrn)
+    WireMockResponses.customerDataOkWithBankDetails(Vrn(vrn))
+    WireMockResponses.obligationsOk(Vrn(vrn))
     goToViaPath(path)
-    OnePayment.assertPageIsDisplayed(vrn)
+    OnePayment.assertPageIsDisplayed(Vrn(vrn))
 
   }
 

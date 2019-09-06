@@ -22,7 +22,9 @@
 mainTemplate: views.html.main_template
 )
 
-@(showBankDetails: Boolean, bankDetails: Option[BankDetails])(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+@(
+showBankDetails: Boolean, bankDetails: Option[BankDetails])(implicit request: Request[_], messages: Messages, appConfig: ViewConfig
+)
 
 @mainTemplate(
 title = messages("heading"),

@@ -19,6 +19,7 @@ package controllers
 import config.ViewConfig
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
+import model.Vrn
 import model.des.{ApprovedInformation, Transaction}
 import play.api.Logger
 import play.api.i18n.Messages
@@ -36,7 +37,7 @@ class Controller @Inject() (mcc: MessagesControllerComponents, implicit val view
 
   extends FrontendController(mcc) with AuthorisedFunctions {
 
-  def showResults(vrn: String): Action[AnyContent] = Action.async { implicit request =>
+  def showResults(vrn: Vrn): Action[AnyContent] = Action.async { implicit request =>
     authorised() {
 
       for {

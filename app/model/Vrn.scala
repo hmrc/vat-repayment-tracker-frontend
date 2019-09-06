@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package pages.tests
+package model
 
-import model.Vrn
-import pages.ErrorPage
-import support.{ITSpec, WireMockResponses}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Format
+import play.api.mvc.PathBindable
+import controllers.ValueClassBinder.valueClassBinder
 
-class ErrorPageSpec extends ITSpec {
+/**
+ * Vat Registration Number (Vrn)
+ */
+final case class Vrn(value: String)
 
-  val vrn = "234567890"
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
+object Vrn {
 
-  "user is authorised and financial data found" in {
-    WireMockResponses.authFailed
-    goToViaPath(path)
-    ErrorPage.assertPageIsDisplayed(Vrn(vrn))
-
-  }
+  implicit val format: Format[Vrn] = implicitly[Format[String]].inmap(Vrn(_), _.value)
+  implicit val vrnBinder: PathBindable[Vrn] = valueClassBinder(_.value)
 
 }
+

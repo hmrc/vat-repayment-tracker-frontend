@@ -16,10 +16,10 @@
 
 package pages
 
+import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 import org.openqa.selenium.By
-import pages.OnePayment.{probing, readAccName, readAccNumber, readAccSortCode}
 
 object NoVatRepaymentsFoundPage extends CommonPage {
 
@@ -35,8 +35,8 @@ object NoVatRepaymentsFoundPage extends CommonPage {
 
   def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
-  def assertPageIsDisplayed(vrn: String)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn}"""
+  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Vat Repayment Tracker"
     readMainMessage shouldBe "No VAT repayments in progress"
     readAccName shouldBe "Name on account: *********"

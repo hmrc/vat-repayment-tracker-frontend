@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
+import model.Vrn
 import model.des.ObligationDates
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DesService @Inject() (desConnector: DesConnector)(implicit ec: ExecutionContext) {
 
-  def getObligations(vrn: String, periodKey: String): Future[ObligationDates] = {
+  def getObligations(vrn: Vrn, periodKey: String): Future[ObligationDates] = {
     for {
       obligations <- desConnector.getObligations(vrn)
       result <- obligations match {

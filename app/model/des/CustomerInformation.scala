@@ -16,10 +16,11 @@
 
 package model.des
 
+import model.Vrn
 import play.api.libs.json._
 
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
-  def unWrap(vrn: String): ApprovedInformation = {
+  def unWrap(vrn: Vrn): ApprovedInformation = {
     approvedInformation match {
       case None       => throw new RuntimeException(s"""No Customer data for VRN: ${vrn}""")
       case Some(data) => data
@@ -28,28 +29,20 @@ final case class CustomerInformation(approvedInformation: Option[ApprovedInforma
 }
 
 object CustomerInformation {
-  implicit val reads: Reads[CustomerInformation] = Json.reads[CustomerInformation]
   implicit val format: OFormat[CustomerInformation] = Json.format[CustomerInformation]
 }
 
 final case class ApprovedInformation(bankDetails: Option[BankDetails]) {
 
-  def bankDetailsExist: Boolean = {
-    bankDetails match {
-      case None    => false
-      case Some(x) => true
-    }
-  }
+  val bankDetailsExist = bankDetails.isDefined
 }
 object ApprovedInformation {
 
-  implicit val reads: Reads[ApprovedInformation] = Json.reads[ApprovedInformation]
   implicit val format: OFormat[ApprovedInformation] = Json.format[ApprovedInformation]
 }
 
 final case class BankDetails(accountHolderName: String, bankAccountNumber: String, sortCode: String)
 object BankDetails {
-  implicit val reads: Reads[BankDetails] = Json.reads[BankDetails]
   implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
 }
 

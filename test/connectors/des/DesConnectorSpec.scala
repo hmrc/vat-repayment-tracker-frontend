@@ -16,6 +16,7 @@
 
 package connectors.des
 
+import model.Vrn
 import model.des._
 import play.api.libs.json.Json
 import support.{ITSpec, WireMockResponses}
@@ -25,8 +26,8 @@ class DesConnectorSpec extends ITSpec {
   val desConnector = injector.instanceOf[DesConnector]
 
   "find some obligations" in {
-    WireMockResponses.obligationsOk("968501689")
-    val futureResponse: Option[VatObligations] = desConnector.getObligations("968501689").futureValue
+    WireMockResponses.obligationsOk(Vrn("968501689"))
+    val futureResponse: Option[VatObligations] = desConnector.getObligations(Vrn("968501689")).futureValue
     futureResponse match {
       case Some(response) => {
         response.obligations.head.obligationDetails.size shouldBe 4
@@ -48,7 +49,7 @@ class DesConnectorSpec extends ITSpec {
   "obligations not found" in {
 
     WireMockResponses.obligationsNotFound
-    val futureResponse = desConnector.getObligations("968501689").futureValue
+    val futureResponse = desConnector.getObligations(Vrn("968501689")).futureValue
     futureResponse match {
       case Some(response) => "found obligaions data" shouldBe "test failed"
       case None           => "None" shouldBe "None"
@@ -57,7 +58,7 @@ class DesConnectorSpec extends ITSpec {
 
   "find some financial transactions" in {
     WireMockResponses.financialsOkMultiple
-    val futureResponse: Option[FinancialData] = desConnector.getFinancialData("968501689").futureValue
+    val futureResponse: Option[FinancialData] = desConnector.getFinancialData(Vrn("968501689")).futureValue
     futureResponse match {
       case Some(response) => {
         response.financialTransactions.head.size shouldBe 5
@@ -78,7 +79,7 @@ class DesConnectorSpec extends ITSpec {
 
   "transactions not found" in {
     WireMockResponses.financialsNotFound
-    val futureResponse = desConnector.getFinancialData("968501689").futureValue
+    val futureResponse = desConnector.getFinancialData(Vrn("968501689")).futureValue
     futureResponse match {
       case Some(response) => "found financial data" shouldBe "test failed"
       case None           => "None" shouldBe "None"
@@ -87,9 +88,9 @@ class DesConnectorSpec extends ITSpec {
   }
 
   "find some customer data" in {
-    WireMockResponses.customerDataOkWithBankDetails("968501689")
+    WireMockResponses.customerDataOkWithBankDetails(Vrn("968501689"))
 
-    val futureResponse: Option[CustomerInformation] = desConnector.getCustomerData("968501689").futureValue
+    val futureResponse: Option[CustomerInformation] = desConnector.getCustomerData(Vrn("968501689")).futureValue
     futureResponse match {
       case Some(response) => {
         Json.toJson(response.approvedInformation) shouldBe Json.parse(
@@ -101,8 +102,8 @@ class DesConnectorSpec extends ITSpec {
   }
 
   "customer data not found" in {
-    WireMockResponses.customerNotFound("968501689")
-    val futureResponse = desConnector.getCustomerData("968501689").futureValue
+    WireMockResponses.customerNotFound(Vrn("968501689"))
+    val futureResponse = desConnector.getCustomerData(Vrn("968501689")).futureValue
     futureResponse match {
       case Some(response) => "found customer data" shouldBe "test failed"
       case None           => "None" shouldBe "None"

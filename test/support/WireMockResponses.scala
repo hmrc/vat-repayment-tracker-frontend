@@ -19,6 +19,7 @@ package support
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.http.{HttpHeader, HttpHeaders}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import model.Vrn
 
 object WireMockResponses {
 
@@ -30,7 +31,7 @@ object WireMockResponses {
   // new HttpHeader("Failing-Enrolment", "SA")
   )
 
-  def obligationsOk(vrn: String) = {
+  def obligationsOk(vrn: Vrn) = {
     stubFor(get(urlMatching("/enterprise/obligation-data/vrn/.*"))
       .willReturn(aResponse()
         .withStatus(200)
@@ -40,7 +41,7 @@ object WireMockResponses {
                  "obligations": [
                      {
                       "identification": {
-                          "incomeSourceType": "ITSA","referenceNumber": "${vrn}","referenceType": "VRN"
+                          "incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"
                          },
                          "obligationDetails": [
                              {
@@ -288,8 +289,8 @@ object WireMockResponses {
 
   }
 
-  def customerDataOkWithBankDetails(vrn: String) = {
-    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn}/information"""))
+  def customerDataOkWithBankDetails(vrn: Vrn) = {
+    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn.value}/information"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -388,8 +389,8 @@ object WireMockResponses {
 
   }
 
-  def customerDataOkWithoutBankDetails(vrn: String) = {
-    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn}/information"""))
+  def customerDataOkWithoutBankDetails(vrn: Vrn) = {
+    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn.value}/information"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -511,8 +512,8 @@ object WireMockResponses {
 
   }
 
-  def customerNotFound(vrn: String) = {
-    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn}/information"""))
+  def customerNotFound(vrn: Vrn) = {
+    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn.value}/information"""))
       .willReturn(aResponse()
         .withStatus(404)
         .withBody(

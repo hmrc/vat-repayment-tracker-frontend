@@ -16,6 +16,7 @@
 
 package pages.tests
 
+import model.Vrn
 import pages.NoVatRepaymentsFoundPage
 import support.{ITSpec, WireMockResponses}
 
@@ -27,9 +28,9 @@ class NoVatRepaymentsFoundSpec extends ITSpec {
   "user is authorised and no financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     WireMockResponses.financialsNotFound
-    WireMockResponses.customerDataOkWithBankDetails(vrn)
+    WireMockResponses.customerDataOkWithBankDetails(Vrn(vrn))
     goToViaPath(path)
-    NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
+    NoVatRepaymentsFoundPage.assertPageIsDisplayed(Vrn(vrn))
 
   }
 
