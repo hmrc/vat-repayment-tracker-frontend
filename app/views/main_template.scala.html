@@ -17,34 +17,38 @@
 @import config.ViewConfig
 
 @this(
-uiSidebar: uk.gov.hmrc.play.views.html.layouts.Sidebar,
-govUkWrapper: views.html.govuk_wrapper
+  viewsHelpers: ViewsHelpers,
+  appConfig: ViewConfig
 )
 
-@(title: String,
-sidebarLinks: Option[Html] = None,
-contentHeader: Option[Html] = None,
-bodyClasses: Option[String] = None,
-mainClass: Option[String] = None,
-scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: ViewConfig)
+@(
+  title: String,
+  sidebarLinks: Option[Html] = None,
+  contentHeader: Option[Html] = None,
+  bodyClasses: Option[String] = None,
+  mainClass: Option[String] = None,
+  scriptElem: Option[Html] = None)(
+  mainContent: Html)(
+  implicit
+  request : Request[_],
+  messages: Messages
+)
 
 
 @serviceInfoContent = {}
 
 @sidebar = {
-@if(sidebarLinks.isDefined) {
-@uiSidebar(sidebarLinks.getOrElse(Html("")), Some("sidebar"))
-}
+  @{sidebarLinks.map(sidebarLinks => viewsHelpers.sidebar(sidebarLinks, Some("sidebar")) )}
 }
 
 
-@govUkWrapper(appConfig = appConfig,
-title = title,
-mainClass = mainClass,
-bodyClasses = bodyClasses,
-sidebar = sidebar,
-contentHeader = contentHeader,
-mainContent = mainContent,
-serviceInfoContent = serviceInfoContent,
-scriptElem = scriptElem
+@viewsHelpers.govUkWrapper(
+  title = title,
+  mainClass = mainClass,
+  bodyClasses = bodyClasses,
+  sidebar = sidebar,
+  contentHeader = contentHeader,
+  mainContent = mainContent,
+  serviceInfoContent = serviceInfoContent,
+  scriptElem = scriptElem
 )

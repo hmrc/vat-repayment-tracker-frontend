@@ -27,62 +27,73 @@ import play.api.mvc._
 import service.des.DesService
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject() (mcc: MessagesControllerComponents, implicit val viewConfig: ViewConfig, one_payment: views.html.one_payment,
-                            val authConnector: FrontendAuthConnector, errorHandler: ErrorHandler,
-                            desConnector: DesConnector, no_vat_repayments: views.html.no_vat_repayments, desService: DesService)(implicit ec: ExecutionContext)
+class Controller @Inject() (
+    mcc:           MessagesControllerComponents,
+    authConnector: FrontendAuthConnector,
+    errorHandler:  ErrorHandler,
+    desConnector:  DesConnector,
+    views:         Views,
+    desService:    DesService)(
+    implicit
+    ec: ExecutionContext) extends FrontendController(mcc) with AuthorisedFunctions {
 
-  extends FrontendController(mcc) with AuthorisedFunctions {
+  def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
+    implicit request =>
+      authorised() {
 
-  def showResults(vrn: Vrn): Action[AnyContent] = Action.async { implicit request =>
-    authorised() {
+        for {
+          futureFinancialData <- desConnector.getFinancialData(vrn)
+          futureCustomerData <- desConnector.getCustomerData(vrn)
 
-      for {
-        futureFinancialData <- desConnector.getFinancialData(vrn)
-        futureCustomerData <- desConnector.getCustomerData(vrn)
+          //should not happen as we are logged in.
+          customerData: ApprovedInformation = futureCustomerData.getOrElse(throw new RuntimeException(
+            s"""No Customer data found for VRN: ${
+              vrn
+            }""")).unWrap(vrn)
 
-        //should not happen as we are logged in.
-        customerData: ApprovedInformation = futureCustomerData.getOrElse(throw new RuntimeException(s"""No Customer data found for VRN: ${vrn}""")).unWrap(vrn)
+          result <- futureFinancialData match {
 
-        result <- futureFinancialData match {
-
-          case Some(data) => {
-            val transactions = data.financialTransactions.getOrElse(Seq[Transaction]())
-            transactions.size match {
-              case 0 => Future.successful(Ok(no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-              case 1 => {
-                for {
-                  obligationDates <- desService.getObligations(vrn, transactions(0).periodKey)
-                } yield Ok(one_payment(transactions(0).originalAmount.toString(),
-                                       obligationDates,
-                                       transactions(0).periodKeyDescription,
-                                       customerData.bankDetailsExist,
-                                       customerData.bankDetails))
+            case Some(data) => {
+              val transactions = data.financialTransactions.getOrElse(Seq[Transaction]())
+              transactions.size match {
+                case 0 => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
+                case 1 => {
+                  for {
+                    obligationDates <- desService.getObligations(vrn, transactions(0).periodKey)
+                  } yield Ok(views.one_payment(transactions(0).originalAmount.toString(),
+                                               obligationDates,
+                                               transactions(0).periodKeyDescription,
+                                               customerData.bankDetailsExist,
+                                               customerData.bankDetails))
+                }
+                case _ => throw new RuntimeException("todo: implement multiple page")
               }
-              case _ => throw new RuntimeException("todo: implement multiple page")
+
             }
 
+            case None => {
+              Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
+            }
           }
+        } yield (result)
 
-          case None => {
-            Future.successful(Ok(no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-          }
-        }
-      } yield (result)
+      }.recoverWith {
+        case e: AuthorisationException =>
+          Logger.debug(s"Unauthorised because of ${
+            e.reason
+          }, $e")
+          Future.successful(Unauthorized(
+            errorHandler.standardErrorTemplate(
+              Messages("unauthorised.title"),
+              Messages("unauthorised.heading"),
+              "")))
 
-    }.recoverWith {
-      case e: AuthorisationException =>
-        Logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        Future.successful(Unauthorized(
-          errorHandler.standardErrorTemplate(
-            Messages("unauthorised.title"),
-            Messages("unauthorised.heading"),
-            "")))
-
-    }
+      }
   }
 
 }

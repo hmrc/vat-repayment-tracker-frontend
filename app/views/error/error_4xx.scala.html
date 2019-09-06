@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import views.ViewsHelpers
+
 @this(
   viewsHelpers: ViewsHelpers
 )
@@ -23,20 +25,27 @@
   heading: String,
   message: String)(
   implicit
-  request: Request[_],
+  request: play.api.mvc.Request[_],
   messages: Messages
 )
 
 
-@contentHeader = {
-<h1>@heading</h1>
+@mainContent = {
+    <h1 class="heading-large" id="not_found_heading">@heading</h1>
+
+    <p>@message</p>
 }
 
-@viewsHelpers.mainTemplate(
+
+@serviceInfoContent = {}
+
+
+@viewsHelpers.govUkWrapper(
   title = pageTitle,
-  contentHeader = Some(contentHeader)
-) {
-
-<p>@message</p>
-
-}
+  mainClass = None,
+  bodyClasses = None,
+  contentHeader = None,
+  mainContent = mainContent,
+  serviceInfoContent = serviceInfoContent,
+  scriptElem = None
+)

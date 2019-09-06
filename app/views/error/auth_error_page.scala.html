@@ -14,29 +14,35 @@
  * limitations under the License.
  *@
 
+@import views.ViewsHelpers
+
 @this(
   viewsHelpers: ViewsHelpers
 )
 
-@(
-  pageTitle: String,
-  heading: String,
-  message: String)(
+@()(
   implicit
-  request: Request[_],
+  request: play.api.mvc.Request[_],
   messages: Messages
 )
 
 
-@contentHeader = {
-<h1>@heading</h1>
-}
+@mainContent = {
+    <h1 class="heading-large">@Messages("error.auth.heading")</h1>
 
-@viewsHelpers.mainTemplate(
-  title = pageTitle,
-  contentHeader = Some(contentHeader)
-) {
-
-<p>@message</p>
+    <p>@Messages("error.auth.para.1")</p>
 
 }
+
+@serviceInfoContent = {}
+
+
+@viewsHelpers.govUkWrapper(
+  title = Messages("global.error.session"),
+  mainClass = None,
+  bodyClasses = None,
+  contentHeader = None,
+  mainContent = mainContent,
+  serviceInfoContent = serviceInfoContent,
+  scriptElem = None
+)

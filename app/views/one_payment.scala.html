@@ -18,25 +18,29 @@
 @import uk.gov.hmrc.play.views.html._
 @import model.des.BankDetails
 @import model.des.ObligationDates
+import views.ViewsHelpers
 
 @this(
-mainTemplate: views.html.main_template
+  viewsHelpers: ViewsHelpers,
+  appConfig: ViewConfig
 )
 
 @(
-amountClaimed: String,
-obligationDates: ObligationDates,
-period: String,
-showBankDetails: Boolean,
-bankDetails: Option[BankDetails]
-)(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+  amountClaimed: String,
+  obligationDates: ObligationDates,
+  period: String,
+  showBankDetails: Boolean,
+  bankDetails: Option[BankDetails])(
+  implicit
+  request: Request[_],
+  messages: Messages
+)
 
 
-@()(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
-
-@mainTemplate(
-title = messages("heading"),
-bodyClasses = None) {
+@viewsHelpers.mainTemplate(
+  title = messages("heading"),
+  bodyClasses = None
+) {
 
 <h1 id="main-message">@Messages("one_payment.message")</h1>
 </br>

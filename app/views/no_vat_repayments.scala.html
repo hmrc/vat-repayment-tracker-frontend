@@ -14,21 +14,24 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
-@import uk.gov.hmrc.play.views.html._
 @import model.des.BankDetails
 
 @this(
-mainTemplate: views.html.main_template
+  viewsHelpers: ViewsHelpers
 )
 
 @(
-showBankDetails: Boolean, bankDetails: Option[BankDetails])(implicit request: Request[_], messages: Messages, appConfig: ViewConfig
+  showBankDetails: Boolean,
+  bankDetails: Option[BankDetails])(
+  implicit
+  request: Request[_],
+  messages: Messages
 )
 
-@mainTemplate(
-title = messages("heading"),
-bodyClasses = None) {
+@viewsHelpers.mainTemplate(
+  title = messages("heading"),
+  bodyClasses = None
+) {
 
 <h1 id="main-message">@Messages("no_vrts.message")</h1>
 <p>@Messages("no_vrts.line1")</p>

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,31 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-  viewsHelpers: ViewsHelpers
-)
+package langswitch
 
-@(
-  pageTitle: String,
-  heading: String,
-  message: String)(
-  implicit
-  request: Request[_],
-  messages: Messages
-)
+class Example {
 
-
-@contentHeader = {
-<h1>@heading</h1>
-}
-
-@viewsHelpers.mainTemplate(
-  title = pageTitle,
-  contentHeader = Some(contentHeader)
-) {
-
-<p>@message</p>
-
+  class View(implicit lang: Language = Languages.English) {
+    val messageText: String = MessagesA.`Some Message`
+  }
 }

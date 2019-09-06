@@ -87,7 +87,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.11.12",
     resolvers ++= Seq(Resolver.bintrayRepo("hmrc", "releases"), Resolver.jcenterRepo),
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    retrieveManaged := true,
+    retrieveManaged := false,
     routesGenerator := InjectedRoutesGenerator,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
   )
