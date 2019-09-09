@@ -57,8 +57,8 @@ class DesConnectorSpec extends ItSpec {
     val futureResponse: Option[FinancialData] = desConnector.getFinancialData(vrn).futureValue
     futureResponse match {
       case Some(response) => {
-        response.financialTransactions.head.size shouldBe 5
-        response.financialTransactions.head.last shouldBe DesData.financialDataOk(vrn).\("financialTransactions").\(4).as[Transaction]
+        response.financialTransactions.size shouldBe 5
+        response.financialTransactions.last shouldBe DesData.financialDataOk(vrn).\("financialTransactions").\(4).as[Transaction]
       }
       case None => "did not find any financial data" shouldBe "test failed"
     }

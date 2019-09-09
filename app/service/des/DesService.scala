@@ -21,7 +21,7 @@ import java.time.LocalDate
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import model.Vrn
-import model.des.ObligationDates
+import model.des.{ApprovedInformation, ObligationDates}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,6 +43,17 @@ class DesService @Inject() (desConnector: DesConnector)(implicit ec: ExecutionCo
         }
       }
     } yield (result)
+  }
+
+  def getCustomerData(vrn: Vrn): Future[ApprovedInformation] = {
+    for {
+      futureCustomerData <- desConnector.getCustomerData(vrn)
+
+      customerData: ApprovedInformation = futureCustomerData.getOrElse(throw new RuntimeException(
+        s"""No Customer data found for VRN: ${
+          vrn
+        }""")).unWrap(vrn)
+    } yield (customerData)
   }
 
   private def estimatedRepaymentDate(receivedDate: LocalDate): String = {
