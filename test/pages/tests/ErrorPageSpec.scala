@@ -22,13 +22,13 @@ import support.{ITSpec, WireMockResponses}
 
 class ErrorPageSpec extends ITSpec {
 
-  val vrn = "234567890"
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
+  val vrn = Vrn("234567890")
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and financial data found" in {
     WireMockResponses.authFailed
     goToViaPath(path)
-    ErrorPage.assertPageIsDisplayed(Vrn(vrn))
+    ErrorPage.assertPageIsDisplayed(vrn)
 
   }
 

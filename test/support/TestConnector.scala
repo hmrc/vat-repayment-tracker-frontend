@@ -17,6 +17,7 @@
 package support
 
 import javax.inject.{Inject, Singleton}
+import model.Vrn
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -27,6 +28,6 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   val port = 19001
 
-  def showResults(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn}")
+  def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
 
 }

@@ -22,16 +22,16 @@ import support.{ITSpec, WireMockResponses}
 
 class OnePaymentSpec extends ITSpec {
 
-  val vrn = "234567890"
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
+  val vrn = Vrn("234567890")
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsOkSingle
-    WireMockResponses.customerDataOkWithBankDetails(Vrn(vrn))
-    WireMockResponses.obligationsOk(Vrn(vrn))
+    WireMockResponses.financialsOkSingle(vrn)
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
+    WireMockResponses.obligationsOk(vrn)
     goToViaPath(path)
-    OnePayment.assertPageIsDisplayed(Vrn(vrn))
+    OnePayment.assertPageIsDisplayed(vrn)
 
   }
 

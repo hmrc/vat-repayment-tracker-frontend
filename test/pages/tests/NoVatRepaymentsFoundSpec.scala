@@ -22,15 +22,15 @@ import support.{ITSpec, WireMockResponses}
 
 class NoVatRepaymentsFoundSpec extends ITSpec {
 
-  val vrn = "234567890"
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
+  val vrn = Vrn("234567890")
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and no financial data found" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     WireMockResponses.financialsNotFound
-    WireMockResponses.customerDataOkWithBankDetails(Vrn(vrn))
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
     goToViaPath(path)
-    NoVatRepaymentsFoundPage.assertPageIsDisplayed(Vrn(vrn))
+    NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
 
   }
 

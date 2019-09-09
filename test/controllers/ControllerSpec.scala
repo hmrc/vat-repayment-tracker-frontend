@@ -21,17 +21,20 @@ import play.api.http.Status
 import support.{ITSpec, WireMockResponses}
 
 class ControllerSpec extends ITSpec {
+  val vrn: Vrn = Vrn("2345678890")
+
   "Get ShowResults authorised" in {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsOkSingle
-    WireMockResponses.customerDataOkWithBankDetails(Vrn("2345678890"))
-    val result = connector.showResults("2345678890").futureValue
+    WireMockResponses.financialsOkSingle(vrn)
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
+    WireMockResponses.obligationsOk(vrn)
+    val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }
 
   "Get ShowResults unauthorised" in {
     WireMockResponses.authFailed
-    val result = connector.showResults("234567890").failed.futureValue
+    val result = connector.showResults(vrn).failed.futureValue
   }
 
 }

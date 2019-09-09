@@ -23,12 +23,14 @@ import support.{ITSpec, WireMockResponses}
 class DesServiceSpec extends ITSpec {
 
   val desService = injector.instanceOf[DesService]
+  val vrn: Vrn = Vrn("968501689")
+
   "desService" - {
 
     "should find obligation detail for known VRN and Period  " in {
 
-      WireMockResponses.obligationsOk(Vrn("968501689"))
-      val futureResponse: ObligationDates = desService.getObligations(Vrn("968501689"), "18AA").futureValue
+      WireMockResponses.obligationsOk(vrn)
+      val futureResponse: ObligationDates = desService.getObligations(vrn, "18AA").futureValue
 
       futureResponse.inboundCorrespondenceDateReceived shouldBe "2018-04-15"
       futureResponse.estimatedPaymentDate shouldBe "2018-05-15"
@@ -40,7 +42,7 @@ class DesServiceSpec extends ITSpec {
   "obligations not found" in {
 
     WireMockResponses.obligationsNotFound
-    val futureResponse = desService.getObligations(Vrn("968501689"), "18AA").futureValue
+    val futureResponse = desService.getObligations(vrn, "18AA").futureValue
     futureResponse.inboundCorrespondenceDateReceived shouldBe ""
     futureResponse.estimatedPaymentDate shouldBe ""
 
