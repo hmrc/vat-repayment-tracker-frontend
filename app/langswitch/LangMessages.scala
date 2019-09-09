@@ -55,10 +55,6 @@ object LangMessages {
     english = "We will ususally repay you before the estimated repayment date, but it may take longer.  You do not need to contact us before this date."
   )
 
-  val `You do not have access to this service`: Message = Message(
-    english = "You do not have access to this service"
-  )
-
   val `No VAT repayments in progress`: Message = Message(
     english = "No VAT repayments in progress"
   )

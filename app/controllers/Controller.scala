@@ -18,11 +18,10 @@ package controllers
 
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
-import langswitch.{LangMessages, Language}
+import langswitch.{ErrorMessages}
 import model.Vrn
 import model.des.{ApprovedInformation, FinancialData}
 import play.api.Logger
-import play.api.i18n.Messages
 import play.api.mvc._
 import req.RequestSupport
 import service.des.DesService
@@ -46,13 +45,8 @@ class Controller @Inject() (cc:             ControllerComponents,
 
   import requestSupport._
 
-  def hello(): Action[AnyContent] = Action { implicit request: Request[_] =>
-
-    Ok(views.helloPage())
-  }
-
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
-    implicit request =>
+    implicit request: Request[_] =>
       af.authorised() {
 
         val financialF = desConnector.getFinancialData(vrn)
@@ -74,8 +68,8 @@ class Controller @Inject() (cc:             ControllerComponents,
           }, $e")
           Future.successful(Unauthorized(
             errorHandler.standardErrorTemplate(
-              Messages("unauthorised.title"),
-              Messages("unauthorised.heading"),
+              ErrorMessages.`You do not have access to this service`.show,
+              ErrorMessages.`You do not have access to this service`.show,
               "")))
 
       }

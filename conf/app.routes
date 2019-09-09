@@ -1,6 +1,5 @@
 # microservice specific routes
 
-GET        /                             controllers.Controller.hello
 GET        /show-results/vrn/:vrn        controllers.Controller.showResults(vrn : Vrn)
 
 

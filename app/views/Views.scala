@@ -23,7 +23,6 @@ import javax.inject.Inject
 class Views @Inject() (
     val no_vat_repayments: _root_.views.html.no_vat_repayments,
     val one_payment:       _root_.views.html.one_payment,
-    val helloPage:         _root_.views.html.hello_page,
 
     //error pages
     val errorTemplate: _root_.views.html.error.error_template

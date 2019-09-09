@@ -47,5 +47,8 @@ object ErrorMessages {
   val internalServerError500Message = Message(
     "Please try again in a few minutes."
   )
+  val `You do not have access to this service`: Message = Message(
+    english = "You do not have access to this service"
+  )
 
 }

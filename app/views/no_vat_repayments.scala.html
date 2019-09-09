@@ -15,6 +15,8 @@
  *@
 
 @import model.des.BankDetails
+@import langswitch.LangMessages
+
 @this(
   mainTemplate: views.html.main_template,
   viewsHelpers: views.ViewsHelpers
@@ -24,29 +26,27 @@
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails])(
   implicit
-  request: Request[_],
-  messages: Messages
+  request: Request[_]
 )
 
+@import viewsHelpers.requestSupport._
+
 @mainTemplate(
-  title = messages("heading"),
+  title = LangMessages.heading.show,
   bodyClasses = None
 ) {
 
-<h1 id="main-message">@Messages("no_vrts.message")</h1>
-<p>@Messages("no_vrts.line1")</p>
-<p>@Messages("no_vrts.line2")</p>
-<p><a href="www.fixme.com">@Messages("no_vrts.view.vat.acc")</a></p>
-<h2>@Messages("shared.repayment.details")</h2>
+<h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
+<p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
+<p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
+<p><a href="www.fixme.com">@{LangMessages.`View your VAT account`.show}</a></p>
+<h2>@{LangMessages.`Your repayment details`.show}</h2>
 @if(showBankDetails) {
-<p>@Messages("no_vrts.bank.line1")</p>
-<p id="acc-name">@Messages("no_vrts.bank.line2") @bankDetails.fold("")(_.accountHolderName)</p>
-<p id="acc-sort-code">@Messages("no_vrts.bank.line3") @bankDetails.fold("")(_.bankAccountNumber)</p>
-<p id="acc-number">@Messages("no_vrts.bank.line4") @bankDetails.fold("")(_.sortCode)</p>
+<p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
+<p id="acc-name">@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName)</p>
+<p id="acc-sort-code">@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.bankAccountNumber)</p>
+<p id="acc-number">@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.sortCode)</p>
 }
 
-
-<p><a href="www.fixme.com">@Messages("shared.manage.link")</a></p>
-
-
+<p><a href="www.changeme.com">@{LangMessages.`Manage your repayment account`.show}</a></p>
 }
