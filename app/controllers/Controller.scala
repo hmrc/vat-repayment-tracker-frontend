@@ -19,7 +19,7 @@ package controllers
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import langswitch.{LangMessages, Language}
-import model.Vrn
+import model.{Person, Vrn}
 import model.des.{ApprovedInformation, FinancialData}
 import play.api.Logger
 import play.api.i18n.Messages
@@ -48,7 +48,24 @@ class Controller @Inject() (cc:             ControllerComponents,
 
   def hello(): Action[AnyContent] = Action { implicit request: Request[_] =>
 
-    Ok(views.helloPage())
+    val allPersons = {
+      val person1 = Person(
+        name = "Pawel",
+        age  = 25
+      )
+
+      val person2 = Person(
+        name = "Jon",
+        age  = 23
+      )
+
+      List(
+        person1,
+        person2
+      )
+    }
+
+    Ok(views.helloPage(allPersons))
   }
 
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {

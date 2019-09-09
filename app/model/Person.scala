@@ -21,22 +21,3 @@ case class Person(
     age:  Int
 )
 
-object Person {
-
-  val s: String = "hello"
-
-  val person1 = Person(
-    name = "Pawel",
-    age  = 25
-  )
-
-  val person2 = Person(
-    name = "Jon",
-    age  = 23
-  )
-
-  val allPersons = List(
-    person1,
-    person2
-  )
-}
