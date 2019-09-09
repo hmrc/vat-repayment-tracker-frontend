@@ -25,22 +25,24 @@ import play.api.libs.json.{Json, OFormat, Reads}
  * containing financial data for a VRN.
  */
 
-final case class FinancialData(idType:                String,
-                               idNumber:              String,
-                               regimeType:            String,
-                               processingDate:        String,
-                               financialTransactions: Seq[Transaction])
+final case class FinancialData(
+    idType:                String,
+    idNumber:              String,
+    regimeType:            String,
+    processingDate:        String,
+    financialTransactions: Seq[Transaction])
 
 object FinancialData {
   implicit val format: OFormat[FinancialData] = Json.format[FinancialData]
 }
 
-final case class Transaction(periodKey:            String,
-                             periodKeyDescription: String,
-                             taxPeriodFrom:        LocalDate,
-                             taxPeriodTo:          LocalDate,
-                             originalAmount:       BigDecimal,
-                             outstandingAmount:    BigDecimal)
+final case class Transaction(
+    periodKey:            String,
+    periodKeyDescription: String,
+    taxPeriodFrom:        LocalDate,
+    taxPeriodTo:          LocalDate,
+    originalAmount:       BigDecimal,
+    outstandingAmount:    BigDecimal)
 
 object Transaction {
   implicit val format: OFormat[Transaction] = Json.format[Transaction]

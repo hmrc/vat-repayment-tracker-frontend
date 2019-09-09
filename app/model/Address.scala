@@ -20,7 +20,14 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
 import service.CountriesService
 
-final case class Address(line1: Option[String], line2: Option[String], line3: Option[String], line4: Option[String], postCode: Option[String], countryCode: Option[String])
+final case class Address(
+    line1:       Option[String],
+    line2:       Option[String],
+    line3:       Option[String],
+    line4:       Option[String],
+    postCode:    Option[String],
+    countryCode: Option[String]
+)
 
 object Address {
   implicit val format: OFormat[Address] = Json.format[Address]

@@ -31,13 +31,14 @@ import views.views.Views
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject() (cc:             ControllerComponents,
-                            errorHandler:   ErrorHandler,
-                            views:          Views,
-                            desConnector:   DesConnector,
-                            desService:     DesService,
-                            requestSupport: RequestSupport,
-                            af:             AuthorisedFunctions)(
+class Controller @Inject() (
+    cc:             ControllerComponents,
+    errorHandler:   ErrorHandler,
+    views:          Views,
+    desConnector:   DesConnector,
+    desService:     DesService,
+    requestSupport: RequestSupport,
+    af:             AuthorisedFunctions)(
     implicit
     ec: ExecutionContext)
 
@@ -75,21 +76,23 @@ class Controller @Inject() (cc:             ControllerComponents,
       }
   }
 
-  def computeView(data: FinancialData, customerData: ApprovedInformation, vrn: Vrn)(implicit request: Request[_]) = {
-    data.financialTransactions.size match {
-      case 0 => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-      case 1 => {
-        for {
-          obligationDates <- desService.getObligations(vrn, data.financialTransactions(0).periodKey)
-        } yield Ok(views.one_payment(data.financialTransactions(0).originalAmount.toString(),
-                                     obligationDates,
-                                     data.financialTransactions(0).periodKeyDescription,
-                                     customerData.bankDetailsExist,
-                                     customerData.bankDetails))
-      }
-      case _ => throw new RuntimeException("todo: implement multiple page")
+  def computeView(
+      data:         FinancialData,
+      customerData: ApprovedInformation,
+      vrn:          Vrn)(
+      implicit
+      request: Request[_]): Future[Result] = data.financialTransactions.size match {
+    case 0 => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
+    case 1 => {
+      for {
+        obligationDates <- desService.getObligations(vrn, data.financialTransactions(0).periodKey)
+      } yield Ok(views.one_payment(data.financialTransactions(0).originalAmount.toString(),
+                                   obligationDates,
+                                   data.financialTransactions(0).periodKeyDescription,
+                                   customerData.bankDetailsExist,
+                                   customerData.bankDetails))
     }
-
+    case _ => throw new RuntimeException("todo: implement multiple page")
   }
 
 }

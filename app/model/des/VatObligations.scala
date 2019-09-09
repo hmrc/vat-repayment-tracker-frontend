@@ -32,12 +32,13 @@ object VatObligation {
   implicit val format: OFormat[VatObligation] = Json.format[VatObligation]
 }
 
-final case class ObligationDetail(status:                            String,
-                                  inboundCorrespondenceFromDate:     LocalDate,
-                                  inboundCorrespondenceToDate:       LocalDate,
-                                  inboundCorrespondenceDateReceived: LocalDate,
-                                  inboundCorrespondenceDueDate:      LocalDate,
-                                  periodKey:                         String)
+final case class ObligationDetail(
+    status:                            String,
+    inboundCorrespondenceFromDate:     LocalDate,
+    inboundCorrespondenceToDate:       LocalDate,
+    inboundCorrespondenceDateReceived: LocalDate,
+    inboundCorrespondenceDueDate:      LocalDate,
+    periodKey:                         String)
 
 object ObligationDetail {
 
@@ -46,4 +47,7 @@ object ObligationDetail {
 
 }
 
-final case class ObligationDates(inboundCorrespondenceDateReceived: String, estimatedPaymentDate: String)
+final case class ObligationDates(
+    inboundCorrespondenceDateReceived: String,
+    estimatedPaymentDate:              String
+)

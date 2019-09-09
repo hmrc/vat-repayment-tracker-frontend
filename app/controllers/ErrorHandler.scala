@@ -24,7 +24,15 @@ import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 
 @Singleton
-class ErrorHandler @Inject() (val messagesApi: MessagesApi, implicit val appConfig: ViewConfig, error_template: views.html.error.error_template) extends FrontendErrorHandler {
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
-    error_template(pageTitle, heading, message)
+class ErrorHandler @Inject() (
+    val messagesApi:        MessagesApi,
+    implicit val appConfig: ViewConfig,
+    error_template:         views.html.error.error_template) extends FrontendErrorHandler {
+  override def standardErrorTemplate(
+      pageTitle: String,
+      heading:   String,
+      message:   String)(
+      implicit
+      request: Request[_]
+  ): Html = error_template(pageTitle, heading, message)
 }
