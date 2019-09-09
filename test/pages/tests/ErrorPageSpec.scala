@@ -18,9 +18,9 @@ package pages.tests
 
 import model.Vrn
 import pages.ErrorPage
-import support.{ITSpec, WireMockResponses}
+import support.{ItSpec, WireMockResponses}
 
-class ErrorPageSpec extends ITSpec {
+class ErrorPageSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""

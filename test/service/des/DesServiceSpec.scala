@@ -18,9 +18,9 @@ package service.des
 
 import model.Vrn
 import model.des.ObligationDates
-import support.{ITSpec, WireMockResponses}
+import support.{ItSpec, WireMockResponses}
 
-class DesServiceSpec extends ITSpec {
+class DesServiceSpec extends ItSpec {
 
   val desService = injector.instanceOf[DesService]
   val vrn: Vrn = Vrn("968501689")

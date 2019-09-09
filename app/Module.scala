@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package controllers
+import com.google.inject.{AbstractModule, Provides, Singleton}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
-import config.ViewConfig
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+class Module extends AbstractModule {
 
-@Singleton
-class FrontendAuthConnector @Inject() (viewConfig: ViewConfig, val http: DefaultHttpClient) extends PlayAuthConnector {
+  def configure(): Unit = ()
 
-  override val serviceUrl: String = viewConfig.authUrl
+  @Provides
+  @Singleton
+  def authorisedFunctions(ac: AuthConnector): AuthorisedFunctions = new AuthorisedFunctions {
+    override def authConnector: AuthConnector = ac
+  }
+
 }

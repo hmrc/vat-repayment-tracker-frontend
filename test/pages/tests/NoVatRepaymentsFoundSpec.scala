@@ -18,9 +18,9 @@ package pages.tests
 
 import model.Vrn
 import pages.NoVatRepaymentsFoundPage
-import support.{ITSpec, WireMockResponses}
+import support.{ItSpec, WireMockResponses}
 
-class NoVatRepaymentsFoundSpec extends ITSpec {
+class NoVatRepaymentsFoundSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""

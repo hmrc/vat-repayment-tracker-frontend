@@ -32,17 +32,17 @@ import views.views.Views
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Controller @Inject() (cc:                ControllerComponents,
-                            val authConnector: FrontendAuthConnector,
-                            errorHandler:      ErrorHandler,
-                            views:             Views,
-                            desConnector:      DesConnector,
-                            desService:        DesService,
-                            requestSupport:    RequestSupport)(
+class Controller @Inject() (cc:             ControllerComponents,
+                            errorHandler:   ErrorHandler,
+                            views:          Views,
+                            desConnector:   DesConnector,
+                            desService:     DesService,
+                            requestSupport: RequestSupport,
+                            af:             AuthorisedFunctions)(
     implicit
     ec: ExecutionContext)
 
-  extends FrontendBaseController(cc) with AuthorisedFunctions {
+  extends FrontendBaseController(cc) {
 
   import requestSupport._
 
@@ -53,7 +53,7 @@ class Controller @Inject() (cc:                ControllerComponents,
 
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
     implicit request =>
-      authorised() {
+      af.authorised() {
 
         for {
           futureFinancialData <- desConnector.getFinancialData(vrn)
