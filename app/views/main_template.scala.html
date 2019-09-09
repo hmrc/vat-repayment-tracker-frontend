@@ -14,37 +14,39 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
-
 @this(
-uiSidebar: uk.gov.hmrc.play.views.html.layouts.Sidebar,
-govUkWrapper: views.html.govuk_wrapper
+  govUkWrapper: govuk_wrapper,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: config.ViewConfig
 )
 
-@(title: String,
-sidebarLinks: Option[Html] = None,
-contentHeader: Option[Html] = None,
-bodyClasses: Option[String] = None,
-mainClass: Option[String] = None,
-scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: ViewConfig)
+@(
+  title: String,
+  sidebarLinks: Option[Html] = None,
+  contentHeader: Option[Html] = None,
+  bodyClasses: Option[String] = None,
+  mainClass: Option[String] = None,
+  scriptElem: Option[Html] = None)(
+  mainContent: Html)(
+  implicit
+  request : Request[_]
+)
 
 
 @serviceInfoContent = {}
 
 @sidebar = {
-@if(sidebarLinks.isDefined) {
-@uiSidebar(sidebarLinks.getOrElse(Html("")), Some("sidebar"))
-}
+  @{sidebarLinks.map(sidebarLinks => viewsHelpers.sidebar(sidebarLinks, Some("sidebar")) )}
 }
 
 
-@govUkWrapper(appConfig = appConfig,
-title = title,
-mainClass = mainClass,
-bodyClasses = bodyClasses,
-sidebar = sidebar,
-contentHeader = contentHeader,
-mainContent = mainContent,
-serviceInfoContent = serviceInfoContent,
-scriptElem = scriptElem
+@govUkWrapper(
+  title = title,
+  mainClass = mainClass,
+  bodyClasses = bodyClasses,
+  sidebar = sidebar,
+  contentHeader = contentHeader,
+  mainContent = mainContent,
+  serviceInfoContent = serviceInfoContent,
+  scriptElem = scriptElem
 )

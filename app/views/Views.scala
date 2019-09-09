@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.ViewConfig
-@import uk.gov.hmrc.play.views.html._
+package views
 
-@this(
-mainTemplate: views.html.main_template
+package views
+
+import javax.inject.Inject
+
+class Views @Inject() (
+    val no_vat_repayments: _root_.views.html.no_vat_repayments,
+    val one_payment:       _root_.views.html.one_payment,
+
+    //error pages
+    val errorTemplate: _root_.views.html.error.error_template
+
 )
-
-@()(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
-
-@mainTemplate(
-title = messages("heading"),
-bodyClasses = None) {
-
-<h1 id="main-message">@Messages("page1.message")</h1>
-
-}

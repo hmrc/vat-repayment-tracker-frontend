@@ -14,15 +14,21 @@
  * limitations under the License.
  *@
 
+@import config.ViewConfig
 @import model.des.BankDetails
+@import model.des.ObligationDates
 @import langswitch.LangMessages
 
 @this(
   mainTemplate: views.html.main_template,
-  viewsHelpers: views.ViewsHelpers
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: ViewConfig
 )
 
 @(
+  amountClaimed: String,
+  obligationDates: ObligationDates,
+  period: String,
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails])(
   implicit
@@ -32,14 +38,31 @@
 @import viewsHelpers.requestSupport._
 
 @mainTemplate(
-  title = LangMessages.heading.show,
+  title =LangMessages.heading.show,
   bodyClasses = None
 ) {
 
-<h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
-<p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
-<p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
-<p><a href="www.fixme.com">@{LangMessages.`View your VAT account`.show}</a></p>
+<h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
+</br>
+<table>
+ <tr>
+  <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td>
+ </tr>
+ <tr>
+  <td id="amount">£@amountClaimed</td><td id="repay-date">@obligationDates.estimatedPaymentDate</td>
+ </tr>
+ <tr>
+  <td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
+ </tr>
+ <tr>
+  <td id="received-date">@obligationDates.inboundCorrespondenceDateReceived</td><td id="period">@period</td>
+ </tr>
+</table>
+</br>
+</br>
+<h2>@{LangMessages.`When we will repay you`.show}</h2>
+<p>@{LangMessages.`When we will repay you description`.show}</p>
+</br>
 <h2>@{LangMessages.`Your repayment details`.show}</h2>
 @if(showBankDetails) {
 <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>

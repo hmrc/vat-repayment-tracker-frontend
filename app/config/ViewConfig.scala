@@ -25,11 +25,15 @@ case class ViewConfig(
     analyticsToken:  String,
     analyticsHost:   String,
     authUrl:         String,
-    frontendBaseUrl: String) {
+    frontendBaseUrl: String,
+    signInPath:      String) {
 
   val reportAProblemPartialUrl = s"$frontendBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$frontendBaseUrl/contact/problem_reports_nonjs?service=$appName"
   val feedbackUrl = s"$frontendBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
+  val loginUrl = authUrl + signInPath
+
+  val supportLanguages: Boolean = false
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -38,7 +42,8 @@ case class ViewConfig(
     analyticsToken  = servicesConfig.getString(s"google-analytics.token"),
     analyticsHost   = servicesConfig.getString(s"google-analytics.host"),
     authUrl         = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl = servicesConfig.getString("frontend-base-url")
+    frontendBaseUrl = servicesConfig.getString("frontend-base-url"),
+    signInPath      = servicesConfig.getString("microservice.services.auth.sign-in-path")
   )
 
 }

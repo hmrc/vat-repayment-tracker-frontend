@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package support
+package pages.tests
 
-import javax.inject.{Inject, Singleton}
 import model.Vrn
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import pages.OnePayment
+import support.{ItSpec, WireMockResponses}
 
-import scala.concurrent.{ExecutionContext, Future}
+class OnePaymentSpec extends ItSpec {
 
-@Singleton
-class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext: ExecutionContext) {
+  val vrn = Vrn("234567890")
+  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
-  val port = 19001
+  "user is authorised and financial data found" in {
+    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    WireMockResponses.financialsOkSingle(vrn)
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
+    WireMockResponses.obligationsOk(vrn)
+    goToViaPath(path)
+    OnePayment.assertPageIsDisplayed(vrn)
 
-  def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
+  }
 
 }

@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package model
 
-import config.ViewConfig
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+case class Person(
+    name: String,
+    age:  Int
+)
 
-@Singleton
-class FrontendAuthConnector @Inject() (viewConfig: ViewConfig, val http: DefaultHttpClient) extends PlayAuthConnector {
-
-  override val serviceUrl: String = viewConfig.authUrl
-}

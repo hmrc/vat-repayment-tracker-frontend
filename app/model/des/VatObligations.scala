@@ -16,6 +16,8 @@
 
 package model.des
 
+import java.time.LocalDate
+
 import play.api.libs.json._
 
 final case class VatObligations(obligations: Seq[VatObligation])
@@ -30,12 +32,13 @@ object VatObligation {
   implicit val format: OFormat[VatObligation] = Json.format[VatObligation]
 }
 
-final case class ObligationDetail(status:                            String,
-                                  inboundCorrespondenceFromDate:     String,
-                                  inboundCorrespondenceToDate:       String,
-                                  inboundCorrespondenceDateReceived: Option[String],
-                                  inboundCorrespondenceDueDate:      String,
-                                  periodKey:                         String)
+final case class ObligationDetail(
+    status:                            String,
+    inboundCorrespondenceFromDate:     LocalDate,
+    inboundCorrespondenceToDate:       LocalDate,
+    inboundCorrespondenceDateReceived: LocalDate,
+    inboundCorrespondenceDueDate:      LocalDate,
+    periodKey:                         String)
 
 object ObligationDetail {
 
@@ -43,3 +46,8 @@ object ObligationDetail {
   implicit val format: OFormat[ObligationDetail] = Json.format[ObligationDetail]
 
 }
+
+final case class ObligationDates(
+    inboundCorrespondenceDateReceived: String,
+    estimatedPaymentDate:              String
+)

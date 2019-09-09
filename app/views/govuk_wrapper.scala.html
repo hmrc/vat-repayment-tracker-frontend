@@ -14,89 +14,114 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
 @import play.twirl.api.HtmlFormat
 
 
 @this(
-govUkTemplate: views.html.layouts.GovUkTemplate,
-uiHead: uk.gov.hmrc.play.views.html.layouts.Head,
-uiHeaderNav: uk.gov.hmrc.play.views.html.layouts.HeaderNav,
-uiFooter: uk.gov.hmrc.play.views.html.layouts.Footer,
-uiServiceInfo: uk.gov.hmrc.play.views.html.layouts.ServiceInfo,
-uiMainContentHeader: uk.gov.hmrc.play.views.html.layouts.MainContentHeader,
-uiMainContent: uk.gov.hmrc.play.views.html.layouts.MainContent,
-uiFooterLinks: uk.gov.hmrc.play.views.html.layouts.FooterLinks,
-helperReportAProblemLink: uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+  govUkTemplate: views.html.layouts.GovUkTemplate,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: config.ViewConfig
 )
 
-@(appConfig: ViewConfig,
-title: String,
-mainClass: Option[String] = None,
-mainDataAttributes: Option[Html] = None,
-bodyClasses: Option[String] = None,
-sidebar: Html = HtmlFormat.empty,
-contentHeader: Option[Html] = None,
-mainContent: Html = HtmlFormat.empty,
-serviceInfoContent: Html = HtmlFormat.empty,
-scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
 
+
+@(
+  title: String,
+  mainClass: Option[String] = None,
+  mainDataAttributes: Option[Html] = None,
+  bodyClasses: Option[String] = None,
+  sidebar: Html = HtmlFormat.empty,
+  contentHeader: Option[Html] = None,
+  mainContent: Html = HtmlFormat.empty,
+  serviceInfoContent: Html = HtmlFormat.empty,
+  scriptElem: Option[Html] = None)(
+  implicit request: Request[_]
+)
+
+@import viewsHelpers.requestSupport._
 
 @head = {
-@uiHead(
-linkElem = None,
-headScripts = None)
-<meta name="format-detection" content="telephone=no"/>
+  @viewsHelpers.head(
+    linkElem = None,
+    headScripts = None
+  )
+  <meta name="format-detection" content="telephone=no"/>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 }
 
-@headerNavLinks = {}
+@headerNavLinks = {
+  @if(appConfig.supportLanguages) {
+    <li><span id="language-toggle">@viewsHelpers.languageSelection()</span></li>
+  }
+}
+
 
 @insideHeader = {
-@uiHeaderNav(
-navTitle = Some("vat-repayment-tracker-frontend"),
-navTitleLink = None,
-showBetaLink = false,
-navLinks = Some(headerNavLinks))
+  @viewsHelpers.headerNav(
+  navTitle = Some("vat-repayment-tracker-frontend"),
+  navTitleLink = None,
+  showBetaLink = false,
+  navLinks = Some(headerNavLinks))
 }
 
 @afterHeader = {}
 
 @bodyEnd = {
-@uiFooter(
-analyticsToken = Some(appConfig.analyticsToken),
-analyticsHost = appConfig.analyticsHost,
-ssoUrl = None,
-scriptElem = scriptElem,
-gaCalls = None)
+  @viewsHelpers.footer(
+    analyticsToken = Some(appConfig.analyticsToken),
+    analyticsHost = appConfig.analyticsHost,
+    ssoUrl = None,
+    scriptElem = scriptElem,
+    gaCalls = None
+  )
 }
 
 @footerTop = {}
-@footerLinks = {}
+
+@footerLinks = {
+  @viewsHelpers.footerLinks(None)
+}
 
 @serviceInfo = {
-@uiServiceInfo(
-betaBanner = HtmlFormat.empty,
-includeGridWrapper = false,
-serviceInfoContent = Some(serviceInfoContent))
+  @viewsHelpers.serviceInfo(
+    betaBanner = HtmlFormat.empty,
+    includeGridWrapper = false,
+    serviceInfoContent = Some(serviceInfoContent)
+  )
 }
 
 @mainContentHeader = {
-@if(contentHeader.isDefined) {
-@uiMainContentHeader(contentHeader = contentHeader.getOrElse(Html("")))
-}
+  @{contentHeader.map(contentHeader => viewsHelpers.mainContentHeader(contentHeader = contentHeader))}
 }
 
-@getHelpForm = @{helperReportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{
+  viewsHelpers.reportAProblemLink(
+    appConfig.reportAProblemPartialUrl,
+    appConfig.reportAProblemNonJSUrl
+  )
+}
 
 @content = {
-@uiMainContent(
-article = mainContent,
-mainClass = mainClass,
-mainDataAttributes = mainDataAttributes,
-mainContentHeader = mainContentHeader,
-serviceInfo = serviceInfo,
-getHelpForm = getHelpForm,
-sidebar = sidebar)
+  @viewsHelpers.mainContent(
+    article = mainContent,
+    mainClass = mainClass,
+    mainDataAttributes = mainDataAttributes,
+    mainContentHeader = mainContentHeader,
+    serviceInfo = serviceInfo,
+    getHelpForm = getHelpForm,
+    sidebar = sidebar
+  )
 }
 
-@govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiFooterLinks()), true)(content)
+@govUkTemplate(
+  Some(title),
+  bodyClasses)(
+  head,
+  bodyEnd,
+  insideHeader,
+  afterHeader,
+  footerTop,
+  Some(footerLinks),
+  true)(
+  content
+)

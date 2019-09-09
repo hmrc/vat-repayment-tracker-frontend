@@ -16,27 +16,37 @@
 
 package model.des
 
-import play.api.libs.json.{JsResult, JsValue, Reads}
+import model.Vrn
+import play.api.libs.json._
 
-/**
- * Case class representing a small subset of the DES 1363 API response
- * containing customer data for a VRN.  Currently, we only extract the Welsh Indicator,
- * but more data can be added in future
- */
-final case class CustomerInformation(welshIndicator: Option[WelshIndicator])
-
-object CustomerInformation {
-
-  val empty: CustomerInformation = CustomerInformation(None)
-
-  implicit val reads: Reads[CustomerInformation] = new Reads[CustomerInformation] {
-    override def reads(json: JsValue): JsResult[CustomerInformation] = {
-      for {
-        welshIndicator <- (json \ "approvedInformation" \ "customerDetails" \ "welshIndicator").validateOpt[WelshIndicator]
-      } yield {
-        CustomerInformation(welshIndicator)
-      }
+final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
+  def unWrap(vrn: Vrn): ApprovedInformation = {
+    approvedInformation match {
+      case None       => throw new RuntimeException(s"""No Customer data for VRN: ${vrn}""")
+      case Some(data) => data
     }
   }
+}
+
+object CustomerInformation {
+  implicit val format: OFormat[CustomerInformation] = Json.format[CustomerInformation]
+}
+
+final case class ApprovedInformation(bankDetails: Option[BankDetails]) {
+
+  val bankDetailsExist = bankDetails.isDefined
+}
+object ApprovedInformation {
+
+  implicit val format: OFormat[ApprovedInformation] = Json.format[ApprovedInformation]
+}
+
+final case class BankDetails(
+    accountHolderName: String,
+    bankAccountNumber: String,
+    sortCode:          String
+)
+object BankDetails {
+  implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
 }
 

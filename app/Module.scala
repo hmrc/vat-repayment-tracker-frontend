@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package support
+import com.google.inject.{AbstractModule, Provides, Singleton}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
-import javax.inject.{Inject, Singleton}
-import model.Vrn
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+class Module extends AbstractModule {
 
-import scala.concurrent.{ExecutionContext, Future}
+  def configure(): Unit = ()
 
-@Singleton
-class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext: ExecutionContext) {
-
-  val port = 19001
-
-  def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
+  @Provides
+  @Singleton
+  def authorisedFunctions(ac: AuthConnector): AuthorisedFunctions = new AuthorisedFunctions {
+    override def authConnector: AuthConnector = ac
+  }
 
 }

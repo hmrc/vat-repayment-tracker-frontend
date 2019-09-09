@@ -75,7 +75,7 @@ lazy val scoverageSettings = {
   Seq(
     // Semicolon-separated list of regexs matching classes to exclude
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*BuildInfo.*;Reverse.*;app.Routes.*;prod.*;testOnlyDoNotUseInAppConf.*;forms.*;config.*",
-    ScoverageKeys.coverageExcludedFiles := ".*microserviceGlobal.*;.*microserviceWiring.*",
+    ScoverageKeys.coverageExcludedFiles := ".*microserviceGlobal.*;.*microserviceWiring.*;.*Link.*",
     ScoverageKeys.coverageMinimum := 80,
     ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true
@@ -87,7 +87,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.11.12",
     resolvers ++= Seq(Resolver.bintrayRepo("hmrc", "releases"), Resolver.jcenterRepo),
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    retrieveManaged := true,
+    retrieveManaged := false,
     routesGenerator := InjectedRoutesGenerator,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
   )
@@ -109,8 +109,23 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings())
   .configs(IntegrationTest)
   .settings(
+    routesImport ++= Seq(
+      "model._",
+      "langswitch.Language"
+    ))
+  .settings(
     scalacOptions ++= Seq(
       "-Xfatal-warnings",
-      "-feature")
+      "-Xlint:-missing-interpolator,_",
+      "-Yno-adapted-args",
+      "-Ywarn-value-discard",
+      "-Ywarn-dead-code",
+      "-deprecation",
+      "-feature",
+      "-unchecked",
+      "-language:implicitConversions",
+      "-language:reflectiveCalls",
+      "-Ypartial-unification" //required by cats
+      )
   )
 val appName = "vat-repayment-tracker-frontend"

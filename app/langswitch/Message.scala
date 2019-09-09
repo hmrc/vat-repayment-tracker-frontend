@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package pages.tests
+package langswitch
 
-import pages.Page1
-import support.{ITSpec, WireMockResponses}
+import play.api.i18n.Messages
 
-class Page1Spec extends ITSpec {
+case class Message(
+    english: String,
+    welsh:   Option[String]
+) {
 
-  val vrn = "234567890"
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn}"""
-
-  "user is authorised and financial data found" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsOk
-    goToViaPath(path)
-    Page1.assertPageIsDisplayed(vrn)
-
+  def show(implicit language: Language): String = language match {
+    case Languages.English => english
+    case Languages.Welsh   => welsh.getOrElse(english)
   }
+}
 
+object Message {
+
+  @SuppressWarnings(Array("org.wartremover.warts.Null"))
+  def apply(english: String, welsh: String = null): Message = Message(english, Option(welsh))
 }

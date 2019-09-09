@@ -16,13 +16,13 @@
 
 package connectors.des
 
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
+import model.Vrn
 import model.des.{CustomerInformation, FinancialData, VatObligations}
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.http.{HeaderCarrier}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -42,31 +42,29 @@ class DesConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpCl
   private val desHeaderCarrier: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(s"Bearer $authorisationToken")))
     .withExtraHeaders("Environment" -> serviceEnvironment)
 
-  //may not need this one
-  def getObligations(vrn: String, fromDate: LocalDate, toDate: LocalDate): Future[VatObligations] = {
-    Logger.debug(s"Calling des api 1330 for vrn ${vrn}, fromDate ${fromDate.toString}, toDate ${toDate.toString}")
+  def getObligations(vrn: Vrn): Future[Option[VatObligations]] = {
+    Logger.debug(s"Calling des api 1330 for vrn ${vrn}")
     implicit val hc: HeaderCarrier = desHeaderCarrier
     val fullDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val getObligationsURL: String = s"$serviceURL$obligationsUrl/${vrn}/VATC?from=${fromDate.format(fullDate)}&to=${toDate.format(fullDate)}&status=F"
+    val getObligationsURL: String = s"$serviceURL$obligationsUrl/${vrn.value}/VATC?status=O"
     Logger.debug(s"""Calling des api 1330 with url ${getObligationsURL}""")
-    httpClient.GET[VatObligations](getObligationsURL)
+    httpClient.GET[Option[VatObligations]](getObligationsURL)
   }
 
-  def getFinancialData(vrn: String): Future[Option[FinancialData]] = {
+  def getFinancialData(vrn: Vrn): Future[Option[FinancialData]] = {
     Logger.debug(s"Calling des api 1166 for vrn ${vrn}")
     implicit val hc: HeaderCarrier = desHeaderCarrier
-    val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn}/VATC?onlyOpenItems=true"
+    val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn.value}/VATC?onlyOpenItems=true"
     Logger.debug(s"""Calling des api 1166 with url ${getFinancialURL}""")
     httpClient.GET[Option[FinancialData]](getFinancialURL)
   }
 
-  //this may only be needed for welsh indicator if needed
-  def getCustomerData(vrn: String): Future[CustomerInformation] = {
+  def getCustomerData(vrn: Vrn): Future[Option[CustomerInformation]] = {
     Logger.debug(s"Calling des api 1363 for vrn ${vrn}")
     implicit val hc: HeaderCarrier = desHeaderCarrier
-    val getCustomerURL: String = s"$serviceURL$customerUrl/${vrn}/information:"
+    val getCustomerURL: String = s"$serviceURL$customerUrl/${vrn.value}/information"
     Logger.debug(s"""Calling des api 1363 with url ${getCustomerURL}""")
-    httpClient.GET[CustomerInformation](getCustomerURL)
+    httpClient.GET[Option[CustomerInformation]](getCustomerURL)
   }
 
 }

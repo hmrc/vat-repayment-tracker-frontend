@@ -17,17 +17,28 @@
 @import config.ViewConfig
 
 @this(
-mainTemplate: views.html.main_template
+  appConfig: ViewConfig,
+  govUkWrapper: views.html.govuk_wrapper
 )
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: ViewConfig)
+@(
+  pageTitle: String,
+  heading: String,
+  message: String)(
+  implicit
+  request: Request[_]
+)
 
 
 @contentHeader = {
-<h1>@heading</h1>
+    <h1>@heading</h1>
+}
+@mainContent = {
+    <b>@message</b>
 }
 
-@mainTemplate(title = pageTitle, contentHeader = Some(contentHeader)) {
-<p>@message</p>
-
-}
+@govUkWrapper(
+    title = pageTitle,
+    contentHeader = Some(contentHeader),
+    mainContent = mainContent
+)

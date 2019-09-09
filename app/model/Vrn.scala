@@ -14,34 +14,22 @@
  * limitations under the License.
  */
 
-package model.des
+package model
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Format
+import play.api.mvc.PathBindable
+import controllers.ValueClassBinder.valueClassBinder
 
 /**
- * Indicates whether a customer has chosen the Welsh correspondence and language option.
- * Stored in ETMP with their customer details and returned from the DES 1363 API
+ * Vat Registration Number (Vrn)
  */
-sealed trait WelshIndicator {
-  def isWelsh = this match {
-    case Welsh   => true
-    case English => false
-  }
+final case class Vrn(value: String)
+
+object Vrn {
+
+  implicit val format: Format[Vrn] = implicitly[Format[String]].inmap(Vrn(_), _.value)
+  implicit val vrnBinder: PathBindable[Vrn] = valueClassBinder(_.value)
+
 }
 
-case object Welsh extends WelshIndicator
-
-case object English extends WelshIndicator
-
-object WelshIndicator {
-  val welsh = Welsh
-  val english = English
-
-  implicit val format: Format[WelshIndicator] = implicitly[Format[Boolean]].inmap(
-    welshIndicator => if (welshIndicator) Welsh else English,
-    {
-      case Welsh   => true
-      case English => false
-    })
-}

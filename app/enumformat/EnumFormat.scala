@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package enumformat
 
-import org.openqa.selenium.By
-import support.{ITSpec, WireMockResponses}
+import enumeratum.{Enum, EnumEntry}
+import play.api.libs.json._
 
-class NoVatRepaymentsFoundSpec extends ITSpec with CommonPage {
-
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/234567890"
-
-  "user is authorised and no financial data found" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    WireMockResponses.financialsNotFound
-    goToViaPath(path)
-    webDriver.getTitle shouldBe "Vat Repayment Tracker"
-    probing(_.findElement(By.id("main-message")).getText) shouldBe "No VAT repayments in progress"
-  }
-
+object EnumFormat {
+  def apply[T <: EnumEntry](e: Enum[T]): Format[T] = Format(
+    Reads {
+      case JsString(value) => e.withNameOption(value).map(JsSuccess(_)).getOrElse(JsError(s"Unknown ${e.getClass.getSimpleName} value: $value"))
+      case _               => JsError("Can only parse String")
+    },
+    Writes(v => JsString(v.entryName)))
 }

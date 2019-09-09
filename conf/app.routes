@@ -1,3 +1,7 @@
 # microservice specific routes
-GET         /assets/*file                      @controllers.Assets.at(path="/public", file)
-GET         /show-results/vrn/:vrn             controllers.Controller.showResults(vrn : String)
+
+GET        /show-results/vrn/:vrn        controllers.Controller.showResults(vrn : Vrn)
+
+
+GET        /assets/*file                 @controllers.Assets.at(path="/public", file)
+GET        /language/:language           @langswitch.LanguageSwitchController.switchToLanguage(language: Language)

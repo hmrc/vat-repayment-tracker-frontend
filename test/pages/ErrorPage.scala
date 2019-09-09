@@ -16,6 +16,7 @@
 
 package pages
 
+import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
@@ -25,8 +26,8 @@ object ErrorPage extends CommonPage {
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 
-  def assertPageIsDisplayed(vrn: String)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn}"""
+  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "You do not have access to this service"
   }
 }

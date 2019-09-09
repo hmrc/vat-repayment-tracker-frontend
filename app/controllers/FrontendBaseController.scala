@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package support
+package controllers
 
-import javax.inject.{Inject, Singleton}
-import model.Vrn
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import play.api.mvc._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
+import scala.language.implicitConversions
 
-@Singleton
-class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext: ExecutionContext) {
+abstract class FrontendBaseController(cc: ControllerComponents)
+  extends BaseControllerHelpers {
 
-  val port = 19001
+  override val controllerComponents: ControllerComponents = cc
 
-  def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
+  val Action = controllerComponents.actionBuilder
 
+  implicit def toFutureResult(result: Result): Future[Result] = Future.successful(result)
 }
