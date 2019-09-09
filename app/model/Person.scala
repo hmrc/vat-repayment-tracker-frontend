@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,30 +12,31 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import langswitch.LangMessages
+package model
 
-@this(
-  mainTemplate: views.html.main_template,
-  viewsHelpers: views.ViewsHelpers
+case class Person(
+    name: String,
+    age:  Int
 )
 
-@()(
-  implicit
-  request: Request[_]
-)
+object Person {
 
-@import viewsHelpers.requestSupport._
+  val s: String = "hello"
 
-@mainTemplate(
-  title = LangMessages.exapmleMessage.show,
-  bodyClasses = None
-) {
+  val person1 = Person(
+    name = "Pawel",
+    age  = 25
+  )
 
-  <h1 id="main-message">@LangMessages.exapmleMessage.show</h1>
+  val person2 = Person(
+    name = "Jon",
+    age  = 23
+  )
 
-
-  @partials.hello_div(model.Person.allPersons)
-
+  val allPersons = List(
+    person1,
+    person2
+  )
 }

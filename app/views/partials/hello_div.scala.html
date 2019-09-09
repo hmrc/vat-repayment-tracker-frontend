@@ -14,28 +14,16 @@
  * limitations under the License.
  *@
 
-@import langswitch.LangMessages
+@import model.Person
 
-@this(
-  mainTemplate: views.html.main_template,
-  viewsHelpers: views.ViewsHelpers
+
+@(
+  persons: List[Person] = List()
 )
 
-@()(
-  implicit
-  request: Request[_]
-)
+<div class="helloclass">
+  @persons.map { person =>
+    <div>Hello @{person.name}! You are @{person.age} years old.</div>
+  }
 
-@import viewsHelpers.requestSupport._
-
-@mainTemplate(
-  title = LangMessages.exapmleMessage.show,
-  bodyClasses = None
-) {
-
-  <h1 id="main-message">@LangMessages.exapmleMessage.show</h1>
-
-
-  @partials.hello_div(model.Person.allPersons)
-
-}
+</div>
