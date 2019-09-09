@@ -24,16 +24,16 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 
 /**
- * Repeating the pattern which was brought originally by play-framework
+ * I'm repeating a pattern which was brought originally by play-framework
  * and putting some more data which can be derived from a request
  *
  * Use it to provide HeaderCarrier, Lang, or Messages
  */
 class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I18nSupport {
 
-  implicit def hc(implicit request: Request[_]): HeaderCarrier = RequestSupport.hc
   def lang(implicit messages: Messages): Lang = messages.lang
-  def language(implicit messages: Messages): Language = Language()(messages)
+  implicit def language(implicit messages: Messages): Language = Language(messages.lang)
+  implicit def hc(implicit request: Request[_]): HeaderCarrier = RequestSupport.hc
 }
 
 object RequestSupport {

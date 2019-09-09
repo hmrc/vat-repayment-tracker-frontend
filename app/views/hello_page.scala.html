@@ -14,34 +14,24 @@
  * limitations under the License.
  *@
 
+@import langswitch.LangMessages
+
 @this(
-  viewsHelpers: views.ViewsHelpers,
-    govUkWrapper: views.html.govuk_wrapper
+  mainTemplate: views.html.main_template,
+  viewsHelpers: views.ViewsHelpers
 )
 
 @()(
   implicit
-  request: play.api.mvc.Request[_],
-  messages: Messages
+  request: Request[_]
 )
 
+@import viewsHelpers.requestSupport._
 
-@mainContent = {
-    <h1 class="heading-large">@Messages("error.auth.heading")</h1>
+@mainTemplate(
+  title = LangMessages.exapmleMessage.show,
+  bodyClasses = None
+) {
 
-    <p>@Messages("error.auth.para.1")</p>
-
+  <h1 id="main-message">@LangMessages.exapmleMessage.show</h1>
 }
-
-@serviceInfoContent = {}
-
-
-@govUkWrapper(
-  title = Messages("global.error.session"),
-  mainClass = None,
-  bodyClasses = None,
-  contentHeader = None,
-  mainContent = mainContent,
-  serviceInfoContent = serviceInfoContent,
-  scriptElem = None
-)

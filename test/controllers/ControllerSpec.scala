@@ -18,9 +18,9 @@ package controllers
 
 import model.Vrn
 import play.api.http.Status
-import support.{ITSpec, WireMockResponses}
+import support.{ItSpec, WireMockResponses}
 
-class ControllerSpec extends ITSpec {
+class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
 
   "Get ShowResults authorised" in {

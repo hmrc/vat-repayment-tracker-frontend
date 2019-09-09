@@ -19,9 +19,9 @@ package connectors.des
 import model.Vrn
 import model.des._
 import play.api.libs.json.Json
-import support.{DesData, ITSpec, WireMockResponses}
+import support.{DesData, ItSpec, WireMockResponses}
 
-class DesConnectorSpec extends ITSpec {
+class DesConnectorSpec extends ItSpec {
 
   val desConnector = injector.instanceOf[DesConnector]
 

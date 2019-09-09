@@ -20,13 +20,13 @@ import javax.inject.Inject
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
 import req.RequestSupport
-import views.DefaultViews
+import views.views.Views
 
 import scala.concurrent.ExecutionContext
 
 class LanguageSwitchController @Inject() (
     requestSupport: RequestSupport,
-    defaultViews:   DefaultViews,
+    views:          Views,
     cc:             ControllerComponents)(
     implicit
     ec: ExecutionContext)
@@ -44,10 +44,21 @@ class LanguageSwitchController @Inject() (
     result.withLang(language.toPlayLang)
   }
 
-  def noReferrerContent(language: Language)(implicit request: Request[_]) = Ok(
-    defaultViews.ForceBrowsing.error4xx(
-      s"Missing referer header - language changed to $language",
-      s"Missing referer header - language changed to $language",
-      "This url has to have parent page."))
+  def noReferrerContent(l: Language)(implicit request: Request[_]) = Ok(
+    views.errorTemplate(
+      pageTitle = missingRefererHeader(l).show,
+      heading   = missingRefererHeader(l).show,
+      message   = `This url has to have parent page`.show
+    )
+  )
+
+  private def missingRefererHeader(language: Language) = Message(
+    english = s"Missing referer header - language changed to ${language.label}"
+  )
+
+  private val `This url has to have parent page` = Message(
+    english = "This url has to have parent page."
+  )
 
 }
+

@@ -23,6 +23,7 @@ import play.api.i18n.{Lang, Messages}
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
 import controllers.ValueClassBinder.valueClassBinder
+import play.mvc.Http.Request
 
 import scala.collection.immutable
 
@@ -37,9 +38,7 @@ object Language {
   implicit val format: Format[Language] = EnumFormat(Languages)
   implicit val languagePathBinder: PathBindable[Language] = valueClassBinder(_.toString)
 
-  def apply()(implicit m: Messages): Language = apply(m.lang)
-
-  private def apply(lang: Lang): Language = lang.code match {
+  def apply(lang: Lang): Language = lang.code match {
     case "en" => English
     case "cy" => Welsh
     case _    => English //default language is English

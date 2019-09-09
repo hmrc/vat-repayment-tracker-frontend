@@ -17,11 +17,16 @@
 package views
 
 import javax.inject.{Inject, Singleton}
+import req.RequestSupport
 import uk.gov.hmrc.play.views.html.helpers._
 import uk.gov.hmrc.play.views.html.layouts._
 
 @Singleton
 class ViewsHelpers @Inject() (
+
+    val requestSupport:    RequestSupport,
+    val languageSelection: _root_.views.html.partials.language_selection,
+
     //copied from uk.gov.hmrc.play.views.html.helpers
     val address:                    Address,
     val dateFields:                 DateFields,

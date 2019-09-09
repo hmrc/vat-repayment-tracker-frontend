@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,39 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-  viewsHelpers: views.ViewsHelpers,
-  govUkWrapper: views.html.govuk_wrapper
-)
+import com.google.inject.{AbstractModule, Provides, Singleton}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
-@(
-  pageTitle: String,
-  heading: String,
-  message: String)(
-  implicit
-  request: play.api.mvc.Request[_],
-  messages: Messages
-)
+class Module extends AbstractModule {
 
+  def configure(): Unit = ()
 
-@mainContent = {
-    <h1 class="heading-large" id="not_found_heading">@heading</h1>
+  @Provides
+  @Singleton
+  def authorisedFunctions(ac: AuthConnector): AuthorisedFunctions = new AuthorisedFunctions {
+    override def authConnector: AuthConnector = ac
+  }
 
-    <p>@message</p>
 }
-
-
-@serviceInfoContent = {}
-
-
-@govUkWrapper(
-  title = pageTitle,
-  mainClass = None,
-  bodyClasses = None,
-  contentHeader = None,
-  mainContent = mainContent,
-  serviceInfoContent = serviceInfoContent,
-  scriptElem = None
-)
