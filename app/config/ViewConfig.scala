@@ -33,6 +33,8 @@ case class ViewConfig(
   val feedbackUrl = s"$frontendBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
   val loginUrl = authUrl + signInPath
 
+  val supportLanguages: Boolean = true
+
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
     appName         = servicesConfig.getString("appName"),

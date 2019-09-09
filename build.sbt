@@ -110,11 +110,22 @@ lazy val microservice = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(
     routesImport ++= Seq(
-      "model._"
+      "model._",
+      "langswitch.Language"
     ))
   .settings(
     scalacOptions ++= Seq(
       "-Xfatal-warnings",
-      "-feature")
+      "-Xlint:-missing-interpolator,_",
+      "-Yno-adapted-args",
+      "-Ywarn-value-discard",
+      "-Ywarn-dead-code",
+      "-deprecation",
+      "-feature",
+      "-unchecked",
+      "-language:implicitConversions",
+      "-language:reflectiveCalls",
+      "-Ypartial-unification" //required by cats
+      )
   )
 val appName = "vat-repayment-tracker-frontend"

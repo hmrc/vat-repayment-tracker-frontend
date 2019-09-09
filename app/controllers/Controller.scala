@@ -18,7 +18,7 @@ package controllers
 
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
-import langswitch.OnePayment
+import langswitch.{LangMessages, Language}
 import model.Vrn
 import model.des.{ApprovedInformation, Transaction}
 import play.api.Logger
@@ -35,10 +35,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class Controller @Inject() (cc:                ControllerComponents,
                             val authConnector: FrontendAuthConnector,
                             errorHandler:      ErrorHandler,
-                            val views:         Views,
+                            views:             Views,
                             desConnector:      DesConnector,
                             desService:        DesService,
-                            onePayment:        OnePayment,
                             requestSupport:    RequestSupport)(
     implicit
     ec: ExecutionContext)
@@ -46,6 +45,11 @@ class Controller @Inject() (cc:                ControllerComponents,
   extends FrontendBaseController(cc) with AuthorisedFunctions {
 
   import requestSupport._
+
+  def hello(): Action[AnyContent] = Action { implicit request: Request[_] =>
+
+    Ok(views.helloPage())
+  }
 
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
     implicit request =>
