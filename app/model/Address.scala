@@ -29,19 +29,15 @@ object Address {
 @Singleton
 class AddressFormter @Inject() (countriesService: CountriesService) {
 
-  def getFormattedAddress(vrn: String, address: Option[Address]): String = {
+  val lineReturn = "<br>"
 
-    val lineReturn = "<br>"
-
-    address match {
-      case None => ""
-      case Some(addressValue) => addressValue.line1.fold("")(_ + lineReturn) +
-        addressValue.line2.fold("")(_ + lineReturn) +
-        addressValue.line3.fold("")(_ + lineReturn) +
-        addressValue.line4.fold("")(_ + lineReturn) +
-        addressValue.postCode.fold("")(_ + lineReturn) +
-        addressValue.countryCode.fold("")(countriesService.getCountry(_) + lineReturn)
-    }
+  def getFormattedAddress(vrn: String, address: Address): String = {
+    address.line1.fold("")(_ + lineReturn) +
+      address.line2.fold("")(_ + lineReturn) +
+      address.line3.fold("")(_ + lineReturn) +
+      address.line4.fold("")(_ + lineReturn) +
+      address.postCode.fold("")(_ + lineReturn) +
+      address.countryCode.fold("")(countriesService.getCountry(_) + lineReturn)
   }
 
 }

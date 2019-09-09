@@ -20,7 +20,7 @@ import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import langswitch.OnePayment
 import model.Vrn
-import model.des.{ApprovedInformation, Transaction}
+import model.des.{ApprovedInformation, FinancialData}
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc._
@@ -51,39 +51,15 @@ class Controller @Inject() (cc:                ControllerComponents,
     implicit request =>
       authorised() {
 
+        val financialF = desConnector.getFinancialData(vrn)
+        val customerDataF = desService.getCustomerData(vrn)
+
         for {
-          futureFinancialData <- desConnector.getFinancialData(vrn)
-          futureCustomerData <- desConnector.getCustomerData(vrn)
-
-          //should not happen as we are logged in.
-          customerData: ApprovedInformation = futureCustomerData.getOrElse(throw new RuntimeException(
-            s"""No Customer data found for VRN: ${
-              vrn
-            }""")).unWrap(vrn)
-
+          futureFinancialData <- financialF
+          customerData <- customerDataF
           result <- futureFinancialData match {
-
-            case Some(data) => {
-              val transactions = data.financialTransactions.getOrElse(Seq[Transaction]())
-              transactions.size match {
-                case 0 => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-                case 1 => {
-                  for {
-                    obligationDates <- desService.getObligations(vrn, transactions(0).periodKey)
-                  } yield Ok(views.one_payment(transactions(0).originalAmount.toString(),
-                                               obligationDates,
-                                               transactions(0).periodKeyDescription,
-                                               customerData.bankDetailsExist,
-                                               customerData.bankDetails))
-                }
-                case _ => throw new RuntimeException("todo: implement multiple page")
-              }
-
-            }
-
-            case None => {
-              Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-            }
+            case Some(data) => computeView(data, customerData, vrn)
+            case None       => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
           }
         } yield (result)
 
@@ -99,6 +75,23 @@ class Controller @Inject() (cc:                ControllerComponents,
               "")))
 
       }
+  }
+
+  def computeView(data: FinancialData, customerData: ApprovedInformation, vrn: Vrn)(implicit request: Request[_]) = {
+    data.financialTransactions.size match {
+      case 0 => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
+      case 1 => {
+        for {
+          obligationDates <- desService.getObligations(vrn, data.financialTransactions(0).periodKey)
+        } yield Ok(views.one_payment(data.financialTransactions(0).originalAmount.toString(),
+                                     obligationDates,
+                                     data.financialTransactions(0).periodKeyDescription,
+                                     customerData.bankDetailsExist,
+                                     customerData.bankDetails))
+      }
+      case _ => throw new RuntimeException("todo: implement multiple page")
+    }
+
   }
 
 }
