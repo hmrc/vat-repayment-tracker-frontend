@@ -1,7 +1,7 @@
 # microservice specific routes
 
 GET        /show-results/vrn/:vrn        controllers.Controller.showResults(vrn : Vrn)
-
+GET        /view-repayment-account/:accountHolderName/:bankAccountNumber/:sortCode      controllers.Controller.viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode : SortCode)
 
 GET        /assets/*file                 @controllers.Assets.at(path="/public", file)
 GET        /language/:language           @langswitch.LanguageSwitchController.switchToLanguage(language: Language)

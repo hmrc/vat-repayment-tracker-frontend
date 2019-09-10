@@ -17,22 +17,33 @@
 package pages.tests
 
 import model.Vrn
-import pages.OnePayment
+import model.des.{AccountHolderName, BankAccountNumber, SortCode}
+import pages.{OneRepayment, ViewRepaymentAccount}
 import support.{ItSpec, WireMockResponses}
 
-class OnePaymentSpec extends ItSpec {
+class OneRepaymentSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and financial data found" in {
+    setup()
+    OneRepayment.assertPageIsDisplayed(vrn)
+
+  }
+
+  "click manager link" in {
+    setup()
+    OneRepayment.clickManageAccount
+    ViewRepaymentAccount.assertPageIsDisplayed(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"))
+  }
+
+  private def setup() = {
     WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     WireMockResponses.financialsOkSingle(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
     WireMockResponses.obligationsOk(vrn)
     goToViaPath(path)
-    OnePayment.assertPageIsDisplayed(vrn)
-
   }
 
 }

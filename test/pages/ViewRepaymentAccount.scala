@@ -16,22 +16,23 @@
 
 package pages
 
-import model.Vrn
+import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
-object NoVatRepaymentsFoundPage extends CommonPage {
+object ViewRepaymentAccount extends CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
+  val path = "/vat-repayment-tracker-frontend/view-repayment-account/"
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 
-  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
+  def assertPageIsDisplayed(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}${accountHolderName.value}/${bankAccountNumber.value}/${sortCode.value}"""
     readTitle shouldBe "Vat Repayment Tracker"
-    readMainMessage shouldBe "No VAT repayments in progress"
     readAccName shouldBe "Name on account: *********"
     readAccNumber shouldBe "Account number: ****2490"
     readAccSortCode() shouldBe "Sort code: 40****"
+    readMainMessage() shouldBe "Your VAT repayments will be sent to this account"
   }
+
 }

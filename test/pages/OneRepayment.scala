@@ -21,13 +21,11 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 import org.openqa.selenium.By
 
-object OnePayment extends CommonPage {
+object OneRepayment extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
-
-  def readMainMessage()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
 
   def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("amount")).getText)
 
@@ -37,11 +35,7 @@ object OnePayment extends CommonPage {
 
   def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("period")).getText)
 
-  def readAccName()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
-
-  def readAccSortCode()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)
-
-  def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
+  def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
@@ -52,7 +46,8 @@ object OnePayment extends CommonPage {
     readReceivedDate shouldBe "2018-04-12"
     readPeriod shouldBe "March 2018"
     readAccName shouldBe "Name on account: *********"
-    readAccSortCode shouldBe "Sort code: ****2490"
-    readAccNumber shouldBe "Account number: 40****"
+    readAccNumber shouldBe "Account number: ****2490"
+    readAccSortCode() shouldBe "Sort code: 40****"
+
   }
 }

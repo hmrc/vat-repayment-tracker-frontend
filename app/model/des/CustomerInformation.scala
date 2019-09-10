@@ -18,6 +18,9 @@ package model.des
 
 import model.Vrn
 import play.api.libs.json._
+import play.api.mvc.PathBindable
+import controllers.ValueClassBinder.valueClassBinder
+import play.api.libs.functional.syntax._
 
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
   def unWrap(vrn: Vrn): ApprovedInformation = {
@@ -42,11 +45,38 @@ object ApprovedInformation {
 }
 
 final case class BankDetails(
-    accountHolderName: String,
-    bankAccountNumber: String,
-    sortCode:          String
+    accountHolderName: AccountHolderName,
+    bankAccountNumber: BankAccountNumber,
+    sortCode:          SortCode
 )
 object BankDetails {
   implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
+}
+
+final case class AccountHolderName(value: String)
+
+object AccountHolderName {
+
+  implicit val format: Format[AccountHolderName] = implicitly[Format[String]].inmap(AccountHolderName(_), _.value)
+  implicit val vrnBinder: PathBindable[AccountHolderName] = valueClassBinder(_.value)
+
+}
+
+final case class BankAccountNumber(value: String)
+
+object BankAccountNumber {
+
+  implicit val format: Format[BankAccountNumber] = implicitly[Format[String]].inmap(BankAccountNumber(_), _.value)
+  implicit val vrnBinder: PathBindable[BankAccountNumber] = valueClassBinder(_.value)
+
+}
+
+final case class SortCode(value: String)
+
+object SortCode {
+
+  implicit val format: Format[SortCode] = implicitly[Format[String]].inmap(SortCode(_), _.value)
+  implicit val vrnBinder: PathBindable[SortCode] = valueClassBinder(_.value)
+
 }
 

@@ -15,6 +15,7 @@
  *@
 
 @import play.twirl.api.HtmlFormat
+@import langswitch.LangMessages
 
 
 @this(
@@ -58,7 +59,7 @@
 
 @insideHeader = {
   @viewsHelpers.headerNav(
-  navTitle = Some("vat-repayment-tracker-frontend"),
+  navTitle = Some(LangMessages.`Track your VAT repayments`.show),
   navTitleLink = None,
   showBetaLink = false,
   navLinks = Some(headerNavLinks))

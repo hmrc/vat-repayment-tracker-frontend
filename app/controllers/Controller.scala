@@ -18,15 +18,15 @@ package controllers
 
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
-import langswitch.{ErrorMessages}
+import langswitch.ErrorMessages
 import model.Vrn
-import model.des.{ApprovedInformation, FinancialData}
+import model.des._
 import play.api.Logger
 import play.api.mvc._
 import req.RequestSupport
 import service.des.DesService
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
-import views.views.Views
+import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -63,17 +63,32 @@ class Controller @Inject() (
         } yield (result)
 
       }.recoverWith {
-        case e: AuthorisationException =>
-          Logger.debug(s"Unauthorised because of ${
-            e.reason
-          }, $e")
-          Future.successful(Unauthorized(
-            errorHandler.standardErrorTemplate(
-              ErrorMessages.`You do not have access to this service`.show,
-              ErrorMessages.`You do not have access to this service`.show,
-              "")))
-
+        case e: AuthorisationException => authorisationException(e)
       }
+  }
+
+  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode): Action[AnyContent] = Action.async {
+    implicit request: Request[_] =>
+      af.authorised() {
+        val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
+        Future.successful(Ok(views.view_repayment_account(bankDetails)))
+      }.recoverWith {
+        case e: AuthorisationException => authorisationException(e)
+      }
+  }
+
+  def authorisationException(e: AuthorisationException)(
+      implicit
+      request: Request[_]): Future[Result] = {
+    Logger.debug(s"Unauthorised because of ${
+      e.reason
+    }, $e")
+    Future.successful(Unauthorized(
+      errorHandler.standardErrorTemplate(
+        ErrorMessages.`You do not have access to this service`.show,
+        ErrorMessages.`You do not have access to this service`.show,
+        "")))
+
   }
 
   def computeView(
@@ -86,11 +101,11 @@ class Controller @Inject() (
     case 1 => {
       for {
         obligationDates <- desService.getObligations(vrn, data.financialTransactions(0).periodKey)
-      } yield Ok(views.one_payment(data.financialTransactions(0).originalAmount.toString(),
-                                   obligationDates,
-                                   data.financialTransactions(0).periodKeyDescription,
-                                   customerData.bankDetailsExist,
-                                   customerData.bankDetails))
+      } yield Ok(views.one_repayment(data.financialTransactions(0).originalAmount.toString(),
+                                     obligationDates,
+                                     data.financialTransactions(0).periodKeyDescription,
+                                     customerData.bankDetailsExist,
+                                     customerData.bankDetails))
     }
     case _ => throw new RuntimeException("todo: implement multiple page")
   }

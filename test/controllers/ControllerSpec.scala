@@ -17,6 +17,7 @@
 package controllers
 
 import model.Vrn
+import model.des.{AccountHolderName, BankAccountNumber, BankDetails, SortCode}
 import play.api.http.Status
 import support.{ItSpec, WireMockResponses}
 
@@ -32,9 +33,10 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get ShowResults unauthorised" in {
-    WireMockResponses.authFailed
-    val result = connector.showResults(vrn).failed.futureValue
+  "Get view repayment account authorised" in {
+    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    val result = connector.viewRepaymentAccount(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****")).futureValue
+    result.status shouldBe Status.OK
   }
 
 }
