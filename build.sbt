@@ -111,6 +111,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     routesImport ++= Seq(
       "model._",
+      "model.des._",
       "langswitch.Language"
     ))
   .settings(

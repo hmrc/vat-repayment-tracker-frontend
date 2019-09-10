@@ -20,7 +20,7 @@ import javax.inject.Inject
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
 import req.RequestSupport
-import views.views.Views
+import views.Views
 
 import scala.concurrent.ExecutionContext
 
