@@ -32,3 +32,10 @@
     clear: both;
   }
 }
+
+/* 
+  lte IE8 polyfill
+*/
+@mixin govuk-if-ie8 {
+  @content;
+}

@@ -3,11 +3,10 @@
   padding: 0 $govuk-gutter-half;
   width: 100%;
   float: $float;
-  
+
   @include break(tablet) {
     width: $width;
   }
-  outline: 1px solid green;
 }
 
 .govuk-grid-row {
@@ -20,5 +19,17 @@
   .govuk-grid-column-#{$width} {
     $value: map-get($govuk-grid-widths, $width);
     @include govuk-grid-column($value)
+  }
+}
+
+/*
+  overrides for incombent elements
+*/
+#content {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  @include break(desktop) {
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
 }
