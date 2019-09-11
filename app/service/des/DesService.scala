@@ -21,6 +21,7 @@ import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import model.{AllRepaymentData, RepaymentData, Vrn}
 import model.des._
+import play.api.Logger
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}

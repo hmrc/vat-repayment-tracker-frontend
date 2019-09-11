@@ -107,4 +107,19 @@ object LangMessages {
     english = "Change account details"
   )
 
+  val `Your repayment is delayed`: Message = Message(
+    english = "Your repayment is delayed"
+  )
+
+  val `What happens next`: Message = Message(
+    english = "What happens next"
+  )
+
+  val `What happens next description`: Message = Message(
+    english = "You do not need to do anything right now.  We are working on paying you as soon as possible.  If you need to speak to someone about your repayment, you can "
+  )
+
+  val `Contact HMRC`: Message = Message(
+    english = "Contact HMRC."
+  )
 }

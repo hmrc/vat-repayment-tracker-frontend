@@ -111,12 +111,18 @@ class Controller @Inject() (
 
     val showCurrent = allRepaymentData.currentRepaymentData.isDefined
     val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
+
+    Logger.error (s"""AAAAAAAAAAA: showCurrent: ${showCurrent}, overDueSize: ${overDueSize} """)
     if ((showCurrent == false) && (overDueSize == 0)) {
       Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails))
     } else if (showCurrent && (overDueSize == 0)) {
       Ok(views.one_repayment(allRepaymentData.getCurrentRepaymentData,
                              customerData.bankDetailsExist,
                              customerData.bankDetails))
+    } else if ((showCurrent == false) && (overDueSize == 1)) {
+      Ok(views.one_repayment_delayed(allRepaymentData.getOverDueRepaymentData(0),
+                                     customerData.bankDetailsExist,
+                                     customerData.bankDetails))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
 
   }
