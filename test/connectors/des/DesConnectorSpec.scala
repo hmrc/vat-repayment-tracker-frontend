@@ -16,7 +16,7 @@
 
 package connectors.des
 
-import java.time.LocalDate
+import java.time.{Clock, LocalDate}
 
 import model.Vrn
 import model.des._
@@ -27,6 +27,8 @@ class DesConnectorSpec extends ItSpec {
 
   val desConnector = injector.instanceOf[DesConnector]
 
+  val clock = injector.instanceOf[Clock]
+
   val vrn: Vrn = Vrn("968501689")
 
   "find some obligations" in {
@@ -35,7 +37,7 @@ class DesConnectorSpec extends ItSpec {
     futureResponse match {
       case Some(response) => {
         response.obligations.head.obligationDetails.size shouldBe 4
-        response.obligations.head.obligationDetails.last shouldBe DesData.obligationsDataOk(vrn, LocalDate.now().toString).
+        response.obligations.head.obligationDetails.last shouldBe DesData.obligationsDataOk(vrn, LocalDate.now(clock).toString).
           \("obligations").\(0).\("obligationDetails").\(3).as[ObligationDetail]
       }
       case None => "did not find any obligations data" shouldBe "test failed"

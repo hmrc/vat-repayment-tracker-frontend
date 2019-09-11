@@ -16,7 +16,7 @@
 
 package model
 
-import java.time.LocalDate
+import java.time.{Clock, LocalDate}
 
 final case class RepaymentData(
     returnedReceivedOn: LocalDate,
@@ -27,8 +27,8 @@ final case class RepaymentData(
     returnedReceivedOn.plusDays(30)
   }
 
-  def isOverdue: Boolean = {
-    estimatedRepaymentDate.isBefore(LocalDate.now())
+  def isOverdue(implicit clock: Clock): Boolean = {
+    estimatedRepaymentDate.isBefore(LocalDate.now(clock))
   }
 
 }

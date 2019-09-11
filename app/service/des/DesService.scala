@@ -15,6 +15,8 @@
  */
 
 package service.des
+import java.time.Clock
+
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import model.{AllRepaymentData, RepaymentData, Vrn}
@@ -24,7 +26,15 @@ import views.Views
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DesService @Inject() (desConnector: DesConnector, views: Views)(implicit ec: ExecutionContext) {
+class DesService @Inject() (
+    desConnector: DesConnector,
+    views:        Views)
+  (
+    implicit
+    ec:    ExecutionContext,
+    clock: Clock
+
+) {
 
   def getCustomerData(vrn: Vrn): Future[ApprovedInformation] = {
     for {
