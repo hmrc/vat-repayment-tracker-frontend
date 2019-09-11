@@ -111,6 +111,10 @@ object LangMessages {
     english = "Your repayment is delayed"
   )
 
+  val `Your repayments are delayed`: Message = Message(
+    english = "Your repayments are delayed"
+  )
+
   val `What happens next`: Message = Message(
     english = "What happens next"
   )

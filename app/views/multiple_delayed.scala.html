@@ -1,0 +1,76 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.ViewConfig
+@import model.des._
+@import model.RepaymentData
+@import langswitch.LangMessages
+
+@this(
+  mainTemplate: views.html.main_template,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: ViewConfig
+)
+
+@(
+  repayments: List[RepaymentData],
+  showBankDetails: Boolean,
+  bankDetails: Option[BankDetails])(
+  implicit
+  request: Request[_]
+)
+
+@import viewsHelpers.requestSupport._
+
+@mainTemplate(
+  title =LangMessages.heading.show,
+  bodyClasses = None
+) {
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 id="main-message">@{LangMessages.`Your repayments are delayed`.show}</h1>
+  </div>
+</div>
+
+</br>
+<table>
+ <tr>
+  <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td><td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
+ </tr>
+    @for(onePayment <- repayments) {
+ <tr>
+  <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.estimatedRepaymentDate</td><td id="received-date">@onePayment.returnedReceivedOn</td><td id="period">@onePayment.period</td>
+ </tr>
+    }
+
+</table>
+</br>
+</br>
+<h2>@{LangMessages.`What happens next`.show}</h2>
+<p>@{LangMessages.`What happens next description`.show}<a href="www.changeme.com">@{LangMessages.`Contact HMRC`.show}</a></p>
+</br>
+<h2>@{LangMessages.`Your repayment details`.show}</h2>
+@if(showBankDetails) {
+<p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
+<p id="acc-name">@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</p>
+<p id="acc-number">@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</p>
+<p id="acc-sort-code">@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.sortCode.value)</p>
+}
+
+<p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode))' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
+}

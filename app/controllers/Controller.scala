@@ -123,6 +123,10 @@ class Controller @Inject() (
       Ok(views.one_repayment_delayed(allRepaymentData.getOverDueRepaymentData(0),
                                      customerData.bankDetailsExist,
                                      customerData.bankDetails))
+    } else if ((showCurrent == false) && (overDueSize > 1)) {
+      Ok(views.multiple_delayed(allRepaymentData.getOverDueRepaymentData,
+                                customerData.bankDetailsExist,
+                                customerData.bankDetails))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
 
   }
