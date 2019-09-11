@@ -1,3 +1,17 @@
 @import "utils/reset";
+@import "utils/settings";
+@import "utils/helpers";
 @import "utils/layout";
 
+/* typography */
+h1, .heading-h1 {
+  margin-top: 0;
+  font-size: 32px;
+  margin-bottom: 30px;
+
+  @include break(desktop) {
+    font-size: 48px;
+    margin-bottom: 50px;
+  }
+
+}

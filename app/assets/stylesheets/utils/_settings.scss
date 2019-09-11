@@ -1,0 +1,17 @@
+$govuk-gutter: 30px !default;
+$govuk-gutter-half: $govuk-gutter / 2;
+
+$breakpoints: (
+  mobile:  320px,
+  tablet:  641px,
+  desktop: 769px
+) !default;
+
+$govuk-grid-widths: (
+  one-quarter: 25%,
+  one-third: 33.3333%,
+  one-half: 50%,
+  two-thirds: 66.6666%,
+  three-quarters: 75%,
+  full: 100%
+) !default;
