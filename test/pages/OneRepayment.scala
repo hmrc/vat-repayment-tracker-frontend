@@ -44,8 +44,8 @@ object OneRepayment extends CommonPage {
     readTitle shouldBe "Vat Repayment Tracker"
     readMainMessage shouldBe "We are processing your VAT repayment"
     readAmount shouldBe "£5.56"
-    readRepayDate shouldBe LocalDate.now().plusDays(30).toString
-    readReceivedDate shouldBe LocalDate.now().toString
+    readRepayDate shouldBe "2027-12-02"
+    readReceivedDate shouldBe "2027-11-02"
     readPeriod shouldBe "March 2018"
     readAccName shouldBe "Name on account: *********"
     readAccNumber shouldBe "Account number: ****2490"

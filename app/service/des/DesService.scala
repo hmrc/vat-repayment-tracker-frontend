@@ -43,7 +43,9 @@ class DesService @Inject() (desConnector: DesConnector, views: Views)(implicit e
       ft =>
         {
           RepaymentData((vatObligations.obligations.flatMap(x => x.obligationDetails).find(ob => ob.periodKey == ft.periodKey))
-            .getOrElse(dealWithNoObligations(vrn)).inboundCorrespondenceDateReceived,
+            .getOrElse(
+              dealWithNoObligations (
+                vrn)).inboundCorrespondenceDateReceived,
                         ft.periodKeyDescription,
                         ft.originalAmount)
         }
@@ -59,7 +61,10 @@ class DesService @Inject() (desConnector: DesConnector, views: Views)(implicit e
             val data = getRepaymentData(fd, vo, vrn)
             val currentData: Option[RepaymentData] = data.find(f => f.isOverdue == false)
             val overDrawn: List[RepaymentData] = data.filter(f => f.isOverdue == true).toList
-            AllRepaymentData(currentData, if (overDrawn.size == 0) None else Some(overDrawn))
+            AllRepaymentData(
+              currentData,
+              if (overDrawn.size == 0) None else Some(overDrawn)
+            )
           }
           case None => dealWithNoObligations(vrn)
         }

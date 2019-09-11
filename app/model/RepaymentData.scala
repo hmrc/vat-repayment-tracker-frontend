@@ -18,13 +18,16 @@ package model
 
 import java.time.LocalDate
 
-final case class RepaymentData(returnedReceivedOn: LocalDate, period: String, amount: BigDecimal) {
+final case class RepaymentData(
+    returnedReceivedOn: LocalDate,
+    period:             String,
+    amount:             BigDecimal) {
 
-  val estimatedRepaymentDate: LocalDate = {
+  def estimatedRepaymentDate: LocalDate = {
     returnedReceivedOn.plusDays(30)
   }
 
-  val isOverdue: Boolean = {
+  def isOverdue: Boolean = {
     estimatedRepaymentDate.isBefore(LocalDate.now())
   }
 

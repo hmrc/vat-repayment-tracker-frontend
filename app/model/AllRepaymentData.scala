@@ -16,6 +16,18 @@
 
 package model
 
-final case class AllRepaymentData(currentRepaymentData: Option[RepaymentData], overDueRepaymentData: Option[List[RepaymentData]]) {
+final case class AllRepaymentData(
+    currentRepaymentData: Option[RepaymentData],
+    overDueRepaymentData: Option[List[RepaymentData]]
+) {
 
+  def getCurrentRepaymentData: RepaymentData = currentRepaymentData match {
+    case Some(data) => data
+    case None       => throw new RuntimeException("currentRepaymentData missing")
+  }
+
+  def getOverDueRepaymentData: List[RepaymentData] = overDueRepaymentData match {
+    case Some(data) => data
+    case None       => throw new RuntimeException("overDueRepaymentData missing")
+  }
 }

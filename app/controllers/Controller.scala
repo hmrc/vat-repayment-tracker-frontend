@@ -69,7 +69,7 @@ class Controller @Inject() (
           customerData <- customerDataF
           obligationData <- obligationDataF
         } yield (
-          computeView2(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
+          computeView(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
         )
 
         result
@@ -103,7 +103,7 @@ class Controller @Inject() (
 
   }
 
-  def computeView2(
+  def computeView(
       allRepaymentData: AllRepaymentData,
       customerData:     ApprovedInformation,
       vrn:              Vrn
@@ -114,7 +114,7 @@ class Controller @Inject() (
     if ((showCurrent == false) && (overDueSize == 0)) {
       Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails))
     } else if (showCurrent && (overDueSize == 0)) {
-      Ok(views.one_repayment(allRepaymentData.currentRepaymentData,
+      Ok(views.one_repayment(allRepaymentData.getCurrentRepaymentData,
                              customerData.bankDetailsExist,
                              customerData.bankDetails))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")

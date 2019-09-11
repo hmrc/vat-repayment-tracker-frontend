@@ -38,7 +38,7 @@ object WireMockResponses {
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.obligationsDataOk(vrn, LocalDate.now().toString).toString()
+          DesData.obligationsDataOk(vrn, "2027-11-02").toString()
             .stripMargin)))
 
   }
