@@ -16,6 +16,8 @@
 
 package support
 
+import java.time.LocalDate
+
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.http.{HttpHeader, HttpHeaders}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -36,7 +38,7 @@ object WireMockResponses {
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.obligationsDataOk(vrn).toString()
+          DesData.obligationsDataOk(vrn, "2027-11-02").toString()
             .stripMargin)))
 
   }

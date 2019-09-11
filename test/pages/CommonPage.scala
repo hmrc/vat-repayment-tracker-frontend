@@ -35,7 +35,7 @@ trait CommonPage
   // with PatienceConfiguration
   with RichMatchers {
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(10, Seconds)), scaled(Span(200, Millis)))
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(1, Seconds)), scaled(Span(200, Millis)))
 
   def assertTechnicalErrorDisplayed(path: String)(implicit webDriver: WebDriver): Assertion = probing { _ =>
     currentPath shouldBe path

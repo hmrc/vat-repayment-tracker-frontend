@@ -33,9 +33,10 @@ package support
  */
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZoneId, ZonedDateTime}
+import java.time._
 
-import com.google.inject.AbstractModule
+import com.google.inject.{AbstractModule, Provides}
+import javax.inject.Singleton
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -51,6 +52,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext
+import scala.util.Random
 
 /**
  * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
@@ -70,9 +72,7 @@ trait ItSpec
   }
 
   implicit lazy val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  lazy val overridingsModule = new AbstractModule {
-    override def configure(): Unit = ()
-  }
+
   lazy val servicesConfig = fakeApplication.injector.instanceOf[ServicesConfig]
   lazy val config = fakeApplication.injector.instanceOf[Configuration]
   lazy val env = fakeApplication.injector.instanceOf[Environment]
@@ -92,8 +92,25 @@ trait ItSpec
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .configure("microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.des.port" -> WireMockSupport.port
-    ).build()
+    .configure(configMap).build()
+
+  def configMap = Map[String, Any](
+    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.des.port" -> WireMockSupport.port
+  )
+
+  def frozenTimeString: String = "2027-11-02T16:33:51.880"
+
+  lazy val overridingsModule: AbstractModule = new AbstractModule {
+
+    override def configure(): Unit = ()
+
+    @Provides
+    @Singleton
+    def clock: Clock = {
+      val fixedInstant = LocalDateTime.parse(frozenTimeString).toInstant(ZoneOffset.UTC)
+      Clock.fixed(fixedInstant, ZoneId.systemDefault)
+    }
+  }
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
 

@@ -16,6 +16,8 @@
 
 package connectors.des
 
+import java.time.LocalDate
+
 import model.Vrn
 import model.des._
 import play.api.libs.json.Json
@@ -33,7 +35,7 @@ class DesConnectorSpec extends ItSpec {
     futureResponse match {
       case Some(response) => {
         response.obligations.head.obligationDetails.size shouldBe 4
-        response.obligations.head.obligationDetails.last shouldBe DesData.obligationsDataOk(vrn).
+        response.obligations.head.obligationDetails.last shouldBe DesData.obligationsDataOk(vrn, LocalDate.now().toString).
           \("obligations").\(0).\("obligationDetails").\(3).as[ObligationDetail]
       }
       case None => "did not find any obligations data" shouldBe "test failed"
