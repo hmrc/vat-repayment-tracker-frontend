@@ -35,6 +35,17 @@ h3, .heading-h3 { //govuk-heading-m
   }
 }
 
+.header__menu__proposition-name {
+  color: white;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+  @include break(desktop) {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+}
+
 /* a11y */
 a {
   &:focus {
