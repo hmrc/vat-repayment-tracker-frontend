@@ -15,35 +15,16 @@
  */
 
 package service.des
-
-import java.time.LocalDate
-
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
-import model.Vrn
-import model.des.{ApprovedInformation, ObligationDates}
+import model.{AllRepaymentData, RepaymentData, Vrn}
+import model.des._
+import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DesService @Inject() (desConnector: DesConnector)(implicit ec: ExecutionContext) {
-
-  def getObligations(vrn: Vrn, periodKey: String): Future[ObligationDates] = {
-    for {
-      obligations <- desConnector.getObligations(vrn)
-      result <- obligations match {
-        case None => Future.successful(ObligationDates("", ""))
-        case Some(res) => {
-          val obligationDetail = res.obligations(0).obligationDetails.find(f => f.periodKey == periodKey)
-          val obligationDates = obligationDetail match {
-            case None         => ObligationDates("", "")
-            case Some(detail) => ObligationDates(detail.inboundCorrespondenceDateReceived.toString, estimatedRepaymentDate(detail.inboundCorrespondenceDateReceived))
-          }
-          Future.successful(obligationDates)
-        }
-      }
-    } yield (result)
-  }
+class DesService @Inject() (desConnector: DesConnector, views: Views)(implicit ec: ExecutionContext) {
 
   def getCustomerData(vrn: Vrn): Future[ApprovedInformation] = {
     for {
@@ -56,8 +37,39 @@ class DesService @Inject() (desConnector: DesConnector)(implicit ec: ExecutionCo
     } yield (customerData)
   }
 
-  private def estimatedRepaymentDate(receivedDate: LocalDate): String = {
-    receivedDate.plusDays(30).toString
+  private def getRepaymentData(financialData: FinancialData, vatObligations: VatObligations, vrn: Vrn) = {
+
+    financialData.financialTransactions.map{
+      ft =>
+        {
+          RepaymentData((vatObligations.obligations.flatMap(x => x.obligationDetails).find(ob => ob.periodKey == ft.periodKey))
+            .getOrElse(dealWithNoObligations(vrn)).inboundCorrespondenceDateReceived,
+                        ft.periodKeyDescription,
+                        ft.originalAmount)
+        }
+    }
+  }
+
+  def getAllRepaymentData(financialData: Option[FinancialData], vatObligations: Option[VatObligations], vrn: Vrn): AllRepaymentData = {
+
+    financialData match {
+      case Some(fd) => {
+        vatObligations match {
+          case Some(vo) => {
+            val data = getRepaymentData(fd, vo, vrn)
+            val currentData: Option[RepaymentData] = data.find(f => f.isOverdue == false)
+            val overDrawn: List[RepaymentData] = data.filter(f => f.isOverdue == true).toList
+            AllRepaymentData(currentData, if (overDrawn.size == 0) None else Some(overDrawn))
+          }
+          case None => dealWithNoObligations(vrn)
+        }
+      }
+      case None => AllRepaymentData(None, None)
+    }
+  }
+
+  private def dealWithNoObligations(vrn: Vrn) = {
+    throw new RuntimeException(s"""Problem getting obligationData for vrn ${vrn.value}""")
   }
 
 }

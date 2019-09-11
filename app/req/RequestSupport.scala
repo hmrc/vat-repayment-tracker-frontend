@@ -42,12 +42,12 @@ object RequestSupport {
 
   /**
    * Naive way of checking if user is logged in. Use it in views only.
-   * For more real check see [[auth.AuthService]]
+   * For more real check see auth.AuthService
    */
   def isLoggedIn(implicit request: Request[_]): Boolean = request.session.get(SessionKeys.authToken).isDefined
 
   /**
-   * This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code.
+   * This is because we want to give responsibility of creation of HeaderCarrier to the platform code.
    * If they refactor how hc is created our code will pick it up automatically.
    */
   private object HcProvider extends FrontendHeaderCarrierProvider {

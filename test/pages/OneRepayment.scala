@@ -16,6 +16,8 @@
 
 package pages
 
+import java.time.LocalDate
+
 import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
@@ -42,8 +44,8 @@ object OneRepayment extends CommonPage {
     readTitle shouldBe "Vat Repayment Tracker"
     readMainMessage shouldBe "We are processing your VAT repayment"
     readAmount shouldBe "£5.56"
-    readRepayDate shouldBe "2018-05-12"
-    readReceivedDate shouldBe "2018-04-12"
+    readRepayDate shouldBe LocalDate.now().plusDays(30).toString
+    readReceivedDate shouldBe LocalDate.now().toString
     readPeriod shouldBe "March 2018"
     readAccName shouldBe "Name on account: *********"
     readAccNumber shouldBe "Account number: ****2490"

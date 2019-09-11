@@ -16,6 +16,7 @@
 
 @import config.ViewConfig
 @import model.des._
+@import model.RepaymentData
 @import langswitch.LangMessages
 
 @this(
@@ -25,9 +26,7 @@
 )
 
 @(
-  amountClaimed: String,
-  obligationDates: ObligationDates,
-  period: String,
+  onePayment: Option[RepaymentData],
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails])(
   implicit
@@ -48,13 +47,13 @@
   <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td>
  </tr>
  <tr>
-  <td id="amount">£@amountClaimed</td><td id="repay-date">@obligationDates.estimatedPaymentDate</td>
+  <td id="amount">£@onePayment.fold("")(_.amount.toString)</td><td id="repay-date">@onePayment.fold("")(_.estimatedRepaymentDate.toString)</td>
  </tr>
  <tr>
   <td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
  </tr>
  <tr>
-  <td id="received-date">@obligationDates.inboundCorrespondenceDateReceived</td><td id="period">@period</td>
+  <td id="received-date">@onePayment.fold("")(_.returnedReceivedOn.toString)</td><td id="period">@onePayment.fold("")(_.period)</td>
  </tr>
 </table>
 </br>

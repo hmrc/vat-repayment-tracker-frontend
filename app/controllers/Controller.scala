@@ -19,7 +19,7 @@ package controllers
 import connectors.des.DesConnector
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
-import model.Vrn
+import model.{AllRepaymentData, Vrn}
 import model.des._
 import play.api.Logger
 import play.api.mvc._
@@ -46,21 +46,33 @@ class Controller @Inject() (
 
   import requestSupport._
 
+  def manageOrTrack(vrn: Vrn): Action[AnyContent] = Action.async {
+    implicit request: Request[_] =>
+      af.authorised() {
+
+        Future.successful(Ok("manageOrTrack"))
+      }.recoverWith {
+        case e: AuthorisationException => authorisationException(e)
+      }
+  }
+
   def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
     implicit request: Request[_] =>
       af.authorised() {
 
-        val financialF = desConnector.getFinancialData(vrn)
+        val financialDataF = desConnector.getFinancialData(vrn)
         val customerDataF = desService.getCustomerData(vrn)
+        val obligationDataF = desConnector.getObligations(vrn)
 
-        for {
-          futureFinancialData <- financialF
+        val result = for {
+          financialData <- financialDataF
           customerData <- customerDataF
-          result <- futureFinancialData match {
-            case Some(data) => computeView(data, customerData, vrn)
-            case None       => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-          }
-        } yield (result)
+          obligationData <- obligationDataF
+        } yield (
+          computeView2(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
+        )
+
+        result
 
       }.recoverWith {
         case e: AuthorisationException => authorisationException(e)
@@ -91,23 +103,22 @@ class Controller @Inject() (
 
   }
 
-  def computeView(
-      data:         FinancialData,
-      customerData: ApprovedInformation,
-      vrn:          Vrn)(
-      implicit
-      request: Request[_]): Future[Result] = data.financialTransactions.size match {
-    case 0 => Future.successful(Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails)))
-    case 1 => {
-      for {
-        obligationDates <- desService.getObligations(vrn, data.financialTransactions(0).periodKey)
-      } yield Ok(views.one_repayment(data.financialTransactions(0).originalAmount.toString(),
-                                     obligationDates,
-                                     data.financialTransactions(0).periodKeyDescription,
-                                     customerData.bankDetailsExist,
-                                     customerData.bankDetails))
-    }
-    case _ => throw new RuntimeException("todo: implement multiple page")
+  def computeView2(
+      allRepaymentData: AllRepaymentData,
+      customerData:     ApprovedInformation,
+      vrn:              Vrn
+  )(implicit request: Request[_]): Result = {
+
+    val showCurrent = allRepaymentData.currentRepaymentData.isDefined
+    val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
+    if ((showCurrent == false) && (overDueSize == 0)) {
+      Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails))
+    } else if (showCurrent && (overDueSize == 0)) {
+      Ok(views.one_repayment(allRepaymentData.currentRepaymentData,
+                             customerData.bankDetailsExist,
+                             customerData.bankDetails))
+    } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
+
   }
 
 }
