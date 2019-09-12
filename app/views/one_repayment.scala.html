@@ -39,41 +39,46 @@
   title =LangMessages.heading.show,
   bodyClasses = None
 ) {
+<a href="## TODO: Add previous service link here ##" class="govuk-back-link">Back</a>
+<main class="govuk-main-wrapper" role="main">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
+      
+      <div class="govuk-grid-row govuk-!-margin-bottom-9">
+        <div class="govuk-grid-column-one-half">
+          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Amount claimed`.show}</h2>
+          <p class="heading-h2 govuk-!-padding-top-1">£@onePayment.amount</p>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Estimated repayment date`.show}</h2>
+          <p class="heading-h2 govuk-!-padding-top-1">@onePayment.estimatedRepaymentDate</p>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return received on`.show}</h2>
+          <p class="heading-h2 govuk-!-padding-top-1">@onePayment.returnedReceivedOn</p>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return period`.show}</h2>
+          <p class="heading-h2 govuk-!-padding-top-1">@onePayment.period</p>
+        </div>
+      </div>
 
+      <h3>@{LangMessages.`When we will repay you`.show}</h3>
+      <p>@{LangMessages.`When we will repay you description`.show}</p>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
+      <h3>@{LangMessages.`Your repayment details`.show}</h3>
+      @if(showBankDetails) {
+        <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
+        <p>
+          @{LangMessages.`Name on account`.show} <strong>@bankDetails.fold("")(_.accountHolderName.value)</strong><br>
+          @{LangMessages.`Account number`.show} <strong>@bankDetails.fold("")(_.bankAccountNumber.value)</strong><br>
+          @{LangMessages.`Sort code`.show} <strong>@bankDetails.fold("")(_.sortCode.value)</strong>
+        </p>
+        <p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode))' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
+      }
+
+    </div>
   </div>
-</div>
-
-</br>
-<table>
- <tr>
-  <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td>
- </tr>
- <tr>
-  <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.estimatedRepaymentDate</td>
- </tr>
- <tr>
-  <td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
- </tr>
- <tr>
-  <td id="received-date">@onePayment.returnedReceivedOn</td><td id="period">@onePayment.period</td>
- </tr>
-</table>
-</br>
-</br>
-<h2>@{LangMessages.`When we will repay you`.show}</h2>
-<p>@{LangMessages.`When we will repay you description`.show}</p>
-</br>
-<h2>@{LangMessages.`Your repayment details`.show}</h2>
-@if(showBankDetails) {
-<p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
-<p id="acc-name">@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</p>
-<p id="acc-number">@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</p>
-<p id="acc-sort-code">@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.sortCode.value)</p>
-}
-
-<p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode))' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
+</main>
 }
