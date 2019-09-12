@@ -23,7 +23,8 @@
   mainTemplate: views.html.main_template,
   viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig,
-repaymentDetails: views.html.partials.repayment_details
+  repaymentDetails: views.html.partials.repayment_details,
+  multiple_repayments: views.html.partials.multiple_repayment_details
 )
 
 @(
@@ -48,23 +49,6 @@ repaymentDetails: views.html.partials.repayment_details
     <h1 id="main-message">@{LangMessages.`Your repayments are delayed`.show}</h1>
   </div>
 </div>
-
-</br>
-<table>
- <tr>
-  <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td><td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
- </tr>
-    @for(onePayment <- repayments) {
- <tr>
-  <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.estimatedRepaymentDate</td><td id="received-date">@onePayment.returnedReceivedOn</td><td id="period">@onePayment.period</td>
- </tr>
-    }
-
-</table>
-</br>
-</br>
-<h2>@{LangMessages.`What happens next`.show}</h2>
-<p>@{LangMessages.`What happens next description`.show}<a href="www.changeme.com">@{LangMessages.`Contact HMRC`.show}</a></p>
-</br>
+@multiple_repayments(repayments)
 @repaymentDetails(showBankDetails,bankDetails,address)
 }

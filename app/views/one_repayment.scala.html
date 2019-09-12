@@ -23,7 +23,8 @@
   mainTemplate: views.html.main_template,
   viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig,
-  repaymentDetails: views.html.partials.repayment_details
+  repaymentDetails: views.html.partials.repayment_details,
+  one_repayment: views.html.partials.single_repayment_detail
 )
 
 @(
@@ -41,30 +42,12 @@
   title =LangMessages.heading.show,
   bodyClasses = None
 ) {
-<a href="## TODO: Add previous service link here ##" class="govuk-back-link">Back</a>
+<!--<a href="## TODO: Add previous service link here ##" class="govuk-back-link">Back</a>   Don't think we have back links on OPS Apps-->
 <main class="govuk-main-wrapper" role="main">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
-      
-      <div class="govuk-grid-row govuk-!-margin-bottom-9">
-        <div class="govuk-grid-column-one-half">
-          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Amount claimed`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@onePayment.amount</p>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Estimated repayment date`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">@onePayment.estimatedRepaymentDate</p>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return received on`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1" id="received-date">@onePayment.returnedReceivedOn</p>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return period`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1" id="period">@onePayment.period</p>
-        </div>
-      </div>
+        @one_repayment(onePayment)
         @repaymentDetails(showBankDetails,bankDetails,address)
     </div>
   </div>
