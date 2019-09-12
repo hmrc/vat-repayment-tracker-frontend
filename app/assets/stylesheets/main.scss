@@ -4,12 +4,9 @@
 @import "utils/layout";
 
 /* typography */
-h1, .heading-h1,
-h2, .heading-h2,
-h3,  .heading-h3,
-h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 1.04;
 }
 h1, .heading-h1 { //govuk-heading-xl
@@ -37,33 +34,7 @@ h3, .heading-h3 { //govuk-heading-m
     font-size: 24px;
   }
 }
-p, .govuk-body {
-  font-size: 16px;
-  line-height: 1.25;
-  font-weight: 400;
-  margin-bottom: 15px;
-  margin-top: 0;
-  @include break(desktop) {
-    font-size: 19px;
-    line-height: 1.31579;
-    margin-bottom: 20px;
-  }
-}
-strong { font-weight: 700; }
-em { font-style: italic; }
 
-//extra spacing for heading following [p, ol, ul, h1-6]
-h1, h2, h3, h4, h5, h6 {
-  + h1, + h2, + h3, + h4, + h5, + h6,
-    + p, + ol, + ul {
-      margin-top: 5px;
-      @include break(desktop) {
-        margin-top: 10px;
-      }
-    }
-}
-
-/* fix some problems */
 .header__menu__proposition-name {
   color: white;
   font-size: 18px;
@@ -73,45 +44,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 24px;
     line-height: 1.25;
   }
-}
-.service-info { display: none; }
-
-/* back button */
-.govuk-back-link:link, 
-.govuk-back-link:visited, 
-.govuk-back-link:hover, 
-.govuk-back-link:active {
-  color: #0b0c0c;
-}
-.govuk-back-link {
-  display: inline-block;
-  position: relative;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding-left: 14px;
-  border-bottom: 1px solid #0b0c0c;
-  text-decoration: none;
-  font-size: 16px;
-  line-height: 1.25;
-
-  &:before {
-    display: block;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-color: transparent;
-    -webkit-clip-path: polygon(0% 50%, 100% 100%, 100% 0%);
-    clip-path: polygon(0% 50%, 100% 100%, 100% 0%);
-    border-width: 5px 6px 5px 0;
-    border-right-color: inherit;
-    content: "";
-    position: absolute;
-    top: -1px;
-    bottom: 1px;
-    left: 0;
-    margin: auto;
-  }
-
 }
 
 /* a11y */

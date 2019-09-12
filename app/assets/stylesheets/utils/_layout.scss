@@ -25,7 +25,7 @@
 /*
   overrides for incombent elements
 */
-.govuk-main-wrapper {
+#content {
   padding-top: 20px;
   padding-bottom: 20px;
   @include break(desktop) {
