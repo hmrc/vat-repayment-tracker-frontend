@@ -19,12 +19,14 @@
 
 @this(
   mainTemplate: views.html.main_template,
-  viewsHelpers: views.ViewsHelpers
+  viewsHelpers: views.ViewsHelpers,
+  repaymentDetails: views.html.partials.repayment_details
 )
 
 @(
   showBankDetails: Boolean,
-  bankDetails: Option[BankDetails])(
+  bankDetails: Option[BankDetails],
+  address: String)(
   implicit
   request: Request[_]
 )
@@ -40,13 +42,5 @@
 <p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
 <p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
 <p><a href="www.fixme.com">@{LangMessages.`View your VAT account`.show}</a></p>
-<h2>@{LangMessages.`Your repayment details`.show}</h2>
-@if(showBankDetails) {
-<p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
-<p id="acc-name">@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</p>
-<p id="acc-number">@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</p>
-<p id="acc-sort-code">@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.sortCode.value)</p>
-}
-
-<p><a href="www.changeme.com">@{LangMessages.`Manage your repayment account`.show}</a></p>
+@repaymentDetails(showBankDetails,bankDetails,address)
 }

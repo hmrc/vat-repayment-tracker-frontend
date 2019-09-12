@@ -126,4 +126,28 @@ object LangMessages {
   val `Contact HMRC`: Message = Message(
     english = "Contact HMRC."
   )
+
+  val `Delayed`: Message = Message(
+    english = "Delayed"
+  )
+
+  val `In progress`: Message = Message(
+    english = "In progress"
+  )
+
+  val `Currently sent to`: Message = Message(
+    english = "Your cheque is currently send to:"
+  )
+
+  val `For faster payment next time`: Message = Message(
+    english = "For faster payment next time"
+  )
+
+  val `add a repayment account`: Message = Message(
+    english = "add a repayment account"
+  )
+
+  val `Update your correspondence address`: Message = Message(
+    english = "Update your correspondence address"
+  )
 }
