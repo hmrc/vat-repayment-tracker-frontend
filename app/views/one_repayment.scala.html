@@ -22,13 +22,15 @@
 @this(
   mainTemplate: views.html.main_template,
   viewsHelpers: views.ViewsHelpers,
-  appConfig: ViewConfig
+  appConfig: ViewConfig,
+  repaymentDetails: views.html.partials.repayment_details
 )
 
 @(
   onePayment: RepaymentData,
   showBankDetails: Boolean,
-  bankDetails: Option[BankDetails])(
+  bankDetails: Option[BankDetails],
+  address: String)(
   implicit
   request: Request[_]
 )
@@ -48,36 +50,22 @@
       <div class="govuk-grid-row govuk-!-margin-bottom-9">
         <div class="govuk-grid-column-one-half">
           <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Amount claimed`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1">£@onePayment.amount</p>
+          <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@onePayment.amount</p>
         </div>
         <div class="govuk-grid-column-one-half">
           <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Estimated repayment date`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1">@onePayment.estimatedRepaymentDate</p>
+          <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">@onePayment.estimatedRepaymentDate</p>
         </div>
         <div class="govuk-grid-column-one-half">
           <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return received on`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1">@onePayment.returnedReceivedOn</p>
+          <p class="heading-h2 govuk-!-padding-top-1" id="received-date">@onePayment.returnedReceivedOn</p>
         </div>
         <div class="govuk-grid-column-one-half">
           <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return period`.show}</h2>
-          <p class="heading-h2 govuk-!-padding-top-1">@onePayment.period</p>
+          <p class="heading-h2 govuk-!-padding-top-1" id="period">@onePayment.period</p>
         </div>
       </div>
-
-      <h3>@{LangMessages.`When we will repay you`.show}</h3>
-      <p>@{LangMessages.`When we will repay you description`.show}</p>
-
-      <h3>@{LangMessages.`Your repayment details`.show}</h3>
-      @if(showBankDetails) {
-        <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
-        <p>
-          @{LangMessages.`Name on account`.show} <strong>@bankDetails.fold("")(_.accountHolderName.value)</strong><br>
-          @{LangMessages.`Account number`.show} <strong>@bankDetails.fold("")(_.bankAccountNumber.value)</strong><br>
-          @{LangMessages.`Sort code`.show} <strong>@bankDetails.fold("")(_.sortCode.value)</strong>
-        </p>
-        <p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode))' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
-      }
-
+        @repaymentDetails(showBankDetails,bankDetails,address)
     </div>
   </div>
 </main>
