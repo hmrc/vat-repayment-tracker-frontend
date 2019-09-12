@@ -22,6 +22,38 @@
 }
 
 /*
+  Override helpers
+*/
+@mixin define-override-spacing($type) {
+
+  $_spacing-directions: (
+    "top",
+    "right",
+    "bottom",
+    "left"
+  ) !default;
+
+  @each $space in map-keys($govuk-spacing-points) {
+    
+    $space-value: map-get($govuk-spacing-points, $space);
+
+    @each $direction in $_spacing-directions {
+
+      .govuk-\!-#{$type}-#{$direction}-#{$space} {
+        margin-#{$direction}: $space-value !important;
+      }
+
+    }
+
+  }
+}
+
+@include define-override-spacing('margin');
+@include define-override-spacing('padding');
+
+
+
+/*
   Clearfix
 */
 
