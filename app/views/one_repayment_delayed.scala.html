@@ -31,7 +31,8 @@
   onePayment: RepaymentData,
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
-  address: String)(
+  address: Option[String],
+  addressExists: Boolean)(
   implicit
   request: Request[_]
 )
@@ -53,5 +54,5 @@
 <h2>@{LangMessages.`What happens next`.show}</h2>
 <p>@{LangMessages.`What happens next description`.show}<a href="www.changeme.com">@{LangMessages.`Contact HMRC`.show}</a></p>
 </br>
-@repaymentDetails(showBankDetails,bankDetails,address)
+@repaymentDetails(showBankDetails,bankDetails,address,addressExists)
 }

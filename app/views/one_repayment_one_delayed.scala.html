@@ -32,7 +32,8 @@ onePayment: RepaymentData,
 oneDelayed: RepaymentData,
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
-address: String)(
+address: Option[String],
+addressExists: Boolean)(
 implicit
 request: Request[_]
 )
@@ -75,5 +76,5 @@ bodyClasses = None
         </br>
     </section>
 </div>
-@repaymentDetails(showBankDetails,bankDetails,address)
+@repaymentDetails(showBankDetails,bankDetails,address,addressExists)
 }

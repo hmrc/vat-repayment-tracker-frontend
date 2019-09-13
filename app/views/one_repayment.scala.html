@@ -24,15 +24,15 @@
   viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig,
   repaymentDetails: views.html.partials.repayment_details,
-  one_repayment: views.html.partials.single_repayment_detail,
-  whenWeRepayYou: views.html.partials.when_we_repay_you
+  one_repayment: views.html.partials.single_repayment_detail
 )
 
 @(
   onePayment: RepaymentData,
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
-  address: String)(
+  address: Option[String],
+  addressExists: Boolean)(
   implicit
   request: Request[_]
 )
@@ -43,13 +43,13 @@
   title =LangMessages.heading.show,
   bodyClasses = None
 ) {
+<!--<a href="## TODO: Add previous service link here ##" class="govuk-back-link">Back</a>   Don't think we have back links on OPS Apps-->
 <main class="govuk-main-wrapper" role="main">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
         @one_repayment(onePayment)
-        @whenWeRepayYou()
-        @repaymentDetails(showBankDetails,bankDetails,address)
+        @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
     </div>
   </div>
 </main>

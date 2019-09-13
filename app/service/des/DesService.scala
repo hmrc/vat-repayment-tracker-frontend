@@ -37,17 +37,6 @@ class DesService @Inject() (
 
 ) {
 
-  def getCustomerData(vrn: Vrn): Future[ApprovedInformation] = {
-    for {
-      futureCustomerData <- desConnector.getCustomerData(vrn)
-
-      customerData: ApprovedInformation = futureCustomerData.getOrElse(throw new RuntimeException(
-        s"""No Customer data found for VRN: ${
-          vrn
-        }""")).unWrap(vrn)
-    } yield (customerData)
-  }
-
   private def getRepaymentData(financialData: FinancialData, vatObligations: VatObligations, vrn: Vrn) = {
 
     financialData.financialTransactions.map{
