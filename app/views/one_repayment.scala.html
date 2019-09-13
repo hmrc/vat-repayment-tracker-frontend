@@ -24,7 +24,8 @@
   viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig,
   repaymentDetails: views.html.partials.repayment_details,
-  one_repayment: views.html.partials.single_repayment_detail
+  one_repayment: views.html.partials.single_repayment_detail,
+  whenWeRepayYou: views.html.partials.when_we_repay_you
 )
 
 @(
@@ -49,6 +50,7 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
         @one_repayment(onePayment)
+        @whenWeRepayYou()
         @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
     </div>
   </div>
