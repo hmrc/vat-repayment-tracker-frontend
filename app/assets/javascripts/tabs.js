@@ -2,7 +2,6 @@
   
   function ready(fn) {
     if (d.readyState != 'loading') {
-      console.log('ready');
       fn();
     } else {
       d.addEventListener('DOMContentLoaded', fn);
