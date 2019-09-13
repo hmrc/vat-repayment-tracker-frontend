@@ -25,7 +25,8 @@ viewsHelpers: views.ViewsHelpers,
 appConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
-one_repayment: views.html.partials.single_repayment_detail
+one_repayment: views.html.partials.single_repayment_detail,
+tabs: views.html.partials.tabs
 )
 
 @(
@@ -45,10 +46,11 @@ title =LangMessages.heading.show,
 bodyClasses = None
 ) {
 
-
+<main class="govuk-main-wrapper" role="main">
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
+        <h1 id="main-message">@{LangMessages.`We are processing your VAT repayments`.show}</h1>
+        @tabs(repayments)
     </div>
 </div>
 <div class="govuk-tabs" data-module="tabs">
@@ -72,6 +74,7 @@ bodyClasses = None
         <p>@{LangMessages.`When we will repay you description`.show}</p>
         </br>
     </section>
+</div>
 </div>
 @repaymentDetails(showBankDetails,bankDetails,address)
 }
