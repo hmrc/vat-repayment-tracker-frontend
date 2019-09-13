@@ -26,7 +26,8 @@ appConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
 one_repayment: views.html.partials.single_repayment_detail,
-tabs: views.html.partials.tabs
+guidance_delayed: views.html.partials.guidance_delayed,
+guidance_in_progress: views.html.partials.guidance_in_progress
 )
 
 @(
@@ -48,34 +49,32 @@ bodyClasses = None
 ) {
 
 <main class="govuk-main-wrapper" role="main">
-<div class="govuk-grid-row">
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 id="main-message">@{LangMessages.`We are processing your VAT repayments`.show}</h1>
-        @tabs(repayments)
+        <div class="govuk-tabs" data-module="govuk-tabs">
+          <ul class="govuk-tabs__list">
+            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+              <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#delayed" role="tab" aria-controls="delayed" tab-index="0" aria-selected="true" id="tab_delayed">@{LangMessages.`Delayed`.show}</a>
+            </li>
+            <li class="govuk-tabs__list-item" role="presentation">
+              <a class="govuk-tabs__tab" href="#inProgress" role="tab" aria-controls="inProgress" tab-index="1" aria-selected="false" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
+            </li>
+          </ul>
+          <section class="govuk-tabs__panel" id="delayed" role="tabpanel" aria-labelledby="tab_delayed">
+            <h2 class="govuk-tabs__title">@{LangMessages.`Delayed`.show}</h2>
+            @multiple_repayments(repayments)
+            @guidance_delayed()
+          </section>
+          <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
+            <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
+            @multiple_repayments(List(onePayment))
+            @guidance_in_progress()
+          </section>
+        </div>
     </div>
-</div>
-<div class="govuk-tabs" data-module="tabs">
-    <li class="govuk-tabs__list-item">
-        <a class="govuk-tabs__tab" href="#delayed">
-            @{LangMessages.`Delayed`.show}
-        </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-        <a class="govuk-tabs__tab" href="#inprogress">
-            @{LangMessages.`In progress`.show}
-        </a>
-    </li>
-    <section class="govuk-tabs__panel" id="delayed">
-        @multiple_repayments(repayments)
-    </section>
+  </div>
+</main>
 
-    <section section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inprogress">
-        @one_repayment(onePayment)
-        <h2>@{LangMessages.`When we will repay you`.show}</h2>
-        <p>@{LangMessages.`When we will repay you description`.show}</p>
-        </br>
-    </section>
-</div>
-</div>
 @repaymentDetails(showBankDetails,bankDetails,address)
 }
