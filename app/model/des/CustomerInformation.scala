@@ -16,38 +16,29 @@
 
 package model.des
 
-import model.Vrn
 import play.api.libs.json._
 import play.api.mvc.PathBindable
 import controllers.ValueClassBinder.valueClassBinder
-import javax.inject.{Inject, Singleton}
 import play.api.libs.functional.syntax._
-import service.CountriesService
 
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
-  def unWrap(vrn: Vrn): ApprovedInformation = {
-    approvedInformation match {
-      case None       => throw new RuntimeException(s"""No Customer data for VRN: ${vrn}""")
-      case Some(data) => data
-    }
-  }
+  val approvedInformationExists = approvedInformation.isDefined
 }
 
 object CustomerInformation {
   implicit val format: OFormat[CustomerInformation] = Json.format[CustomerInformation]
 }
 
-final case class ApprovedInformation(bankDetails: Option[BankDetails], PPOB: Option[PPOB]) {
+final case class ApprovedInformation
+  (
+    bankDetails: Option[BankDetails],
+    PPOB:        Option[PPOB]
+) {
 
   val bankDetailsExist = bankDetails.isDefined
 
-  def getAddress(vrn: Vrn): Address = PPOB match {
-    case Some(ppob) => ppob.address match {
-      case Some(address) => address
-      case None          => throw new RuntimeException(s"""No Customer address for VRN: ${vrn}""")
-    }
-    case None => throw new RuntimeException(s"""No Customer address for VRN: ${vrn}""")
-  }
+  val addressExists = PPOB.isDefined
+
 }
 
 object ApprovedInformation {
@@ -60,7 +51,15 @@ object PPOB {
   implicit val format: OFormat[PPOB] = Json.format[PPOB]
 }
 
-final case class Address(line1: Option[String], line2: Option[String], line3: Option[String], line4: Option[String], postCode: Option[String], countryCode: Option[String])
+final case class Address(
+    line1:       Option[String],
+    line2:       Option[String],
+    line3:       Option[String],
+    line4:       Option[String],
+    postCode:    Option[String],
+    countryCode: Option[String]
+)
+
 object Address {
   implicit val format: OFormat[Address] = Json.format[Address]
 }

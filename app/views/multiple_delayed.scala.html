@@ -31,7 +31,8 @@
   repayments: List[RepaymentData],
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
-  address: String)(
+  address: Option[String],
+  addressExists: Boolean)(
   implicit
   request: Request[_]
 )
@@ -50,5 +51,5 @@
   </div>
 </div>
 @multiple_repayments(repayments)
-@repaymentDetails(showBankDetails,bankDetails,address)
+@repaymentDetails(showBankDetails,bankDetails,address,addressExists)
 }

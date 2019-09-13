@@ -26,7 +26,8 @@
 @(
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
-  address: String)(
+  address: Option[String],
+  addressExists: Boolean)(
   implicit
   request: Request[_]
 )
@@ -42,5 +43,5 @@
 <p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
 <p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
 <p><a href="www.fixme.com">@{LangMessages.`View your VAT account`.show}</a></p>
-@repaymentDetails(showBankDetails,bankDetails,address)
+@repaymentDetails(showBankDetails,bankDetails,address,addressExists)
 }

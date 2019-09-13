@@ -27,26 +27,28 @@ appConfig: ViewConfig
 @(
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
-address: String)(
+address: Option[String],
+addressExists: Boolean)(
 implicit
 request: Request[_]
 )
 
 @import viewsHelpers.requestSupport._
 
-
-<h2>@{LangMessages.`Your repayment details`.show}</h2>
 @if(showBankDetails) {
+<h2>@{LangMessages.`Your repayment details`.show}</h2>
 <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
 <p id="acc-name"><strong>@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</strong></p>
 <p id="acc-number"><strong>@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</strong></p>
 <p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.sortCode.value)</strong></p>
 </br>
 <p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode))' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
-}else{
+}
+@if(addressExists && (!(showBankDetails))) {
+<h2>@{LangMessages.`Your repayment details`.show}</h2>
 <p>@{LangMessages.`Currently sent to`.show}</p>
 </br>
-<p id="address">@Html(address)</p>
+<p id="address">@Html(address.getOrElse(""))</p>
 </br>
 <p>@{LangMessages.`For faster payment next time`.show} <a href="www.changeme.com">@{LangMessages.`add a repayment account`.show}</a></p>
 </br>

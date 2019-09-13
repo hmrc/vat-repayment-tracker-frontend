@@ -31,7 +31,8 @@
   onePayment: RepaymentData,
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
-  address: String)(
+  address: Option[String],
+  addressExists: Boolean)(
   implicit
   request: Request[_]
 )
@@ -48,7 +49,7 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
         @one_repayment(onePayment)
-        @repaymentDetails(showBankDetails,bankDetails,address)
+        @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
     </div>
   </div>
 </main>

@@ -20,8 +20,8 @@ import connectors.des.DesConnector
 import format.AddressFormter
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
+import model.des.{CustomerInformation, _}
 import model.{AllRepaymentData, Vrn}
-import model.des._
 import play.api.Logger
 import play.api.mvc._
 import req.RequestSupport
@@ -63,7 +63,7 @@ class Controller @Inject() (
       af.authorised() {
 
         val financialDataF = desConnector.getFinancialData(vrn)
-        val customerDataF = desService.getCustomerData(vrn)
+        val customerDataF = desConnector.getCustomerData(vrn)
         val obligationDataF = desConnector.getObligations(vrn)
 
         val result = for {
@@ -91,7 +91,7 @@ class Controller @Inject() (
       }
   }
 
-  def authorisationException(e: AuthorisationException)(
+  private def authorisationException(e: AuthorisationException)(
       implicit
       request: Request[_]): Future[Result] = {
     Logger.debug(s"Unauthorised because of ${
@@ -105,61 +105,109 @@ class Controller @Inject() (
 
   }
 
-  def computeView(
+  private def computeView(
       allRepaymentData: AllRepaymentData,
-      customerData:     ApprovedInformation,
+      customerData:     Option[CustomerInformation],
       vrn:              Vrn
   )(implicit request: Request[_]): Result = {
 
     val showCurrent = allRepaymentData.currentRepaymentData.isDefined
     val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
 
+    val bankDetailsExist = getBankDetailsExist(customerData)
+    val bankDetails = getBankDetails(customerData)
+    val addressDetails = getAddressDetails(customerData)
+    val addressDetailsExist = getAddressDetailsExist(customerData)
+
     if ((showCurrent == false) && (overDueSize == 0)) {
       Ok(
-        views.no_vat_repayments (
-          customerData.bankDetailsExist,
-          customerData.bankDetails,
-          addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        views.no_vat_repayments(
+          bankDetailsExist,
+          bankDetails,
+          addressDetails,
+          addressDetailsExist
         ))
     } else if (showCurrent && (overDueSize == 0)) {
-      Ok(views.one_repayment (
+      Ok(views.one_repayment(
         allRepaymentData.getCurrentRepaymentData,
-        customerData.bankDetailsExist,
-        customerData.bankDetails,
-        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist
       ))
     } else if ((showCurrent == false) && (overDueSize == 1)) {
-      Ok(views.one_repayment_delayed (
+      Ok(views.one_repayment_delayed(
         allRepaymentData.getOverDueRepaymentData(0),
-        customerData.bankDetailsExist,
-        customerData.bankDetails,
-        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist
       ))
     } else if ((showCurrent == false) && (overDueSize > 1)) {
-      Ok(views.multiple_delayed (
+      Ok(views.multiple_delayed(
         allRepaymentData.getOverDueRepaymentData,
-        customerData.bankDetailsExist,
-        customerData.bankDetails,
-        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist
       ))
     } else if (showCurrent && (overDueSize == 1)) {
-      Ok(views.one_repayment_one_dealyed (
+      Ok(views.one_repayment_one_dealyed(
         allRepaymentData.getCurrentRepaymentData,
         allRepaymentData.getOverDueRepaymentData(0),
-        customerData.bankDetailsExist,
-        customerData.bankDetails,
-        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist
       ))
     } else if (showCurrent && (overDueSize > 1)) {
       Ok(views.one_repayment_multiple_delayed(
         allRepaymentData.getCurrentRepaymentData,
         allRepaymentData.getOverDueRepaymentData,
-        customerData.bankDetailsExist,
-        customerData.bankDetails,
-        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist
       ))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
 
   }
 
+  private def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
+    case Some(cd) => cd.approvedInformation match {
+      case Some(ai) => ai.bankDetailsExist
+      case None     => false
+    }
+    case None => false
+  }
+
+  private def getBankDetails(customerData: Option[CustomerInformation]): Option[BankDetails] = {
+
+    for {
+      cd <- customerData
+      ai <- cd.approvedInformation
+      bd <- ai.bankDetails
+    } yield (bd)
+  }
+
+  private def getAddressDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
+    case Some(cd) => cd.approvedInformation match {
+      case Some(ai) => ai.addressExists
+      case None     => false
+    }
+    case None => false
+  }
+
+  private def getAddressDetails(customerData: Option[CustomerInformation]): Option[String] = {
+    for {
+      cd <- customerData
+      ai <- cd.approvedInformation
+      ppob <- ai.PPOB
+    } yield {
+      ppob.address match {
+        case Some(ad) => addressFormater.getFormattedAddress(ad)
+        case None     => ""
+      }
+    }
+  }
 }
