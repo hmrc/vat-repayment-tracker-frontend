@@ -19,9 +19,13 @@ package views
 import javax.inject.Inject
 
 class Views @Inject() (
-    val no_vat_repayments:      _root_.views.html.no_vat_repayments,
-    val one_repayment:          _root_.views.html.one_repayment,
-    val view_repayment_account: _root_.views.html.view_repayment_account,
+    val no_vat_repayments:              _root_.views.html.no_vat_repayments,
+    val one_repayment:                  _root_.views.html.one_repayment,
+    val view_repayment_account:         _root_.views.html.view_repayment_account,
+    val one_repayment_delayed:          _root_.views.html.one_repayment_delayed,
+    val multiple_delayed:               _root_.views.html.multiple_delayed,
+    val one_repayment_one_dealyed:      _root_.views.html.one_repayment_one_delayed,
+    val one_repayment_multiple_delayed: _root_.views.html.one_repayment_multiple_delayed,
 
     //error pages
     val errorTemplate: _root_.views.html.error.error_template

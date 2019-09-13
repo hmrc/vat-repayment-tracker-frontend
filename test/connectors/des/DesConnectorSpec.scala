@@ -86,7 +86,7 @@ class DesConnectorSpec extends ItSpec {
     futureResponse match {
       case Some(response) => {
         Json.toJson(response.approvedInformation) shouldBe Json.parse(
-          s"""{"bankDetails":{"accountHolderName":"*********","bankAccountNumber":"****2490","sortCode":"40****"}}""".stripMargin)
+          s"""{"bankDetails":{"accountHolderName":"*********","bankAccountNumber":"****2490","sortCode":"40****"},"PPOB":{"address":{"line1":"VAT PPOB Line1","line2":"VAT PPOB Line2","line3":"VAT PPOB Line3","line4":"VAT PPOB Line4","postCode":"TF3 4ER","countryCode":"GB"}}}""".stripMargin)
       }
       case None => "did not find any customer data" shouldBe "test failed"
     }

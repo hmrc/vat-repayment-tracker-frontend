@@ -17,6 +17,7 @@
 package controllers
 
 import connectors.des.DesConnector
+import format.AddressFormter
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model.{AllRepaymentData, Vrn}
@@ -32,13 +33,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
-    cc:             ControllerComponents,
-    errorHandler:   ErrorHandler,
-    views:          Views,
-    desConnector:   DesConnector,
-    desService:     DesService,
-    requestSupport: RequestSupport,
-    af:             AuthorisedFunctions)(
+    cc:              ControllerComponents,
+    errorHandler:    ErrorHandler,
+    views:           Views,
+    desConnector:    DesConnector,
+    desService:      DesService,
+    requestSupport:  RequestSupport,
+    af:              AuthorisedFunctions,
+    addressFormater: AddressFormter)(
     implicit
     ec: ExecutionContext)
 
@@ -111,12 +113,51 @@ class Controller @Inject() (
 
     val showCurrent = allRepaymentData.currentRepaymentData.isDefined
     val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
+
     if ((showCurrent == false) && (overDueSize == 0)) {
-      Ok(views.no_vat_repayments(customerData.bankDetailsExist, customerData.bankDetails))
+      Ok(
+        views.no_vat_repayments (
+          customerData.bankDetailsExist,
+          customerData.bankDetails,
+          addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+        ))
     } else if (showCurrent && (overDueSize == 0)) {
-      Ok(views.one_repayment(allRepaymentData.getCurrentRepaymentData,
-                             customerData.bankDetailsExist,
-                             customerData.bankDetails))
+      Ok(views.one_repayment (
+        allRepaymentData.getCurrentRepaymentData,
+        customerData.bankDetailsExist,
+        customerData.bankDetails,
+        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+      ))
+    } else if ((showCurrent == false) && (overDueSize == 1)) {
+      Ok(views.one_repayment_delayed (
+        allRepaymentData.getOverDueRepaymentData(0),
+        customerData.bankDetailsExist,
+        customerData.bankDetails,
+        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+      ))
+    } else if ((showCurrent == false) && (overDueSize > 1)) {
+      Ok(views.multiple_delayed (
+        allRepaymentData.getOverDueRepaymentData,
+        customerData.bankDetailsExist,
+        customerData.bankDetails,
+        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+      ))
+    } else if (showCurrent && (overDueSize == 1)) {
+      Ok(views.one_repayment_one_dealyed (
+        allRepaymentData.getCurrentRepaymentData,
+        allRepaymentData.getOverDueRepaymentData(0),
+        customerData.bankDetailsExist,
+        customerData.bankDetails,
+        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+      ))
+    } else if (showCurrent && (overDueSize > 1)) {
+      Ok(views.one_repayment_multiple_delayed(
+        allRepaymentData.getCurrentRepaymentData,
+        allRepaymentData.getOverDueRepaymentData,
+        customerData.bankDetailsExist,
+        customerData.bankDetails,
+        addressFormater.getFormattedAddress(customerData.getAddress(vrn))
+      ))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
 
   }

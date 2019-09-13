@@ -41,13 +41,22 @@
 
 @import viewsHelpers.requestSupport._
 
+@headScripts = {
+<link href="@controllers.routes.Assets.at("stylesheets/tabs.css")" rel="stylesheet" media="all">
+}
+
 @head = {
   @viewsHelpers.head(
     linkElem = None,
-    headScripts = None
+    headScripts = Some(headScripts)
   )
   <meta name="format-detection" content="telephone=no"/>
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+  <script src="@controllers.routes.Assets.at("javascripts/tabs.js")" type="text/javascript"></script>
+
+}
+
+@scriptElement = {
 }
 
 @headerNavLinks = {
@@ -73,7 +82,7 @@
     analyticsToken = Some(appConfig.analyticsToken),
     analyticsHost = appConfig.analyticsHost,
     ssoUrl = None,
-    scriptElem = scriptElem,
+    scriptElem = Some(scriptElement),
     gaCalls = None
   )
 }
