@@ -21,10 +21,13 @@
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+appConfig: ViewConfig,
+multiple_repayments: views.html.partials.multiple_repayment_details,
+one_repayment: views.html.partials.single_repayment_detail
 )
 
 @(
+onePayment: RepaymentData,
 repayments: List[RepaymentData])(
 implicit
 request: Request[_]
@@ -42,9 +45,9 @@ request: Request[_]
     </li>
   </ul>
   <section class="govuk-tabs__panel" id="delayed" role="tabpanel" aria-labelledby="tab_delayed">
-    <p>Delayed</p>
+    @multiple_repayments(repayments)
   </section>
   <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
-    <p>In Progress</p>
+    @one_repayment(onePayment)
   </section>
 </div>

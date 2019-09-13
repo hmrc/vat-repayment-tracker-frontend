@@ -25,22 +25,12 @@ appConfig: ViewConfig
 )
 
 @(
-repayments: List[RepaymentData])(
+)(
 implicit
 request: Request[_]
 )
 
 @import viewsHelpers.requestSupport._
 
-
-
-<table>
-    <tr>
-        <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td><td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
-    </tr>
-    @for(onePayment <- repayments) {
-    <tr>
-        <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td><td id="received-date">@onePayment.formatDate(onePayment.returnedReceivedOn)</td><td id="period">@onePayment.period</td>
-    </tr>
-    }
-</table>
+<h3>@{LangMessages.`When we will repay you`.show}</h3>
+<p>@{LangMessages.`When we will repay you description`.show}<a href="www.changeme.com">@{LangMessages.`Contact HMRC`.show}</a></p>
