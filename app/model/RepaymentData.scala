@@ -16,6 +16,7 @@
 
 package model
 
+import java.time.format.DateTimeFormatter
 import java.time.{Clock, LocalDate}
 
 final case class RepaymentData(
@@ -29,6 +30,11 @@ final case class RepaymentData(
 
   def isOverdue(implicit clock: Clock): Boolean = {
     estimatedRepaymentDate.isBefore(LocalDate.now(clock))
+  }
+
+  def formatDate(localDate: LocalDate): String = {
+    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    localDate.format(pattern1)
   }
 
 }

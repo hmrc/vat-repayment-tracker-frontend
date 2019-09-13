@@ -40,7 +40,7 @@ request: Request[_]
     </tr>
     @for(onePayment <- repayments) {
     <tr>
-        <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.estimatedRepaymentDate</td><td id="received-date">@onePayment.returnedReceivedOn</td><td id="period">@onePayment.period</td>
+        <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td><td id="received-date">@onePayment.formatDate(onePayment.returnedReceivedOn)</td><td id="period">@onePayment.period</td>
     </tr>
     }
 </table>
