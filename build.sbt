@@ -91,7 +91,7 @@ lazy val microservice = Project(appName, file("."))
     routesGenerator := InjectedRoutesGenerator,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
   )
-  .settings(majorVersion := 0)
+  .settings(majorVersion := 1)
   .settings(scalariformSettings: _*)
   .settings(wartRemoverError)
   .settings(wartRemoverWarning)
