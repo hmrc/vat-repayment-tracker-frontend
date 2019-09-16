@@ -3,6 +3,9 @@
 @import "utils/helpers";
 @import "utils/layout";
 
+//components
+@import "tabs.css";
+
 /* typography */
 h1, .heading-h1,
 h2, .heading-h2,
@@ -126,3 +129,19 @@ a {
 }
 
 
+/* table polyfill */
+.govuk {
+
+  &-table {
+    margin-bottom: 20px;
+    
+    @include break(desktop) {
+      margin-bottom: 30px;
+    }
+  }
+
+  &-table__row td {
+    border: none;
+  }
+
+}

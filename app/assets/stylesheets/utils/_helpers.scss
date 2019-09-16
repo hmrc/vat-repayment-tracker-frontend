@@ -47,10 +47,23 @@
 
   }
 }
-
 @include define-override-spacing('margin');
 @include define-override-spacing('padding');
 
+/*
+  Spacing helpers
+*/
+
+@mixin _space($space, $attr: 'margin', $direction: 'bottom') {
+  #{attr}-#{$direction}: map-get($govuk-spacing-points, $space)
+}
+
+@mixin _space-margin($space, $direction) {
+  @include _space($space, 'margin', $direction)
+}
+@mixin _space-padding($space, $direction) {
+  @include _space($space, 'padding', $direction)
+}
 
 
 /*

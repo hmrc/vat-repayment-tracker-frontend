@@ -34,17 +34,23 @@ request: Request[_]
 
 
 
-<table>
-    <tr>
-        <td>@{LangMessages.`Amount claimed`.show}</td><td>@{LangMessages.`Estimated repayment date`.show}</td><td>@{LangMessages.`VAT Return received on`.show}</td><td>@{LangMessages.`VAT Return period`.show}</td>
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">@{LangMessages.`VAT Return received on`.show}</th>
+      <th scope="col" class="govuk-table__header">@{LangMessages.`VAT Return period`.show}</th>
+      <th scope="col" class="govuk-table__header">@{LangMessages.`Amount claimed`.show}</th>
+      <th scope="col" class="govuk-table__header">@{LangMessages.`Estimated repayment date`.show}</th>
     </tr>
+  </thead>
+  <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
-    <tr>
-        <td id="amount">£@onePayment.amount</td><td id="repay-date">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td><td id="received-date">@onePayment.formatDate(onePayment.returnedReceivedOn)</td><td id="period">@onePayment.period</td>
+    <tr class="govuk-table__row">
+      <td id="amount">@onePayment.formatDate(onePayment.returnedReceivedOn)</td>
+      <td id="repay-date">@onePayment.period</td>
+      <td id="received-date">£@onePayment.amount</td>
+      <td id="period">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td>
     </tr>
     }
+  </tbody>
 </table>
-</br>
-<h2>@{LangMessages.`What happens next`.show}</h2>
-<p>@{LangMessages.`What happens next description`.show}<a href="www.changeme.com">@{LangMessages.`Contact HMRC`.show}</a></p>
-</br>

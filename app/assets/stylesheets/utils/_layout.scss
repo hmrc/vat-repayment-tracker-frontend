@@ -4,7 +4,7 @@
   width: 100%;
   float: $float;
 
-  @include break(tablet) {
+  @include break(desktop) {
     width: $width;
   }
 }

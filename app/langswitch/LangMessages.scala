@@ -24,11 +24,15 @@ object LangMessages {
   )
 
   val heading: Message = Message(
-    english = "Vat Repayment Tracker"
+    english = "Track your VAT repayments"
   )
 
   val `We are processing your VAT repayment` = Message(
     english = "We are processing your VAT repayment"
+  )
+
+  val `We are processing your VAT repayments` = Message(
+    english = "We are processing your VAT repayments"
   )
 
   val `Amount claimed`: Message = Message(
