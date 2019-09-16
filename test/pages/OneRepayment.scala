@@ -22,6 +22,7 @@ import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 import org.openqa.selenium.By
+import pages.NoVatRepaymentsFoundPage.readTitle
 
 object OneRepayment extends CommonPage {
 
@@ -41,7 +42,7 @@ object OneRepayment extends CommonPage {
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "Vat Repayment Tracker"
+    readTitle shouldBe "Track your VAT repayments"
     readMainMessage shouldBe "We are processing your VAT repayment"
     readAmount shouldBe "£5.56"
     readRepayDate shouldBe "02 Dec 2027"

@@ -19,6 +19,7 @@ package pages
 import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
+import pages.OneRepayment.readTitle
 
 object ViewRepaymentAccount extends CommonPage {
 
@@ -28,7 +29,7 @@ object ViewRepaymentAccount extends CommonPage {
 
   def assertPageIsDisplayed(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${accountHolderName.value}/${bankAccountNumber.value}/${sortCode.value}"""
-    readTitle shouldBe "Vat Repayment Tracker"
+    readTitle shouldBe "Track your VAT repayments"
     readAccName shouldBe "Name on account: *********"
     readAccNumber shouldBe "Account number: ****2490"
     readAccSortCode() shouldBe "Sort code: 40****"
