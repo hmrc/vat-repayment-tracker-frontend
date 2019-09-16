@@ -24,7 +24,8 @@
   viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig,
   repaymentDetails: views.html.partials.repayment_details,
-  one_repayment: views.html.partials.single_repayment_detail
+  one_repayment: views.html.partials.single_repayment_detail,
+  guidance_delayed: views.html.partials.guidance_delayed
 )
 
 @(
@@ -44,15 +45,14 @@
   bodyClasses = None
 ) {
 
-
+<main class="govuk-main-wrapper" role="main">
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 id="main-message">@{LangMessages.`Your repayment is delayed`.show}</h1>
+    @one_repayment(onePayment)
+    @guidance_delayed()
+    @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
   </div>
 </div>
-@one_repayment(onePayment)
-<h2>@{LangMessages.`What happens next`.show}</h2>
-<p>@{LangMessages.`What happens next description`.show}<a href="www.changeme.com">@{LangMessages.`Contact HMRC`.show}</a></p>
-</br>
-@repaymentDetails(showBankDetails,bankDetails,address,addressExists)
+</main>
 }
