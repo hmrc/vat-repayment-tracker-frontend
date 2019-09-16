@@ -36,7 +36,7 @@ request: Request[_]
 @import viewsHelpers.requestSupport._
 
 @if(showBankDetails) {
-<h2>@{LangMessages.`Your repayment details`.show}</h2>
+<h3>@{LangMessages.`Your repayment details`.show}</h3>
 <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
 <p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</strong></p>
 <p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</strong></p>
