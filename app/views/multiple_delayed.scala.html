@@ -24,7 +24,8 @@
   viewsHelpers: views.ViewsHelpers,
   appConfig: ViewConfig,
   repaymentDetails: views.html.partials.repayment_details,
-  multiple_repayments: views.html.partials.multiple_repayment_details
+  multiple_repayments: views.html.partials.multiple_repayment_details,
+  guidance_delayed: views.html.partials.guidance_delayed
 )
 
 @(
@@ -44,12 +45,17 @@
   bodyClasses = None
 ) {
 
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 id="main-message">@{LangMessages.`Your repayments are delayed`.show}</h1>
+<main class="govuk-main-wrapper" role="main">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="main-message">@{LangMessages.`Your repayments are delayed`.show}</h1>
+      <div class="govuk-!-margin-bottom-9">
+      @multiple_repayments(repayments)
+      </div>
+      @guidance_delayed()
+      @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
+    </div>
   </div>
-</div>
-@multiple_repayments(repayments)
-@repaymentDetails(showBankDetails,bankDetails,address,addressExists)
+</main>
+
 }
