@@ -21,8 +21,10 @@ import format.AddressFormter
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model.des.{CustomerInformation, _}
-import model.{AllRepaymentData, Vrn}
+import model.{AllRepaymentData, ManageOrTrack, ManageOrTrackOptions, Vrn}
 import play.api.Logger
+import play.api.data.Form
+import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
 import service.des.DesService
@@ -51,8 +53,32 @@ class Controller @Inject() (
   def manageOrTrack(vrn: Vrn): Action[AnyContent] = Action.async {
     implicit request: Request[_] =>
       af.authorised() {
+        Future.successful(Ok(views.manage_or_track(vrn, true, true, manageOrTrackForm.fill(ManageOrTrack(None, vrn.value)))))
+      }.recoverWith {
+        case e: AuthorisationException => authorisationException(e)
+      }
+  }
 
-        Future.successful(Ok("manageOrTrack"))
+  private def manageOrTrackForm(implicit request: Request[_]): Form[ManageOrTrack] = {
+    Form(mapping(
+      "manage" -> optional(text),
+      "vrn" -> text.verifying(ErrorMessages.`VRN missing`.show, _.nonEmpty)
+    )(ManageOrTrack.apply)(ManageOrTrack.unapply))
+  }
+
+  def manageOrTrackSubmit(): Action[AnyContent] = Action.async {
+    implicit request =>
+      af.authorised() {
+        val mtFormOptional = manageOrTrackForm.bindFromRequest()
+        mtFormOptional.value match {
+          case Some(mtForm) => mtForm.choice match {
+            case Some(choice) => Future.successful(Ok(s"""manage_or_track_submit ${choice} ${mtForm.vrn} """))
+            case None => Future.successful(Ok(views.manage_or_track(Vrn(mtForm.vrn), true, true, manageOrTrackForm.fill(ManageOrTrack(None, mtForm.vrn)).
+              withError("manage", ErrorMessages.`choose an option`.show))))
+          }
+          case None => Future.successful(Ok(s"""manage_or_track_submit no value  """))
+        }
+
       }.recoverWith {
         case e: AuthorisationException => authorisationException(e)
       }
@@ -210,4 +236,5 @@ class Controller @Inject() (
       }
     }
   }
+
 }

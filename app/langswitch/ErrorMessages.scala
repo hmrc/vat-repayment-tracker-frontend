@@ -50,5 +50,11 @@ object ErrorMessages {
   val `You do not have access to this service`: Message = Message(
     english = "You do not have access to this service"
   )
+  val `choose an option` = Message(
+    "Please choose an option"
+  )
+  val `VRN missing` = Message(
+    "VRN missing"
+  )
 
 }

@@ -26,6 +26,7 @@ class Views @Inject() (
     val multiple_delayed:               _root_.views.html.multiple_delayed,
     val one_repayment_one_dealyed:      _root_.views.html.one_repayment_one_delayed,
     val one_repayment_multiple_delayed: _root_.views.html.one_repayment_multiple_delayed,
+    val manage_or_track:                _root_.views.html.manage_or_track,
 
     //error pages
     val errorTemplate: _root_.views.html.error.error_template
