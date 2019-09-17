@@ -19,13 +19,21 @@ import enumeratum._
 
 case class ManageOrTrack(choice: Option[String], vrn: String)
 
-sealed abstract class ManageOrTrackOption extends EnumEntry
+sealed abstract class ManageOrTrackOption extends EnumEntry {
+  val value: String
+}
 
 object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
 
-  case object vrt extends ManageOrTrackOption
-  case object bank extends ManageOrTrackOption
-  case object dd extends ManageOrTrackOption
+  case object vrt extends ManageOrTrackOption {
+    override val value: String = "vrt"
+  }
+  case object bank extends ManageOrTrackOption {
+    override val value: String = "bank"
+  }
+  case object dd extends ManageOrTrackOption {
+    override val value: String = "dd"
+  }
   override def values = findValues
 
 }

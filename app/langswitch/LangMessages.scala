@@ -16,6 +16,8 @@
 
 package langswitch
 
+import model.des.BankDetails
+
 object LangMessages {
 
   val exapmleMessage: Message = Message(
@@ -171,6 +173,13 @@ object LangMessages {
   )
   val `There is a problem` = Message(
     "There is a problem"
+  )
+  val `Manage your repayment bank account` = Message(
+    "Manage your repayment bank account"
+  )
+
+  def accountAndSortCode(bankDetails: BankDetails) = Message(
+    s"""Account: ${bankDetails.bankAccountNumber.value}, Sort code: ${bankDetails.sortCode.value}"""
   )
 
 }

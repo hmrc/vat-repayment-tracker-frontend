@@ -17,6 +17,7 @@
 @import config.ViewConfig
 @import model.ManageOrTrack
 @import model.Vrn
+@import model.des._
 @import langswitch.LangMessages
 @import model.ManageOrTrackOptions
 
@@ -29,6 +30,7 @@ appConfig: ViewConfig
 vrn: Vrn,
 showDDOption : Boolean,
 showBankAccountOption : Boolean,
+bankDetailsOption : Option[BankDetails],
 form: Form[ManageOrTrack]
 )(
 implicit
@@ -45,7 +47,6 @@ bodyClasses = None
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
    <h1 id="main-message">@{LangMessages.`Manage or track`.show}</h1>
-
    @if(form.hasErrors) { @viewsHelpers.errorSummary(LangMessages.`There is a problem`.show, form) }
 
 
@@ -61,7 +62,15 @@ bodyClasses = None
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
      @views.html.partials.error_message_form_input("manage", form)
      @views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.heading.show, Some(LangMessages.`View what HMRC owe you`.show), None)
+    @{
+    if(showBankAccountOption) {
+    bankDetailsOption.map(bankDetails => {
+    views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.bank.toString, ManageOrTrackOptions.bank.toString, LangMessages.`Manage your repayment bank account`.show, Some(LangMessages.accountAndSortCode(bankDetails).show), None)
+    })
 
+    }
+
+    }
     </div>
    </fieldset>
    <input type="hidden" name="vrn" value="@vrn.value" />
