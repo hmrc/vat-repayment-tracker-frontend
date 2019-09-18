@@ -16,6 +16,8 @@
 
 package langswitch
 
+import model.des.BankDetails
+
 object LangMessages {
 
   val exapmleMessage: Message = Message(
@@ -154,4 +156,30 @@ object LangMessages {
   val `Update your correspondence address`: Message = Message(
     english = "Update your correspondence address"
   )
+
+  val `Manage or track`: Message = Message(
+    english = "Manage bank accounts or track repayments"
+  )
+
+  val heading_bta: Message = Message(
+    english = "Business tax account"
+  )
+
+  val Continue: Message = Message(
+    english = "Continue"
+  )
+  val `View what HMRC owe you`: Message = Message(
+    english = "View what HMRC owe you"
+  )
+  val `There is a problem` = Message(
+    "There is a problem"
+  )
+  val `Manage your repayment bank account` = Message(
+    "Manage your repayment bank account"
+  )
+
+  def accountAndSortCode(bankDetails: BankDetails) = Message(
+    s"""Account: ${bankDetails.bankAccountNumber.value}, Sort code: ${bankDetails.sortCode.value}"""
+  )
+
 }

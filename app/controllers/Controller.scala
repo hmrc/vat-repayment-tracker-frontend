@@ -16,31 +16,35 @@
 
 package controllers
 
-import connectors.des.DesConnector
-import format.AddressFormter
+import connectors.PaymentsOrchestratorConnector
+import controllers.action.AuthenticatedAction
+import format.{AddressFormter, CutomerInformationFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model.des.{CustomerInformation, _}
-import model.{AllRepaymentData, Vrn}
-import play.api.Logger
+import model.{AllRepaymentData, ManageOrTrack, ManageOrTrackOptions, Vrn}
+import play.api.data.Form
+import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
-import service.des.DesService
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
+import service.PaymentsOrchestratorService
+import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
-    cc:              ControllerComponents,
-    errorHandler:    ErrorHandler,
-    views:           Views,
-    desConnector:    DesConnector,
-    desService:      DesService,
-    requestSupport:  RequestSupport,
-    af:              AuthorisedFunctions,
-    addressFormater: AddressFormter)(
+    cc:                           ControllerComponents,
+    errorHandler:                 ErrorHandler,
+    views:                        Views,
+    desConnector:                 PaymentsOrchestratorConnector,
+    desService:                   PaymentsOrchestratorService,
+    requestSupport:               RequestSupport,
+    af:                           AuthorisedFunctions,
+    addressFormater:              AddressFormter,
+    customerInformationFormatter: CutomerInformationFormatter,
+    authenticatedAction:          AuthenticatedAction)(
     implicit
     ec: ExecutionContext)
 
@@ -48,60 +52,93 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def manageOrTrack(vrn: Vrn): Action[AnyContent] = Action.async {
+  def manageOrTrack(vrn: Vrn): Action[AnyContent] = authenticatedAction.async {
     implicit request: Request[_] =>
-      af.authorised() {
+      manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
 
-        Future.successful(Ok("manageOrTrack"))
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
-      }
   }
 
-  def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
-    implicit request: Request[_] =>
-      af.authorised() {
+  def manageOrTrackSubmit(): Action[AnyContent] = authenticatedAction.async {
+    implicit request =>
 
-        val financialDataF = desConnector.getFinancialData(vrn)
-        val customerDataF = desConnector.getCustomerData(vrn)
-        val obligationDataF = desConnector.getObligations(vrn)
-
-        val result = for {
-          financialData <- financialDataF
-          customerData <- customerDataF
-          obligationData <- obligationDataF
-        } yield (
-          computeView(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
-        )
-
-        result
-
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
+      val vrn = request.session.get("vrn") match {
+        case Some(vrnString) => Vrn(vrnString)
+        case None            => throw new RuntimeException("Could not get VRN from session")
       }
+
+      manageOrTrackForm.bindFromRequest().fold(
+        formWithErrors => {
+          manageOrTrackView(vrn, formWithErrors)
+        },
+        {
+          valueInForm =>
+            {
+              valueInForm.choice match {
+                case Some(choice) => {
+                  choice match {
+                    case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(vrn))
+                    case ManageOrTrackOptions.bank.value => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
+                    case ManageOrTrackOptions.dd.value   => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
+                  }
+                }
+                case None => {
+                  manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", ErrorMessages.`choose an option`.show))
+                }
+              }
+            }
+        }
+      )
+
   }
 
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode): Action[AnyContent] = Action.async {
-    implicit request: Request[_] =>
-      af.authorised() {
-        val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
-        Future.successful(Ok(views.view_repayment_account(bankDetails)))
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
-      }
-  }
-
-  private def authorisationException(e: AuthorisationException)(
+  private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(
       implicit
-      request: Request[_]): Future[Result] = {
-    Logger.debug(s"Unauthorised because of ${
-      e.reason
-    }, $e")
-    Future.successful(Unauthorized(
-      errorHandler.standardErrorTemplate(
-        ErrorMessages.`You do not have access to this service`.show,
-        ErrorMessages.`You do not have access to this service`.show,
-        "")))
+      request: Request[_]): Future[Result] =
+    {
+
+      val customerDataF = desConnector.getCustomerData(vrn)
+      val chosenUrl = for {
+        customerData <- customerDataF
+      } yield {
+        val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
+        val bankDetails: Option[BankDetails] = customerInformationFormatter.getBankDetails(customerData)
+
+        Ok(views.manage_or_track(vrn, false, bankDetailsExist, bankDetails, form)).addingToSession(("vrn", vrn.value))
+      }
+      chosenUrl
+
+    }
+
+  private def manageOrTrackForm(implicit request: Request[_]): Form[ManageOrTrack] = {
+    Form(mapping(
+      "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
+  }
+
+  //------------------------------------------------------------------------------------------------------------------------------
+
+  def showResults(vrn: Vrn): Action[AnyContent] = authenticatedAction.async {
+    implicit request: Request[_] =>
+      val financialDataF = desConnector.getFinancialData(vrn)
+      val customerDataF = desConnector.getCustomerData(vrn)
+      val obligationDataF = desConnector.getObligations(vrn)
+
+      val result = for {
+        financialData <- financialDataF
+        customerData <- customerDataF
+        obligationData <- obligationDataF
+      } yield (
+        computeView(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
+      )
+
+      result
+
+  }
+
+  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode): Action[AnyContent] = authenticatedAction.async {
+    implicit request: Request[_] =>
+
+      val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
+      Future.successful(Ok(views.view_repayment_account(bankDetails)))
 
   }
 
@@ -114,10 +151,10 @@ class Controller @Inject() (
     val showCurrent = allRepaymentData.currentRepaymentData.isDefined
     val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
 
-    val bankDetailsExist = getBankDetailsExist(customerData)
-    val bankDetails = getBankDetails(customerData)
-    val addressDetails = getAddressDetails(customerData)
-    val addressDetailsExist = getAddressDetailsExist(customerData)
+    val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
+    val bankDetails = customerInformationFormatter.getBankDetails(customerData)
+    val addressDetails = customerInformationFormatter.getAddressDetails(customerData)
+    val addressDetailsExist = customerInformationFormatter.getAddressDetailsExist(customerData)
 
     if ((showCurrent == false) && (overDueSize == 0)) {
       Ok(
@@ -173,41 +210,4 @@ class Controller @Inject() (
 
   }
 
-  private def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
-    case Some(cd) => cd.approvedInformation match {
-      case Some(ai) => ai.bankDetailsExist
-      case None     => false
-    }
-    case None => false
-  }
-
-  private def getBankDetails(customerData: Option[CustomerInformation]): Option[BankDetails] = {
-
-    for {
-      cd <- customerData
-      ai <- cd.approvedInformation
-      bd <- ai.bankDetails
-    } yield (bd)
-  }
-
-  private def getAddressDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
-    case Some(cd) => cd.approvedInformation match {
-      case Some(ai) => ai.addressExists
-      case None     => false
-    }
-    case None => false
-  }
-
-  private def getAddressDetails(customerData: Option[CustomerInformation]): Option[String] = {
-    for {
-      cd <- customerData
-      ai <- cd.approvedInformation
-      ppob <- ai.PPOB
-    } yield {
-      ppob.address match {
-        case Some(ad) => addressFormater.getFormattedAddress(ad)
-        case None     => ""
-      }
-    }
-  }
 }

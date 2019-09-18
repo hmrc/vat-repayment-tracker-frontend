@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package service.des
+package service
+
 import java.time.Clock
 
-import connectors.des.DesConnector
+import connectors.PaymentsOrchestratorConnector
 import javax.inject.{Inject, Singleton}
-import model.{AllRepaymentData, RepaymentData, Vrn}
 import model.des._
-import play.api.Logger
+import model.{AllRepaymentData, RepaymentData, Vrn}
 import views.Views
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class DesService @Inject() (
-    desConnector: DesConnector,
+class PaymentsOrchestratorService @Inject() (
+    desConnector: PaymentsOrchestratorConnector,
     views:        Views)
   (
     implicit

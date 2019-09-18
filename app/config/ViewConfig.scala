@@ -26,12 +26,12 @@ case class ViewConfig(
     analyticsHost:   String,
     authUrl:         String,
     frontendBaseUrl: String,
-    signInPath:      String) {
+    loginUrl:        String,
+    signOut:         String) {
 
   val reportAProblemPartialUrl = s"$frontendBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$frontendBaseUrl/contact/problem_reports_nonjs?service=$appName"
   val feedbackUrl = s"$frontendBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
-  val loginUrl = authUrl + signInPath
 
   val supportLanguages: Boolean = false
 
@@ -42,8 +42,9 @@ case class ViewConfig(
     analyticsToken  = servicesConfig.getString(s"google-analytics.token"),
     analyticsHost   = servicesConfig.getString(s"google-analytics.host"),
     authUrl         = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl = servicesConfig.getString("frontend-base-url"),
-    signInPath      = servicesConfig.getString("microservice.services.auth.sign-in-path")
+    frontendBaseUrl = if (runMode.env == "Dev") servicesConfig.getString("frontend-base-url") else "",
+    loginUrl        = servicesConfig.getString("urls.login"),
+    signOut         = servicesConfig.getString("urls.logout")
   )
 
 }

@@ -16,13 +16,130 @@
 
 package support
 
+import java.time.LocalDate
+
 import model.Vrn
+import model.des._
 import play.api.libs.json.{JsValue, Json}
 
 object DesData {
 
+  val bankDetails: BankDetails = BankDetails(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"))
+  val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
+  val ppob: PPOB = PPOB(Some(address))
+  val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
+  val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation))
+
+  //language=JSON
+  val approvedInformationJson: JsValue = Json.parse(
+    s"""
+       {
+          "approvedInformation":{
+             "bankDetails":{
+                "accountHolderName":"*********",
+                "bankAccountNumber":"****2490",
+                "sortCode":"40****"
+             },
+             "PPOB":{
+                "address":{
+                   "line1":"VAT PPOB Line1",
+                   "line2":"VAT PPOB Line2",
+                   "line3":"VAT PPOB Line3",
+                   "line4":"VAT PPOB Line4",
+                   "postCode":"TF3 4ER",
+                   "countryCode":"GB"
+                }
+             }
+          }
+       }
+     """.stripMargin)
+
+  val transaction: Transaction = Transaction("18AC", "March 2018", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), BigDecimal(5.56), BigDecimal(5.56))
+
+  val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
+
+  //language=JSON
+  val financialDataJson: JsValue = Json.parse(
+    s"""
+       {
+          "idType":"VRN",
+          "idNumber":"2345678890",
+          "regimeType":"VATC",
+          "processingDate":"2019-08-20T10:44:05Z",
+          "financialTransactions":[
+             {
+                "periodKey":"18AC",
+                "periodKeyDescription":"March 2018",
+                "taxPeriodFrom":"2018-03-01",
+                "taxPeriodTo":"2018-03-31",
+                "originalAmount":5.56,
+                "outstandingAmount":5.56
+             }
+          ]
+       }
+     """.stripMargin
+  )
+
+  val obligation1 = ObligationDetail("O", LocalDate.parse("2018-04-01"), LocalDate.parse("2018-04-30"), LocalDate.parse("2018-04-15"),
+                                          LocalDate.parse("2018-06-07"), "18AD")
+  val obligation2 = ObligationDetail("O", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), LocalDate.parse("2027-11-02"),
+                                          LocalDate.parse("2018-05-07"), "18AC")
+  val obligation3 = ObligationDetail("O", LocalDate.parse("2018-02-01"), LocalDate.parse("2018-02-28"), LocalDate.parse("2018-04-12"),
+                                          LocalDate.parse("2018-04-07"), "18AB")
+  val obligation4 = ObligationDetail("O", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-31"), LocalDate.parse("2018-04-15"),
+                                          LocalDate.parse("2018-03-07"), "18AA")
+
+  val vatObligation = VatObligation(Seq(obligation1, obligation2, obligation3, obligation4))
+  val vatObligations = VatObligations(Seq(vatObligation))
+
+  //language=JSON
+  val vatObligationsJson: JsValue = Json.parse(
+    s"""
+       {
+          "obligations":[
+             {
+                "obligationDetails":[
+                   {
+                      "status":"O",
+                      "inboundCorrespondenceFromDate":"2018-04-01",
+                      "inboundCorrespondenceToDate":"2018-04-30",
+                      "inboundCorrespondenceDateReceived":"2018-04-15",
+                      "inboundCorrespondenceDueDate":"2018-06-07",
+                      "periodKey":"18AD"
+                   },
+                   {
+                      "status":"O",
+                      "inboundCorrespondenceFromDate":"2018-03-01",
+                      "inboundCorrespondenceToDate":"2018-03-31",
+                      "inboundCorrespondenceDateReceived":"2027-11-02",
+                      "inboundCorrespondenceDueDate":"2018-05-07",
+                      "periodKey":"18AC"
+                   },
+                   {
+                      "status":"O",
+                      "inboundCorrespondenceFromDate":"2018-02-01",
+                      "inboundCorrespondenceToDate":"2018-02-28",
+                      "inboundCorrespondenceDateReceived":"2018-04-12",
+                      "inboundCorrespondenceDueDate":"2018-04-07",
+                      "periodKey":"18AB"
+                   },
+                   {
+                      "status":"O",
+                      "inboundCorrespondenceFromDate":"2018-01-01",
+                      "inboundCorrespondenceToDate":"2018-01-31",
+                      "inboundCorrespondenceDateReceived":"2018-04-15",
+                      "inboundCorrespondenceDueDate":"2018-03-07",
+                      "periodKey":"18AA"
+                   }
+                ]
+             }
+          ]
+       }
+       """.stripMargin)
+
   // language=JSON
-  val customerDataNotFound: JsValue = Json.parse(s"""
+  val customerDataNotFound: JsValue = Json.parse(
+    s"""
                                                    {
                                                        "code": "NOT_FOUND",
                                                        "reason": "The back end has indicated that No subscription can be found."
@@ -30,7 +147,8 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val customerDataOk: JsValue = Json.parse(s"""
+  val customerDataOk: JsValue = Json.parse(
+    s"""
      {
          "approvedInformation": {
              "customerDetails": {
@@ -123,7 +241,8 @@ object DesData {
      }
        """.stripMargin)
 
-  val customerDataOkWithoutBankDetails: JsValue = Json.parse(s"""
+  val customerDataOkWithoutBankDetails: JsValue = Json.parse(
+    s"""
      {
          "approvedInformation": {
              "customerDetails": {
@@ -212,15 +331,25 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val obligationsDataNotFound: JsValue = Json.parse(s"""
+  val obligationsDataNotFound: JsValue = Json.parse(
+    s"""
                                                       {
                                                           "code": "NOT_FOUND",
                                                           "reason": "The remote endpoint has indicated that no data can be found."
                                                       }
        """.stripMargin)
+  // language=JSON
+  val financialDataNotFound: JsValue = Json.parse(
+    s"""
+                                                     {
+                                                        "code": "NOT_FOUND",
+                                                        "reason": "The remote endpoint has indicated that no data can be found."
+                                                    }
+       """.stripMargin)
 
   // language=JSON
-  def obligationsDataOk(vrn: Vrn, receivedDate: String): JsValue = Json.parse(s"""
+  def obligationsDataOk(vrn: Vrn, receivedDate: String): JsValue = Json.parse(
+    s"""
                                                  {
                                                      "obligations": [
                                                          {
@@ -265,15 +394,8 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val financialDataNotFound: JsValue = Json.parse(s"""
-                                                     {
-                                                        "code": "NOT_FOUND",
-                                                        "reason": "The remote endpoint has indicated that no data can be found."
-                                                    }
-       """.stripMargin)
-
-  // language=JSON
-  def financialDataOk(vrn: Vrn): JsValue = Json.parse(s"""
+  def financialDataOk(vrn: Vrn): JsValue = Json.parse(
+    s"""
                                                  {
                                                    "idType": "VRN",
                                                    "idNumber": "${vrn.value}",
@@ -427,7 +549,8 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def financialDataSingleOk(vrn: Vrn): JsValue = Json.parse(s"""
+  def financialDataSingleOk(vrn: Vrn): JsValue = Json.parse(
+    s"""
                                                  {
                                                    "idType": "VRN",
                                                    "idNumber": "${vrn.value}",

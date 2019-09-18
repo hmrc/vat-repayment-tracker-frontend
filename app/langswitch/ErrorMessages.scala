@@ -38,6 +38,16 @@ object ErrorMessages {
     "Please check that you have entered the correct web address."
   )
 
+  val authProblemTitle = Message(
+    "More than one session is open"
+  )
+  val authProblemHeading = Message(
+    "More than one session is open"
+  )
+  val authProblemMessage = Message(
+    "To continue, please close one session or start again."
+  )
+
   val internalServerError500Title = Message(
     "Sorry, we are experiencing technical difficulties - 500"
   )
@@ -49,6 +59,12 @@ object ErrorMessages {
   )
   val `You do not have access to this service`: Message = Message(
     english = "You do not have access to this service"
+  )
+  val `choose an option` = Message(
+    "Please choose an option"
+  )
+  val `VRN missing` = Message(
+    "VRN missing"
   )
 
 }
