@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package model
-import enumeratum._
+package support
 
-case class ManageOrTrack(choice: Option[String])
+import org.scalatest.FreeSpecLike
 
-sealed abstract class ManageOrTrackOption extends EnumEntry {
-  val value: String
-}
-
-object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
-
-  case object vrt extends ManageOrTrackOption {
-    override val value: String = "vrt"
-  }
-  case object bank extends ManageOrTrackOption {
-    override val value: String = "bank"
-  }
-  case object dd extends ManageOrTrackOption {
-    override val value: String = "dd"
-  }
-  override def values = findValues
-
-}
-
+/**
+ * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
+ */
+trait UnitSpec
+  extends FreeSpecLike
+  with RichMatchers

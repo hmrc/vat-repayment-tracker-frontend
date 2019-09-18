@@ -38,6 +38,16 @@ object ErrorMessages {
     "Please check that you have entered the correct web address."
   )
 
+  val authProblemTitle = Message(
+    "More than one session is open"
+  )
+  val authProblemHeading = Message(
+    "More than one session is open"
+  )
+  val authProblemMessage = Message(
+    "To continue, please close one session or start again."
+  )
+
   val internalServerError500Title = Message(
     "Sorry, we are experiencing technical difficulties - 500"
   )

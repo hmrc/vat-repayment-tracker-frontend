@@ -16,8 +16,6 @@
 
 package support
 
-import java.time.LocalDate
-
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.http.{HttpHeader, HttpHeaders}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -34,7 +32,7 @@ object WireMockResponses {
   )
 
   def obligationsOk(vrn: Vrn) = {
-    stubFor(get(urlMatching("/enterprise/obligation-data/vrn/.*"))
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -44,7 +42,7 @@ object WireMockResponses {
   }
 
   def financialsOkMultiple(vrn: Vrn) = {
-    stubFor(get(urlMatching("/enterprise/financial-data/VRN/.*"))
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -54,7 +52,7 @@ object WireMockResponses {
   }
 
   def financialsOkSingle(vrn: Vrn) = {
-    stubFor(get(urlMatching("/enterprise/financial-data/VRN/.*"))
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -64,7 +62,7 @@ object WireMockResponses {
   }
 
   def customerDataOkWithBankDetails(vrn: Vrn) = {
-    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn.value}/information"""))
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -74,7 +72,7 @@ object WireMockResponses {
   }
 
   def customerDataOkWithoutBankDetails(vrn: Vrn) = {
-    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn.value}/information"""))
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
@@ -83,8 +81,8 @@ object WireMockResponses {
 
   }
 
-  def financialsNotFound = {
-    stubFor(get(urlMatching("/enterprise/financial-data/VRN/.*"))
+  def financialsNotFound(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
         .withBody(
@@ -93,8 +91,8 @@ object WireMockResponses {
 
   }
 
-  def obligationsNotFound = {
-    stubFor(get(urlMatching("/enterprise/obligation-data/vrn/.*"))
+  def obligationsNotFound(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
         .withBody(
@@ -104,7 +102,7 @@ object WireMockResponses {
   }
 
   def customerNotFound(vrn: Vrn) = {
-    stubFor(get(urlMatching(s"""/vat/customer/vrn/${vrn.value}/information"""))
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
         .withBody(

@@ -16,19 +16,19 @@
 
 package controllers
 
-import connectors.des.DesConnector
+import connectors.PaymentsOrchestratorConnector
+import controllers.action.AuthenticatedAction
 import format.{AddressFormter, CutomerInformationFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model.des.{CustomerInformation, _}
 import model.{AllRepaymentData, ManageOrTrack, ManageOrTrackOptions, Vrn}
-import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
-import service.des.DesService
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
+import service.PaymentsOrchestratorService
+import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,12 +38,13 @@ class Controller @Inject() (
     cc:                           ControllerComponents,
     errorHandler:                 ErrorHandler,
     views:                        Views,
-    desConnector:                 DesConnector,
-    desService:                   DesService,
+    desConnector:                 PaymentsOrchestratorConnector,
+    desService:                   PaymentsOrchestratorService,
     requestSupport:               RequestSupport,
     af:                           AuthorisedFunctions,
     addressFormater:              AddressFormter,
-    customerInformationFormatter: CutomerInformationFormatter)(
+    customerInformationFormatter: CutomerInformationFormatter,
+    authenticatedAction:          AuthenticatedAction)(
     implicit
     ec: ExecutionContext)
 
@@ -51,40 +52,43 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def manageOrTrack(vrn: Vrn): Action[AnyContent] = Action.async {
+  def manageOrTrack(vrn: Vrn): Action[AnyContent] = authenticatedAction.async {
     implicit request: Request[_] =>
-      af.authorised() {
+      manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
 
-        manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None, vrn.value)))
-
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
-      }
   }
 
-  def manageOrTrackSubmit(): Action[AnyContent] = Action.async {
+  def manageOrTrackSubmit(): Action[AnyContent] = authenticatedAction.async {
     implicit request =>
-      af.authorised() {
-        val mtFormOptional = manageOrTrackForm.bindFromRequest()
-        mtFormOptional.value match {
-          case Some(mtForm) => mtForm.choice match {
-            case Some(choice) => {
-              choice match {
-                case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(Vrn(mtForm.vrn)))
-                case ManageOrTrackOptions.bank.value => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${mtForm.vrn} """))
-                case ManageOrTrackOptions.dd.value   => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${mtForm.vrn} """))
+
+      val vrn = request.session.get("vrn") match {
+        case Some(vrnString) => Vrn(vrnString)
+        case None            => throw new RuntimeException("Could not get VRN from session")
+      }
+
+      manageOrTrackForm.bindFromRequest().fold(
+        formWithErrors => {
+          manageOrTrackView(vrn, formWithErrors)
+        },
+        {
+          valueInForm =>
+            {
+              valueInForm.choice match {
+                case Some(choice) => {
+                  choice match {
+                    case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(vrn))
+                    case ManageOrTrackOptions.bank.value => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
+                    case ManageOrTrackOptions.dd.value   => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
+                  }
+                }
+                case None => {
+                  manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", ErrorMessages.`choose an option`.show))
+                }
               }
             }
-            case None => {
-              manageOrTrackView(Vrn(mtForm.vrn), manageOrTrackForm.fill(ManageOrTrack(None, mtForm.vrn)).withError("manage", ErrorMessages.`choose an option`.show))
-            }
-          }
-          case None => throw new RuntimeException("Could not get form from request")
         }
+      )
 
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
-      }
   }
 
   private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(
@@ -93,74 +97,50 @@ class Controller @Inject() (
     {
 
       val customerDataF = desConnector.getCustomerData(vrn)
-      val nextUrl = for {
+      val chosenUrl = for {
         customerData <- customerDataF
       } yield {
         val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
         val bankDetails: Option[BankDetails] = customerInformationFormatter.getBankDetails(customerData)
 
-        Ok(views.manage_or_track(vrn, false, bankDetailsExist, bankDetails, form))
+        Ok(views.manage_or_track(vrn, false, bankDetailsExist, bankDetails, form)).addingToSession(("vrn", vrn.value))
       }
-      nextUrl
+      chosenUrl
 
     }
 
   private def manageOrTrackForm(implicit request: Request[_]): Form[ManageOrTrack] = {
     Form(mapping(
-      "manage" -> optional(text),
-      "vrn" -> text.verifying(ErrorMessages.`VRN missing`.show, _.nonEmpty)
-    )(ManageOrTrack.apply)(ManageOrTrack.unapply))
+      "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
   }
 
   //------------------------------------------------------------------------------------------------------------------------------
 
-  def showResults(vrn: Vrn): Action[AnyContent] = Action.async {
+  def showResults(vrn: Vrn): Action[AnyContent] = authenticatedAction.async {
     implicit request: Request[_] =>
-      af.authorised() {
+      val financialDataF = desConnector.getFinancialData(vrn)
+      val customerDataF = desConnector.getCustomerData(vrn)
+      val obligationDataF = desConnector.getObligations(vrn)
 
-        val financialDataF = desConnector.getFinancialData(vrn)
-        val customerDataF = desConnector.getCustomerData(vrn)
-        val obligationDataF = desConnector.getObligations(vrn)
+      val result = for {
+        financialData <- financialDataF
+        customerData <- customerDataF
+        obligationData <- obligationDataF
+      } yield (
+        computeView(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
+      )
 
-        val result = for {
-          financialData <- financialDataF
-          customerData <- customerDataF
-          obligationData <- obligationDataF
-        } yield (
-          computeView(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
-        )
+      result
 
-        result
-
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
-      }
   }
 
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode): Action[AnyContent] = Action.async {
+  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode): Action[AnyContent] = authenticatedAction.async {
     implicit request: Request[_] =>
-      af.authorised() {
-        val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
-        Future.successful(Ok(views.view_repayment_account(bankDetails)))
-      }.recoverWith {
-        case e: AuthorisationException => authorisationException(e)
-      }
+
+      val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
+      Future.successful(Ok(views.view_repayment_account(bankDetails)))
+
   }
-
-  private def authorisationException(e: AuthorisationException)(
-      implicit
-      request: Request[_]): Future[Result] =
-    {
-      Logger.debug(s"Unauthorised because of ${
-        e.reason
-      }, $e")
-      Future.successful(Unauthorized(
-        errorHandler.standardErrorTemplate(
-          ErrorMessages.`You do not have access to this service`.show,
-          ErrorMessages.`You do not have access to this service`.show,
-          "")))
-
-    }
 
   private def computeView(
       allRepaymentData: AllRepaymentData,

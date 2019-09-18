@@ -95,7 +95,7 @@ trait ItSpec
     .configure(configMap).build()
 
   def configMap = Map[String, Any](
-    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.des.port" -> WireMockSupport.port
+    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port
   )
 
   def frozenTimeString: String = "2027-11-02T16:33:51.880"

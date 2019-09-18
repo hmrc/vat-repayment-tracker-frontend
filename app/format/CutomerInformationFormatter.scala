@@ -22,12 +22,15 @@ import model.des.{BankDetails, CustomerInformation}
 @Singleton
 class CutomerInformationFormatter @Inject() (addressFormater: AddressFormter) {
 
-  def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
-    case Some(cd) => cd.approvedInformation match {
-      case Some(ai) => ai.bankDetailsExist
-      case None     => false
-    }
-    case None => false
+  def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
+
+    val maybeBankDetailsExist = for {
+      cd <- customerData
+      ai <- cd.approvedInformation
+    } yield ai.bankDetailsExist
+
+    maybeBankDetailsExist.getOrElse(false)
+
   }
 
   def getBankDetails(customerData: Option[CustomerInformation]): Option[BankDetails] = {
@@ -52,12 +55,9 @@ class CutomerInformationFormatter @Inject() (addressFormater: AddressFormter) {
       cd <- customerData
       ai <- cd.approvedInformation
       ppob <- ai.PPOB
-    } yield {
-      ppob.address match {
-        case Some(ad) => addressFormater.getFormattedAddress(ad)
-        case None     => ""
-      }
-    }
+      ad <- ppob.address
+    } yield addressFormater.getFormattedAddress(ad)
+
   }
 
 }

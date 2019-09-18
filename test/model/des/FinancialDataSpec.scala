@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package model
-import enumeratum._
+package model.des
 
-case class ManageOrTrack(choice: Option[String])
+import play.api.libs.json.Json
+import support.{DesData, UnitSpec}
 
-sealed abstract class ManageOrTrackOption extends EnumEntry {
-  val value: String
+class FinancialDataSpec extends UnitSpec {
+
+  "to json" in {
+    Json.toJson(DesData.financialData) shouldBe DesData.financialDataJson
+  }
+
+  "from json" in {
+    DesData.financialDataJson.as[FinancialData] shouldBe DesData.financialData
+  }
 }
-
-object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
-
-  case object vrt extends ManageOrTrackOption {
-    override val value: String = "vrt"
-  }
-  case object bank extends ManageOrTrackOption {
-    override val value: String = "bank"
-  }
-  case object dd extends ManageOrTrackOption {
-    override val value: String = "dd"
-  }
-  override def values = findValues
-
-}
-

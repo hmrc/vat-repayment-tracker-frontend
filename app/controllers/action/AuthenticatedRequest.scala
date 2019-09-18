@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-package pages.tests
+package controllers.action
 
-import model.Vrn
-import pages.ErrorPage
-import support.{ItSpec, WireMockResponses}
+import play.api.mvc.{Request, WrappedRequest}
+import uk.gov.hmrc.auth.core.Enrolments
 
-class ErrorPageSpec extends ItSpec {
-
-  val vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
-
-  "user is authorised and financial data found" in {
-    WireMockResponses.authFailed
-    goToViaPath(path)
-    ErrorPage.assertPageIsDisplayed(vrn)
-
-  }
-
-}
+final class AuthenticatedRequest[A](val request:    Request[A],
+                                    val enrolments: Enrolments
+) extends WrappedRequest[A](request)
