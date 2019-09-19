@@ -18,7 +18,8 @@ package controllers
 
 import play.api.libs.json._
 import play.api.mvc.{PathBindable, QueryStringBindable}
-import scala.reflect.runtime.universe.{typeOf, TypeTag}
+
+import scala.reflect.runtime.universe.{TypeTag, typeOf}
 
 object ValueClassBinder {
 

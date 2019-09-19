@@ -16,10 +16,8 @@
 
 package controllers
 
-import java.time.LocalDate
-
+import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import model.{EnrolmentKeys, Vrn}
-import model.des.{AccountHolderName, BankAccountNumber, BankDetails, SortCode}
 import play.api.http.Status
 import support.{ItSpec, WireMockResponses}
 

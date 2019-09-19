@@ -37,21 +37,6 @@ class PaymentsOrchestratorService @Inject() (
 
 ) {
 
-  private def getRepaymentData(financialData: FinancialData, vatObligations: VatObligations, vrn: Vrn) = {
-
-    financialData.financialTransactions.map{
-      ft =>
-        {
-          RepaymentData((vatObligations.obligations.flatMap(x => x.obligationDetails).find(ob => ob.periodKey == ft.periodKey))
-            .getOrElse(
-              dealWithNoObligations (
-                vrn)).inboundCorrespondenceDateReceived,
-                        ft.periodKeyDescription,
-                        ft.originalAmount)
-        }
-    }
-  }
-
   def getAllRepaymentData(financialData: Option[FinancialData], vatObligations: Option[VatObligations], vrn: Vrn): AllRepaymentData = {
 
     financialData match {
@@ -70,6 +55,21 @@ class PaymentsOrchestratorService @Inject() (
         }
       }
       case None => AllRepaymentData(None, None)
+    }
+  }
+
+  private def getRepaymentData(financialData: FinancialData, vatObligations: VatObligations, vrn: Vrn) = {
+
+    financialData.financialTransactions.map {
+      ft =>
+        {
+          RepaymentData((vatObligations.obligations.flatMap(x => x.obligationDetails).find(ob => ob.periodKey == ft.periodKey))
+            .getOrElse(
+              dealWithNoObligations(
+                vrn)).inboundCorrespondenceDateReceived,
+                        ft.periodKeyDescription,
+                        ft.originalAmount)
+        }
     }
   }
 

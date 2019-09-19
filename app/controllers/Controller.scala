@@ -17,20 +17,17 @@
 package controllers
 
 import connectors.PaymentsOrchestratorConnector
-import controllers.action.{Actions, AuthenticatedAction}
+import controllers.action.Actions
 import format.{AddressFormter, CutomerInformationFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
-import model.TypedVrn.{ClassicVrn, MtdVrn}
-import model.des.{CustomerInformation, _}
 import model._
-import play.api.Logger
+import model.des.{CustomerInformation, _}
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
 import service.PaymentsOrchestratorService
-import uk.gov.hmrc.auth.core._
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,6 +55,28 @@ class Controller @Inject() (
 
       manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
     }
+
+  private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(
+      implicit
+      request: Request[_]): Future[Result] = {
+
+    val customerDataF = desConnector.getCustomerData(vrn)
+    val chosenUrl = for {
+      customerData <- customerDataF
+    } yield {
+      val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
+      val bankDetails: Option[BankDetails] = customerInformationFormatter.getBankDetails(customerData)
+
+      Ok(views.manage_or_track(vrn, false, bankDetailsExist, bankDetails, form)).addingToSession(("vrn", vrn.value))
+    }
+    chosenUrl
+
+  }
+
+  private def manageOrTrackForm(implicit request: Request[_]): Form[ManageOrTrack] = {
+    Form(mapping(
+      "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
+  }
 
   def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionFromSession.async {
     implicit request =>
@@ -92,29 +111,6 @@ class Controller @Inject() (
 
   }
 
-  private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(
-      implicit
-      request: Request[_]): Future[Result] =
-    {
-
-      val customerDataF = desConnector.getCustomerData(vrn)
-      val chosenUrl = for {
-        customerData <- customerDataF
-      } yield {
-        val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
-        val bankDetails: Option[BankDetails] = customerInformationFormatter.getBankDetails(customerData)
-
-        Ok(views.manage_or_track(vrn, false, bankDetailsExist, bankDetails, form)).addingToSession(("vrn", vrn.value))
-      }
-      chosenUrl
-
-    }
-
-  private def manageOrTrackForm(implicit request: Request[_]): Form[ManageOrTrack] = {
-    Form(mapping(
-      "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
-  }
-
   //------------------------------------------------------------------------------------------------------------------------------
 
   def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
@@ -132,14 +128,6 @@ class Controller @Inject() (
       )
 
       result
-
-  }
-
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
-    implicit request: Request[_] =>
-
-      val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
-      Future.successful(Ok(views.view_repayment_account(bankDetails)))
 
   }
 
@@ -214,6 +202,14 @@ class Controller @Inject() (
         vrn
       ))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
+
+  }
+
+  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
+    implicit request: Request[_] =>
+
+      val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
+      Future.successful(Ok(views.view_repayment_account(bankDetails)))
 
   }
 

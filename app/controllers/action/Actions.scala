@@ -17,11 +17,10 @@
 package controllers.action
 
 import com.google.inject.Inject
-import model.TypedVrn.{ClassicVrn, MtdVrn}
-import model.{TypedVrn, Vrn}
+import model.Vrn
 import play.api.Logger
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.{AuthorisedFunctions, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.AuthorisedFunctions
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,6 +31,17 @@ class Actions @Inject() (
     unhappyPathResponses: UnhappyPathResponses)(implicit ec: ExecutionContext) {
 
   def securedAction(vrn: Vrn): ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateVrn(vrn)
+
+  private def validateVrn(vrn: Vrn): ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
+    new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
+
+      override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
+
+        vrnCheck(request, vrn)
+      }
+
+      override protected def executionContext: ExecutionContext = ec
+    }
 
   def securedActionFromSession: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateVrnFromSession
 
@@ -44,16 +54,6 @@ class Actions @Inject() (
 
       }
 
-      override protected def executionContext: ExecutionContext = ec
-    }
-
-  private def validateVrn(vrn: Vrn): ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
-    new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
-
-      override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
-
-        vrnCheck(request, vrn)
-      }
       override protected def executionContext: ExecutionContext = ec
     }
 

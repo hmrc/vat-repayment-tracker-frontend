@@ -16,10 +16,10 @@
 
 package model.des
 
-import play.api.libs.json._
-import play.api.mvc.PathBindable
 import controllers.ValueClassBinder.valueClassBinder
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import play.api.mvc.PathBindable
 
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
   val approvedInformationExists = approvedInformation.isDefined
@@ -47,6 +47,7 @@ object ApprovedInformation {
 }
 
 final case class PPOB(address: Option[Address])
+
 object PPOB {
   implicit val format: OFormat[PPOB] = Json.format[PPOB]
 }
@@ -69,6 +70,7 @@ final case class BankDetails(
     bankAccountNumber: BankAccountNumber,
     sortCode:          SortCode
 )
+
 object BankDetails {
   implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
 }

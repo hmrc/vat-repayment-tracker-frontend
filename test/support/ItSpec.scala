@@ -32,8 +32,8 @@ package support
  * limitations under the License.
  */
 
-import java.time.format.DateTimeFormatter
 import java.time._
+import java.time.format.DateTimeFormatter
 
 import com.google.inject.{AbstractModule, Provides}
 import javax.inject.Singleton
@@ -52,7 +52,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext
-import scala.util.Random
 
 /**
  * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
@@ -76,30 +75,6 @@ trait ItSpec
   lazy val servicesConfig = fakeApplication.injector.instanceOf[ServicesConfig]
   lazy val config = fakeApplication.injector.instanceOf[Configuration]
   lazy val env = fakeApplication.injector.instanceOf[Environment]
-  val baseUrl: String = s"http://localhost:$WireMockSupport.port"
-  val webdriverUr: String = s"http://localhost:$port"
-
-  override implicit val patienceConfig = PatienceConfig(
-    timeout  = scaled(Span(3, Seconds)),
-    interval = scaled(Span(300, Millis)))
-
-  implicit val emptyHC = HeaderCarrier()
-  val connector = injector.instanceOf[TestConnector]
-
-  def httpClient = fakeApplication().injector.instanceOf[HttpClient]
-
-  def injector: Injector = fakeApplication().injector
-
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
-    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .configure(configMap).build()
-
-  def configMap = Map[String, Any](
-    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port
-  )
-
-  def frozenTimeString: String = "2027-11-02T16:33:51.880"
-
   lazy val overridingsModule: AbstractModule = new AbstractModule {
 
     override def configure(): Unit = ()
@@ -111,6 +86,29 @@ trait ItSpec
       Clock.fixed(fixedInstant, ZoneId.systemDefault)
     }
   }
+  val baseUrl: String = s"http://localhost:$WireMockSupport.port"
+
+  override implicit val patienceConfig = PatienceConfig(
+    timeout  = scaled(Span(3, Seconds)),
+    interval = scaled(Span(300, Millis)))
+
+  implicit val emptyHC = HeaderCarrier()
+  val webdriverUr: String = s"http://localhost:$port"
+  val connector = injector.instanceOf[TestConnector]
+
+  def httpClient = fakeApplication().injector.instanceOf[HttpClient]
+
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
+    .configure(configMap).build()
+
+  def configMap = Map[String, Any](
+    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port
+  )
+
+  def injector: Injector = fakeApplication().injector
+
+  def frozenTimeString: String = "2027-11-02T16:33:51.880"
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
 

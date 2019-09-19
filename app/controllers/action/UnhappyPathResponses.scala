@@ -16,13 +16,13 @@
 
 package controllers.action
 
-import javax.inject.{Inject, Singleton}
 import config.ViewConfig
 import controllers.ErrorHandler
+import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model.Vrn
-import play.api.mvc.Results.{NotFound, Unauthorized}
 import play.api.mvc.Request
+import play.api.mvc.Results.{NotFound, Unauthorized}
 import req.RequestSupport
 
 @Singleton

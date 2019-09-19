@@ -24,12 +24,12 @@ final case class RepaymentData(
     period:             String,
     amount:             BigDecimal) {
 
-  def estimatedRepaymentDate: LocalDate = {
-    returnedReceivedOn.plusDays(30)
-  }
-
   def isOverdue(implicit clock: Clock): Boolean = {
     estimatedRepaymentDate.isBefore(LocalDate.now(clock))
+  }
+
+  def estimatedRepaymentDate: LocalDate = {
+    returnedReceivedOn.plusDays(30)
   }
 
   def formatDate(localDate: LocalDate): String = {

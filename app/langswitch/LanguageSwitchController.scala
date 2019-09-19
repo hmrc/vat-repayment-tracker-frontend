@@ -34,6 +34,10 @@ class LanguageSwitchController @Inject() (
 
   import requestSupport._
 
+  private val `This url has to have parent page` = Message(
+    english = "This url has to have parent page."
+  )
+
   def switchToLanguage(language: Language): Action[AnyContent] = cc.actionBuilder { implicit request =>
     val maybeReferrer: Option[String] =
       request
@@ -54,10 +58,6 @@ class LanguageSwitchController @Inject() (
 
   private def missingRefererHeader(language: Language) = Message(
     english = s"Missing referer header - language changed to ${language.label}"
-  )
-
-  private val `This url has to have parent page` = Message(
-    english = "This url has to have parent page."
   )
 
 }

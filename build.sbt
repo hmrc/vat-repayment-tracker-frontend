@@ -127,6 +127,6 @@ lazy val microservice = Project(appName, file("."))
       "-language:implicitConversions",
       "-language:reflectiveCalls",
       "-Ypartial-unification" //required by cats
-      )
+    )
   )
 val appName = "vat-repayment-tracker-frontend"

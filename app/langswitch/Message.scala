@@ -16,8 +16,6 @@
 
 package langswitch
 
-import play.api.i18n.Messages
-
 case class Message(
     english: String,
     welsh:   Option[String]

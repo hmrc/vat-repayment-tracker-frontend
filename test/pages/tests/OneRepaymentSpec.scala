@@ -16,8 +16,8 @@
 
 package pages.tests
 
-import model.{EnrolmentKeys, Vrn}
 import model.des.{AccountHolderName, BankAccountNumber, SortCode}
+import model.{EnrolmentKeys, Vrn}
 import pages.{OneRepayment, ViewRepaymentAccount}
 import support.{ItSpec, WireMockResponses}
 

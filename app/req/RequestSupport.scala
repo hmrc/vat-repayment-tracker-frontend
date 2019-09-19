@@ -32,7 +32,9 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I18nSupport {
 
   def lang(implicit messages: Messages): Lang = messages.lang
+
   implicit def language(implicit messages: Messages): Language = Language(messages.lang)
+
   implicit def hc(implicit request: Request[_]): HeaderCarrier = RequestSupport.hc
 }
 
@@ -53,4 +55,5 @@ object RequestSupport {
   private object HcProvider extends FrontendHeaderCarrierProvider {
     def headerCarrier(implicit request: Request[_]): HeaderCarrier = hc(request)
   }
+
 }
