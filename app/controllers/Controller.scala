@@ -54,12 +54,12 @@ class Controller @Inject() (
   import requestSupport._
 
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
-    actions.securedAction(vrn) { implicit request =>
+    actions.securedAction(vrn).async { implicit request =>
 
       manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
     }
 
-  def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionFromSession {
+  def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionFromSession.async {
     implicit request =>
 
       val vrn = request.session.get("vrn") match {
@@ -117,7 +117,7 @@ class Controller @Inject() (
 
   //------------------------------------------------------------------------------------------------------------------------------
 
-  def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn) {
+  def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
     implicit request: Request[_] =>
       val financialDataF = desConnector.getFinancialData(vrn)
       val customerDataF = desConnector.getCustomerData(vrn)
@@ -135,7 +135,7 @@ class Controller @Inject() (
 
   }
 
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn) {
+  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
     implicit request: Request[_] =>
 
       val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)

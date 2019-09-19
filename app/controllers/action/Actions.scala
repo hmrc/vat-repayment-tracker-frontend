@@ -31,17 +31,9 @@ class Actions @Inject() (
     cc:                   ControllerComponents,
     unhappyPathResponses: UnhappyPathResponses)(implicit ec: ExecutionContext) {
 
-  def securedAction(vrn: Vrn)(block: Request[AnyContent] => Future[Result]): Action[AnyContent] = {
-    val actionBuilder: ActionBuilder[Request, AnyContent] = authoriseAction.andThen(validateVrn(vrn))
+  def securedAction(vrn: Vrn): ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateVrn(vrn)
 
-    actionBuilder.async(block)
-  }
-
-  def securedActionFromSession(block: Request[AnyContent] => Future[Result]): Action[AnyContent] = {
-    val actionBuilder: ActionBuilder[Request, AnyContent] = authoriseAction.andThen(validateVrnFromSession)
-
-    actionBuilder.async(block)
-  }
+  def securedActionFromSession: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateVrnFromSession
 
   private def validateVrnFromSession: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
     new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
