@@ -61,7 +61,7 @@ bodyClasses = None
    <fieldset id="manage">
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
      @views.html.partials.error_message_form_input("manage", form)
-     @views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.heading.show, Some(LangMessages.`View what HMRC owe you`.show), None)
+    <!-- DD option goes here -->
     @{
     if(showBankAccountOption) {
     bankDetailsOption.map(bankDetails => {
@@ -71,6 +71,7 @@ bodyClasses = None
     }
 
     }
+    @views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.heading.show, Some(LangMessages.`View what HMRC owe you`.show), None)
     </div>
    </fieldset>
    <div class="form-field">
