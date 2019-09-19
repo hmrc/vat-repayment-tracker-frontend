@@ -20,10 +20,8 @@ import java.io.{FileInputStream, FileOutputStream}
 
 import org.openqa.selenium.{By, OutputType, TakesScreenshot, WebDriver}
 import org.scalatest.Assertion
-import org.scalatest.concurrent.PatienceConfiguration
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.selenium.WebBrowser
-import pages.NoVatRepaymentsFoundPage.probing
 import play.api.Logger
 import support.RichMatchers
 
@@ -52,16 +50,6 @@ trait CommonPage
   def getPageHeader(implicit driver: WebDriver): String = probing(_.findElement(By.className("heading-large")).getText)
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
-
-  def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
-
-  def readMainMessage()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
-
-  def readAccName()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
-
-  def readAccSortCode()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)
-
-  def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
   /**
    * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
@@ -106,6 +94,16 @@ trait CommonPage
         None
     }
   }
+
+  def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
+
+  def readMainMessage()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
+
+  def readAccName()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
+
+  def readAccSortCode()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)
+
+  def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
   def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion = {
     globalErrors shouldBe defined

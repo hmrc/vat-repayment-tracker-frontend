@@ -24,12 +24,16 @@ import play.twirl.api.{Html, HtmlFormat}
 
 trait Target {
   protected val targetName: String
+
   def toAttr: String = Link.attr("target", targetName)
+
   def hiddenInfo: Option[String] = None
 }
+
 case object SameWindow extends Target {
   override val targetName = "_self"
 }
+
 case object NewWindow extends Target {
   override val targetName = "_blank"
   override val hiddenInfo = Some("link opens in a new window")
@@ -37,14 +41,18 @@ case object NewWindow extends Target {
 
 trait PossibleSso {
   protected val value: String
+
   def toAttr: String = Link.attr("data-sso", value)
 }
+
 case object NoSso extends PossibleSso {
   override val value = "false"
 }
+
 case object ClientSso extends PossibleSso {
   override val value = "client"
 }
+
 case object ServerSso extends PossibleSso {
   override val value = "server"
 }
@@ -61,14 +69,19 @@ case class Link(
 
   import Link._
 
+  val hiddenLink: String = hiddenSpanFor(hiddenInfo.orElse(target.hiddenInfo))
+
+  def toHtml: Html = Html(s"<a$idAttr$hrefAttr${target.toAttr}${sso.toAttr}$cssAttr$dataAttr$relAttr>$text$hiddenLink</a>")
+
   private def hrefAttr = attr("href", url)
+
   private def idAttr = id.map(attr("id", _)).getOrElse("")
 
   private def text = value.map(v => Messages(v)).getOrElse("")
+
   private def cssAttr = cssClasses.map(attr("class", _)).getOrElse("")
+
   private def dataAttr = buildAttributeString(dataAttributes)
-  private def hiddenSpanFor(txt: Option[String]) = txt.map(t => s"""<span class="visuallyhidden">${Messages(t)}</span>""").getOrElse("")
-  private def relAttr = if (target == NewWindow) attr("rel", "external noopener noreferrer") else ""
 
   def buildAttributeString(attributes: Option[Map[String, String]]): String = {
     attributes match {
@@ -80,16 +93,24 @@ case class Link(
     }
   }
 
-  val hiddenLink: String = hiddenSpanFor(hiddenInfo.orElse(target.hiddenInfo))
+  private def relAttr = if (target == NewWindow) attr("rel", "external noopener noreferrer") else ""
 
-  def toHtml: Html = Html(s"<a$idAttr$hrefAttr${target.toAttr}${sso.toAttr}$cssAttr$dataAttr$relAttr>$text$hiddenLink</a>")
+  private def hiddenSpanFor(txt: Option[String]) = txt.map(t => s"""<span class="visuallyhidden">${Messages(t)}</span>""").getOrElse("")
 }
 
 object Link {
 
+  def attr(name: String, value: String): String = s""" $name="${escape(value)}""""
+
   private def escape(str: String) = HtmlFormat.escape(str).toString()
 
-  def attr(name: String, value: String): String = s""" $name="${escape(value)}""""
+  def toInternalPage: PreconfiguredLink = PreconfiguredLink(NoSso, SameWindow)
+
+  def toExternalPage: PreconfiguredLink = PreconfiguredLink(NoSso, NewWindow)
+
+  def toPortalPage: PreconfiguredLink = PreconfiguredLink(ClientSso, SameWindow)
+
+  def toInternalPageWithSso: PreconfiguredLink = PreconfiguredLink(ServerSso, SameWindow)
 
   case class PreconfiguredLink(sso: PossibleSso, target: Target) {
     def apply(
@@ -101,13 +122,5 @@ object Link {
         hiddenInfo:     Option[String]              = None)(implicit messages: Messages): Link =
       Link(url, value, id, target, sso, cssClasses, dataAttributes, hiddenInfo)
   }
-
-  def toInternalPage: PreconfiguredLink = PreconfiguredLink(NoSso, SameWindow)
-
-  def toExternalPage: PreconfiguredLink = PreconfiguredLink(NoSso, NewWindow)
-
-  def toPortalPage: PreconfiguredLink = PreconfiguredLink(ClientSso, SameWindow)
-
-  def toInternalPageWithSso: PreconfiguredLink = PreconfiguredLink(ServerSso, SameWindow)
 
 }

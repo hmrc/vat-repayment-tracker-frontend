@@ -16,7 +16,7 @@
 
 package pages.tests
 
-import model.Vrn
+import model.{EnrolmentKeys, Vrn}
 import pages.NoVatRepaymentsFoundPage
 import support.{ItSpec, WireMockResponses}
 
@@ -26,7 +26,7 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and no financial data found" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.financialsNotFound(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
     WireMockResponses.obligationsOk(vrn)

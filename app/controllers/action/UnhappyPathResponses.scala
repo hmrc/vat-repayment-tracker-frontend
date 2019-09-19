@@ -16,12 +16,13 @@
 
 package controllers.action
 
-import javax.inject.{Inject, Singleton}
 import config.ViewConfig
 import controllers.ErrorHandler
+import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
-import play.api.mvc.Results.{NotFound, Unauthorized}
+import model.Vrn
 import play.api.mvc.Request
+import play.api.mvc.Results.{NotFound, Unauthorized}
 import req.RequestSupport
 
 @Singleton
@@ -48,6 +49,12 @@ class UnhappyPathResponses @Inject() (
     errorHandler.standardErrorTemplate(
       ErrorMessages.`You do not have access to this service`.show,
       ErrorMessages.`You do not have access to this service`.show,
+      ""))
+
+  def unauthorised(vrn: Vrn)(implicit request: Request[_]) = Unauthorized(
+    errorHandler.standardErrorTemplate(
+      ErrorMessages.`You do not have access to this service`.show,
+      ErrorMessages.`You do not have access to this service`(vrn).show,
       ""))
 
 }

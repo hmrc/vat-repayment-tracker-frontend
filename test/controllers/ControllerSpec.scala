@@ -16,10 +16,8 @@
 
 package controllers
 
-import java.time.LocalDate
-
-import model.Vrn
-import model.des.{AccountHolderName, BankAccountNumber, BankDetails, SortCode}
+import model.des.{AccountHolderName, BankAccountNumber, SortCode}
+import model.{EnrolmentKeys, Vrn}
 import play.api.http.Status
 import support.{ItSpec, WireMockResponses}
 
@@ -27,7 +25,7 @@ class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
 
   "Get ShowResults authorised" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.financialsOkSingle(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
     WireMockResponses.obligationsOk(vrn)
@@ -36,8 +34,8 @@ class ControllerSpec extends ItSpec {
   }
 
   "Get view repayment account authorised" in {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
-    val result = connector.viewRepaymentAccount(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****")).futureValue
+    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    val result = connector.viewRepaymentAccount(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"), vrn).futureValue
     result.status shouldBe Status.OK
   }
 

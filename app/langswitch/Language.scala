@@ -16,21 +16,22 @@
 
 package langswitch
 
+import controllers.ValueClassBinder.valueClassBinder
 import enumeratum.{Enum, EnumEntry}
 import enumformat.EnumFormat
 import langswitch.Languages.{English, Welsh}
-import play.api.i18n.{Lang, Messages}
+import play.api.i18n.Lang
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
-import controllers.ValueClassBinder.valueClassBinder
-import play.mvc.Http.Request
 
 import scala.collection.immutable
 
 sealed trait Language extends EnumEntry {
-  def code: String
-  def label: String
   val toPlayLang: Lang = Lang(code)
+
+  def code: String
+
+  def label: String
 }
 
 object Language {
@@ -47,16 +48,20 @@ object Language {
 
 object Languages extends Enum[Language] {
 
+  val availableLanguages = List(English, Welsh)
+
+  override def values: immutable.IndexedSeq[Language] = findValues
+
   case object English extends Language {
     override def code: String = "en"
+
     override def label: String = "English"
   }
+
   case object Welsh extends Language {
     override def code: String = "cy"
+
     override def label: String = "Cymraeg"
   }
-
-  val availableLanguages = List(English, Welsh)
-  override def values: immutable.IndexedSeq[Language] = findValues
 }
 

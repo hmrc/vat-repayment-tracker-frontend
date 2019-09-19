@@ -15,6 +15,7 @@
  */
 
 package model
+
 import enumeratum._
 
 case class ManageOrTrack(choice: Option[String])
@@ -25,16 +26,19 @@ sealed abstract class ManageOrTrackOption extends EnumEntry {
 
 object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
 
+  override def values = findValues
+
   case object vrt extends ManageOrTrackOption {
     override val value: String = "vrt"
   }
+
   case object bank extends ManageOrTrackOption {
     override val value: String = "bank"
   }
+
   case object dd extends ManageOrTrackOption {
     override val value: String = "dd"
   }
-  override def values = findValues
 
 }
 

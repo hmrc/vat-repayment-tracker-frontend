@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-package langswitch
+package model
 
-case class Message(
-    english: String,
-    welsh:   Option[String]
-) {
-
-  def show(implicit language: Language): String = language match {
-    case Languages.English => english
-    case Languages.Welsh   => welsh.getOrElse(english)
-  }
-}
-
-object Message {
-
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
-  def apply(english: String, welsh: String = null): Message = Message(english, Option(welsh))
+object EnrolmentKeys {
+  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
+  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
+  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
 }

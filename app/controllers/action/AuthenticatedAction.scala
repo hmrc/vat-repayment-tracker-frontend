@@ -20,11 +20,11 @@ import com.google.inject.Inject
 import config.ViewConfig
 import play.api.Logger
 import play.api.mvc.Results._
-import play.api.mvc.{ActionBuilder, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
+import play.api.mvc._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 
 import scala.concurrent.{ExecutionContext, Future}
 

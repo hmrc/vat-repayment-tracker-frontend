@@ -16,27 +16,13 @@
 
 package pages
 
-import java.time.LocalDate
-
 import model.Vrn
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
-import org.openqa.selenium.By
-import pages.NoVatRepaymentsFoundPage.readTitle
 
 object OneRepayment extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
-
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
-
-  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("amount")).getText)
-
-  def readRepayDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("repay-date")).getText)
-
-  def readReceivedDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("received-date")).getText)
-
-  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("period")).getText)
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
@@ -53,4 +39,14 @@ object OneRepayment extends CommonPage {
     readAccSortCode() shouldBe "Sort code: 40****"
 
   }
+
+  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
+
+  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("amount")).getText)
+
+  def readRepayDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("repay-date")).getText)
+
+  def readReceivedDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("received-date")).getText)
+
+  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("period")).getText)
 }

@@ -24,10 +24,10 @@ object ErrorPage extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
-
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "You do not have access to this service"
   }
+
+  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 }

@@ -16,12 +16,7 @@
 
 package connectors
 
-import java.time.{Clock, LocalDate}
-
-import model.Vrn
-import model.des._
-import play.api.libs.json.Json
-import support.{DesData, ItSpec, WireMockResponses}
+import support.ItSpec
 
 class PaymentsOrchestratorConnectorSpec extends ItSpec {
 

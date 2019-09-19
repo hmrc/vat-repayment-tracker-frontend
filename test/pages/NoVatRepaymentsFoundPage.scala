@@ -24,8 +24,6 @@ object NoVatRepaymentsFoundPage extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
-
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Track your VAT repayments"
@@ -34,4 +32,6 @@ object NoVatRepaymentsFoundPage extends CommonPage {
     readAccNumber shouldBe "Account number: ****2490"
     readAccSortCode() shouldBe "Sort code: 40****"
   }
+
+  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 }

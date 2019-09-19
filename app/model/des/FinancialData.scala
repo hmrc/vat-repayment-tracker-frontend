@@ -18,7 +18,7 @@ package model.des
 
 import java.time.LocalDate
 
-import play.api.libs.json.{Json, OFormat, Reads}
+import play.api.libs.json.{Json, OFormat}
 
 /**
  * Case class representing a small subset of the DES 1166 API response
