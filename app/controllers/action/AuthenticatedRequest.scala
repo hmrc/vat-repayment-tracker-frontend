@@ -16,9 +16,29 @@
 
 package controllers.action
 
+import model.TypedVrn.{ClassicVrn, MtdVrn}
+import model.{TypedVrn, Vrn}
 import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 final class AuthenticatedRequest[A](val request:    Request[A],
                                     val enrolments: Enrolments
-) extends WrappedRequest[A](request)
+) extends WrappedRequest[A](request) {
+
+  val enrolmentsVrn: Option[TypedVrn] = {
+    import model.EnrolmentKeys._
+
+    enrolments.enrolments.collectFirst {
+      case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
+        identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => MtdVrn(Vrn(vrn)) }
+
+      case Enrolment(key, identifiers, _, _) if Set(vatDecEnrolmentKey, vatVarEnrolmentKey).contains(key) =>
+        identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => ClassicVrn(Vrn(vrn)) }
+    }.flatten
+  }
+
+  def sessionVrn = request.session.get("vrn") match {
+    case Some(vrnString) => Vrn(vrnString)
+    case None            => throw new RuntimeException("Could not get VRN from session")
+  }
+}

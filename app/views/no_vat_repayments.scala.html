@@ -16,6 +16,7 @@
 
 @import model.des.BankDetails
 @import langswitch.LangMessages
+@import model.Vrn
 
 @this(
   mainTemplate: views.html.main_template,
@@ -27,7 +28,8 @@
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
   address: Option[String],
-  addressExists: Boolean)(
+  addressExists: Boolean,
+  vrn: Vrn)(
   implicit
   request: Request[_]
 )
@@ -45,7 +47,7 @@
       <p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
       <p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
       <p class="govuk-!-margin-bottom-9"><a href="www.fixme.com">@{LangMessages.`View your VAT account`.show}</a></p>
-      @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
+      @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)
     </div>
   </div>
 </main>

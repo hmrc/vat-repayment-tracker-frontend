@@ -16,6 +16,8 @@
 
 package langswitch
 
+import model.Vrn
+
 object ErrorMessages {
 
   val badRequest400Title = Message(
@@ -59,6 +61,9 @@ object ErrorMessages {
   )
   val `You do not have access to this service`: Message = Message(
     english = "You do not have access to this service"
+  )
+  def `You do not have access to this service`(vrn: Vrn): Message = Message(
+    english = s"""You do not have access to this service for VRN : ${vrn.value}"""
   )
   val `choose an option` = Message(
     "Please choose an option"

@@ -17,18 +17,20 @@
 package controllers
 
 import connectors.PaymentsOrchestratorConnector
-import controllers.action.AuthenticatedAction
+import controllers.action.{Actions, AuthenticatedAction}
 import format.{AddressFormter, CutomerInformationFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
+import model.TypedVrn.{ClassicVrn, MtdVrn}
 import model.des.{CustomerInformation, _}
-import model.{AllRepaymentData, ManageOrTrack, ManageOrTrackOptions, Vrn}
+import model._
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
 import service.PaymentsOrchestratorService
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
+import uk.gov.hmrc.auth.core._
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,10 +43,9 @@ class Controller @Inject() (
     desConnector:                 PaymentsOrchestratorConnector,
     desService:                   PaymentsOrchestratorService,
     requestSupport:               RequestSupport,
-    af:                           AuthorisedFunctions,
     addressFormater:              AddressFormter,
     customerInformationFormatter: CutomerInformationFormatter,
-    authenticatedAction:          AuthenticatedAction)(
+    actions:                      Actions)(
     implicit
     ec: ExecutionContext)
 
@@ -52,13 +53,13 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def manageOrTrack(vrn: Vrn): Action[AnyContent] = authenticatedAction.async {
-    implicit request: Request[_] =>
+  def manageOrTrack(vrn: Vrn): Action[AnyContent] =
+    actions.securedAction(vrn) { implicit request =>
+
       manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
+    }
 
-  }
-
-  def manageOrTrackSubmit(): Action[AnyContent] = authenticatedAction.async {
+  def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionFromSession {
     implicit request =>
 
       val vrn = request.session.get("vrn") match {
@@ -116,7 +117,7 @@ class Controller @Inject() (
 
   //------------------------------------------------------------------------------------------------------------------------------
 
-  def showResults(vrn: Vrn): Action[AnyContent] = authenticatedAction.async {
+  def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn) {
     implicit request: Request[_] =>
       val financialDataF = desConnector.getFinancialData(vrn)
       val customerDataF = desConnector.getCustomerData(vrn)
@@ -134,7 +135,7 @@ class Controller @Inject() (
 
   }
 
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode): Action[AnyContent] = authenticatedAction.async {
+  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn) {
     implicit request: Request[_] =>
 
       val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
@@ -162,7 +163,8 @@ class Controller @Inject() (
           bankDetailsExist,
           bankDetails,
           addressDetails,
-          addressDetailsExist
+          addressDetailsExist,
+          vrn
         ))
     } else if (showCurrent && (overDueSize == 0)) {
       Ok(views.one_repayment(
@@ -170,7 +172,8 @@ class Controller @Inject() (
         bankDetailsExist,
         bankDetails,
         addressDetails,
-        addressDetailsExist
+        addressDetailsExist,
+        vrn
       ))
     } else if ((showCurrent == false) && (overDueSize == 1)) {
       Ok(views.one_repayment_delayed(
@@ -178,7 +181,8 @@ class Controller @Inject() (
         bankDetailsExist,
         bankDetails,
         addressDetails,
-        addressDetailsExist
+        addressDetailsExist,
+        vrn
       ))
     } else if ((showCurrent == false) && (overDueSize > 1)) {
       Ok(views.multiple_delayed(
@@ -186,7 +190,8 @@ class Controller @Inject() (
         bankDetailsExist,
         bankDetails,
         addressDetails,
-        addressDetailsExist
+        addressDetailsExist,
+        vrn
       ))
     } else if (showCurrent && (overDueSize == 1)) {
       Ok(views.one_repayment_one_dealyed(
@@ -195,7 +200,8 @@ class Controller @Inject() (
         bankDetailsExist,
         bankDetails,
         addressDetails,
-        addressDetailsExist
+        addressDetailsExist,
+        vrn
       ))
     } else if (showCurrent && (overDueSize > 1)) {
       Ok(views.one_repayment_multiple_delayed(
@@ -204,7 +210,8 @@ class Controller @Inject() (
         bankDetailsExist,
         bankDetails,
         addressDetails,
-        addressDetailsExist
+        addressDetailsExist,
+        vrn
       ))
     } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
 

@@ -16,7 +16,7 @@
 
 package pages.tests
 
-import model.Vrn
+import model.{EnrolmentKeys, Vrn}
 import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import pages.{OneRepayment, ViewRepaymentAccount}
 import support.{ItSpec, WireMockResponses}
@@ -35,11 +35,11 @@ class OneRepaymentSpec extends ItSpec {
   "click manager link" in {
     setup()
     OneRepayment.clickManageAccount
-    ViewRepaymentAccount.assertPageIsDisplayed(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"))
+    ViewRepaymentAccount.assertPageIsDisplayed(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"), vrn)
   }
 
   private def setup() = {
-    WireMockResponses.authOk(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.financialsOkSingle(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
     WireMockResponses.obligationsOk(vrn)

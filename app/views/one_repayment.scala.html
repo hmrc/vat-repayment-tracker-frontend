@@ -15,6 +15,7 @@
  *@
 
 @import config.ViewConfig
+@import model.Vrn
 @import model.des._
 @import model.RepaymentData
 @import langswitch.LangMessages
@@ -33,7 +34,8 @@
   showBankDetails: Boolean,
   bankDetails: Option[BankDetails],
   address: Option[String],
-  addressExists: Boolean)(
+  addressExists: Boolean,
+  vrn : Vrn)(
   implicit
   request: Request[_]
 )
@@ -50,7 +52,7 @@
       <h1 id="main-message">@{LangMessages.`We are processing your VAT repayment`.show}</h1>
         @one_repayment(onePayment)
         @whenWeRepayYou()
-        @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
+        @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)
     </div>
   </div>
 </main>

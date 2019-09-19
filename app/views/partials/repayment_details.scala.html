@@ -17,6 +17,7 @@
 @import config.ViewConfig
 @import model.des._
 @import model.RepaymentData
+@import model.Vrn
 @import langswitch.LangMessages
 
 @this(
@@ -28,7 +29,8 @@ appConfig: ViewConfig
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
 address: Option[String],
-addressExists: Boolean)(
+addressExists: Boolean,
+vrn: Vrn)(
 implicit
 request: Request[_]
 )
@@ -41,7 +43,7 @@ request: Request[_]
 <p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</strong></p>
 <p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</strong></p>
 <p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.sortCode.value)</strong></p>
-<p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode))' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
+<p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode),vrn)' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
 }
 @if(addressExists && (!(showBankDetails))) {
 <h3>@{LangMessages.`Your repayment details`.show}</h3>

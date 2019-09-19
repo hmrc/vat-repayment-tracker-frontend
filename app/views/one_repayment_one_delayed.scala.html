@@ -18,6 +18,7 @@
 @import model.des._
 @import model.RepaymentData
 @import langswitch.LangMessages
+@import model.Vrn
 
 @this(
 mainTemplate: views.html.main_template,
@@ -35,7 +36,8 @@ oneDelayed: RepaymentData,
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
 address: Option[String],
-addressExists: Boolean)(
+addressExists: Boolean,
+vrn: Vrn)(
 implicit
 request: Request[_]
 )
@@ -71,7 +73,7 @@ bodyClasses = None
             @guidance_in_progress()
           </section>
         </div>
-        @repaymentDetails(showBankDetails,bankDetails,address,addressExists)
+        @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)
     </div>
   </div>
 </main>
