@@ -359,7 +359,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOk(vrn: Vrn, receivedDate: String): JsValue = Json.parse(
+  def obligationsDataOk(vrn: Vrn, toDate: String): JsValue = Json.parse(
     s"""
                                                  {
                                                      "obligations": [
@@ -377,8 +377,8 @@ object DesData {
                                                                  {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-03-01",
-                                                                     "inboundCorrespondenceToDate": "2018-03-31",
-                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
+                                                                     "inboundCorrespondenceToDate": "${toDate}",
+                                                                     "inboundCorrespondenceDateReceived": "2018-04-12",
                                                                      "inboundCorrespondenceDueDate": "2018-05-07",
                                                                      "periodKey": "18AC"
                                                                  },
