@@ -32,6 +32,6 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
   def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
 
   def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
-    s"http://localhost:$port/vat-repayment-tracker-frontend/view-repayment-account/${accountHolderName.value}/${bankAccountNumber.value}/${sortCode.value}/${vrn.value}")
+    s"http://localhost:$port/vat-repayment-tracker-frontend/view-repayment-account/${vrn.value}")
 
 }

@@ -179,7 +179,11 @@ object LangMessages {
   )
 
   def accountAndSortCode(bankDetails: BankDetails) = Message(
-    s"""Account: ${bankDetails.bankAccountNumber.value}, Sort code: ${bankDetails.sortCode.value}"""
+    s"""Account: ${bankDetails.bankAccountNumber.bankAccounNumberObscured}, Sort code: ${bankDetails.sortCode.value}"""
+  )
+
+  val `Manage your Direct Debit` = Message(
+    "Manage your Direct Debit"
   )
 
 }

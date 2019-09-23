@@ -28,9 +28,9 @@ object NoVatRepaymentsFoundPage extends CommonPage {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Track your VAT repayments"
     readMainMessage shouldBe "No VAT repayments in progress"
-    readAccName shouldBe "Name on account: *********"
-    readAccNumber shouldBe "Account number: ****2490"
-    readAccSortCode() shouldBe "Sort code: 40****"
+    readAccName shouldBe "Name on account: Account holder"
+    readAccNumber shouldBe "Account number: ****2222"
+    readAccSortCode() shouldBe "Sort code: 667788"
   }
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle

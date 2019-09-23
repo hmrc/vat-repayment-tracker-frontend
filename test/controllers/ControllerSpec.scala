@@ -35,6 +35,7 @@ class ControllerSpec extends ItSpec {
 
   "Get view repayment account authorised" in {
     WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    WireMockResponses.customerDataOkWithBankDetails(vrn)
     val result = connector.viewRepaymentAccount(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"), vrn).futureValue
     result.status shouldBe Status.OK
   }

@@ -26,11 +26,11 @@ object ViewRepaymentAccount extends CommonPage {
   val path = "/vat-repayment-tracker-frontend/view-repayment-account/"
 
   def assertPageIsDisplayed(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${accountHolderName.value}/${bankAccountNumber.value}/${sortCode.value}/${vrn.value}"""
+    currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Track your VAT repayments"
-    readAccName shouldBe "Name on account: *********"
-    readAccNumber shouldBe "Account number: ****2490"
-    readAccSortCode() shouldBe "Sort code: 40****"
+    readAccName shouldBe "Name on account: Account holder"
+    readAccNumber shouldBe "Account number: ****2222"
+    readAccSortCode() shouldBe "Sort code: 667788"
     readMainMessage() shouldBe "Your VAT repayments will be sent to this account"
   }
 

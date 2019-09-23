@@ -84,7 +84,9 @@ object AccountHolderName {
 
 }
 
-final case class BankAccountNumber(value: String)
+final case class BankAccountNumber(value: String) {
+  val bankAccounNumberObscured = "****" + value.drop(4)
+}
 
 object BankAccountNumber {
 

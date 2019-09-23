@@ -35,7 +35,7 @@ class OneRepaymentSpec extends ItSpec {
   "click manager link" in {
     setup()
     OneRepayment.clickManageAccount
-    ViewRepaymentAccount.assertPageIsDisplayed(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"), vrn)
+    ViewRepaymentAccount.assertPageIsDisplayed(AccountHolderName("Account holder"), BankAccountNumber("****2222"), SortCode("667788"), vrn)
   }
 
   private def setup() = {
