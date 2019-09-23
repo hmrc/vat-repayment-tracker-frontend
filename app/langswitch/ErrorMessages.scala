@@ -69,6 +69,14 @@ object ErrorMessages {
     "VRN missing"
   )
 
+  val `general error title` = Message(
+    "Sorry, there is a problem with the service"
+  )
+
+  val `try again later` = Message(
+    "Try again later."
+  )
+
   def `You do not have access to this service`(vrn: Vrn): Message = Message(
     english = s"""You do not have access to this service for VRN : ${vrn.value}"""
   )
