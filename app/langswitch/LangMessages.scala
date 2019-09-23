@@ -110,8 +110,8 @@ object LangMessages {
     english = "Your VAT repayments will be sent to this account"
   )
 
-  val `Change account details`: Message = Message(
-    english = "Change account details"
+  val `View your business details to update your repayment bank account`: Message = Message(
+    english = "`View your business details to update your repayment bank account`"
   )
 
   val `Your repayment is delayed`: Message = Message(
@@ -174,9 +174,6 @@ object LangMessages {
   )
   val `There is a problem` = Message(
     "There is a problem"
-  )
-  val `Manage your repayment bank account` = Message(
-    "Manage your repayment bank account"
   )
 
   def accountAndSortCode(bankDetails: BankDetails) = Message(

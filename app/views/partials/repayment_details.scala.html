@@ -52,6 +52,6 @@ request: Request[_]
 <p>@{LangMessages.`Currently sent to`.show}</p>
 <p id="address">@Html(address.getOrElse(""))</p>
 <p>@{LangMessages.`For faster payment next time`.show} <a href="www.changeme.com">@{LangMessages.`add a repayment account`.show}</a></p>
-<p><a href="www.changeme.com">@{LangMessages.`Update your correspondence address`.show}</a></p>
+<p><a href=@{appConfig.updateCorrespondenceAddress}>@{LangMessages.`Update your correspondence address`.show}</a></p>
 }
 
