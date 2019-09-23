@@ -145,3 +145,40 @@ a {
   }
 
 }
+
+/* summary lists */
+.summary-list {
+    margin-bottom: 20px;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    font-size: 16px;
+
+    &__row {
+        display: table-row;
+    }
+
+    &__key, &__value {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #bfc1c3;
+        padding-right: 20px;
+        display: table-cell;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    &__key {
+        width: 30%;
+        font-weight: 700;
+    }
+
+    &__value {
+        width: 70%;
+    }
+
+    @include break(desktop) {
+        margin-bottom: 30px;
+        font-size: 19px;
+    }
+}

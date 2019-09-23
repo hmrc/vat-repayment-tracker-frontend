@@ -37,19 +37,43 @@ request: Request[_]
 title =LangMessages.heading.show,
 bodyClasses = None
 ) {
+<main class="govuk-main-wrapper" role="main">
+ <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+   <h1 id="main-message">@{LangMessages.`Sent to this account`.show}</h1>
+   @bankDetailsOption.map{bankDetails =>
 
-<h1 id="main-message">@{LangMessages.`Sent to this account`.show}</h1>
-</br>
+   <dl class="summary-list">
+    <div class="summary-list__row" id="acc-name">
+     <dt class="summary-list__key">
+      @{LangMessages.`Name on account`.show}
+     </dt>
+     <dd class="summary-list__value">
+      @{bankDetails.accountHolderName.value}
+     </dd>
+    </div>
+    <div class="summary-list__row" id="acc-number">
+     <dt class="summary-list__key">
+      @{LangMessages.`Account number`.show}
+     </dt>
+     <dd class="summary-list__value">
+      @{bankDetails.bankAccountNumber.bankAccounNumberObscured}
+     </dd>
+    </div>
+    <div class="summary-list__row" id="acc-sort-code">
+     <dt class="summary-list__key">
+      @{LangMessages.`Sort code`.show}
+     </dt>
+     <dd class="summary-list__value">
+      @{bankDetails.sortCode.value}
+     </dd>
+    </div>
+   </dl>
 
-@bankDetailsOption.map{bankDetails =>
-
-<p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @{bankDetails.accountHolderName.value}</strong></p>
-<p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @{bankDetails.bankAccountNumber.bankAccounNumberObscured}</strong></p>
-<p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @{bankDetails.sortCode.value}</strong></p>
-</br>
-<p><a href="www.changeme.com">@{LangMessages.`Change account details`.show}</a></p>
+   <p><a href="www.changeme.com">@{LangMessages.`Change account details`.show}</a></p>
+  </div>
+ </div>
+</main>
 }
-
-
 
 }
