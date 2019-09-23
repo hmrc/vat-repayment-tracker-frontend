@@ -66,7 +66,7 @@ class PaymentsOrchestratorService @Inject() (
           RepaymentData((vatObligations.obligations.flatMap(x => x.obligationDetails).find(ob => ob.periodKey == ft.periodKey))
             .getOrElse(
               dealWithNoObligations(
-                vrn)).inboundCorrespondenceDateReceived,
+                vrn)).inboundCorrespondenceToDate,
                         ft.periodKeyDescription,
                         ft.originalAmount)
         }

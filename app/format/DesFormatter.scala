@@ -17,10 +17,10 @@
 package format
 
 import javax.inject.{Inject, Singleton}
-import model.des.{BankDetails, CustomerInformation}
+import model.des.{BankDetails, CustomerInformation, DirectDebitData, DirectDebitDetails}
 
 @Singleton
-class CutomerInformationFormatter @Inject() (addressFormater: AddressFormter) {
+class DesFormatter @Inject() (addressFormater: AddressFormter) {
 
   def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
 
@@ -48,6 +48,29 @@ class CutomerInformationFormatter @Inject() (addressFormater: AddressFormter) {
       case None     => false
     }
     case None => false
+  }
+
+  def getAddressDetailsExist2(customerData: Option[CustomerInformation]): Boolean = {
+
+    val maybeExists = for {
+      cd <- customerData
+      ai <- cd.approvedInformation
+    } yield (ai.addressExists)
+
+    maybeExists.getOrElse(false)
+
+  }
+
+  def getDDData(directDebitData: Option[DirectDebitData]): Option[BankDetails] = {
+
+    val ddDetail: Option[DirectDebitDetails] = for {
+      dd <- directDebitData
+      ddDetailsOption <- dd.directDebitDetails
+      ddDetails <- ddDetailsOption.headOption
+    } yield (ddDetails)
+
+    ddDetail.map(detail => BankDetails(detail.accountHolderName, detail.accountNumber, detail.sortCode))
+
   }
 
   def getAddressDetails(customerData: Option[CustomerInformation]): Option[String] = {

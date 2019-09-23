@@ -18,7 +18,7 @@ package controllers
 
 import connectors.PaymentsOrchestratorConnector
 import controllers.action.Actions
-import format.{AddressFormter, CutomerInformationFormatter}
+import format.{AddressFormter, DesFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model._
@@ -34,15 +34,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
-    cc:                           ControllerComponents,
-    errorHandler:                 ErrorHandler,
-    views:                        Views,
-    desConnector:                 PaymentsOrchestratorConnector,
-    desService:                   PaymentsOrchestratorService,
-    requestSupport:               RequestSupport,
-    addressFormater:              AddressFormter,
-    customerInformationFormatter: CutomerInformationFormatter,
-    actions:                      Actions)(
+    cc:              ControllerComponents,
+    errorHandler:    ErrorHandler,
+    views:           Views,
+    desConnector:    PaymentsOrchestratorConnector,
+    desService:      PaymentsOrchestratorService,
+    requestSupport:  RequestSupport,
+    addressFormater: AddressFormter,
+    desFormatter:    DesFormatter,
+    actions:         Actions)(
     implicit
     ec: ExecutionContext)
 
@@ -61,13 +61,14 @@ class Controller @Inject() (
       request: Request[_]): Future[Result] = {
 
     val customerDataF = desConnector.getCustomerData(vrn)
+    val ddDataF = desConnector.getDDData(vrn)
     val chosenUrl = for {
       customerData <- customerDataF
+      ddData <- ddDataF
     } yield {
-      val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
-      val bankDetails: Option[BankDetails] = customerInformationFormatter.getBankDetails(customerData)
-
-      Ok(views.manage_or_track(vrn, false, bankDetailsExist, bankDetails, form)).addingToSession(("vrn", vrn.value))
+      val bankDetails: Option[BankDetails] = desFormatter.getBankDetails(customerData)
+      val ddDetails: Option[BankDetails] = desFormatter.getDDData(ddData)
+      Ok(views.manage_or_track(vrn, bankDetails, ddDetails, form)).addingToSession(("vrn", vrn.value))
     }
     chosenUrl
 
@@ -140,10 +141,10 @@ class Controller @Inject() (
     val showCurrent = allRepaymentData.currentRepaymentData.isDefined
     val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
 
-    val bankDetailsExist = customerInformationFormatter.getBankDetailsExist(customerData)
-    val bankDetails = customerInformationFormatter.getBankDetails(customerData)
-    val addressDetails = customerInformationFormatter.getAddressDetails(customerData)
-    val addressDetailsExist = customerInformationFormatter.getAddressDetailsExist(customerData)
+    val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
+    val bankDetails = desFormatter.getBankDetails(customerData)
+    val addressDetails = desFormatter.getAddressDetails(customerData)
+    val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
 
     if ((showCurrent == false) && (overDueSize == 0)) {
       Ok(
@@ -205,11 +206,18 @@ class Controller @Inject() (
 
   }
 
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
+  def viewRepaymentAccount(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
     implicit request: Request[_] =>
 
-      val bankDetails: BankDetails = BankDetails(accountHolderName, bankAccountNumber, sortCode)
-      Future.successful(Ok(views.view_repayment_account(bankDetails)))
+      val customerDataF = desConnector.getCustomerData(vrn)
+      val url = for {
+        customerData <- customerDataF
+      } yield {
+        val bankDetails = desFormatter.getBankDetails(customerData)
+        Ok(views.view_repayment_account(bankDetails))
+      }
+
+      url
 
   }
 

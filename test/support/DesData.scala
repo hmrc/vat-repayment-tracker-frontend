@@ -24,11 +24,38 @@ import play.api.libs.json.{JsValue, Json}
 
 object DesData {
 
-  val bankDetails: BankDetails = BankDetails(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"))
+  val bankDetails: BankDetails = BankDetails(AccountHolderName("Account holder"), BankAccountNumber("11112222"), SortCode("667788"))
   val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   val ppob: PPOB = PPOB(Some(address))
   val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation))
+  val transaction: Transaction = Transaction("18AC", "March 2018", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), BigDecimal(5.56), BigDecimal(5.56))
+  val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
+  val obligation1 = ObligationDetail("O", LocalDate.parse("2018-04-01"), LocalDate.parse("2018-04-30"), LocalDate.parse("2018-04-15"),
+                                          LocalDate.parse("2018-06-07"), "18AD")
+  val obligation2 = ObligationDetail("O", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), LocalDate.parse("2027-11-02"),
+                                          LocalDate.parse("2018-05-07"), "18AC")
+  val obligation3 = ObligationDetail("O", LocalDate.parse("2018-02-01"), LocalDate.parse("2018-02-28"), LocalDate.parse("2018-04-12"),
+                                          LocalDate.parse("2018-04-07"), "18AB")
+  val obligation4 = ObligationDetail("O", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-31"), LocalDate.parse("2018-04-15"),
+                                          LocalDate.parse("2018-03-07"), "18AA")
+  val vatObligation = VatObligation(Seq(obligation1, obligation2, obligation3, obligation4))
+  val vatObligations = VatObligations(Seq(vatObligation))
+  val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails(AccountHolderName("Tester Surname"), SortCode("404784"), BankAccountNumber("70872490")))))
+  val directDebitDataNone: DirectDebitData = DirectDebitData(None)
+
+  //language=JSON
+  val directDebitDataJson: JsValue = Json.parse(
+    s"""{
+        "directDebitDetails": [
+                     {
+                          "accountHolderName": "Tester Surname",
+                         "sortCode": "404784",
+                         "accountNumber": "70872490"
+                      }
+                  ]
+                  }
+       """.stripMargin)
 
   //language=JSON
   val approvedInformationJson: JsValue = Json.parse(
@@ -36,9 +63,9 @@ object DesData {
        {
           "approvedInformation":{
              "bankDetails":{
-                "accountHolderName":"*********",
-                "bankAccountNumber":"****2490",
-                "sortCode":"40****"
+                "accountHolderName":"Account holder",
+                "bankAccountNumber":"11112222",
+                "sortCode":"667788"
              },
              "PPOB":{
                 "address":{
@@ -53,10 +80,6 @@ object DesData {
           }
        }
      """.stripMargin)
-
-  val transaction: Transaction = Transaction("18AC", "March 2018", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), BigDecimal(5.56), BigDecimal(5.56))
-
-  val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
 
   //language=JSON
   val financialDataJson: JsValue = Json.parse(
@@ -79,18 +102,6 @@ object DesData {
        }
      """.stripMargin
   )
-
-  val obligation1 = ObligationDetail("O", LocalDate.parse("2018-04-01"), LocalDate.parse("2018-04-30"), LocalDate.parse("2018-04-15"),
-                                          LocalDate.parse("2018-06-07"), "18AD")
-  val obligation2 = ObligationDetail("O", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), LocalDate.parse("2027-11-02"),
-                                          LocalDate.parse("2018-05-07"), "18AC")
-  val obligation3 = ObligationDetail("O", LocalDate.parse("2018-02-01"), LocalDate.parse("2018-02-28"), LocalDate.parse("2018-04-12"),
-                                          LocalDate.parse("2018-04-07"), "18AB")
-  val obligation4 = ObligationDetail("O", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-31"), LocalDate.parse("2018-04-15"),
-                                          LocalDate.parse("2018-03-07"), "18AA")
-
-  val vatObligation = VatObligation(Seq(obligation1, obligation2, obligation3, obligation4))
-  val vatObligations = VatObligations(Seq(vatObligation))
 
   //language=JSON
   val vatObligationsJson: JsValue = Json.parse(
@@ -185,9 +196,9 @@ object DesData {
                  "websiteAddress": "www.tumbleweed.com"
              },
              "bankDetails": {
-                 "accountHolderName": "*********",
-                 "bankAccountNumber": "****2490",
-                 "sortCode": "40****"
+                 "accountHolderName": "Account holder",
+                 "bankAccountNumber": "11112222",
+                 "sortCode": "667788"
              },
              "businessActivities": {
                  "primaryMainCode": "10410",
@@ -225,9 +236,9 @@ object DesData {
                          "formBundle": "092000001020",
                          "dateReceived": "2019-03-04"
                      },
-                     "accountHolderName": "******",
-                     "bankAccountNumber": "****2490",
-                     "sortCode": "****84"
+                     "accountHolderName": "Account holder",
+                     "bankAccountNumber": "11112222",
+                     "sortCode": "667788"
                  },
                  "mandationStatus": {
                      "formInformation": {
@@ -314,9 +325,9 @@ object DesData {
                          "formBundle": "092000001020",
                          "dateReceived": "2019-03-04"
                      },
-                     "accountHolderName": "******",
-                     "bankAccountNumber": "****2490",
-                     "sortCode": "****84"
+                     "accountHolderName": "Account holder",
+                     "bankAccountNumber": "11112222",
+                     "sortCode": "667788"
                  },
                  "mandationStatus": {
                      "formInformation": {
@@ -348,7 +359,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOk(vrn: Vrn, receivedDate: String): JsValue = Json.parse(
+  def obligationsDataOk(vrn: Vrn, toDate: String): JsValue = Json.parse(
     s"""
                                                  {
                                                      "obligations": [
@@ -366,8 +377,8 @@ object DesData {
                                                                  {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-03-01",
-                                                                     "inboundCorrespondenceToDate": "2018-03-31",
-                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
+                                                                     "inboundCorrespondenceToDate": "${toDate}",
+                                                                     "inboundCorrespondenceDateReceived": "2018-04-12",
                                                                      "inboundCorrespondenceDueDate": "2018-05-07",
                                                                      "periodKey": "18AC"
                                                                  },
@@ -587,5 +598,40 @@ object DesData {
                                                    ]
                                                }
        """.stripMargin)
+
+  // language=JSON
+  def ddOk: JsValue = Json.parse(
+    s"""
+       {
+           "directDebitMandateFound": true,
+           "directDebitDetails": [
+               {
+                   "directDebitInstructionNumber": "091700000409",
+                   "directDebitPlanType": "VPP",
+                   "dateCreated": "2019-09-20",
+                   "accountHolderName": "Tester Surname",
+                   "sortCode": "404784",
+                   "accountNumber": "70872490"
+               }
+           ]
+       }
+       """.stripMargin)
+
+  // language=JSON
+  val ddNotFound: JsValue = Json.parse(
+    s"""
+                                                     {
+                                                        "code": "NOT_FOUND",
+                                                        "reason": "The back end has indicated that there is no match found for the given identifier"
+                                                    }
+       """.stripMargin)
+
+  // language=JSON
+  val ddOkNoMandate: JsValue = Json.parse(
+    s"""
+       {
+     "directDebitMandateFound": false
+      }
+           """.stripMargin)
 }
 

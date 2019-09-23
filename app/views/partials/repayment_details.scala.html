@@ -27,7 +27,7 @@ appConfig: ViewConfig
 
 @(
 showBankDetails: Boolean,
-bankDetails: Option[BankDetails],
+bankDetailsOption: Option[BankDetails],
 address: Option[String],
 addressExists: Boolean,
 vrn: Vrn)(
@@ -37,14 +37,16 @@ request: Request[_]
 
 @import viewsHelpers.requestSupport._
 
-@if(showBankDetails) {
+@bankDetailsOption.map{bankDetails =>
 <h3>@{LangMessages.`Your repayment details`.show}</h3>
 <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
-<p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @bankDetails.fold("")(_.accountHolderName.value)</strong></p>
-<p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @bankDetails.fold("")(_.bankAccountNumber.value)</strong></p>
-<p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @bankDetails.fold("")(_.sortCode.value)</strong></p>
-<p><a href='@routes.Controller.viewRepaymentAccount(bankDetails.fold(AccountHolderName(""))(_.accountHolderName),bankDetails.fold(BankAccountNumber(""))(_.bankAccountNumber),bankDetails.fold(SortCode(""))(_.sortCode),vrn)' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
+<p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @{bankDetails.accountHolderName.value}</strong></p>
+<p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @{bankDetails.bankAccountNumber.bankAccounNumberObscured}</strong></p>
+<p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @{bankDetails.sortCode.value}</strong></p>
+<p><a href='@routes.Controller.viewRepaymentAccount(vrn)' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
 }
+
+
 @if(addressExists && (!(showBankDetails))) {
 <h3>@{LangMessages.`Your repayment details`.show}</h3>
 <p>@{LangMessages.`Currently sent to`.show}</p>
