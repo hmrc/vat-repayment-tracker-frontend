@@ -16,7 +16,6 @@
 
 @import config.ViewConfig
 @import model.des.BankDetails
-@import model.des.ObligationDates
 @import langswitch.LangMessages
 
 @this(
@@ -49,7 +48,7 @@ bodyClasses = None
       @{LangMessages.`Name on account`.show}
      </dt>
      <dd class="summary-list__value">
-      @{bankDetails.accountHolderName.value}
+      @{bankDetails.accountHolderName}
      </dd>
     </div>
     <div class="summary-list__row" id="acc-number">
@@ -57,7 +56,7 @@ bodyClasses = None
       @{LangMessages.`Account number`.show}
      </dt>
      <dd class="summary-list__value">
-      @{bankDetails.bankAccountNumber.bankAccounNumberObscured}
+      @{bankDetails.obscureBankAccountNumber}
      </dd>
     </div>
     <div class="summary-list__row" id="acc-sort-code">
@@ -65,7 +64,7 @@ bodyClasses = None
       @{LangMessages.`Sort code`.show}
      </dt>
      <dd class="summary-list__value">
-      @{bankDetails.sortCode.value}
+      @{bankDetails.sortCode}
      </dd>
     </div>
    </dl>
