@@ -15,10 +15,13 @@
  *@
 
 @import config.ViewConfig
+@import langswitch.ErrorMessages
+@import langswitch.LangMessages
 
 @this(
   appConfig: ViewConfig,
-  govUkWrapper: views.html.govuk_wrapper
+  govUkWrapper: views.html.govuk_wrapper,
+  viewsHelpers: views.ViewsHelpers
 )
 
 @(
@@ -31,14 +34,25 @@
 
 
 @contentHeader = {
-    <h1>@heading</h1>
+
 }
+
+@import viewsHelpers.requestSupport._
+
 @mainContent = {
-    <b>@message</b>
+<main class="govuk-main-wrapper" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1>@{ErrorMessages.`general error title`.show}</h1>
+            <p>@{ErrorMessages.`try again later`.show}</p>
+            <p>@message</p>
+        </div>
+    </div>
+</main>
+
 }
 
 @govUkWrapper(
-    title = pageTitle,
-    contentHeader = Some(contentHeader),
+    title = LangMessages.heading.show,
     mainContent = mainContent
 )
