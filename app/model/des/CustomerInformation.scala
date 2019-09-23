@@ -16,10 +16,7 @@
 
 package model.des
 
-import controllers.ValueClassBinder.valueClassBinder
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import play.api.mvc.PathBindable
 
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation]) {
   val approvedInformationExists = approvedInformation.isDefined
@@ -66,41 +63,16 @@ object Address {
 }
 
 final case class BankDetails(
-    accountHolderName: AccountHolderName,
-    bankAccountNumber: BankAccountNumber,
-    sortCode:          SortCode
-)
+    accountHolderName: String,
+    bankAccountNumber: String,
+    sortCode:          String
+) {
+  def obscureBankAccountNumber: String = {
+    "****" + bankAccountNumber.drop(4)
+  }
+
+}
 
 object BankDetails {
   implicit val format: OFormat[BankDetails] = Json.format[BankDetails]
 }
-
-final case class AccountHolderName(value: String)
-
-object AccountHolderName {
-
-  implicit val format: Format[AccountHolderName] = implicitly[Format[String]].inmap(AccountHolderName(_), _.value)
-  implicit val vrnBinder: PathBindable[AccountHolderName] = valueClassBinder(_.value)
-
-}
-
-final case class BankAccountNumber(value: String) {
-  val bankAccounNumberObscured = "****" + value.drop(4)
-}
-
-object BankAccountNumber {
-
-  implicit val format: Format[BankAccountNumber] = implicitly[Format[String]].inmap(BankAccountNumber(_), _.value)
-  implicit val vrnBinder: PathBindable[BankAccountNumber] = valueClassBinder(_.value)
-
-}
-
-final case class SortCode(value: String)
-
-object SortCode {
-
-  implicit val format: Format[SortCode] = implicitly[Format[String]].inmap(SortCode(_), _.value)
-  implicit val vrnBinder: PathBindable[SortCode] = valueClassBinder(_.value)
-
-}
-

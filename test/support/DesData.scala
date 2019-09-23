@@ -24,7 +24,7 @@ import play.api.libs.json.{JsValue, Json}
 
 object DesData {
 
-  val bankDetails: BankDetails = BankDetails(AccountHolderName("Account holder"), BankAccountNumber("11112222"), SortCode("667788"))
+  val bankDetails: BankDetails = BankDetails("Account holder", "11112222", "667788")
   val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   val ppob: PPOB = PPOB(Some(address))
   val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
@@ -41,7 +41,7 @@ object DesData {
                                           LocalDate.parse("2018-03-07"), "18AA")
   val vatObligation = VatObligation(Seq(obligation1, obligation2, obligation3, obligation4))
   val vatObligations = VatObligations(Seq(vatObligation))
-  val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails(AccountHolderName("Tester Surname"), SortCode("404784"), BankAccountNumber("70872490")))))
+  val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val directDebitDataNone: DirectDebitData = DirectDebitData(None)
 
   //language=JSON
@@ -359,7 +359,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOk(vrn: Vrn, toDate: String): JsValue = Json.parse(
+  def obligationsDataOk(vrn: Vrn, toDate: String, receivedDate: String): JsValue = Json.parse(
     s"""
                                                  {
                                                      "obligations": [
@@ -378,7 +378,7 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-03-01",
                                                                      "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDateReceived": "2018-04-12",
+                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-05-07",
                                                                      "periodKey": "18AC"
                                                                  },

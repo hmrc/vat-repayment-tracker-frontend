@@ -17,6 +17,7 @@
 package langswitch
 
 import model.des.BankDetails
+import format.DesFormatter
 
 object LangMessages {
 
@@ -179,7 +180,7 @@ object LangMessages {
   )
 
   def accountAndSortCode(bankDetails: BankDetails) = Message(
-    s"""Account: ${bankDetails.bankAccountNumber.bankAccounNumberObscured}, Sort code: ${bankDetails.sortCode.value}"""
+    s"""Account: ${bankDetails.obscureBankAccountNumber}, Sort code: ${bankDetails.sortCode}"""
   )
 
   val `Manage your Direct Debit` = Message(

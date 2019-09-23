@@ -27,7 +27,7 @@ object DirectDebitData {
 
 }
 
-final case class DirectDebitDetails(accountHolderName: AccountHolderName, sortCode: SortCode, accountNumber: BankAccountNumber)
+final case class DirectDebitDetails(accountHolderName: String, sortCode: String, accountNumber: String)
 
 object DirectDebitDetails {
   implicit val format: OFormat[DirectDebitDetails] = Json.format[DirectDebitDetails]

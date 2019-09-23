@@ -46,8 +46,3 @@ object ObligationDetail {
   implicit val format: OFormat[ObligationDetail] = Json.format[ObligationDetail]
 
 }
-
-final case class ObligationDates(
-    inboundCorrespondenceDateReceived: String,
-    estimatedPaymentDate:              String
-)

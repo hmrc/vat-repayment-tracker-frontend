@@ -31,12 +31,12 @@ object WireMockResponses {
   // new HttpHeader("Failing-Enrolment", "SA")
   )
 
-  def obligationsOk(vrn: Vrn) = {
+  def obligationsOk(vrn: Vrn, toDate: String, receivedDate: String) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.obligationsDataOk(vrn, "2027-11-02").toString()
+          DesData.obligationsDataOk(vrn, toDate, receivedDate).toString()
             .stripMargin)))
 
   }
