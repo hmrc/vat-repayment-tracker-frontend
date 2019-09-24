@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.ViewConfig
 import connectors.PaymentsOrchestratorConnector
 import controllers.action.Actions
 import format.{AddressFormter, DesFormatter}
@@ -42,7 +43,8 @@ class Controller @Inject() (
     requestSupport:  RequestSupport,
     addressFormater: AddressFormter,
     desFormatter:    DesFormatter,
-    actions:         Actions)(
+    actions:         Actions,
+    viewConfig:      ViewConfig)(
     implicit
     ec: ExecutionContext)
 
@@ -52,7 +54,7 @@ class Controller @Inject() (
 
   def signout: Action[AnyContent] =
     Action.async { implicit request =>
-      Future.successful(Ok("Signed out"))
+      Redirect(viewConfig.feedbackUrlForLogout).withNewSession
     }
 
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
