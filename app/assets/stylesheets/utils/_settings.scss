@@ -4,7 +4,8 @@ $govuk-gutter-half: $govuk-gutter / 2;
 $breakpoints: (
   mobile:  320px,
   tablet:  641px,
-  desktop: 769px
+  desktop: 769px,
+  max:     1020px
 ) !default;
 
 $govuk-grid-widths: (
