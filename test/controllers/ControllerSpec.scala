@@ -16,7 +16,6 @@
 
 package controllers
 
-import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import model.{EnrolmentKeys, Vrn}
 import play.api.http.Status
 import support.{ItSpec, WireMockResponses}
@@ -28,7 +27,7 @@ class ControllerSpec extends ItSpec {
     WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.financialsOkSingle(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
-    WireMockResponses.obligationsOk(vrn)
+    WireMockResponses.obligationsOk(vrn, "2027-12-12", "2027-11-12")
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }
@@ -36,7 +35,7 @@ class ControllerSpec extends ItSpec {
   "Get view repayment account authorised" in {
     WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
-    val result = connector.viewRepaymentAccount(AccountHolderName("*********"), BankAccountNumber("****2490"), SortCode("40****"), vrn).futureValue
+    val result = connector.viewRepaymentAccount(vrn).futureValue
     result.status shouldBe Status.OK
   }
 

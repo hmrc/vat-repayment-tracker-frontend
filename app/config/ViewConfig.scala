@@ -20,31 +20,38 @@ import com.google.inject.Inject
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 case class ViewConfig(
-    appName:         String,
-    assetsPrefix:    String,
-    analyticsToken:  String,
-    analyticsHost:   String,
-    authUrl:         String,
-    frontendBaseUrl: String,
-    loginUrl:        String,
-    signOut:         String) {
+    appName:                     String,
+    assetsPrefix:                String,
+    analyticsToken:              String,
+    analyticsHost:               String,
+    authUrl:                     String,
+    frontendBaseUrl:             String,
+    loginUrl:                    String,
+    viewVatAccount:              String,
+    updateCorrespondenceAddress: String,
+    feedbackBaseUrl:             String,
+    contactBaseUrl:              String) {
 
-  val reportAProblemPartialUrl = s"$frontendBaseUrl/contact/problem_reports_ajax?service=$appName"
-  val reportAProblemNonJSUrl = s"$frontendBaseUrl/contact/problem_reports_nonjs?service=$appName"
-  val feedbackUrl = s"$frontendBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
-
+  val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
+  val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
+  val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
+  val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
   val supportLanguages: Boolean = false
+  val signOut = s"$frontendBaseUrl/$appName/signout"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
-    appName         = servicesConfig.getString("appName"),
-    assetsPrefix    = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
-    analyticsToken  = servicesConfig.getString(s"google-analytics.token"),
-    analyticsHost   = servicesConfig.getString(s"google-analytics.host"),
-    authUrl         = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl = if (runMode.env == "Dev") servicesConfig.getString("frontend-base-url") else "",
-    loginUrl        = servicesConfig.getString("urls.login"),
-    signOut         = servicesConfig.getString("urls.logout")
+    appName                     = servicesConfig.getString("appName"),
+    assetsPrefix                = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
+    analyticsToken              = servicesConfig.getString(s"google-analytics.token"),
+    analyticsHost               = servicesConfig.getString(s"google-analytics.host"),
+    authUrl                     = servicesConfig.baseUrl("auth"),
+    frontendBaseUrl             = servicesConfig.getString("frontend-base-url"),
+    loginUrl                    = servicesConfig.getString("urls.login"),
+    viewVatAccount              = servicesConfig.getString("urls.view-vat-account"),
+    updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
+    feedbackBaseUrl             = servicesConfig.getString("feedback-base-url"),
+    contactBaseUrl              = servicesConfig.getString("contact-frontend-url")
   )
 
 }

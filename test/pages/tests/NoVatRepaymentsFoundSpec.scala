@@ -29,7 +29,7 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
     WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.financialsNotFound(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
-    WireMockResponses.obligationsOk(vrn)
+    WireMockResponses.obligationsOk(vrn, "2027-11-12", "2027-12-12")
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
 

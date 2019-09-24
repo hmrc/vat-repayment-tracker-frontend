@@ -18,7 +18,6 @@ package support
 
 import javax.inject.{Inject, Singleton}
 import model.Vrn
-import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -31,7 +30,7 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
 
-  def viewRepaymentAccount(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+  def viewRepaymentAccount(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
     s"http://localhost:$port/vat-repayment-tracker-frontend/view-repayment-account/${vrn.value}")
 
 }

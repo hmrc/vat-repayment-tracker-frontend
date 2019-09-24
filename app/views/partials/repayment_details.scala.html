@@ -40,9 +40,9 @@ request: Request[_]
 @bankDetailsOption.map{bankDetails =>
 <h3>@{LangMessages.`Your repayment details`.show}</h3>
 <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
-<p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @{bankDetails.accountHolderName.value}</strong></p>
-<p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @{bankDetails.bankAccountNumber.bankAccounNumberObscured}</strong></p>
-<p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @{bankDetails.sortCode.value}</strong></p>
+<p id="acc-name" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Name on account`.show} @{bankDetails.accountHolderName}</strong></p>
+<p id="acc-number" class="govuk-!-margin-bottom-1"><strong>@{LangMessages.`Account number`.show} @{bankDetails.obscureBankAccountNumber}</strong></p>
+<p id="acc-sort-code"><strong>@{LangMessages.`Sort code`.show} @{bankDetails.sortCode}</strong></p>
 <p><a href='@routes.Controller.viewRepaymentAccount(vrn)' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
 }
 
@@ -52,6 +52,6 @@ request: Request[_]
 <p>@{LangMessages.`Currently sent to`.show}</p>
 <p id="address">@Html(address.getOrElse(""))</p>
 <p>@{LangMessages.`For faster payment next time`.show} <a href="www.changeme.com">@{LangMessages.`add a repayment account`.show}</a></p>
-<p><a href="www.changeme.com">@{LangMessages.`Update your correspondence address`.show}</a></p>
+<p><a href=@{appConfig.updateCorrespondenceAddress}>@{LangMessages.`Update your correspondence address`.show}</a></p>
 }
 

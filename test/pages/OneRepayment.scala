@@ -26,13 +26,13 @@ object OneRepayment extends CommonPage {
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
-  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed(vrn: Vrn, receivedDate: String, repayDate: String)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Track your VAT repayments"
     readMainMessage shouldBe "We are processing your VAT repayment"
     readAmount shouldBe "£5.56"
-    readRepayDate shouldBe "02 Dec 2027"
-    readReceivedDate shouldBe "02 Nov 2027"
+    readRepayDate shouldBe repayDate
+    readReceivedDate shouldBe receivedDate
     readPeriod shouldBe "March 2018"
     readAccName shouldBe "Name on account: Account holder"
     readAccNumber shouldBe "Account number: ****2222"

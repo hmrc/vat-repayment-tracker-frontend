@@ -17,7 +17,6 @@
 package pages
 
 import model.Vrn
-import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
@@ -25,7 +24,7 @@ object ViewRepaymentAccount extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/view-repayment-account/"
 
-  def assertPageIsDisplayed(accountHolderName: AccountHolderName, bankAccountNumber: BankAccountNumber, sortCode: SortCode, vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed(accountHolderName: String, bankAccountNumber: String, sortCode: String, vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Track your VAT repayments"
     readAccName shouldBe "Name on account: Account holder"

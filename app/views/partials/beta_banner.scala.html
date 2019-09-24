@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,23 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package model.des
+@(feedbackUrl: String)(implicit messages: Messages)
 
-import play.api.libs.json.{Json, OFormat}
-
-final case class DirectDebitData(directDebitDetails: Option[List[DirectDebitDetails]]) {
-  def ddDetailsExist: Boolean = directDebitDetails.isDefined
-}
-
-object DirectDebitData {
-  implicit val format: OFormat[DirectDebitData] = Json.format[DirectDebitData]
-
-}
-
-final case class DirectDebitDetails(accountHolderName: String, sortCode: String, accountNumber: String)
-
-object DirectDebitDetails {
-  implicit val format: OFormat[DirectDebitDetails] = Json.format[DirectDebitDetails]
-}
+<div class="phase-banner">
+    <p>
+        <strong class="phase-tag">@messages("beta-banner.phase-tag")</strong>
+        <span>@{Html(messages("beta-banner.text", feedbackUrl))}</span>
+    </p>
+</div>

@@ -20,16 +20,13 @@ import java.time.format.DateTimeFormatter
 import java.time.{Clock, LocalDate}
 
 final case class RepaymentData(
-    returnedReceivedOn: LocalDate,
-    period:             String,
-    amount:             BigDecimal) {
+    returnedReceivedOn:     LocalDate,
+    estimatedRepaymentDate: LocalDate,
+    period:                 String,
+    amount:                 BigDecimal) {
 
   def isOverdue(implicit clock: Clock): Boolean = {
     estimatedRepaymentDate.isBefore(LocalDate.now(clock))
-  }
-
-  def estimatedRepaymentDate: LocalDate = {
-    returnedReceivedOn.plusDays(30)
   }
 
   def formatDate(localDate: LocalDate): String = {

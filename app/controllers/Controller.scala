@@ -50,6 +50,11 @@ class Controller @Inject() (
 
   import requestSupport._
 
+  def signout: Action[AnyContent] =
+    Action.async { implicit request =>
+      Future.successful(Ok("Signed out"))
+    }
+
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
 
@@ -98,7 +103,7 @@ class Controller @Inject() (
                 case Some(choice) => {
                   choice match {
                     case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(vrn))
-                    case ManageOrTrackOptions.bank.value => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
+                    case ManageOrTrackOptions.bank.value => Redirect(routes.Controller.viewRepaymentAccount(vrn))
                     case ManageOrTrackOptions.dd.value   => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
                   }
                 }

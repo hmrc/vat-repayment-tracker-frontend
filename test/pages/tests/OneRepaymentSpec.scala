@@ -16,7 +16,6 @@
 
 package pages.tests
 
-import model.des.{AccountHolderName, BankAccountNumber, SortCode}
 import model.{EnrolmentKeys, Vrn}
 import pages.{OneRepayment, ViewRepaymentAccount}
 import support.{ItSpec, WireMockResponses}
@@ -26,23 +25,32 @@ class OneRepaymentSpec extends ItSpec {
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
-  "user is authorised and financial data found" in {
-    setup()
-    OneRepayment.assertPageIsDisplayed(vrn)
+  "user is authorised and financial data found - to date" in {
+    setup("2027-12-12", "2027-11-12")
+    OneRepayment.assertPageIsDisplayed(vrn, "12 Nov 2027", "11 Jan 2028")
+  }
 
+  "user is authorised and financial data found - received date" in {
+    setup("2027-11-12", "2027-12-12")
+    OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", "11 Jan 2028")
+  }
+
+  "user is authorised and financial data found - same date" in {
+    setup("2027-12-12", "2027-12-12")
+    OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", "11 Jan 2028")
   }
 
   "click manager link" in {
-    setup()
+    setup("2027-12-12", "2027-11-12")
     OneRepayment.clickManageAccount
-    ViewRepaymentAccount.assertPageIsDisplayed(AccountHolderName("Account holder"), BankAccountNumber("****2222"), SortCode("667788"), vrn)
+    ViewRepaymentAccount.assertPageIsDisplayed("Account holder", "****2222", "667788", vrn)
   }
 
-  private def setup() = {
+  private def setup(toDate: String, receivedDate: String) = {
     WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     WireMockResponses.financialsOkSingle(vrn)
     WireMockResponses.customerDataOkWithBankDetails(vrn)
-    WireMockResponses.obligationsOk(vrn)
+    WireMockResponses.obligationsOk(vrn, toDate, receivedDate)
     goToViaPath(path)
   }
 
