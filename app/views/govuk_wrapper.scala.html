@@ -63,6 +63,7 @@
   @if(appConfig.supportLanguages) {
     <li><span id="language-toggle">@viewsHelpers.languageSelection()</span></li>
   }
+  <li><a id="homeNavHref" href=@appConfig.signOut>Sign out</a></li>
 }
 
 
@@ -95,10 +96,11 @@
 
 @serviceInfo = {
   @viewsHelpers.serviceInfo(
-    betaBanner = HtmlFormat.empty,
+    betaBanner = viewsHelpers.betaBanner(true, appConfig.feedbackUrl, appConfig.feedbackUrl, true),
     includeGridWrapper = false,
     serviceInfoContent = Some(serviceInfoContent)
   )
+
 }
 
 @mainContentHeader = {

@@ -27,15 +27,17 @@ case class ViewConfig(
     authUrl:                     String,
     frontendBaseUrl:             String,
     loginUrl:                    String,
-    signOut:                     String,
     viewVatAccount:              String,
-    updateCorrespondenceAddress: String) {
+    updateCorrespondenceAddress: String,
+    feedbackBaseUrl:             String,
+    contactBaseUrl:              String) {
 
-  val reportAProblemPartialUrl = s"$frontendBaseUrl/contact/problem_reports_ajax?service=$appName"
-  val reportAProblemNonJSUrl = s"$frontendBaseUrl/contact/problem_reports_nonjs?service=$appName"
-  val feedbackUrl = s"$frontendBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
-
+  val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
+  val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
+  val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
+  val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
   val supportLanguages: Boolean = false
+  val signOut = s"$frontendBaseUrl/$appName/signout"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -44,12 +46,12 @@ case class ViewConfig(
     analyticsToken              = servicesConfig.getString(s"google-analytics.token"),
     analyticsHost               = servicesConfig.getString(s"google-analytics.host"),
     authUrl                     = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl             = if (runMode.env == "Dev") servicesConfig.getString("frontend-base-url") else "",
+    frontendBaseUrl             = servicesConfig.getString("frontend-base-url"),
     loginUrl                    = servicesConfig.getString("urls.login"),
-    signOut                     = servicesConfig.getString("urls.logout"),
     viewVatAccount              = servicesConfig.getString("urls.view-vat-account"),
-    updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address")
-
+    updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
+    feedbackBaseUrl             = servicesConfig.getString("feedback-base-url"),
+    contactBaseUrl              = servicesConfig.getString("contact-frontend-url")
   )
 
 }

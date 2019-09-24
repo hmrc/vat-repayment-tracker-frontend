@@ -6,3 +6,4 @@ GET        /manage-or-track/vrn/:vrn     controllers.Controller.manageOrTrack(vr
 GET        /assets/*file                 @controllers.Assets.at(path="/public", file)
 GET        /language/:language           @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
 POST       /manage-or-track-submit       controllers.Controller.manageOrTrackSubmit
+GET        /signout                      controllers.Controller.signout

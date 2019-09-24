@@ -50,6 +50,11 @@ class Controller @Inject() (
 
   import requestSupport._
 
+  def signout: Action[AnyContent] =
+    Action.async { implicit request =>
+      Future.successful(Ok("Signed out"))
+    }
+
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
 
