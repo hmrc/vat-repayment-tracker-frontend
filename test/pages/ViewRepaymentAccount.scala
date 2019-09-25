@@ -22,7 +22,7 @@ import org.scalatest.Assertion
 
 object ViewRepaymentAccount extends CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/view-repayment-account/"
+  val path = "/vat-repayment-tracker-frontend/view-repayment-account/vrn/"
 
   def assertPageIsDisplayed(accountHolderName: String, bankAccountNumber: String, sortCode: String, vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""

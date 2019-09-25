@@ -46,12 +46,12 @@ case class ViewConfig(
     analyticsToken              = servicesConfig.getString(s"google-analytics.token"),
     analyticsHost               = servicesConfig.getString(s"google-analytics.host"),
     authUrl                     = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl             = servicesConfig.getString("frontend-base-url"),
+    frontendBaseUrl             = servicesConfig.getString("urls.frontend-base"),
     loginUrl                    = servicesConfig.getString("urls.login"),
     viewVatAccount              = servicesConfig.getString("urls.view-vat-account"),
     updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
-    feedbackBaseUrl             = servicesConfig.getString("feedback-base-url"),
-    contactBaseUrl              = servicesConfig.getString("contact-frontend-url")
+    feedbackBaseUrl             = servicesConfig.getString("urls.feedback-base"),
+    contactBaseUrl              = servicesConfig.getString("urls.contact-frontend")
   )
 
 }

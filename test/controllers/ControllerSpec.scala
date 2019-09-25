@@ -18,23 +18,23 @@ package controllers
 
 import model.{EnrolmentKeys, Vrn}
 import play.api.http.Status
-import support.{ItSpec, WireMockResponses}
+import support.{AuthWireMockResponses, DDBackendWireMockResponses, DesWireMockResponses, ItSpec}
 
 class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
 
   "Get ShowResults authorised" in {
-    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    WireMockResponses.financialsOkSingle(vrn)
-    WireMockResponses.customerDataOkWithBankDetails(vrn)
-    WireMockResponses.obligationsOk(vrn, "2027-12-12", "2027-11-12")
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.financialsOkSingle(vrn)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.obligationsOk(vrn, "2027-12-12", "2027-11-12")
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }
 
   "Get view repayment account authorised" in {
-    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    WireMockResponses.customerDataOkWithBankDetails(vrn)
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     val result = connector.viewRepaymentAccount(vrn).futureValue
     result.status shouldBe Status.OK
   }

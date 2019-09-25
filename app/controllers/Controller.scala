@@ -17,7 +17,7 @@
 package controllers
 
 import config.ViewConfig
-import connectors.PaymentsOrchestratorConnector
+import connectors.{DirectDebitBackendConnector, PaymentsOrchestratorConnector}
 import controllers.action.Actions
 import format.{AddressFormter, DesFormatter}
 import javax.inject.{Inject, Singleton}
@@ -35,16 +35,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
-    cc:              ControllerComponents,
-    errorHandler:    ErrorHandler,
-    views:           Views,
-    desConnector:    PaymentsOrchestratorConnector,
-    desService:      PaymentsOrchestratorService,
-    requestSupport:  RequestSupport,
-    addressFormater: AddressFormter,
-    desFormatter:    DesFormatter,
-    actions:         Actions,
-    viewConfig:      ViewConfig)(
+    cc:                           ControllerComponents,
+    errorHandler:                 ErrorHandler,
+    views:                        Views,
+    desConnector:                 PaymentsOrchestratorConnector,
+    desService:                   PaymentsOrchestratorService,
+    requestSupport:               RequestSupport,
+    addressFormater:              AddressFormter,
+    desFormatter:                 DesFormatter,
+    actions:                      Actions,
+    viewConfig:                   ViewConfig,
+    directDebitBackendController: DirectDebitBackendConnector)(
     implicit
     ec: ExecutionContext)
 
@@ -106,7 +107,10 @@ class Controller @Inject() (
                   choice match {
                     case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(vrn))
                     case ManageOrTrackOptions.bank.value => Redirect(routes.Controller.viewRepaymentAccount(vrn))
-                    case ManageOrTrackOptions.dd.value   => Future.successful(Ok(s"""TODO: manage_or_track_submit ${choice} ${vrn.value} """))
+                    case ManageOrTrackOptions.dd.value =>
+                      for {
+                        nextUrl <- directDebitBackendController.startJourney(vrn)
+                      } yield Redirect(nextUrl.nextUrl)
                   }
                 }
                 case None => {
