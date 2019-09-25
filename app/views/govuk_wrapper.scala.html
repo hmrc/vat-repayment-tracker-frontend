@@ -53,7 +53,7 @@
   <meta name="format-detection" content="telephone=no"/>
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
   <script src="@controllers.routes.Assets.at("javascripts/tabs.js")" type="text/javascript"></script>
-
+  <script src="@controllers.routes.Assets.at("javascripts/googletags.js")" type="text/javascript"></script>
 }
 
 @scriptElement = {
@@ -76,7 +76,11 @@
   )
 }
 
-@afterHeader = {}
+@afterHeader = {
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJKHWK" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+}
 
 @bodyEnd = {
   @viewsHelpers.footer(
@@ -86,6 +90,7 @@
     scriptElem = Some(scriptElement),
     gaCalls = None
   )
+<div data-gtag='session-id:@request.session.get("sessionId")'></div>
 }
 
 @footerTop = {}
