@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.http.{HttpHeader, HttpHeaders}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.Vrn
 
-object WireMockResponses {
+object AuthWireMockResponses {
 
   val expectedDetail = "SessionRecordNotFound"
   val oid: String = "556737e15500005500eaf68f"
@@ -30,86 +30,6 @@ object WireMockResponses {
     new HttpHeader("WWW-Authenticate", s"""MDTP detail="$expectedDetail"""")
   // new HttpHeader("Failing-Enrolment", "SA")
   )
-
-  def obligationsOk(vrn: Vrn, toDate: String, receivedDate: String) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.obligationsDataOk(vrn, toDate, receivedDate).toString()
-            .stripMargin)))
-
-  }
-
-  def financialsOkMultiple(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.financialDataOk(vrn).toString()
-            .stripMargin)))
-
-  }
-
-  def financialsOkSingle(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.financialDataSingleOk(vrn: Vrn).toString()
-            .stripMargin)))
-
-  }
-
-  def customerDataOkWithBankDetails(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.customerDataOk.toString()
-            .stripMargin)))
-
-  }
-
-  def customerDataOkWithoutBankDetails(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.customerDataOkWithoutBankDetails.toString()
-            .stripMargin)))
-
-  }
-
-  def financialsNotFound(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(404)
-        .withBody(
-          DesData.financialDataNotFound.toString()
-            .stripMargin)))
-
-  }
-
-  def obligationsNotFound(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(404)
-        .withBody(
-          DesData.obligationsDataNotFound.toString()
-            .stripMargin)))
-
-  }
-
-  def customerNotFound(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(404)
-        .withBody(
-          DesData.customerDataNotFound.toString()
-            .stripMargin)))
-
-  }
 
   def authFailed: StubMapping = {
     stubFor(post(urlEqualTo("/auth/authorise"))

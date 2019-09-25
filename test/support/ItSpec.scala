@@ -47,7 +47,7 @@ import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 import play.api.mvc.{AnyContentAsEmpty, Request, Result}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -103,7 +103,8 @@ trait ItSpec
     .configure(configMap).build()
 
   def configMap = Map[String, Any](
-    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port
+    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
+    "microservice.services.direct-debit-backend.port" -> WireMockSupport.port
   )
 
   def injector: Injector = fakeApplication().injector
@@ -117,6 +118,10 @@ trait ItSpec
   protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
 
   def goToViaPath(path: String) = webDriver.get(s"$webdriverUr$path")
+
+
+  implicit val request = FakeRequest()
+
 
 }
 

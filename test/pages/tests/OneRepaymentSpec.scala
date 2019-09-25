@@ -18,7 +18,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.{OneRepayment, ViewRepaymentAccount}
-import support.{ItSpec, WireMockResponses}
+import support.{ItSpec, DesWireMockResponses, AuthWireMockResponses}
 
 class OneRepaymentSpec extends ItSpec {
 
@@ -47,10 +47,10 @@ class OneRepaymentSpec extends ItSpec {
   }
 
   private def setup(toDate: String, receivedDate: String) = {
-    WireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    WireMockResponses.financialsOkSingle(vrn)
-    WireMockResponses.customerDataOkWithBankDetails(vrn)
-    WireMockResponses.obligationsOk(vrn, toDate, receivedDate)
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.financialsOkSingle(vrn)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.obligationsOk(vrn, toDate, receivedDate)
     goToViaPath(path)
   }
 
