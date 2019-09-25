@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 final case class CreateVATJourneyRequest(
     userId:     String,
     userIdType: String = "VRN",
-    returnUrl:  String = "vrturl",
+    returnUrl:  String,
     backUrl:    String = "vrturl"
 )
 

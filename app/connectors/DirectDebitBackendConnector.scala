@@ -41,7 +41,7 @@ class DirectDebitBackendConnector @Inject() (
 
   def startJourney(vrn: Vrn)(implicit request: Request[_]): Future[NextUrl] = {
 
-    val createVATJourneyRequest: CreateVATJourneyRequest = CreateVATJourneyRequest(vrn.value)
+    val createVATJourneyRequest: CreateVATJourneyRequest = CreateVATJourneyRequest(userId    = vrn.value, returnUrl = s"/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}")
     Logger.debug(s"Calling direct-debit-backend start journey for vrn ${vrn}")
     val startJourneyURL: String = s"$serviceURL$sjUrl"
     Logger.debug(s"Calling direct-debit-backend start journey for vrn with url ${startJourneyURL})")

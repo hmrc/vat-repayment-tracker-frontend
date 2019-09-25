@@ -107,11 +107,10 @@ class Controller @Inject() (
                   choice match {
                     case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(vrn))
                     case ManageOrTrackOptions.bank.value => Redirect(routes.Controller.viewRepaymentAccount(vrn))
-                    case ManageOrTrackOptions.dd.value => {
+                    case ManageOrTrackOptions.dd.value =>
                       for {
                         nextUrl <- directDebitBackendController.startJourney(vrn)
                       } yield Redirect(nextUrl.nextUrl)
-                    }
                   }
                 }
                 case None => {
