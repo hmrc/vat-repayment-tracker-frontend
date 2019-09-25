@@ -119,9 +119,7 @@ trait ItSpec
 
   def goToViaPath(path: String) = webDriver.get(s"$webdriverUr$path")
 
-
   implicit val request = FakeRequest()
-
 
 }
 

@@ -23,7 +23,6 @@ import support.{AuthWireMockResponses, DDBackendWireMockResponses, DesWireMockRe
 class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
 
-
   "Get ShowResults authorised" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
@@ -39,7 +38,5 @@ class ControllerSpec extends ItSpec {
     val result = connector.viewRepaymentAccount(vrn).futureValue
     result.status shouldBe Status.OK
   }
-
-
 
 }
