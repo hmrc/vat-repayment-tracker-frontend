@@ -28,6 +28,7 @@
 
 @(
   title: String,
+  headerTitle: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
   bodyClasses: Option[String] = None,
@@ -69,7 +70,7 @@
 
 @insideHeader = {
   @viewsHelpers.headerNav(
-    navTitle = Some(title),
+    navTitle = Some(headerTitle),
     navTitleLink = None,
     showBetaLink = false,
     navLinks = Some(headerNavLinks)

@@ -22,6 +22,7 @@
 
 @(
   title: String,
+  headerTitle: String,
   sidebarLinks: Option[Html] = None,
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
@@ -42,6 +43,7 @@
 
 @govUkWrapper(
   title = title,
+  headerTitle = headerTitle,
   mainClass = mainClass,
   bodyClasses = bodyClasses,
   sidebar = sidebar,
