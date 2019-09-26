@@ -235,7 +235,7 @@ class Controller @Inject() (
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(views.view_repayment_account(bankDetails, vrn))
+        Ok(views.view_repayment_account(bankDetails, vrn, ReturnPage("view-repayment-account")))
       }
 
       url

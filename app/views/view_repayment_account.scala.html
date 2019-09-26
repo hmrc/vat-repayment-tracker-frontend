@@ -27,7 +27,9 @@ appConfig: ViewConfig
 
 @(
 bankDetailsOption: Option[BankDetails],
-vrn: Vrn)(
+vrn: Vrn,
+returnPage : ReturnPage
+)(
 implicit
 request: Request[_]
 )
@@ -72,7 +74,7 @@ bodyClasses = None
     </div>
    </dl>
 
-   <p><a href='@routes.Controller.startBankAccountCocJourney(vrn,ReturnPage("show-results"))'>@{LangMessages.`View your business details to update your repayment bank account`.show}</a></p>
+   <p><a href='@routes.Controller.startBankAccountCocJourney(vrn,returnPage)'>@{LangMessages.`View your business details to update your repayment bank account`.show}</a></p>
   </div>
  </div>
 </main>

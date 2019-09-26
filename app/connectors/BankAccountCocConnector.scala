@@ -35,17 +35,17 @@ class BankAccountCocConnector @Inject() (
 
   import req.RequestSupport._
 
-  private val bankServiceURL: String = servicesConfig.baseUrl("bank-account-coc")
-  private val vrtServiceURL: String = servicesConfig.baseUrl("vat-repayment-tracker-frontend")
+  private val serviceUrl: String = servicesConfig.baseUrl("bank-account-coc")
   private val viewUrl: String = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
+  private val bUrl: String = configuration.get[String]("urls.bank-back-url")
 
   def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
 
-    val bkUrl: String = s"$vrtServiceURL/vat-repayment-tracker-frontend/${returnPage.value}/vrn/${vrn.value}"
+    val bkUrl: String = s"$bUrl${returnPage.value}/vrn/${vrn.value}"
     Logger.debug(s"Using back url : ${bkUrl}")
     val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, false, bkUrl, bkUrl, bkUrl)
     Logger.debug(s"Calling bank-account-coc start journey for vrn ${vrn}")
-    val startJourneyURL: String = s"$bankServiceURL$viewUrl"
+    val startJourneyURL: String = s"$serviceUrl$viewUrl"
     Logger.debug(s"Calling ank-account-coc start journey for vrn with url ${startJourneyURL})")
     httpClient.POST[ViewRepaymentRequest, NextUrl](startJourneyURL, viewRepaymentRequest)
 
