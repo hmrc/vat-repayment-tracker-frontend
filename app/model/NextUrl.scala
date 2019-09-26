@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package model.dd
+package model
 
 import play.api.libs.json.{Format, Json}
 

@@ -17,7 +17,7 @@
 package controllers
 
 import config.ViewConfig
-import connectors.{DirectDebitBackendConnector, PaymentsOrchestratorConnector}
+import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector}
 import controllers.action.Actions
 import format.{AddressFormter, DesFormatter}
 import javax.inject.{Inject, Singleton}
@@ -45,13 +45,23 @@ class Controller @Inject() (
     desFormatter:                 DesFormatter,
     actions:                      Actions,
     viewConfig:                   ViewConfig,
-    directDebitBackendController: DirectDebitBackendConnector)(
+    directDebitBackendController: DirectDebitBackendConnector,
+    bankAccountCocConnector:      BankAccountCocConnector)(
     implicit
     ec: ExecutionContext)
 
   extends FrontendBaseController(cc) {
 
   import requestSupport._
+
+  def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage): Action[AnyContent] =
+    actions.securedAction(vrn).async { implicit request =>
+
+      for {
+        nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
+      } yield Redirect(nextUrl.nextUrl)
+
+    }
 
   def signout: Action[AnyContent] =
     Action.async { implicit request =>
@@ -225,7 +235,7 @@ class Controller @Inject() (
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(views.view_repayment_account(bankDetails))
+        Ok(views.view_repayment_account(bankDetails, vrn))
       }
 
       url

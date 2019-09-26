@@ -22,7 +22,7 @@ final case class CreateVATJourneyRequest(
     userId:     String,
     userIdType: String = "VRN",
     returnUrl:  String,
-    backUrl:    String = "vrturl"
+    backUrl:    String
 )
 
 object CreateVATJourneyRequest {

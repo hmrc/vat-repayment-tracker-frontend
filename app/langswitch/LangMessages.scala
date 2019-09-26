@@ -111,7 +111,7 @@ object LangMessages {
   )
 
   val `View your business details to update your repayment bank account`: Message = Message(
-    english = "`View your business details to update your repayment bank account`"
+    english = "View your business details to update your repayment bank account"
   )
 
   val `Your repayment is delayed`: Message = Message(

@@ -104,7 +104,7 @@ trait ItSpec
 
   def configMap = Map[String, Any](
     "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
-    "microservice.services.direct-debit-backend.port" -> WireMockSupport.port
+    "microservice.services.direct-debit-backend.port" -> WireMockSupport.port, "microservice.services.bank-account-coc.port" -> WireMockSupport.port
   )
 
   def injector: Injector = fakeApplication().injector

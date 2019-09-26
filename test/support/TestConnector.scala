@@ -17,8 +17,7 @@
 package support
 
 import javax.inject.{Inject, Singleton}
-import model.Vrn
-import model.dd.NextUrl
+import model.{NextUrl, Vrn}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -36,5 +35,8 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   def viewDDAccount(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
     s"http://localhost:$port/vat-repayment-tracker-frontend/view-dd-account/vrn/${vrn.value}")
+
+  def startBankAccountCocJourney(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+    s"http://localhost:$port/vat-repayment-tracker-frontend/bank-account-coc/start-journey/vrn/${vrn.value}/manage-or-track")
 
 }

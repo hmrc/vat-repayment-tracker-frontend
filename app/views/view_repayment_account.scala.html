@@ -15,7 +15,8 @@
  *@
 
 @import config.ViewConfig
-@import model.des.BankDetails
+@import model.des._
+@import model._
 @import langswitch.LangMessages
 
 @this(
@@ -25,7 +26,8 @@ appConfig: ViewConfig
 )
 
 @(
-bankDetailsOption: Option[BankDetails])(
+bankDetailsOption: Option[BankDetails],
+vrn: Vrn)(
 implicit
 request: Request[_]
 )
@@ -70,7 +72,7 @@ bodyClasses = None
     </div>
    </dl>
 
-   <p><a href="www.changeme.com">@{LangMessages.`View your business details to update your repayment bank account`.show}</a></p>
+   <p><a href='@routes.Controller.startBankAccountCocJourney(vrn,ReturnPage("show-results"))'>@{LangMessages.`View your business details to update your repayment bank account`.show}</a></p>
   </div>
  </div>
 </main>
