@@ -43,12 +43,12 @@
 @import viewsHelpers.requestSupport._
 
 @mainTemplate(
-  title =LangMessages.heading.show,
+  title =LangMessages.`Your repayments are delayed`.show,
   headerTitle = LangMessages.heading.show,
   bodyClasses = None
 ) {
 
-<main class="govuk-main-wrapper" role="main">
+<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:multiple_delayed">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`Your repayments are delayed`.show}</h1>

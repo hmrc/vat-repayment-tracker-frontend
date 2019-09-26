@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.ViewConfig
-@import model.des._
-@import model.RepaymentData
-@import langswitch.LangMessages
+package connectors
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
-)
+//manage-vat-subscription-frontend.
 
-@(
-)(
-implicit
-request: Request[_]
-)
+class BankAccountCocConnector {
 
-@import viewsHelpers.requestSupport._
-
-<h3>@{LangMessages.`What happens next`.show}</h3>
-<p>@{LangMessages.`What happens next description`.show}<a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">@{LangMessages.`Contact HMRC`.show}</a>.</p>
+}

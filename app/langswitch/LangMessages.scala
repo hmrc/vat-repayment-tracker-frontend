@@ -131,7 +131,7 @@ object LangMessages {
   )
 
   val `Contact HMRC`: Message = Message(
-    english = "Contact HMRC."
+    english = "contact HMRC"
   )
 
   val `Delayed`: Message = Message(

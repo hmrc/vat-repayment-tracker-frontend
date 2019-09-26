@@ -28,7 +28,7 @@ object OneRepayment extends CommonPage {
 
   def assertPageIsDisplayed(vrn: Vrn, receivedDate: String, repayDate: String)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "Track your VAT repayments"
+    readTitle shouldBe "We are processing your VAT repayment"
     readMainMessage shouldBe "We are processing your VAT repayment"
     readAmount shouldBe "£5.56"
     readRepayDate shouldBe repayDate
