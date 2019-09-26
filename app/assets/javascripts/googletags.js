@@ -29,6 +29,7 @@
     w.dataLayer = w.dataLayer || [];
     var localData = d.querySelectorAll('[data-gtag]')
     var localObj = {
+      'event': 'DOMContentLoaded',
       'Session ID': new Date().getTime() + '.' + Math.random().toString(36).substring(5),
       'Hit TimeStamp': new Date().toUTCString()
     }
@@ -37,7 +38,6 @@
     })
 
     w.dataLayer.push(localObj)
-    console.log(w.dataLayer)
   })
 
 })(document,window);
