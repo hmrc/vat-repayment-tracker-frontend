@@ -30,7 +30,7 @@ final case class RepaymentData(
     estimatedRepaymentDate.isBefore(LocalDate.now(clock))
   }
 
-  def formatAmount: String = {
+  val formatAmount: String = {
     val df = new DecimalFormat("#,###.00")
     df.format(amount)
   }
