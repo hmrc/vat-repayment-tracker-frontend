@@ -177,7 +177,11 @@ a {
         display: table-row;
     }
 
-    &__key, &__value {
+    &--undivided {
+        border-bottom: 1px solid #bfc1c3;
+    }
+
+    &__key, &__value, &__actions {
         padding-top: 10px;
         padding-bottom: 10px;
         border-bottom: 1px solid #bfc1c3;
@@ -187,13 +191,24 @@ a {
         overflow-wrap: break-word;
     }
 
+    &--undivided &__key,
+    &--undivided &__value,
+    &--undivided  &__actions{
+        border-bottom: none;
+    }
+
     &__key {
         width: 30%;
         font-weight: 700;
     }
 
+    &__actions {
+        width: 20%;
+        text-align: right;
+    }
+
     &__value {
-        width: 70%;
+        width: 50%;
     }
 
     @include break(desktop) {
