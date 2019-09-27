@@ -48,7 +48,7 @@ request: Request[_]
     <tr class="govuk-table__row">
       <td id="amount">@onePayment.formatDate(onePayment.returnedReceivedOn)</td>
       <td id="repay-date">@onePayment.period</td>
-      <td id="received-date">£@onePayment.amount</td>
+      <td id="received-date">£@onePayment.formatAmount</td>
       <td id="period">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td>
     </tr>
     }
