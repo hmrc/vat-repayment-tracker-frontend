@@ -113,11 +113,8 @@
   @{contentHeader.map(contentHeader => viewsHelpers.mainContentHeader(contentHeader = contentHeader))}
 }
 
-@getHelpForm = @{
-  viewsHelpers.reportAProblemLink(
-    appConfig.reportAProblemPartialUrl,
-    appConfig.reportAProblemNonJSUrl
-  )
+@getHelpForm = {
+  @viewsHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)
 }
 
 @content = {
@@ -131,6 +128,8 @@
     sidebar = sidebar
   )
 }
+
+
 
 @govUkTemplate(
   Some(title),
