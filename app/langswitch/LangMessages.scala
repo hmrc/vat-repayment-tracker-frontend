@@ -94,8 +94,8 @@ object LangMessages {
     english = "Account number:"
   )
 
-  val `Manage your repayment account`: Message = Message(
-    english = "Manage your repayment account"
+  val `Manage your repayment bank account`: Message = Message(
+    english = "Manage your repayment bank account"
   )
 
   val `Change`: Message = Message(
