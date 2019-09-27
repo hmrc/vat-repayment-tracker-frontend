@@ -35,7 +35,7 @@ case class ViewConfig(
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
-  val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback-unauthenticated?service=$appName"
+  val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
   val supportLanguages: Boolean = false
   val signOut = s"$frontendBaseUrl/$appName/signout"
 
