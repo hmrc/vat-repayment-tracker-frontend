@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package model.dd
+package model
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json}
 
-final case class CreateVATJourneyRequest(
-    userId:     String,
-    userIdType: String = "VRN",
-    returnUrl:  String,
-    backUrl:    String
-)
+case class NextUrl(nextUrl: String)
 
-object CreateVATJourneyRequest {
-  implicit val format: OFormat[CreateVATJourneyRequest] = Json.format[CreateVATJourneyRequest]
+object NextUrl {
+  implicit val format: Format[NextUrl] = Json.format[NextUrl]
 }
+

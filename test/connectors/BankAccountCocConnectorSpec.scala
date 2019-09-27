@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package model.dd
+package connectors
 
-import play.api.libs.json.{Format, Json}
+import model.{ReturnPage, Vrn}
+import support.{BankAccountCocWireMockResponses, ItSpec}
 
-case class NextUrl(nextUrl: String)
+class BankAccountCocConnectorSpec extends ItSpec {
+  val vrn: Vrn = Vrn("2345678890")
 
-object NextUrl {
-  implicit val format: Format[NextUrl] = Json.format[NextUrl]
+  val bankAccountCocConnector: BankAccountCocConnector = injector.instanceOf[BankAccountCocConnector]
+
+  "Start Journey" in {
+    BankAccountCocWireMockResponses.bankOk
+    val result = bankAccountCocConnector.startJourney(vrn, ReturnPage("manage-or-track")).futureValue
+    result.nextUrl shouldBe "https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"
+  }
+
 }
-

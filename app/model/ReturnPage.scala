@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package model.dd
+package model
 
-import play.api.libs.json.{Json, OFormat}
+import controllers.ValueClassBinder.valueClassBinder
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Format
+import play.api.mvc.PathBindable
 
-final case class CreateVATJourneyRequest(
-    userId:     String,
-    userIdType: String = "VRN",
-    returnUrl:  String,
-    backUrl:    String
-)
+final case class ReturnPage(value: String)
 
-object CreateVATJourneyRequest {
-  implicit val format: OFormat[CreateVATJourneyRequest] = Json.format[CreateVATJourneyRequest]
+object ReturnPage {
+
+  implicit val format: Format[ReturnPage] = implicitly[Format[String]].inmap(ReturnPage(_), _.value)
+  implicit val rpBinder: PathBindable[ReturnPage] = valueClassBinder(_.value)
+
 }

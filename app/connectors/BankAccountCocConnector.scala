@@ -16,8 +16,39 @@
 
 package connectors
 
-//manage-vat-subscription-frontend.
+import javax.inject.Inject
+import model.{NextUrl, ReturnPage, Vrn}
+import model.bank.ViewRepaymentRequest
+import play.api.mvc.Request
+import play.api.{Configuration, Logger}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-class BankAccountCocConnector {
+import scala.concurrent.{ExecutionContext, Future}
+
+//@Singleton
+class BankAccountCocConnector @Inject() (
+    servicesConfig: ServicesConfig,
+    httpClient:     HttpClient,
+    configuration:  Configuration)
+  (implicit ec: ExecutionContext) {
+
+  import req.RequestSupport._
+
+  private val serviceUrl: String = servicesConfig.baseUrl("bank-account-coc")
+  private val viewUrl: String = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
+  private val bUrl: String = configuration.get[String]("urls.bank-back-url")
+
+  def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
+
+    val bkUrl: String = s"$bUrl${returnPage.value}/vrn/${vrn.value}"
+    Logger.debug(s"Using back url : ${bkUrl}")
+    val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, false, bkUrl, bkUrl, bkUrl)
+    Logger.debug(s"Calling bank-account-coc start journey for vrn ${vrn}")
+    val startJourneyURL: String = s"$serviceUrl$viewUrl"
+    Logger.debug(s"Calling ank-account-coc start journey for vrn with url ${startJourneyURL})")
+    httpClient.POST[ViewRepaymentRequest, NextUrl](startJourneyURL, viewRepaymentRequest)
+
+  }
 
 }

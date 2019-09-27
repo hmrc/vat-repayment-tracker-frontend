@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package model.dd
+package support
 
-import play.api.libs.json.{Json, OFormat}
+import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
-final case class CreateVATJourneyRequest(
-    userId:     String,
-    userIdType: String = "VRN",
-    returnUrl:  String,
-    backUrl:    String
-)
+object BankAccountCocWireMockResponses {
 
-object CreateVATJourneyRequest {
-  implicit val format: OFormat[CreateVATJourneyRequest] = Json.format[CreateVATJourneyRequest]
+  def bankOk: StubMapping = {
+    stubFor(post(urlEqualTo("/bank-account-coc/start-journey-of-change-bank-account"))
+      .willReturn(aResponse()
+        .withStatus(201)
+        .withBody(
+          s"""
+           {"nextUrl":"https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"}
+       """.stripMargin)))
+
+  }
+
 }

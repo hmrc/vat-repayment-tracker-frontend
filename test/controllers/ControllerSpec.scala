@@ -18,7 +18,7 @@ package controllers
 
 import model.{EnrolmentKeys, Vrn}
 import play.api.http.Status
-import support.{AuthWireMockResponses, DDBackendWireMockResponses, DesWireMockResponses, ItSpec}
+import support._
 
 class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
@@ -36,6 +36,13 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     val result = connector.viewRepaymentAccount(vrn).futureValue
+    result.status shouldBe Status.OK
+  }
+
+  "Get startBankAccountCocJourney authorised" in {
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    BankAccountCocWireMockResponses.bankOk
+    val result = connector.startBankAccountCocJourney(vrn).futureValue
     result.status shouldBe Status.OK
   }
 

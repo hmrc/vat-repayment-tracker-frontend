@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package model.dd
+package model.bank
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json}
 
-final case class CreateVATJourneyRequest(
-    userId:     String,
-    userIdType: String = "VRN",
-    returnUrl:  String,
-    backUrl:    String
-)
+final case class ViewRepaymentRequest(vrn:            String,
+                                      isAgent:        Boolean,
+                                      returnUrl:      String,
+                                      backUrl:        String,
+                                      convenienceUrl: String)
 
-object CreateVATJourneyRequest {
-  implicit val format: OFormat[CreateVATJourneyRequest] = Json.format[CreateVATJourneyRequest]
+object ViewRepaymentRequest {
+  implicit val format: Format[ViewRepaymentRequest] = Json.format[ViewRepaymentRequest]
 }
