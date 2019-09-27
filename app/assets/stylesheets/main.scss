@@ -220,3 +220,22 @@ a {
 #proposition-links {
     float: right;
 }
+
+/* error styles */
+.error-summary,
+.form-group-error {
+    border-color: $error-colour;
+    @include break(tablet) {
+        border-color: $error-colour;
+    }
+}
+.error-message {
+    color: $error-colour;
+}
+.error-summary {
+    a:link,
+    a:visited {
+        color: $error-colour;
+        font-weight: 700;
+    }
+}

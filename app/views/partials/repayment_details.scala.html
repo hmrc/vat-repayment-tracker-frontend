@@ -42,7 +42,7 @@ request: Request[_]
 <p id="acc-name" class="govuk-!-margin-bottom-1">@{LangMessages.`Name on account`.show} <strong>@{bankDetails.accountHolderName}</strong></p>
 <p id="acc-sort-code" class="govuk-!-margin-bottom-1">@{LangMessages.`Sort code`.show} <strong>@{bankDetails.sortCode}</strong></p>
 <p id="acc-number">@{LangMessages.`Account number`.show} <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
-<p><a href='@routes.Controller.viewRepaymentAccount(vrn)' id="manage-account">@{LangMessages.`Manage your repayment account`.show}</a></p>
+<p><a href='@routes.Controller.viewRepaymentAccount(vrn)' id="manage-account">@{LangMessages.`Manage your repayment bank account`.show}</a></p>
 }
 
 
