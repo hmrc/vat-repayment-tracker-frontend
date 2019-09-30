@@ -21,12 +21,42 @@ import model.Vrn
 
 object DesWireMockResponses {
 
+  def ddOk(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.ddOk.toString()
+            .stripMargin)))
+
+  }
+
+  def ddNotFound(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(404)
+        .withBody(
+          DesData.ddNotFound.toString()
+            .stripMargin)))
+
+  }
+
   def obligationsOk(vrn: Vrn, toDate: String, receivedDate: String) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
           DesData.obligationsDataOk(vrn, toDate, receivedDate).toString()
+            .stripMargin)))
+
+  }
+
+  def obligationsDataOkSingleDelayed(vrn: Vrn, receivedDate: String, toDate: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.obligationsDataOkSingleDelayed(vrn, receivedDate, toDate).toString()
             .stripMargin)))
 
   }

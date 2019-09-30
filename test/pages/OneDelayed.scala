@@ -19,18 +19,20 @@ package pages
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 
-object OneRepayment extends CommonDetail {
+object OneDelayed extends CommonDetail {
 
   def uniqueToPage(implicit wd: WebDriver): Assertion = {
-    readTitle shouldBe "We are processing your VAT repayment"
-    readMainMessage shouldBe "We are processing your VAT repayment"
+    readTitle shouldBe "Your repayment is delayed"
+    readMainMessage shouldBe "Your repayment is delayed"
   }
 
   def checkGuidance(implicit wd: WebDriver): Assertion = {
-    whenpay shouldBe "When we will repay you"
-    whenpay_desc shouldBe "We will ususally repay you before the estimated repayment date, but it may take longer. You do not need to contact us before this date."
+    whenpay shouldBe "What happens next"
+    whenpay_desc shouldBe "You do not need to do anything right now. We are working on paying you as soon as possible. If you need to speak to someone about your repayment, you can contact HMRC."
   }
 
   def whenpay(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay")).getText)
+
   def whenpay_desc(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay-desc")).getText)
+
 }

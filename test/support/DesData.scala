@@ -359,6 +359,27 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
+  def obligationsDataOkSingleDelayed(vrn: Vrn, receivedDate: String, toDate: String): JsValue = Json.parse(s"""
+                                                 {
+                                                     "obligations": [
+                                                         {
+                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
+                                                             "obligationDetails": [
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
+                                                                     "inboundCorrespondenceToDate": "${toDate}",
+                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
+                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
+                                                                     "periodKey": "18AC"
+                                                                 }
+                                                             ]
+                                                         }
+                                                     ]
+                                                 }
+       """.stripMargin)
+
+  // language=JSON
   def obligationsDataOk(vrn: Vrn, toDate: String, receivedDate: String): JsValue = Json.parse(
     s"""
                                                  {

@@ -22,34 +22,53 @@ import support.{ItSpec, DesWireMockResponses, AuthWireMockResponses}
 
 class OneRepaymentSpec extends ItSpec {
 
+  // def frozenTimeString: String = "2027-11-02T16:33:51.880"
+
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and financial data found - to date" in {
     setup("2027-12-12", "2027-11-12")
     OneRepayment.assertPageIsDisplayed(vrn, "12 Nov 2027", "11 Jan 2028")
+    OneRepayment.checkGuidance
+    OneRepayment.uniqueToPage
   }
 
   "user is authorised and financial data found - received date" in {
     setup("2027-11-12", "2027-12-12")
     OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", "11 Jan 2028")
+    OneRepayment.uniqueToPage
   }
 
   "user is authorised and financial data found - same date" in {
     setup("2027-12-12", "2027-12-12")
     OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", "11 Jan 2028")
+    OneRepayment.uniqueToPage
   }
 
+  //TODO CHECK VIEW REPAYMENT FROM INTELLIJ
   "click manager link" in {
     setup("2027-12-12", "2027-11-12")
+    OneRepayment.uniqueToPage
     OneRepayment.clickManageAccount
     ViewRepaymentAccount.assertPageIsDisplayed("Account holder", "****2222", "667788", vrn)
   }
 
-  private def setup(toDate: String, receivedDate: String) = {
+  "user is authorised and address data found" in {
+    setup("2027-11-12", "2027-12-12", false)
+    OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", "11 Jan 2028", false, true)
+    OneRepayment.uniqueToPage
+  }
+
+  private def setup(toDate: String, receivedDate: String, useBankDetails: Boolean = true) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
-    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    if (useBankDetails) {
+      DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    } else {
+      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+    }
+
     DesWireMockResponses.obligationsOk(vrn, toDate, receivedDate)
     goToViaPath(path)
   }
