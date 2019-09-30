@@ -36,7 +36,7 @@ object OneRepayment extends CommonPage {
     readPeriod shouldBe "March 2018"
     readAccName shouldBe "Name on account: Account holder"
     readAccNumber shouldBe "Account number: ****2222"
-    readAccSortCode() shouldBe "Sort code: 667788"
+    readAccSortCode() shouldBe "Sort code: 66 77 88"
 
   }
 

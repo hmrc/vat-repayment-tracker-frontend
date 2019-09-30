@@ -29,7 +29,7 @@ object ViewRepaymentAccount extends CommonPage {
     readTitle shouldBe "Track your VAT repayments"
     readAccName shouldBe "Name on account: Account holder Change"
     readAccNumber shouldBe "Account number: ****2222"
-    readAccSortCode() shouldBe "Sort code: 667788"
+    readAccSortCode() shouldBe "Sort code: 66 77 88"
     readMainMessage() shouldBe "Your VAT repayments will be sent to this account"
   }
 

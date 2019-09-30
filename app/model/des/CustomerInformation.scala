@@ -67,8 +67,16 @@ final case class BankDetails(
     bankAccountNumber: String,
     sortCode:          String
 ) {
-  def obscureBankAccountNumber: String = {
+
+  val obscureBankAccountNumber: String = {
     "****" + bankAccountNumber.drop(4)
+  }
+
+  val formatSortCode: String = {
+    sortCode.length match {
+      case 6   => s"${sortCode.substring(0, 2)} ${sortCode.substring(2, 4)} ${sortCode.substring(4, 6)}"
+      case sor => throw new RuntimeException(s"Invalid sortcode length [$sor] for sortcode [$sortCode]")
+    }
   }
 
 }
