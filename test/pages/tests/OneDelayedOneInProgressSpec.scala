@@ -17,31 +17,28 @@
 package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
-import pages.{MultipleDelayed}
+import pages.OneDelayedOneInProgress
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
 
-class MultipleDelayedSpec extends ItSpec {
+class OneDelayedOneInProgressSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   // def frozenTimeString: String = "2027-11-02T16:33:51.880"
 
-  "user is authorised and financial data found - to date" in {
-    setup("2027-10-01", "2027-10-01")
-    MultipleDelayed.assertPageIsDisplayed(vrn)
+  "user authenticated, data found " in {
+    setup("2027-12-12", "2027-11-12", "2027-10-01", "2027-10-01")
+    OneDelayedOneInProgress.assertPageIsDisplayed(vrn)
+    OneDelayedOneInProgress.clickDelayed()
+    OneDelayedOneInProgress.amount() shouldBe "£796.00"
   }
 
-  private def setup(toDate: String, receivedDate: String, useBankDetails: Boolean = true) = {
+  private def setup(toDate: String, receivedDate: String, toDate2: String, receivedDate2: String) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkMultiple4(vrn)
-    if (useBankDetails) {
-      DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    } else {
-      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
-    }
-
-    DesWireMockResponses.obligationsOk(vrn, receivedDate, toDate)
+    DesWireMockResponses.financialDataOkTwo(vrn)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.obligationsDataOkMultipleOneOfEach(vrn, toDate, receivedDate, toDate2, receivedDate2)
     goToViaPath(path)
   }
 

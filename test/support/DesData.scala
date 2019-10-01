@@ -654,5 +654,278 @@ object DesData {
      "directDebitMandateFound": false
       }
            """.stripMargin)
+
+  //language=json
+  def financialDataOkTwo(vrn: Vrn): JsValue = Json.parse(s"""
+                                                 {
+                                                   "idType": "VRN",
+                                                   "idNumber": "${vrn.value}",
+                                                   "regimeType": "VATC",
+                                                   "processingDate": "2019-08-20T10:44:05Z",
+                                                   "financialTransactions": [
+                                                       {
+                                                           "chargeType": "VAT Return Debit Charge",
+                                                           "mainType": "VAT Return Charge",
+                                                           "periodKey": "18AC",
+                                                           "periodKeyDescription": "March 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "003030001189",
+                                                           "sapDocumentNumberItem": "0001",
+                                                           "chargeReference": "XJ002610110056",
+                                                           "mainTransaction": "4700",
+                                                           "subTransaction": "1174",
+                                                           "originalAmount": 10169.45,
+                                                           "outstandingAmount": 10169.45,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "001",
+                                                                   "dueDate": "2018-05-07",
+                                                                   "amount": 135.0
+                                                               },
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-05-07",
+                                                                   "amount": 10034.45
+                                                               }
+                                                           ]
+                                                       },
+                                                       {
+                                                           "chargeType": "VAT Protective Assessment",
+                                                           "mainType": "VAT Protective Assessment",
+                                                           "periodKey": "18AD",
+                                                           "periodKeyDescription": "June 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "003360001206",
+                                                           "sapDocumentNumberItem": "0001",
+                                                           "chargeReference": "XV002616013469",
+                                                           "mainTransaction": "4733",
+                                                           "subTransaction": "1174",
+                                                           "originalAmount": 796.0,
+                                                           "outstandingAmount": 796.0,
+                                                           "accruedInterest": 23.45,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-09-23",
+                                                                   "amount": 796.0
+                                                               }
+                                                           ]
+                                                       }
+                                                   ]
+                                               }
+       """.stripMargin)
+
+  // language=JSON
+  def obligationsDataOkMultipleOneOfEach(vrn: Vrn, toDate: String, receivedDate: String, toDate2: String, receivedDate2: String): JsValue = Json.parse(s"""
+                                                 {
+                                                     "obligations": [
+                                                         {
+                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
+                                                             "obligationDetails": [
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
+                                                                     "inboundCorrespondenceToDate": "${toDate}",
+                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
+                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
+                                                                     "periodKey": "18AC"
+                                                                 },
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-03-01",
+                                                                     "inboundCorrespondenceToDate": "${toDate2}",
+                                                                     "inboundCorrespondenceDateReceived": "${receivedDate2}",
+                                                                     "inboundCorrespondenceDueDate": "2018-05-07",
+                                                                     "periodKey": "18AD"
+                                                                 }
+                                                             ]
+                                                         }
+                                                     ]
+                                                 }
+       """.stripMargin)
+
+  // language=JSON
+  def financialDataOK4(vrn: Vrn): JsValue = Json.parse(s"""
+                                                 {
+                                                   "idType": "VRN",
+                                                   "idNumber": "${vrn.value}",
+                                                   "regimeType": "VATC",
+                                                   "processingDate": "2019-08-20T10:44:05Z",
+                                                   "financialTransactions": [
+                                                       {
+                                                           "chargeType": "VAT Protective Assessment",
+                                                           "mainType": "VAT Protective Assessment",
+                                                           "periodKey": "18AA",
+                                                           "periodKeyDescription": "March 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "002720000571",
+                                                           "sapDocumentNumberItem": "0001",
+                                                           "chargeReference": "XB002616013425",
+                                                           "mainTransaction": "4733",
+                                                           "subTransaction": "1174",
+                                                           "originalAmount": 796.0,
+                                                           "outstandingAmount": 796.0,
+                                                           "accruedInterest": 24.23,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-09-12",
+                                                                   "amount": 796.0
+                                                               }
+                                                           ]
+                                                       },
+                                                       {
+                                                           "chargeType": "VAT PA Default Interest",
+                                                           "mainType": "VAT PA Default Interest",
+                                                           "periodKey": "18AB",
+                                                           "periodKeyDescription": "June 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "002720000571",
+                                                           "sapDocumentNumberItem": "0002",
+                                                           "chargeReference": "XB002616013425",
+                                                           "mainTransaction": "4708",
+                                                           "subTransaction": "1175",
+                                                           "originalAmount": 3.59,
+                                                           "outstandingAmount": 3.59,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-08-13",
+                                                                   "amount": 3.59
+                                                               }
+                                                           ]
+                                                       },
+                                                       {
+                                                           "chargeType": "VAT Return Debit Charge",
+                                                           "mainType": "VAT Return Charge",
+                                                           "periodKey": "18AC",
+                                                           "periodKeyDescription": "September 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "003030001189",
+                                                           "sapDocumentNumberItem": "0001",
+                                                           "chargeReference": "XJ002610110056",
+                                                           "mainTransaction": "4700",
+                                                           "subTransaction": "1174",
+                                                           "originalAmount": 10169.45,
+                                                           "outstandingAmount": 10169.45,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "001",
+                                                                   "dueDate": "2018-05-07",
+                                                                   "amount": 135.0
+                                                               },
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-05-07",
+                                                                   "amount": 10034.45
+                                                               }
+                                                           ]
+                                                       },
+                                                       {
+                                                           "chargeType": "VAT Protective Assessment",
+                                                           "mainType": "VAT Protective Assessment",
+                                                           "periodKey": "18AD",
+                                                           "periodKeyDescription": "December 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "003360001206",
+                                                           "sapDocumentNumberItem": "0001",
+                                                           "chargeReference": "XV002616013469",
+                                                           "mainTransaction": "4733",
+                                                           "subTransaction": "1174",
+                                                           "originalAmount": 796.0,
+                                                           "outstandingAmount": 796.0,
+                                                           "accruedInterest": 23.45,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-09-23",
+                                                                   "amount": 796.0
+                                                               }
+                                                           ]
+                                                       }
+                                                   ]
+                                               }
+       """.stripMargin)
+
+  // language=JSON
+  def obligationsDataOkMultipleMix(vrn: Vrn, delayedDate: String, currentDate: String, delayedToDate: String, currentToDate: String): JsValue = Json.parse(s"""
+                                                 {
+                                                     "obligations": [
+                                                         {
+                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
+                                                             "obligationDetails": [
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
+                                                                     "inboundCorrespondenceToDate": "${delayedToDate}",
+                                                                     "inboundCorrespondenceDateReceived": "${delayedDate}",
+                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
+                                                                     "periodKey": "18AD"
+                                                                 },
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-03-01",
+                                                                     "inboundCorrespondenceToDate": "${currentToDate}",
+                                                                     "inboundCorrespondenceDateReceived": "${currentDate}",
+                                                                     "inboundCorrespondenceDueDate": "2018-05-07",
+                                                                     "periodKey": "18AC"
+                                                                 },
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-02-01",
+                                                                     "inboundCorrespondenceToDate": "${delayedToDate}",
+                                                                     "inboundCorrespondenceDateReceived": "${delayedDate}",
+                                                                     "inboundCorrespondenceDueDate": "2018-04-07",
+                                                                     "periodKey": "18AB"
+                                                                 },
+                                                                 {
+                                                                     "status": "O",
+                                                                     "inboundCorrespondenceFromDate": "2018-01-01",
+                                                                     "inboundCorrespondenceToDate": "${delayedToDate}",
+                                                                     "inboundCorrespondenceDateReceived": "${delayedDate}",
+                                                                     "inboundCorrespondenceDueDate": "2018-03-07",
+                                                                     "periodKey": "18AA"
+                                                                 }
+                                                             ]
+                                                         }
+                                                     ]
+                                                 }
+       """.stripMargin)
 }
 

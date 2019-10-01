@@ -57,4 +57,6 @@ object ManageOrTrack extends CommonPage {
 
   def vrt(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("vrt-label")).getText)
 
+  def clickVrtLabel()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("vrt-label")).click())
+
 }

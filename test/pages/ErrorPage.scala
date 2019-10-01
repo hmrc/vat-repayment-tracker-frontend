@@ -26,7 +26,7 @@ object ErrorPage extends CommonPage {
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "You do not have access to this service"
+    readTitle shouldBe "Sorry, there is a problem with the service"
   }
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle

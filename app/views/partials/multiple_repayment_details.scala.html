@@ -46,10 +46,10 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-      <td id="amount">@onePayment.formatDate(onePayment.returnedReceivedOn)</td>
-      <td id="repay-date">@onePayment.period</td>
-      <td id="received-date">£@onePayment.formatAmount</td>
-      <td id="period">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td>
+      <td id="received-date">@onePayment.formatDate(onePayment.returnedReceivedOn)</td>
+      <td id="period">@onePayment.period</td>
+      <td id="amount">£@onePayment.formatAmount</td>
+      <td id="repay-date">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td>
     </tr>
     }
   </tbody>

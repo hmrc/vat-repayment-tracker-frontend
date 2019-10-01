@@ -17,8 +17,9 @@
 package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
-import pages.{OneRepayment, ViewRepaymentAccount}
-import support.{ItSpec, DesWireMockResponses, AuthWireMockResponses}
+import pages.{ErrorPage, ManageOrTrack, OneRepayment, ViewRepaymentAccount}
+import play.api.http.Status
+import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
 
 class OneRepaymentSpec extends ItSpec {
 
@@ -58,6 +59,12 @@ class OneRepaymentSpec extends ItSpec {
     setup("2027-11-12", "2027-12-12", false)
     OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", "11 Jan 2028", false, true)
     OneRepayment.uniqueToPage
+  }
+
+  "Get ShowResults authorised but wrong vrn should show error page" in {
+    AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    goToViaPath(path)
+    ErrorPage.assertPageIsDisplayed(vrn)
   }
 
   private def setup(toDate: String, receivedDate: String, useBankDetails: Boolean = true) = {

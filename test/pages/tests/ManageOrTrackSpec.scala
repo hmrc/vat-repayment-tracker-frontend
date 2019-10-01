@@ -17,7 +17,8 @@
 package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
-import pages.{ManageOrTrack, OneDelayed}
+import pages.OneRepayment.readTitle
+import pages.{ManageOrTrack, OneDelayed, OneRepayment}
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
 
 class ManageOrTrackSpec extends ItSpec {
@@ -38,6 +39,13 @@ class ManageOrTrackSpec extends ItSpec {
   "user is authorised, manage bank option " in {
     setup("2027-10-01", "2027-10-01", true, false)
     ManageOrTrack.assertPageIsDisplayed(vrn, false, true)
+  }
+
+  "click vrtLabel" in {
+    setup("2027-12-12", "2027-11-12", true, true)
+    ManageOrTrack.clickVrtLabel()
+    ManageOrTrack.clickContinue()
+    OneRepayment.assertPageIsDisplayed(vrn, "12 Nov 2027", "11 Jan 2028")
   }
 
   private def setup(toDate: String, receivedDate: String, useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
