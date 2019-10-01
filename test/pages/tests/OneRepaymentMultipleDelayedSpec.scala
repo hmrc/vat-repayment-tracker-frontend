@@ -44,15 +44,15 @@ class OneRepaymentMultipleDelayedSpec extends ItSpec {
   // def frozenTimeString: String = "2027-11-02T16:33:51.880"
 
   "user authenticated, data found " in {
-    setup("2027-10-01", "2027-12-12", "2027-10-01", "2027-12-12")
+    setup("2027-12-12", "2027-09-10")
     OneRepaymentMultipleDelayed.assertPageIsDisplayed(vrn)
   }
 
-  private def setup(delayedDate: String, currentDate: String, delayedToDate: String, currentToDate: String) = {
+  private def setup(toDate: String, delayedToDate: String) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkMultiple4(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.obligationsDataOkMultipleMix(vrn, delayedDate, currentDate, delayedToDate, currentToDate)
+    DesWireMockResponses.obligationsDataOkMultipleMix(vrn, toDate, delayedToDate)
     goToViaPath(path)
   }
 

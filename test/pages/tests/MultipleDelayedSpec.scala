@@ -28,11 +28,11 @@ class MultipleDelayedSpec extends ItSpec {
   // def frozenTimeString: String = "2027-11-02T16:33:51.880"
 
   "user is authorised and financial data found - to date" in {
-    setup("2027-10-01", "2027-10-01")
+    setup("2027-10-01")
     MultipleDelayed.assertPageIsDisplayed(vrn)
   }
 
-  private def setup(toDate: String, receivedDate: String, useBankDetails: Boolean = true) = {
+  private def setup(toDate: String, useBankDetails: Boolean = true) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkMultiple4(vrn)
     if (useBankDetails) {
@@ -41,7 +41,7 @@ class MultipleDelayedSpec extends ItSpec {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
 
-    DesWireMockResponses.obligationsOk(vrn, receivedDate, toDate)
+    DesWireMockResponses.obligationsOk(vrn, toDate)
     goToViaPath(path)
   }
 

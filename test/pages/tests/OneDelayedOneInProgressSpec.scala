@@ -28,17 +28,17 @@ class OneDelayedOneInProgressSpec extends ItSpec {
   // def frozenTimeString: String = "2027-11-02T16:33:51.880"
 
   "user authenticated, data found " in {
-    setup("2027-12-12", "2027-11-12", "2027-10-01", "2027-10-01")
+    setup("2027-12-12", "2027-09-01")
     OneDelayedOneInProgress.assertPageIsDisplayed(vrn)
     OneDelayedOneInProgress.clickDelayed()
     OneDelayedOneInProgress.amount() shouldBe "£796.00"
   }
 
-  private def setup(toDate: String, receivedDate: String, toDate2: String, receivedDate2: String) = {
+  private def setup(toDate: String, toDate2: String) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialDataOkTwo(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.obligationsDataOkMultipleOneOfEach(vrn, toDate, receivedDate, toDate2, receivedDate2)
+    DesWireMockResponses.obligationsDataOkMultipleOneOfEach(vrn, toDate, toDate2)
     goToViaPath(path)
   }
 

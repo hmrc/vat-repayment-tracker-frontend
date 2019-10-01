@@ -21,7 +21,8 @@
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+appConfig: ViewConfig,
+repayment_warning: views.html.partials.repayment_warning
 )
 
 @(
@@ -42,11 +43,8 @@ request: Request[_]
         <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</p>
     </div>
     <div class="govuk-grid-column-one-half">
-        <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return received on`.show}</h2>
-        <p class="heading-h3 govuk-!-padding-top-1" id="received-date">@onePayment.formatDate(onePayment.returnedReceivedOn)</p>
-    </div>
-    <div class="govuk-grid-column-one-half">
         <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return period`.show}</h2>
         <p class="heading-h3 govuk-!-padding-top-1" id="period">@onePayment.period</p>
     </div>
 </div>
+@repayment_warning()

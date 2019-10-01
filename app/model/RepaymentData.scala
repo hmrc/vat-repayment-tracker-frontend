@@ -21,7 +21,6 @@ import java.time.{Clock, LocalDate}
 import java.text.DecimalFormat
 
 final case class RepaymentData(
-    returnedReceivedOn:     LocalDate,
     estimatedRepaymentDate: LocalDate,
     period:                 String,
     amount:                 BigDecimal) {

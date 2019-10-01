@@ -31,13 +31,13 @@ object DesData {
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation))
   val transaction: Transaction = Transaction("18AC", "March 2018", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), BigDecimal(5.56), BigDecimal(5.56))
   val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
-  val obligation1 = ObligationDetail("O", LocalDate.parse("2018-04-01"), LocalDate.parse("2018-04-30"), LocalDate.parse("2018-04-15"),
+  val obligation1 = ObligationDetail("O", LocalDate.parse("2018-04-01"), LocalDate.parse("2018-04-30"),
                                           LocalDate.parse("2018-06-07"), "18AD")
-  val obligation2 = ObligationDetail("O", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), LocalDate.parse("2027-11-02"),
+  val obligation2 = ObligationDetail("O", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"),
                                           LocalDate.parse("2018-05-07"), "18AC")
-  val obligation3 = ObligationDetail("O", LocalDate.parse("2018-02-01"), LocalDate.parse("2018-02-28"), LocalDate.parse("2018-04-12"),
+  val obligation3 = ObligationDetail("O", LocalDate.parse("2018-02-01"), LocalDate.parse("2018-02-28"),
                                           LocalDate.parse("2018-04-07"), "18AB")
-  val obligation4 = ObligationDetail("O", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-31"), LocalDate.parse("2018-04-15"),
+  val obligation4 = ObligationDetail("O", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-31"),
                                           LocalDate.parse("2018-03-07"), "18AA")
   val vatObligation = VatObligation(Seq(obligation1, obligation2, obligation3, obligation4))
   val vatObligations = VatObligations(Seq(vatObligation))
@@ -114,7 +114,6 @@ object DesData {
                       "status":"O",
                       "inboundCorrespondenceFromDate":"2018-04-01",
                       "inboundCorrespondenceToDate":"2018-04-30",
-                      "inboundCorrespondenceDateReceived":"2018-04-15",
                       "inboundCorrespondenceDueDate":"2018-06-07",
                       "periodKey":"18AD"
                    },
@@ -122,7 +121,6 @@ object DesData {
                       "status":"O",
                       "inboundCorrespondenceFromDate":"2018-03-01",
                       "inboundCorrespondenceToDate":"2018-03-31",
-                      "inboundCorrespondenceDateReceived":"2027-11-02",
                       "inboundCorrespondenceDueDate":"2018-05-07",
                       "periodKey":"18AC"
                    },
@@ -130,7 +128,6 @@ object DesData {
                       "status":"O",
                       "inboundCorrespondenceFromDate":"2018-02-01",
                       "inboundCorrespondenceToDate":"2018-02-28",
-                      "inboundCorrespondenceDateReceived":"2018-04-12",
                       "inboundCorrespondenceDueDate":"2018-04-07",
                       "periodKey":"18AB"
                    },
@@ -138,7 +135,6 @@ object DesData {
                       "status":"O",
                       "inboundCorrespondenceFromDate":"2018-01-01",
                       "inboundCorrespondenceToDate":"2018-01-31",
-                      "inboundCorrespondenceDateReceived":"2018-04-15",
                       "inboundCorrespondenceDueDate":"2018-03-07",
                       "periodKey":"18AA"
                    }
@@ -359,7 +355,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOkSingleDelayed(vrn: Vrn, receivedDate: String, toDate: String): JsValue = Json.parse(s"""
+  def obligationsDataOkSingleDelayed(vrn: Vrn, toDate: String): JsValue = Json.parse(s"""
                                                  {
                                                      "obligations": [
                                                          {
@@ -369,7 +365,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-04-01",
                                                                      "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-06-07",
                                                                      "periodKey": "18AC"
                                                                  }
@@ -380,7 +375,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOk(vrn: Vrn, toDate: String, receivedDate: String): JsValue = Json.parse(
+  def obligationsDataOk(vrn: Vrn, toDate: String): JsValue = Json.parse(
     s"""
                                                  {
                                                      "obligations": [
@@ -391,7 +386,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-04-01",
                                                                      "inboundCorrespondenceToDate": "2018-04-30",
-                                                                     "inboundCorrespondenceDateReceived": "2018-04-15",
                                                                      "inboundCorrespondenceDueDate": "2018-06-07",
                                                                      "periodKey": "18AD"
                                                                  },
@@ -399,7 +393,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-03-01",
                                                                      "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-05-07",
                                                                      "periodKey": "18AC"
                                                                  },
@@ -407,7 +400,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-02-01",
                                                                      "inboundCorrespondenceToDate": "2018-02-28",
-                                                                     "inboundCorrespondenceDateReceived": "2018-04-12",
                                                                      "inboundCorrespondenceDueDate": "2018-04-07",
                                                                      "periodKey": "18AB"
                                                                  },
@@ -415,7 +407,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-01-01",
                                                                      "inboundCorrespondenceToDate": "2018-01-31",
-                                                                     "inboundCorrespondenceDateReceived": "2018-04-15",
                                                                      "inboundCorrespondenceDueDate": "2018-03-07",
                                                                      "periodKey": "18AA"
                                                                  }
@@ -728,7 +719,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOkMultipleOneOfEach(vrn: Vrn, toDate: String, receivedDate: String, toDate2: String, receivedDate2: String): JsValue = Json.parse(s"""
+  def obligationsDataOkMultipleOneOfEach(vrn: Vrn, toDate: String, toDate2: String): JsValue = Json.parse(s"""
                                                  {
                                                      "obligations": [
                                                          {
@@ -738,7 +729,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-04-01",
                                                                      "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${receivedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-06-07",
                                                                      "periodKey": "18AC"
                                                                  },
@@ -746,7 +736,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-03-01",
                                                                      "inboundCorrespondenceToDate": "${toDate2}",
-                                                                     "inboundCorrespondenceDateReceived": "${receivedDate2}",
                                                                      "inboundCorrespondenceDueDate": "2018-05-07",
                                                                      "periodKey": "18AD"
                                                                  }
@@ -884,7 +873,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOkMultipleMix(vrn: Vrn, delayedDate: String, currentDate: String, delayedToDate: String, currentToDate: String): JsValue = Json.parse(s"""
+  def obligationsDataOkMultipleMix(vrn: Vrn, toDate: String, delayedToDate: String): JsValue = Json.parse(s"""
                                                  {
                                                      "obligations": [
                                                          {
@@ -894,15 +883,13 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-04-01",
                                                                      "inboundCorrespondenceToDate": "${delayedToDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${delayedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-06-07",
                                                                      "periodKey": "18AD"
                                                                  },
                                                                  {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-03-01",
-                                                                     "inboundCorrespondenceToDate": "${currentToDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${currentDate}",
+                                                                     "inboundCorrespondenceToDate": "${toDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-05-07",
                                                                      "periodKey": "18AC"
                                                                  },
@@ -910,7 +897,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-02-01",
                                                                      "inboundCorrespondenceToDate": "${delayedToDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${delayedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-04-07",
                                                                      "periodKey": "18AB"
                                                                  },
@@ -918,7 +904,6 @@ object DesData {
                                                                      "status": "O",
                                                                      "inboundCorrespondenceFromDate": "2018-01-01",
                                                                      "inboundCorrespondenceToDate": "${delayedToDate}",
-                                                                     "inboundCorrespondenceDateReceived": "${delayedDate}",
                                                                      "inboundCorrespondenceDueDate": "2018-03-07",
                                                                      "periodKey": "18AA"
                                                                  }

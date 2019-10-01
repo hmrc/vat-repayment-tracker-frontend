@@ -64,7 +64,7 @@ class PaymentsOrchestratorService @Inject() (
       ft =>
         {
           vatObligations.obligations.flatMap(x => x.obligationDetails).find(ob => ob.periodKey == ft.periodKey).map { ob =>
-            RepaymentData(ob.inboundCorrespondenceDateReceived, extraDateAllowance(endPeriodDate(ob)), ft.periodKeyDescription, ft.originalAmount)
+            RepaymentData(extraDateAllowance(ob.inboundCorrespondenceToDate), ft.periodKeyDescription, ft.originalAmount)
           }.getOrElse(dealWithNoObligations(vrn))
         }
     }
@@ -72,13 +72,6 @@ class PaymentsOrchestratorService @Inject() (
 
   private def extraDateAllowance(endPeriodDate: LocalDate) = {
     endPeriodDate.plusDays(30)
-  }
-
-  private def endPeriodDate(obligationDetail: ObligationDetail): LocalDate = {
-    if (obligationDetail.inboundCorrespondenceDateReceived.isBefore(obligationDetail.inboundCorrespondenceToDate)) obligationDetail.inboundCorrespondenceToDate
-    else
-      obligationDetail.inboundCorrespondenceDateReceived
-
   }
 
   private def dealWithNoObligations(vrn: Vrn) = {

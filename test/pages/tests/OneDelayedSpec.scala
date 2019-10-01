@@ -28,13 +28,13 @@ class OneDelayedSpec extends ItSpec {
   // def frozenTimeString: String = "2027-11-02T16:33:51.880"
 
   "user is authorised and financial data found - to date" in {
-    setup("2027-10-01", "2027-10-01")
-    OneDelayed.assertPageIsDisplayed(vrn, "01 Oct 2027", "31 Oct 2027")
+    setup("2027-10-01")
+    OneDelayed.assertPageIsDisplayed(vrn, "31 Oct 2027")
     OneDelayed.uniqueToPage
     OneDelayed.checkGuidance
   }
 
-  private def setup(toDate: String, receivedDate: String, useBankDetails: Boolean = true) = {
+  private def setup(toDate: String, useBankDetails: Boolean = true) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
     if (useBankDetails) {
@@ -43,7 +43,7 @@ class OneDelayedSpec extends ItSpec {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
 
-    DesWireMockResponses.obligationsDataOkSingleDelayed(vrn, receivedDate, toDate)
+    DesWireMockResponses.obligationsDataOkSingleDelayed(vrn, toDate)
     goToViaPath(path)
   }
 

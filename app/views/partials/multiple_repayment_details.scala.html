@@ -21,7 +21,8 @@
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+appConfig: ViewConfig,
+repayment_warning: views.html.partials.repayment_warning
 )
 
 @(
@@ -37,7 +38,6 @@ request: Request[_]
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header">@{LangMessages.`VAT Return received on`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`VAT Return period`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`Amount claimed`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`Estimated repayment date`.show}</th>
@@ -46,7 +46,6 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-      <td id="received-date">@onePayment.formatDate(onePayment.returnedReceivedOn)</td>
       <td id="period">@onePayment.period</td>
       <td id="amount">£@onePayment.formatAmount</td>
       <td id="repay-date">@onePayment.formatDate(onePayment.estimatedRepaymentDate)</td>
@@ -54,3 +53,4 @@ request: Request[_]
     }
   </tbody>
 </table>
+@repayment_warning()

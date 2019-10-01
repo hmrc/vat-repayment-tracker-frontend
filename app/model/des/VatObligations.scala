@@ -33,12 +33,11 @@ object VatObligation {
 }
 
 final case class ObligationDetail(
-    status:                            String,
-    inboundCorrespondenceFromDate:     LocalDate,
-    inboundCorrespondenceToDate:       LocalDate,
-    inboundCorrespondenceDateReceived: LocalDate,
-    inboundCorrespondenceDueDate:      LocalDate,
-    periodKey:                         String)
+    status:                        String,
+    inboundCorrespondenceFromDate: LocalDate,
+    inboundCorrespondenceToDate:   LocalDate,
+    inboundCorrespondenceDueDate:  LocalDate,
+    periodKey:                     String)
 
 object ObligationDetail {
 
