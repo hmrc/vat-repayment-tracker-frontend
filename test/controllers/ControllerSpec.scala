@@ -17,6 +17,7 @@
 package controllers
 
 import model.{EnrolmentKeys, Vrn}
+import play.api.Logger
 import play.api.http.Status
 import support._
 
@@ -29,6 +30,14 @@ class ControllerSpec extends ItSpec {
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.obligationsOk(vrn, "2027-12-12", "2027-11-12")
     val result = connector.showResults(vrn).futureValue
+    result.status shouldBe Status.OK
+  }
+
+  "Get ShowResults not authorised redirect to login stub" in {
+    AuthWireMockResponses.authFailed
+    GgStub.signInPage(9863, vrn)
+    val result = connector.showResults(vrn).futureValue
+    result.body should include ("Sign in using Government Gateway")
     result.status shouldBe Status.OK
   }
 

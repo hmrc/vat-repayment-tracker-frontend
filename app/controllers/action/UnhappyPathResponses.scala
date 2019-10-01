@@ -33,18 +33,6 @@ class UnhappyPathResponses @Inject() (
 
   import requestSupport._
 
-  def notFound(implicit request: Request[_]) = NotFound(
-    errorHandler.standardErrorTemplate(
-      ErrorMessages.pageNotFound404Title.show,
-      ErrorMessages.pageNotFound404Heading.show,
-      ErrorMessages.pageNotFound404Message.show))
-
-  def unauthorised(buttonLink: String)(implicit request: Request[_]) = Unauthorized(
-    errorHandler.standardErrorTemplate(
-      ErrorMessages.authProblemTitle.show,
-      ErrorMessages.authProblemHeading.show,
-      ErrorMessages.authProblemMessage.show))
-
   def unauthorised(implicit request: Request[_]) = Unauthorized(
     errorHandler.standardErrorTemplate(
       ErrorMessages.`You do not have access to this service`.show,

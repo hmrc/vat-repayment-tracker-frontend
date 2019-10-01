@@ -31,6 +31,12 @@ object AuthWireMockResponses {
   // new HttpHeader("Failing-Enrolment", "SA")
   )
 
+  def authLoginStubOk: StubMapping = {
+    stubFor(get(urlMatching("/auth-login-stub/gg-sign-in/*"))
+      .willReturn(aResponse()
+        .withStatus(200)))
+  }
+
   def authFailed: StubMapping = {
     stubFor(post(urlEqualTo("/auth/authorise"))
       .willReturn(aResponse()

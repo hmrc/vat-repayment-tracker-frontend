@@ -21,6 +21,26 @@ import model.Vrn
 
 object DesWireMockResponses {
 
+  def ddOk(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.ddOk.toString()
+            .stripMargin)))
+
+  }
+
+  def ddNotFound(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(404)
+        .withBody(
+          DesData.ddNotFound.toString()
+            .stripMargin)))
+
+  }
+
   def obligationsOk(vrn: Vrn, toDate: String, receivedDate: String) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
@@ -31,12 +51,52 @@ object DesWireMockResponses {
 
   }
 
-  def financialsOkMultiple(vrn: Vrn) = {
+  def obligationsDataOkSingleDelayed(vrn: Vrn, receivedDate: String, toDate: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.obligationsDataOkSingleDelayed(vrn, receivedDate, toDate).toString()
+            .stripMargin)))
+
+  }
+
+  def obligationsDataOkMultipleOneOfEach(vrn: Vrn, receivedDate: String, toDate: String, receivedDate2: String, toDate2: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.obligationsDataOkMultipleOneOfEach(vrn, receivedDate, toDate, receivedDate2, toDate2).toString()
+            .stripMargin)))
+
+  }
+
+  def obligationsDataOkMultipleMix(vrn: Vrn, delayedDate: String, currentDate: String, delayedToDate: String, currentToDate: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.obligationsDataOkMultipleMix(vrn, delayedDate, currentDate, delayedToDate, currentToDate).toString()
+            .stripMargin)))
+
+  }
+
+  def financialDataOkTwo(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.financialDataOk(vrn).toString()
+          DesData.financialDataOkTwo(vrn).toString()
+            .stripMargin)))
+
+  }
+
+  def financialsOkMultiple4(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.financialDataOK4(vrn).toString()
             .stripMargin)))
 
   }

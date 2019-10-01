@@ -27,7 +27,6 @@ object ViewRepaymentAccount extends CommonPage {
   def assertPageIsDisplayed(accountHolderName: String, bankAccountNumber: String, sortCode: String, vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Track your VAT repayments"
-    readAccName shouldBe "Name on account: Account holder Change"
     readAccNumber shouldBe "Account number: ****2222"
     readAccSortCode() shouldBe "Sort code: 66 77 88"
     readMainMessage() shouldBe "Your VAT repayments will be sent to this account"

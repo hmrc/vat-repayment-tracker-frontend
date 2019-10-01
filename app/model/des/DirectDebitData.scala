@@ -18,9 +18,7 @@ package model.des
 
 import play.api.libs.json.{Json, OFormat}
 
-final case class DirectDebitData(directDebitDetails: Option[List[DirectDebitDetails]]) {
-  def ddDetailsExist: Boolean = directDebitDetails.isDefined
-}
+final case class DirectDebitData(directDebitDetails: Option[List[DirectDebitDetails]])
 
 object DirectDebitData {
   implicit val format: OFormat[DirectDebitData] = Json.format[DirectDebitData]
