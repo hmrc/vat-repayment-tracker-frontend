@@ -26,36 +26,34 @@ class ManageOrTrackSpec extends ItSpec {
   val path = s"""/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}"""
 
   "user is authorised, bank dd option, manage bank option " in {
-    setup("2027-10-01", true, true)
+    setup(true, true)
     ManageOrTrack.assertPageIsDisplayed(vrn, true, true)
   }
 
   "user is authorised, manage dd option " in {
-    setup("2027-10-01", false, true)
+    setup(false, true)
     ManageOrTrack.assertPageIsDisplayed(vrn, true, false)
   }
 
   "user is authorised, manage bank option " in {
-    setup("2027-10-01", true, false)
+    setup(true, false)
     ManageOrTrack.assertPageIsDisplayed(vrn, false, true)
   }
 
   "click vrtLabel" in {
-    setup("2027-12-12", true, true)
+    setup(true, true)
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
-    OneRepayment.assertPageIsDisplayed(vrn, "11 Jan 2028")
+    OneRepayment.assertPageIsDisplayed(vrn)
   }
 
-  private def setup(toDate: String, useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
+  private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
     if (useBankDetails)
       DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     else
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
-
-    DesWireMockResponses.obligationsOk(vrn, toDate)
 
     //Show dd radio button
     if (useDdDetails)

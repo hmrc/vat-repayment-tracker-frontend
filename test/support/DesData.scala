@@ -31,16 +31,6 @@ object DesData {
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation))
   val transaction: Transaction = Transaction("18AC", "March 2018", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), BigDecimal(5.56), BigDecimal(5.56))
   val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
-  val obligation1 = ObligationDetail("O", LocalDate.parse("2018-04-01"), LocalDate.parse("2018-04-30"),
-                                          LocalDate.parse("2018-06-07"), "18AD")
-  val obligation2 = ObligationDetail("O", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"),
-                                          LocalDate.parse("2018-05-07"), "18AC")
-  val obligation3 = ObligationDetail("O", LocalDate.parse("2018-02-01"), LocalDate.parse("2018-02-28"),
-                                          LocalDate.parse("2018-04-07"), "18AB")
-  val obligation4 = ObligationDetail("O", LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-31"),
-                                          LocalDate.parse("2018-03-07"), "18AA")
-  val vatObligation = VatObligation(Seq(obligation1, obligation2, obligation3, obligation4))
-  val vatObligations = VatObligations(Seq(vatObligation))
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val directDebitDataNone: DirectDebitData = DirectDebitData(None)
 
@@ -102,47 +92,6 @@ object DesData {
        }
      """.stripMargin
   )
-
-  //language=JSON
-  val vatObligationsJson: JsValue = Json.parse(
-    s"""
-       {
-          "obligations":[
-             {
-                "obligationDetails":[
-                   {
-                      "status":"O",
-                      "inboundCorrespondenceFromDate":"2018-04-01",
-                      "inboundCorrespondenceToDate":"2018-04-30",
-                      "inboundCorrespondenceDueDate":"2018-06-07",
-                      "periodKey":"18AD"
-                   },
-                   {
-                      "status":"O",
-                      "inboundCorrespondenceFromDate":"2018-03-01",
-                      "inboundCorrespondenceToDate":"2018-03-31",
-                      "inboundCorrespondenceDueDate":"2018-05-07",
-                      "periodKey":"18AC"
-                   },
-                   {
-                      "status":"O",
-                      "inboundCorrespondenceFromDate":"2018-02-01",
-                      "inboundCorrespondenceToDate":"2018-02-28",
-                      "inboundCorrespondenceDueDate":"2018-04-07",
-                      "periodKey":"18AB"
-                   },
-                   {
-                      "status":"O",
-                      "inboundCorrespondenceFromDate":"2018-01-01",
-                      "inboundCorrespondenceToDate":"2018-01-31",
-                      "inboundCorrespondenceDueDate":"2018-03-07",
-                      "periodKey":"18AA"
-                   }
-                ]
-             }
-          ]
-       }
-       """.stripMargin)
 
   // language=JSON
   val customerDataNotFound: JsValue = Json.parse(
@@ -338,82 +287,12 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val obligationsDataNotFound: JsValue = Json.parse(
-    s"""
-                                                      {
-                                                          "code": "NOT_FOUND",
-                                                          "reason": "The remote endpoint has indicated that no data can be found."
-                                                      }
-       """.stripMargin)
-  // language=JSON
   val financialDataNotFound: JsValue = Json.parse(
     s"""
                                                      {
                                                         "code": "NOT_FOUND",
                                                         "reason": "The remote endpoint has indicated that no data can be found."
                                                     }
-       """.stripMargin)
-
-  // language=JSON
-  def obligationsDataOkSingleDelayed(vrn: Vrn, toDate: String): JsValue = Json.parse(s"""
-                                                 {
-                                                     "obligations": [
-                                                         {
-                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
-                                                             "obligationDetails": [
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
-                                                                     "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
-                                                                     "periodKey": "18AC"
-                                                                 }
-                                                             ]
-                                                         }
-                                                     ]
-                                                 }
-       """.stripMargin)
-
-  // language=JSON
-  def obligationsDataOk(vrn: Vrn, toDate: String): JsValue = Json.parse(
-    s"""
-                                                 {
-                                                     "obligations": [
-                                                         {
-                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
-                                                             "obligationDetails": [
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
-                                                                     "inboundCorrespondenceToDate": "2018-04-30",
-                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
-                                                                     "periodKey": "18AD"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-03-01",
-                                                                     "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-05-07",
-                                                                     "periodKey": "18AC"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-02-01",
-                                                                     "inboundCorrespondenceToDate": "2018-02-28",
-                                                                     "inboundCorrespondenceDueDate": "2018-04-07",
-                                                                     "periodKey": "18AB"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-01-01",
-                                                                     "inboundCorrespondenceToDate": "2018-01-31",
-                                                                     "inboundCorrespondenceDueDate": "2018-03-07",
-                                                                     "periodKey": "18AA"
-                                                                 }
-                                                             ]
-                                                         }
-                                                     ]
-                                                 }
        """.stripMargin)
 
   // language=JSON
@@ -647,7 +526,8 @@ object DesData {
            """.stripMargin)
 
   //language=json
-  def financialDataOkTwo(vrn: Vrn): JsValue = Json.parse(s"""
+  def financialDataOkTwo(vrn: Vrn): JsValue = Json.parse(
+    s"""
                                                  {
                                                    "idType": "VRN",
                                                    "idNumber": "${vrn.value}",
@@ -719,34 +599,8 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def obligationsDataOkMultipleOneOfEach(vrn: Vrn, toDate: String, toDate2: String): JsValue = Json.parse(s"""
-                                                 {
-                                                     "obligations": [
-                                                         {
-                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
-                                                             "obligationDetails": [
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
-                                                                     "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
-                                                                     "periodKey": "18AC"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-03-01",
-                                                                     "inboundCorrespondenceToDate": "${toDate2}",
-                                                                     "inboundCorrespondenceDueDate": "2018-05-07",
-                                                                     "periodKey": "18AD"
-                                                                 }
-                                                             ]
-                                                         }
-                                                     ]
-                                                 }
-       """.stripMargin)
-
-  // language=JSON
-  def financialDataOK4(vrn: Vrn): JsValue = Json.parse(s"""
+  def financialDataOK4(vrn: Vrn): JsValue = Json.parse(
+    s"""
                                                  {
                                                    "idType": "VRN",
                                                    "idNumber": "${vrn.value}",
@@ -872,45 +726,5 @@ object DesData {
                                                }
        """.stripMargin)
 
-  // language=JSON
-  def obligationsDataOkMultipleMix(vrn: Vrn, toDate: String, delayedToDate: String): JsValue = Json.parse(s"""
-                                                 {
-                                                     "obligations": [
-                                                         {
-                                                             "identification": {"incomeSourceType": "ITSA","referenceNumber": "${vrn.value}","referenceType": "VRN"},
-                                                             "obligationDetails": [
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-04-01",
-                                                                     "inboundCorrespondenceToDate": "${delayedToDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-06-07",
-                                                                     "periodKey": "18AD"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-03-01",
-                                                                     "inboundCorrespondenceToDate": "${toDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-05-07",
-                                                                     "periodKey": "18AC"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-02-01",
-                                                                     "inboundCorrespondenceToDate": "${delayedToDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-04-07",
-                                                                     "periodKey": "18AB"
-                                                                 },
-                                                                 {
-                                                                     "status": "O",
-                                                                     "inboundCorrespondenceFromDate": "2018-01-01",
-                                                                     "inboundCorrespondenceToDate": "${delayedToDate}",
-                                                                     "inboundCorrespondenceDueDate": "2018-03-07",
-                                                                     "periodKey": "18AA"
-                                                                 }
-                                                             ]
-                                                         }
-                                                     ]
-                                                 }
-       """.stripMargin)
 }
 

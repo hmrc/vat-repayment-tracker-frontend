@@ -41,46 +41,6 @@ object DesWireMockResponses {
 
   }
 
-  def obligationsOk(vrn: Vrn, toDate: String) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.obligationsDataOk(vrn, toDate).toString()
-            .stripMargin)))
-
-  }
-
-  def obligationsDataOkSingleDelayed(vrn: Vrn, toDate: String) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.obligationsDataOkSingleDelayed(vrn, toDate).toString()
-            .stripMargin)))
-
-  }
-
-  def obligationsDataOkMultipleOneOfEach(vrn: Vrn, toDate: String, toDate2: String) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.obligationsDataOkMultipleOneOfEach(vrn, toDate, toDate2).toString()
-            .stripMargin)))
-
-  }
-
-  def obligationsDataOkMultipleMix(vrn: Vrn, toDate: String, delayedToDate: String) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.obligationsDataOkMultipleMix(vrn, toDate, delayedToDate).toString()
-            .stripMargin)))
-
-  }
-
   def financialDataOkTwo(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
@@ -137,16 +97,6 @@ object DesWireMockResponses {
         .withStatus(404)
         .withBody(
           DesData.financialDataNotFound.toString()
-            .stripMargin)))
-
-  }
-
-  def obligationsNotFound(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/obligations-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(404)
-        .withBody(
-          DesData.obligationsDataNotFound.toString()
             .stripMargin)))
 
   }

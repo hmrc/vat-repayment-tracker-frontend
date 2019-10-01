@@ -27,10 +27,9 @@ trait CommonDetail extends CommonPage {
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
-  def assertPageIsDisplayed(vrn: Vrn, repayDate: String, checkBank: Boolean = true, checkAddress: Boolean = false)(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed(vrn: Vrn, checkBank: Boolean = true, checkAddress: Boolean = false)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readAmount shouldBe "£5.56"
-    readRepayDate shouldBe repayDate
     if (checkBank) {
       readAccName shouldBe "Name on account: Account holder"
       readAccNumber shouldBe "Account number: ****2222"

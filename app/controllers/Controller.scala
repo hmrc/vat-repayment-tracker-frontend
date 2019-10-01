@@ -28,7 +28,6 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
-import service.PaymentsOrchestratorService
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,7 +38,6 @@ class Controller @Inject() (
     errorHandler:                 ErrorHandler,
     views:                        Views,
     desConnector:                 PaymentsOrchestratorConnector,
-    desService:                   PaymentsOrchestratorService,
     requestSupport:               RequestSupport,
     addressFormater:              AddressFormter,
     desFormatter:                 DesFormatter,
@@ -139,14 +137,12 @@ class Controller @Inject() (
     implicit request: Request[_] =>
       val financialDataF = desConnector.getFinancialData(vrn)
       val customerDataF = desConnector.getCustomerData(vrn)
-      val obligationDataF = desConnector.getObligations(vrn)
 
       val result = for {
         financialData <- financialDataF
         customerData <- customerDataF
-        obligationData <- obligationDataF
       } yield (
-        computeView(desService.getAllRepaymentData(financialData, obligationData, vrn), customerData, vrn)
+        computeView(getAllRepaymentData(financialData, vrn), customerData, vrn)
       )
 
       result
@@ -154,20 +150,17 @@ class Controller @Inject() (
   }
 
   private def computeView(
-      allRepaymentData: AllRepaymentData,
+      allRepaymentData: List[RepaymentData],
       customerData:     Option[CustomerInformation],
       vrn:              Vrn
   )(implicit request: Request[_]): Result = {
-
-    val showCurrent = allRepaymentData.currentRepaymentData.isDefined
-    val overDueSize = allRepaymentData.overDueRepaymentData.fold(0)(_.size)
 
     val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
     val bankDetails = desFormatter.getBankDetails(customerData)
     val addressDetails = desFormatter.getAddressDetails(customerData)
     val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
 
-    if ((showCurrent == false) && (overDueSize == 0)) {
+    if (allRepaymentData.size == 0) {
       Ok(
         views.no_vat_repayments(
           bankDetailsExist,
@@ -176,54 +169,25 @@ class Controller @Inject() (
           addressDetailsExist,
           vrn
         ))
-    } else if (showCurrent && (overDueSize == 0)) {
+    } else if (allRepaymentData.size == 1) {
       Ok(views.one_repayment(
-        allRepaymentData.getCurrentRepaymentData,
+        allRepaymentData(0),
         bankDetailsExist,
         bankDetails,
         addressDetails,
         addressDetailsExist,
         vrn
       ))
-    } else if ((showCurrent == false) && (overDueSize == 1)) {
-      Ok(views.one_repayment_delayed(
-        allRepaymentData.getOverDueRepaymentData(0),
+    } else {
+      Ok(views.multiple_repayments(
+        allRepaymentData,
         bankDetailsExist,
         bankDetails,
         addressDetails,
         addressDetailsExist,
         vrn
       ))
-    } else if ((showCurrent == false) && (overDueSize > 1)) {
-      Ok(views.multiple_delayed(
-        allRepaymentData.getOverDueRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else if (showCurrent && (overDueSize == 1)) {
-      Ok(views.one_repayment_one_dealyed(
-        allRepaymentData.getCurrentRepaymentData,
-        allRepaymentData.getOverDueRepaymentData(0),
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else if (showCurrent && (overDueSize > 1)) {
-      Ok(views.one_repayment_multiple_delayed(
-        allRepaymentData.getCurrentRepaymentData,
-        allRepaymentData.getOverDueRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else throw new RuntimeException(s"""View not configured for overDueSize: ${overDueSize}, showCurrent: ${showCurrent}""")
+    }
 
   }
 
@@ -239,6 +203,20 @@ class Controller @Inject() (
       }
 
       url
+
+  }
+
+  private def getAllRepaymentData(financialDataOption: Option[FinancialData], vrn: Vrn): List[RepaymentData] = {
+
+    financialDataOption match {
+      case Some(financialData) => {
+        financialData.financialTransactions.map {
+          ft => RepaymentData(ft.periodKeyDescription, ft.originalAmount)
+
+        }.toList
+      }
+      case None => List[RepaymentData]()
+    }
 
   }
 

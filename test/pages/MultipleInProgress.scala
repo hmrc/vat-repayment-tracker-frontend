@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.ViewConfig
-@import model.des._
-@import model.RepaymentData
-@import langswitch.LangMessages
+package pages
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
-)
+import model.Vrn
+import org.openqa.selenium.WebDriver
+import org.scalatest.Assertion
 
-@(
-)(
-implicit
-request: Request[_]
-)
+object MultipleInProgress extends CommonPage {
 
-@import viewsHelpers.requestSupport._
+  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
-<h3 id="whenpay">@{LangMessages.`What happens next`.show}</h3>
-<p id="whenpay-desc">@{LangMessages.`What happens next description`.show}<a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">@{LangMessages.`Contact HMRC`.show}</a>.</p>
+  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}${vrn.value}"""
+    readTitle shouldBe "We are processing your VAT repayment"
+    readMainMessage() shouldBe "We are processing your VAT repayment"
+  }
+
+  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
+
+}

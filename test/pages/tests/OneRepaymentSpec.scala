@@ -29,23 +29,23 @@ class OneRepaymentSpec extends ItSpec {
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and financial data found - to date" in {
-    setup("2027-12-01")
-    OneRepayment.assertPageIsDisplayed(vrn, "31 Dec 2027")
+    setup()
+    OneRepayment.assertPageIsDisplayed(vrn)
     OneRepayment.checkGuidance
     OneRepayment.uniqueToPage
   }
 
   //TODO CHECK VIEW REPAYMENT FROM INTELLIJ
   "click manager link" in {
-    setup("2027-12-01")
+    setup()
     OneRepayment.uniqueToPage
     OneRepayment.clickManageAccount
     ViewRepaymentAccount.assertPageIsDisplayed("Account holder", "****2222", "667788", vrn)
   }
 
   "user is authorised and address data found" in {
-    setup("2027-11-12", false)
-    OneRepayment.assertPageIsDisplayed(vrn, "12 Dec 2027", false, true)
+    setup(false)
+    OneRepayment.assertPageIsDisplayed(vrn, false, true)
     OneRepayment.uniqueToPage
   }
 
@@ -55,7 +55,7 @@ class OneRepaymentSpec extends ItSpec {
     ErrorPage.assertPageIsDisplayed(vrn)
   }
 
-  private def setup(toDate: String, useBankDetails: Boolean = true) = {
+  private def setup(useBankDetails: Boolean = true) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
     if (useBankDetails) {
@@ -63,8 +63,6 @@ class OneRepaymentSpec extends ItSpec {
     } else {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
-
-    DesWireMockResponses.obligationsOk(vrn, toDate)
     goToViaPath(path)
   }
 
