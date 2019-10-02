@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package model.des
+@import config.ViewConfig
+@import model.des._
+@import model.RepaymentData
+@import langswitch.LangMessages
 
-import play.api.libs.json.Json
-import support.{DesData, UnitSpec}
+@this(
+viewsHelpers: views.ViewsHelpers,
+appConfig: ViewConfig
+)
 
-class VatObligationsSpec extends UnitSpec {
+@(
+)(
+implicit
+request: Request[_]
+)
 
-  "to json" in {
-    Json.toJson(DesData.vatObligations) shouldBe DesData.vatObligationsJson
-  }
+@import viewsHelpers.requestSupport._
 
-  "from json" in {
-    DesData.vatObligationsJson.as[VatObligations] shouldBe DesData.vatObligations
-  }
-}
+<h3 id="warning">@{LangMessages.`repayment warning message`.show}</h3>

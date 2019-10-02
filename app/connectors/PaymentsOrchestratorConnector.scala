@@ -18,7 +18,7 @@ package connectors
 
 import javax.inject.{Inject, Singleton}
 import model.Vrn
-import model.des.{CustomerInformation, DirectDebitData, FinancialData, VatObligations}
+import model.des.{CustomerInformation, DirectDebitData, FinancialData}
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -36,19 +36,11 @@ class PaymentsOrchestratorConnector @Inject() (
   (implicit ec: ExecutionContext) {
 
   private val serviceURL: String = servicesConfig.baseUrl("payments-orchestrator")
-  private val obligationsUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.obligations-url")
   private val financialsUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.financials-url")
   private val customerUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.customer-url")
   private val ddUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.dd-url")
 
   import req.RequestSupport._
-
-  def getObligations(vrn: Vrn)(implicit request: Request[_]): Future[Option[VatObligations]] = {
-    Logger.debug(s"Calling payments orchestrator for des api 1330 for vrn ${vrn}")
-    val getObligationsURL: String = s"$serviceURL$obligationsUrl/${vrn.value}"
-    Logger.debug(s"""Calling payments orchestrator for des api 1330 with url ${getObligationsURL}""")
-    httpClient.GET[Option[VatObligations]](getObligationsURL)
-  }
 
   def getFinancialData(vrn: Vrn)(implicit request: Request[_]): Future[Option[FinancialData]] = {
     Logger.debug(s"Calling payments orchestrator for des api 1166 for vrn ${vrn}")

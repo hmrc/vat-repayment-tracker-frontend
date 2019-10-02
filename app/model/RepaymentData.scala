@@ -15,29 +15,15 @@
  */
 
 package model
-
-import java.time.format.DateTimeFormatter
-import java.time.{Clock, LocalDate}
 import java.text.DecimalFormat
 
 final case class RepaymentData(
-    returnedReceivedOn:     LocalDate,
-    estimatedRepaymentDate: LocalDate,
-    period:                 String,
-    amount:                 BigDecimal) {
-
-  def isOverdue(implicit clock: Clock): Boolean = {
-    estimatedRepaymentDate.isBefore(LocalDate.now(clock))
-  }
+    period: String,
+    amount: BigDecimal) {
 
   val formatAmount: String = {
     val df = new DecimalFormat("#,###.00")
     df.format(amount)
-  }
-
-  def formatDate(localDate: LocalDate): String = {
-    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    localDate.format(pattern1)
   }
 
 }
