@@ -59,7 +59,7 @@ object LangMessages {
   )
 
   val `When we will repay you description`: Message = Message(
-    english = "We will ususally repay you before the estimated repayment date, but it may take longer.  You do not need to contact us before this date."
+    english = "We will usually repay you within 30 days of HMRC receiving your VAT Return. If you need to speak to someone about your repayment, only contact HMRC after 30 days have passed."
   )
 
   val `No VAT repayments in progress`: Message = Message(
