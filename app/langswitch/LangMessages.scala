@@ -188,6 +188,4 @@ object LangMessages {
     "Manage your Direct Debit"
   )
 
-  val `repayment warning message` = Message("REPAYMENT WARNING MESSAGE")
-
 }

@@ -21,8 +21,7 @@
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig,
-repayment_warning: views.html.partials.repayment_warning
+appConfig: ViewConfig
 )
 
 @(
@@ -43,4 +42,3 @@ request: Request[_]
         <p class="heading-h3 govuk-!-padding-top-1" id="period">@onePayment.period</p>
     </div>
 </div>
-@repayment_warning()

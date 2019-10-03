@@ -26,8 +26,8 @@ object MultipleInProgress extends CommonPage {
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "We are processing your VAT repayment"
-    readMainMessage() shouldBe "We are processing your VAT repayment"
+    readTitle shouldBe "We are processing your VAT repayments"
+    readMainMessage() shouldBe "We are processing your VAT repayments"
   }
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
