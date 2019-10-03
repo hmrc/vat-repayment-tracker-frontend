@@ -18,6 +18,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.{ErrorPage, ManageOrTrack, OneRepayment, ViewRepaymentAccount}
+import play.api.Logger
 import play.api.http.Status
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
 
@@ -51,6 +52,13 @@ class OneRepaymentSpec extends ItSpec {
 
   "Get ShowResults authorised but wrong vrn should show error page" in {
     AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+    goToViaPath(path)
+    ErrorPage.assertPageIsDisplayed(vrn)
+  }
+
+  "Get ShowResult logged in but wrong VRN" in {
+    val vrnOther: Vrn = Vrn("2345678891")
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrnOther, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     goToViaPath(path)
     ErrorPage.assertPageIsDisplayed(vrn)
   }
