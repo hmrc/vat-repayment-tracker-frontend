@@ -210,10 +210,12 @@ class Controller @Inject() (
 
     financialDataOption match {
       case Some(financialData) => {
-        financialData.financialTransactions.map {
-          ft => RepaymentData(ft.periodKeyDescription, ft.originalAmount)
 
-        }.toList
+        financialData.financialTransactions.filter(f => f.chargeType == "VAT Return Credit Charge")
+          .map {
+            ft => RepaymentData(ft.periodKeyDescription, ft.originalAmount)
+
+          }.toList
       }
       case None => List[RepaymentData]()
     }

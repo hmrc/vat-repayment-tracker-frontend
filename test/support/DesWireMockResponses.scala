@@ -51,6 +51,16 @@ object DesWireMockResponses {
 
   }
 
+  def financialDataOkVPA(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.financialDataOkVPA(vrn).toString()
+            .stripMargin)))
+
+  }
+
   def financialsOkMultiple4(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
