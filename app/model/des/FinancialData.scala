@@ -37,6 +37,8 @@ object FinancialData {
 }
 
 final case class Transaction(
+
+    chargeType:           String,
     periodKey:            String,
     periodKeyDescription: String,
     taxPeriodFrom:        LocalDate,
