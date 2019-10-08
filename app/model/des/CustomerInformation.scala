@@ -32,7 +32,10 @@ final case class ApprovedInformation
     PPOB:        Option[PPOB]
 ) {
 
-  val bankDetailsExist = bankDetails.isDefined
+  val bankDetailsExist = bankDetails match {
+    case Some(bde) => bde.detailsExist
+    case None      => false
+  }
 
   val addressExists = PPOB.isDefined
 
@@ -63,20 +66,42 @@ object Address {
 }
 
 final case class BankDetails(
-    accountHolderName: String,
-    bankAccountNumber: String,
-    sortCode:          String
+    accountHolderName: Option[String],
+    bankAccountNumber: Option[String],
+    sortCode:          Option[String]
 ) {
 
+  val detailsExist: Boolean = {
+    accountHolderName.isDefined || bankAccountNumber.isDefined || sortCode.isDefined
+  }
+  val formatAccountHolderName: String = {
+    accountHolderName match {
+      case Some(ahn) => ahn
+      case None      => ""
+    }
+  }
+
   val obscureBankAccountNumber: String = {
-    "****" + bankAccountNumber.drop(4)
+
+    bankAccountNumber match {
+      case Some(ban) => "****" + ban.drop(4)
+      case None      => ""
+    }
+
   }
 
   val formatSortCode: String = {
-    sortCode.length match {
-      case 6   => s"${sortCode.substring(0, 2)} ${sortCode.substring(2, 4)} ${sortCode.substring(4, 6)}"
-      case sor => throw new RuntimeException(s"Invalid sortcode length [$sor] for sortcode [$sortCode]")
+
+    sortCode match {
+      case Some(sc) =>
+        {}
+        sc.length match {
+          case 6   => s"${sc.substring(0, 2)} ${sc.substring(2, 4)} ${sc.substring(4, 6)}"
+          case sor => throw new RuntimeException(s"Invalid sortcode length [$sor] for sortcode [$sortCode]")
+        }
+      case None => ""
     }
+
   }
 
 }

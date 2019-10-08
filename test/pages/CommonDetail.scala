@@ -27,21 +27,32 @@ trait CommonDetail extends CommonPage {
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
-  def assertPageIsDisplayed(vrn: Vrn, checkBank: Boolean = true, checkAddress: Boolean = false)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
-    readAmount shouldBe "£5.56"
-    if (checkBank) {
-      readAccName shouldBe "Name on account: Account holder"
-      readAccNumber shouldBe "Account number: ****2222"
-      readAccSortCode shouldBe "Sort code: 66 77 88"
-    }
-    if (checkAddress) {
-      Logger.error(readAddress())
-      readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
-    }
-    readPeriod shouldBe "March 2018"
+  def assertPageIsDisplayed(
+      vrn:            Vrn,
+      checkBank:      Boolean = true,
+      checkAddress:   Boolean = false,
+      amount:         String,
+      partialAccount: Boolean = false)
+    (implicit wd: WebDriver): Assertion =
+    {
+      currentPath shouldBe s"""${path}${vrn.value}"""
+      readAmount shouldBe amount
+      if (checkBank) {
+        if (partialAccount)
+          readAccName shouldBe "Name on account:"
+        else
+          readAccName shouldBe "Name on account: Account holder"
 
-  }
+        readAccNumber shouldBe "Account number: ****2222"
+        readAccSortCode shouldBe "Sort code: 66 77 88"
+      }
+      if (checkAddress) {
+        Logger.error(readAddress())
+        readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
+      }
+      readPeriod shouldBe "March 2018"
+
+    }
 
   def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 

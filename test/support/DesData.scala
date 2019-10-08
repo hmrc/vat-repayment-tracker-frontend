@@ -24,7 +24,7 @@ import play.api.libs.json.{JsValue, Json}
 
 object DesData {
 
-  val bankDetails: BankDetails = BankDetails("Account holder", "11112222", "667788")
+  val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"))
   val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   val ppob: PPOB = PPOB(Some(address))
   val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
@@ -101,6 +101,100 @@ object DesData {
                                                        "code": "NOT_FOUND",
                                                        "reason": "The back end has indicated that No subscription can be found."
                                                    }
+       """.stripMargin)
+
+  // language=JSON
+  val customerDataOkWithPartialBankDetails: JsValue = Json.parse(
+    s"""
+     {
+         "approvedInformation": {
+             "customerDetails": {
+                 "nameIsReadOnly": true,
+                 "organisationName": "TAXPAYER NAME_1",
+                 "dataOrigin": "0001",
+                 "mandationStatus": "1",
+                 "registrationReason": "0001",
+                 "effectiveRegistrationDate": "2017-01-02",
+                 "businessStartDate": "2017-01-01",
+                 "welshIndicator": true,
+                 "partyType": "50",
+                 "optionToTax": true,
+                 "isPartialMigration": false,
+                 "isInsolvent": false,
+                 "overseasIndicator": true
+             },
+             "PPOB": {
+                 "address": {
+                     "line1": "VAT PPOB Line1",
+                     "line2": "VAT PPOB Line2",
+                     "line3": "VAT PPOB Line3",
+                     "line4": "VAT PPOB Line4",
+                     "postCode": "TF3 4ER",
+                     "countryCode": "GB"
+                 },
+                 "contactDetails": {
+                     "primaryPhoneNumber": "012345678901",
+                     "mobileNumber": "012345678902",
+                     "faxNumber": "012345678903",
+                     "emailAddress": "lewis.hay@digital.hmrc.gov.uk",
+                     "emailVerified": true
+                 },
+                 "websiteAddress": "www.tumbleweed.com"
+             },
+             "bankDetails": {
+                 "bankAccountNumber": "11112222",
+                 "sortCode": "667788"
+             },
+             "businessActivities": {
+                 "primaryMainCode": "10410",
+                 "mainCode2": "10611",
+                 "mainCode3": "10710",
+                 "mainCode4": "10720"
+             },
+             "flatRateScheme": {
+                 "FRSCategory": "003",
+                 "FRSPercentage": 59.99,
+                 "startDate": "0001-01-01",
+                 "endDate": "9999-12-31",
+                 "limitedCostTrader": true
+             },
+             "returnPeriod": {
+                 "stdReturnPeriod": "MM"
+             }
+         },
+         "inFlightInformation": {
+             "changeIndicators": {
+                 "organisationDetails": false,
+                 "PPOBDetails": false,
+                 "correspondenceContactDetails": false,
+                 "bankDetails": true,
+                 "returnPeriod": false,
+                 "flatRateScheme": false,
+                 "businessActivities": false,
+                 "deregister": false,
+                 "effectiveDateOfRegistration": false,
+                 "mandationStatus": true
+             },
+             "inFlightChanges": {
+                 "bankDetails": {
+                     "formInformation": {
+                         "formBundle": "092000001020",
+                         "dateReceived": "2019-03-04"
+                     },
+                     "accountHolderName": "Account holder",
+                     "bankAccountNumber": "11112222",
+                     "sortCode": "667788"
+                 },
+                 "mandationStatus": {
+                     "formInformation": {
+                         "formBundle": "092000002124",
+                         "dateReceived": "2019-08-15"
+                     },
+                     "mandationStatus": "3"
+                 }
+             }
+         }
+     }
        """.stripMargin)
 
   // language=JSON
@@ -593,6 +687,46 @@ object DesData {
                                                            "mainTransaction": "4708",
                                                            "subTransaction": "1175",
                                                            "originalAmount": 5.56,
+                                                           "outstandingAmount": 5.56,
+                                                           "items": [
+                                                               {
+                                                                   "subItem": "000",
+                                                                   "dueDate": "2018-08-24",
+                                                                   "amount": 5.56
+                                                               }
+                                                           ]
+                                                       }
+                                                   ]
+                                               }
+       """.stripMargin)
+
+  // language=JSON
+  def financialDataSingleOkNegative(vrn: Vrn): JsValue = Json.parse(
+    s"""
+                                                 {
+                                                   "idType": "VRN",
+                                                   "idNumber": "${vrn.value}",
+                                                   "regimeType": "VATC",
+                                                   "processingDate": "2019-08-20T10:44:05Z",
+                                                   "financialTransactions": [
+                                                       {
+                                                           "chargeType": "VAT Return Credit Charge",
+                                                           "mainType": "VAT PA Default Interest",
+                                                           "periodKey": "18AC",
+                                                           "periodKeyDescription": "March 2018",
+                                                           "taxPeriodFrom": "2018-03-01",
+                                                           "taxPeriodTo": "2018-03-31",
+                                                           "businessPartner": "0100113120",
+                                                           "contractAccountCategory": "33",
+                                                           "contractAccount": "091700000405",
+                                                           "contractObjectType": "ZVAT",
+                                                           "contractObject": "00000180000000000165",
+                                                           "sapDocumentNumber": "003360001206",
+                                                           "sapDocumentNumberItem": "0002",
+                                                           "chargeReference": "XV002616013469",
+                                                           "mainTransaction": "4708",
+                                                           "subTransaction": "1175",
+                                                           "originalAmount": -5.56,
                                                            "outstandingAmount": 5.56,
                                                            "items": [
                                                                {
