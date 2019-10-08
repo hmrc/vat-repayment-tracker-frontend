@@ -23,7 +23,7 @@ final case class RepaymentData(
 
   val formatAmount: String = {
     val df = new DecimalFormat("#,###.00")
-    df.format(amount)
+    df.format(amount.abs)
   }
 
 }

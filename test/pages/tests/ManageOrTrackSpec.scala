@@ -44,7 +44,7 @@ class ManageOrTrackSpec extends ItSpec {
     setup(true, true)
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
-    OneRepayment.assertPageIsDisplayed(vrn)
+    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56")
   }
 
   private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {

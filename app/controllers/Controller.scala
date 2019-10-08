@@ -24,6 +24,7 @@ import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model._
 import model.des.{CustomerInformation, _}
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
@@ -159,6 +160,11 @@ class Controller @Inject() (
     val bankDetails = desFormatter.getBankDetails(customerData)
     val addressDetails = desFormatter.getAddressDetails(customerData)
     val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
+
+    bankDetails match {
+      case Some(bd) => if (!(bd.accountHolderName.isDefined)) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
+      case None     =>
+    }
 
     if (allRepaymentData.size == 0) {
       Ok(

@@ -29,9 +29,16 @@ class OneRepaymentSpec extends ItSpec {
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
-  "user is authorised and financial data found - to date" in {
+  "user is authorised and financial data found" in {
     setup()
-    OneRepayment.assertPageIsDisplayed(vrn)
+    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56")
+    OneRepayment.checkGuidance
+    OneRepayment.uniqueToPage
+  }
+
+  "user is authorised and financial data found but partial" in {
+    setup(true, true)
+    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56", partialAccount = true)
     OneRepayment.checkGuidance
     OneRepayment.uniqueToPage
   }
@@ -46,7 +53,7 @@ class OneRepaymentSpec extends ItSpec {
 
   "user is authorised and address data found" in {
     setup(false)
-    OneRepayment.assertPageIsDisplayed(vrn, false, true)
+    OneRepayment.assertPageIsDisplayed(vrn, false, true, amount = "£5.56")
     OneRepayment.uniqueToPage
   }
 
@@ -63,11 +70,22 @@ class OneRepaymentSpec extends ItSpec {
     ErrorPage.assertPageIsDisplayed(vrn)
   }
 
-  private def setup(useBankDetails: Boolean = true) = {
+  "check negative amount" in {
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.financialDataSingleOkNegative(vrn)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    goToViaPath(path)
+    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56")
+  }
+
+  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
     if (useBankDetails) {
-      DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+      if (partialBankDetails)
+        DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
+      else
+        DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     } else {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }

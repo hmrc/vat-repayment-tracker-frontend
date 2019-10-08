@@ -81,12 +81,32 @@ object DesWireMockResponses {
 
   }
 
+  def financialDataSingleOkNegative(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.financialDataSingleOkNegative(vrn: Vrn).toString()
+            .stripMargin)))
+
+  }
+
   def customerDataOkWithBankDetails(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
           DesData.customerDataOk.toString()
+            .stripMargin)))
+
+  }
+
+  def customerDataOkWithPartialBankDetails(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.customerDataOkWithPartialBankDetails.toString()
             .stripMargin)))
 
   }
