@@ -40,5 +40,13 @@ object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
     override val value: String = "dd"
   }
 
+  case object nodd extends ManageOrTrackOption {
+    override val value: String = "nodd"
+  }
+
+  case object nobank extends ManageOrTrackOption {
+    override val value: String = "nobank"
+  }
+
 }
 

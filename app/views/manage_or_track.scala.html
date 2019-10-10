@@ -67,12 +67,24 @@ bodyClasses = None
     views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.dd.toString, ManageOrTrackOptions.dd.toString, LangMessages.`Manage your Direct Debit`.show, Some(LangMessages.accountAndSortCode(ddDetails).show), None)
     )
     }
+    <!-- No DD -->
+    @{
+    if (!(ddDetailsOption.isDefined)) {
+     views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nodd.toString, ManageOrTrackOptions.nodd.toString, LangMessages.`Set up a Direct Debit`.show, Some(LangMessages.`HMRC will automatically`.show), None)
+    }
+    }
     @{
     bankDetailsOption.map(bankDetails =>
     views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.bank.toString, ManageOrTrackOptions.bank.toString, LangMessages.`Manage your repayment bank account`.show, Some(LangMessages.accountAndSortCode(bankDetails).show), None)
     )
     }
-    @views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.heading.show, Some(LangMessages.`View what HMRC owe you`.show), None)
+    <!-- No Bank -->
+    @{
+    if (!(bankDetailsOption.isDefined)) {
+     views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nobank.toString, ManageOrTrackOptions.nobank.toString, LangMessages.`Set up a repayment bank account`.show, Some(LangMessages.`Tell HMRC where to pay your money`.show), None)
+    }
+    }
+    @views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.`Track your VAT repayments`.show, Some(LangMessages.`View what HMRC owe you`.show), None)
     </div>
    </fieldset>
    <div class="form-field">

@@ -26,10 +26,6 @@ object LangMessages {
     welsh   = "Neges enghreifftiol"
   )
 
-  val heading: Message = Message(
-    english = "Track your VAT repayments"
-  )
-
   val `We are processing your VAT repayment` = Message(
     english = "We are processing your VAT repayment"
   )
@@ -187,5 +183,17 @@ object LangMessages {
   val `Manage your Direct Debit` = Message(
     "Manage your Direct Debit"
   )
+
+  val `Set up a Direct Debit` = Message(
+    "Set up a Direct Debit"
+  )
+
+  val `HMRC will automatically` = Message(
+    "HMRC will automatically collect your VAT Return payments due"
+  )
+
+  val `Set up a repayment bank account` = Message("Set up a repayment bank account")
+
+  val `Tell HMRC where to pay your money` = Message("Tell HMRC where to pay your money")
 
 }
