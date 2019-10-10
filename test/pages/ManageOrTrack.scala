@@ -26,9 +26,11 @@ object ManageOrTrack extends CommonPage {
   val path = "/vat-repayment-tracker-frontend/manage-or-track/vrn/"
 
   def assertPageIsDisplayed(
-      vrn:           Vrn,
-      ddDisplayed:   Boolean = false,
-      bankDisplayed: Boolean = false
+      vrn:             Vrn,
+      ddDisplayed:     Boolean = false,
+      bankDisplayed:   Boolean = false,
+      noddDisplayed:   Boolean = false,
+      nobankDisplayed: Boolean = false
   )
     (implicit wd: WebDriver): Assertion =
     {
@@ -40,6 +42,8 @@ object ManageOrTrack extends CommonPage {
 
       idPresent("dd-label") shouldBe ddDisplayed
       idPresent("bank-label") shouldBe bankDisplayed
+      idPresent("nobank-label") shouldBe nobankDisplayed
+      idPresent("nodd-label") shouldBe noddDisplayed
 
       readMainMessage shouldBe "Manage bank accounts or track repayments"
     }

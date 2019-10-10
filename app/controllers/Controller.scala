@@ -114,8 +114,13 @@ class Controller @Inject() (
               valueInForm.choice match {
                 case Some(choice) => {
                   choice match {
-                    case ManageOrTrackOptions.vrt.value  => Redirect(routes.Controller.showResults(vrn))
-                    case ManageOrTrackOptions.bank.value => Redirect(routes.Controller.viewRepaymentAccount(vrn))
+                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showResults(vrn))
+                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(vrn))
+                    case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(vrn, ReturnPage("manage-or-track")))
+                    case ManageOrTrackOptions.nodd.value =>
+                      for {
+                        nextUrl <- directDebitBackendController.startJourney(vrn)
+                      } yield Redirect(nextUrl.nextUrl)
                     case ManageOrTrackOptions.dd.value =>
                       for {
                         nextUrl <- directDebitBackendController.startJourney(vrn)

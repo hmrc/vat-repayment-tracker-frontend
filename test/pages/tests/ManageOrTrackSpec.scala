@@ -32,12 +32,17 @@ class ManageOrTrackSpec extends ItSpec {
 
   "user is authorised, manage dd option " in {
     setup(false, true)
-    ManageOrTrack.assertPageIsDisplayed(vrn, true, false)
+    ManageOrTrack.assertPageIsDisplayed(vrn, true, false, nobankDisplayed = true)
   }
 
   "user is authorised, manage bank option " in {
     setup(true, false)
-    ManageOrTrack.assertPageIsDisplayed(vrn, false, true)
+    ManageOrTrack.assertPageIsDisplayed(vrn, false, true, noddDisplayed = true)
+  }
+
+  "user is authorised, manage no bank or dd option " in {
+    setup(false, false)
+    ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = true)
   }
 
   "click vrtLabel" in {
