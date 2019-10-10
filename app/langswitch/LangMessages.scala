@@ -189,7 +189,7 @@ object LangMessages {
   )
 
   val `HMRC will automatically` = Message(
-    "HMRC will automatically collect your VAT Return payments due"
+    "HMRC will automatically collect your VAT Return payments when due"
   )
 
   val `Set up a repayment bank account` = Message("Set up a repayment bank account")
