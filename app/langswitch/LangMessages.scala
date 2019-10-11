@@ -46,6 +46,10 @@ object LangMessages {
     english = "VAT Return received on"
   )
 
+  val `Received on`: Message = Message(
+    english = "Received on"
+  )
+
   val `VAT Return period`: Message = Message(
     english = "VAT Return period"
   )
@@ -195,5 +199,9 @@ object LangMessages {
   val `Set up a repayment bank account` = Message("Set up a repayment bank account")
 
   val `Tell HMRC where to pay your money` = Message("Tell HMRC where to pay your money")
+
+  val `View progress` = Message("View progress")
+
+  val `Completed` = Message("Completed")
 
 }

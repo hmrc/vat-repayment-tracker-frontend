@@ -25,20 +25,12 @@ appConfig: ViewConfig
 )
 
 @(
-onePayment: RepaymentData)(
+)(
 implicit
 request: Request[_]
 )
 
 @import viewsHelpers.requestSupport._
 
-<div class="govuk-grid-row govuk-!-margin-bottom-9">
-    <div class="govuk-grid-column-one-half">
-        <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Amount claimed`.show}</h2>
-        <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@onePayment.formatAmount</p>
-    </div>
-    <div class="govuk-grid-column-one-half">
-        <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`VAT Return period`.show}</h2>
-        <p class="heading-h3 govuk-!-padding-top-1" id="period">@onePayment.period</p>
-    </div>
-</div>
+<h3 id="whenpay">@{LangMessages.`What happens next`.show}</h3>
+<p id="whenpay-desc">@{LangMessages.`What happens next description`.show}<a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">@{LangMessages.`Contact HMRC`.show}</a>.</p>

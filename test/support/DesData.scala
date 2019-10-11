@@ -34,6 +34,42 @@ object DesData {
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val directDebitDataNone: DirectDebitData = DirectDebitData(None)
 
+  val repaymentDetail: RepaymentDetailData = RepaymentDetailData(
+    LocalDate.parse("2001-01-01"),
+    LocalDate.parse("2001-01-01"),
+    LocalDate.parse("2001-01-01"),
+    "18AC",
+    "INITIAL",
+    1000,
+    1,
+    100.02
+  )
+
+  val repaymentsDetail: Seq[RepaymentDetailData] = Seq(repaymentDetail)
+
+  //language=JSON
+  val repaymentDetailJson: JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AC",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 100.02
+    }]
+""".stripMargin
+  )
+
+  //language=JSON
+  val repaymentDetailsNotFound: JsValue = Json.parse(
+    s"""{
+   "code": "NOT_FOUND",
+   "reason": "The remote endpoint has indicated that no data can be found"}
+""".stripMargin
+  )
+
   //language=JSON
   val directDebitDataJson: JsValue = Json.parse(
     s"""{

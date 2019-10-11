@@ -16,8 +16,17 @@
 
 package model
 
-case class Person(
-    name: String,
-    age:  Int
-)
+import controllers.ValueClassBinder.valueClassBinder
+import model.TypedVrn.{ClassicVrn, MtdVrn}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Format
+import play.api.mvc.PathBindable
 
+final case class PeriodKey(value: String)
+
+object PeriodKey {
+
+  implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
+  implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
+
+}

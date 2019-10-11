@@ -14,26 +14,13 @@
  * limitations under the License.
  */
 
-package model
-import java.text.DecimalFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+package model.des
 
-final case class RepaymentData(
-    period:             String,
-    amount:             BigDecimal,
-    returnCreationDate: LocalDate,
-    riskingStatus:      String,
-    periodKey:          String) {
+sealed trait RiskingStatus { def value: String }
 
-  val formatAmount: String = {
-    val df = new DecimalFormat("#,###.00")
-    df.format(amount.abs)
-  }
-
-  def formatReturnCreationDate: String = {
-    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    returnCreationDate.format(pattern1)
-  }
-
-}
+case object INITIAL extends RiskingStatus { val value = "INITIAL" }
+case object SENT_FOR_RISKING extends RiskingStatus { val value = "SENT_FOR_RISKING" }
+case object CLAIM_QUERIED extends RiskingStatus { val value = "CLAIM_QUERIED" }
+case object REPAYMENT_ADJUSTED extends RiskingStatus { val value = "REPAYMENT_ADJUSTED" }
+case object ADJUSTMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSTMENT_TO_TAX_DUE" }
+case object REPAYMENT_APPROVED extends RiskingStatus { val value = "REPAYMENT_APPROVED" }

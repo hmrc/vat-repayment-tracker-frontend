@@ -20,17 +20,19 @@
 @import langswitch.LangMessages
 @import model.Vrn
 
+
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
 appConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
+guidance_delayed: views.html.partials.guidance_delayed,
 guidance_in_progress: views.html.partials.guidance_in_progress
 )
 
 @(
-repayments: List[RepaymentData],
+inProgress: List[RepaymentData],
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
 address: Option[String],
@@ -48,17 +50,33 @@ headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
 
-<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:multiple_delayed">
+<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:one_in_progress_multiple_delayed">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message">@{LangMessages.`We are processing your VAT repayments`.show}</h1>
-            <div class="govuk-!-margin-bottom-9">
-                @multiple_repayments(repayments)
+            <div class="govuk-tabs" data-module="govuk-tabs">
+                <ul class="govuk-tabs__list">
+                    <li class="govuk-tabs__list-item" role="presentation">
+                        <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#inProgress" role="tab" aria-controls="inProgress" tab-index="0" aria-selected="true" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
+                    </li>
+                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+                        <a class="govuk-tabs__tab" href="#completed" role="tab" aria-controls="completed" tab-index="1" aria-selected="false" id="tab_delayed">@{LangMessages.`Completed`.show}</a>
+                    </li>
+                </ul>
+                <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
+                    <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
+                    @multiple_repayments(inProgress,vrn)
+                    @guidance_in_progress()
+                </section>
+                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
+                    <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
+                    NO COMPLETED BLAH BLAH
+                </section>
             </div>
-            @guidance_in_progress()
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)
         </div>
     </div>
 </main>
+
 
 }

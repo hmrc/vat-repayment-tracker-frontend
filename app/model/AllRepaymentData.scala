@@ -15,25 +15,8 @@
  */
 
 package model
-import java.text.DecimalFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-final case class RepaymentData(
-    period:             String,
-    amount:             BigDecimal,
-    returnCreationDate: LocalDate,
-    riskingStatus:      String,
-    periodKey:          String) {
-
-  val formatAmount: String = {
-    val df = new DecimalFormat("#,###.00")
-    df.format(amount.abs)
-  }
-
-  def formatReturnCreationDate: String = {
-    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    returnCreationDate.format(pattern1)
-  }
-
-}
+final case class AllRepaymentData(
+    inProgressRepaymentData: List[RepaymentData],
+    completedRepaymentData:  List[RepaymentData]
+)

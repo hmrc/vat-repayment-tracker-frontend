@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package model
-import java.text.DecimalFormat
+package model.des
+
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-final case class RepaymentData(
-    period:             String,
-    amount:             BigDecimal,
-    returnCreationDate: LocalDate,
-    riskingStatus:      String,
-    periodKey:          String) {
+import play.api.libs.json.{Json, OFormat}
 
-  val formatAmount: String = {
-    val df = new DecimalFormat("#,###.00")
-    df.format(amount.abs)
-  }
+final case class RepaymentDetailData(
+    returnCreationDate:     LocalDate,
+    sentForRiskingDate:     LocalDate,
+    lastUpdateReceivedDate: LocalDate,
+    periodKey:              String,
+    riskingStatus:          String,
+    vatToPay_BOX5:          BigDecimal,
+    supplementDelayDays:    Int,
+    originalPostingAmount:  BigDecimal
+)
 
-  def formatReturnCreationDate: String = {
-    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    returnCreationDate.format(pattern1)
-  }
-
+object RepaymentDetailData {
+  implicit val format: OFormat[RepaymentDetailData] = Json.format[RepaymentDetailData]
 }
+
