@@ -26,10 +26,6 @@ object LangMessages {
     welsh   = "Neges enghreifftiol"
   )
 
-  //  val `We are processing your VAT repayment` = Message(
-  //    english = "We are processing your VAT repayment"
-  //  )
-
   val `We are processing your VAT repayments` = Message(
     english = "We are processing your VAT repayments"
   )
@@ -37,14 +33,6 @@ object LangMessages {
   val `Amount claimed`: Message = Message(
     english = "Amount claimed"
   )
-
-  //  val `Estimated repayment date`: Message = Message(
-  //    english = "Estimated repayment date"
-  //  )
-
-  //  val `VAT Return received on`: Message = Message(
-  //    english = "VAT Return received on"
-  //  )
 
   val `Received on`: Message = Message(
     english = "Received on"
@@ -121,29 +109,9 @@ object LangMessages {
     english = "View your business details to update your repayment bank account"
   )
 
-  //  val `Your repayment is delayed`: Message = Message(
-  //    english = "Your repayment is delayed"
-  //  )
-  //
-  //  val `Your repayments are delayed`: Message = Message(
-  //    english = "Your repayments are delayed"
-  //  )
-
-  //  val `What happens next`: Message = Message(
-  //    english = "What happens next"
-  //  )
-
-  //  val `What happens next description`: Message = Message(
-  //    english = "You do not need to do anything right now.  We are working on paying you as soon as possible.  If you need to speak to someone about your repayment, you can "
-  //  )
-
   val `Contact HMRC`: Message = Message(
     english = "contact HMRC"
   )
-
-  //  val `Delayed`: Message = Message(
-  //    english = "Delayed"
-  //  )
 
   val `In progress`: Message = Message(
     english = "In progress"
