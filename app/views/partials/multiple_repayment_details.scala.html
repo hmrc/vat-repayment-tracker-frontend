@@ -17,6 +17,8 @@
 @import config.ViewConfig
 @import model.des._
 @import model.RepaymentData
+@import model.PeriodKey
+@import model.Vrn
 @import langswitch.LangMessages
 
 @this(
@@ -25,7 +27,9 @@ appConfig: ViewConfig
 )
 
 @(
-repayments: List[RepaymentData])(
+repayments: List[RepaymentData],
+vrn : Vrn,
+appender: String)(
 implicit
 request: Request[_]
 )
@@ -37,15 +41,19 @@ request: Request[_]
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">@{LangMessages.`Received on`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`VAT Return period`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`Amount claimed`.show}</th>
+        <th scope="col" class="govuk-table__header"></th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-      <td id="period">@onePayment.period</td>
-      <td id="amount">£@onePayment.formatAmount</td>
+        <td id="receivedOn@{appender}">@onePayment.formatReturnCreationDate</td>
+      <td id="period@{appender}">@onePayment.period</td>
+      <td id="amount@{appender}">£@onePayment.formatAmount</td>
+        <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))'>@{LangMessages.`View progress`.show}</a></td>
     </tr>
     }
   </tbody>

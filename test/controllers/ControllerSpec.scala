@@ -28,6 +28,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsOkSingle(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }

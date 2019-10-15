@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package model
 
-import model.Vrn
-import org.openqa.selenium.WebDriver
-import org.scalatest.Assertion
+import controllers.ValueClassBinder.valueClassBinder
+import model.TypedVrn.{ClassicVrn, MtdVrn}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Format
+import play.api.mvc.PathBindable
 
-object MultipleInProgress extends CommonPage {
+final case class PeriodKey(value: String)
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
+object PeriodKey {
 
-  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "We are processing your VAT repayments"
-    readMainMessage() shouldBe "We are processing your VAT repayments"
-  }
-
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
+  implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
+  implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
 
 }

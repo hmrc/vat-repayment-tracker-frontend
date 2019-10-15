@@ -17,7 +17,7 @@
 package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
-import pages.{ManageOrTrack, OneRepayment}
+import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
 
 class ManageOrTrackSpec extends ItSpec {
@@ -38,6 +38,7 @@ class ManageOrTrackSpec extends ItSpec {
   "user is authorised, manage bank option " in {
     setup(true, false)
     ManageOrTrack.assertPageIsDisplayed(vrn, false, true, noddDisplayed = true)
+
   }
 
   "user is authorised, manage no bank or dd option " in {
@@ -49,7 +50,14 @@ class ManageOrTrackSpec extends ItSpec {
     setup(true, true)
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
-    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56")
+    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_inprogress")
+  }
+
+  "click bankLabel" in {
+    setup(true, true)
+    ManageOrTrack.clickBankLabel()
+    ManageOrTrack.clickContinue()
+    ViewRepaymentAccount.assertPageIsDisplayed(vrn)
   }
 
   private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
@@ -65,6 +73,8 @@ class ManageOrTrackSpec extends ItSpec {
       DesWireMockResponses.ddOk(vrn)
     else
       DesWireMockResponses.ddNotFound(vrn)
+
+    DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
 
     goToViaPath(path)
   }

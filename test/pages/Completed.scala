@@ -14,10 +14,23 @@
  * limitations under the License.
  */
 
-package model
+package pages
 
-case class Person(
-    name: String,
-    age:  Int
-)
+import org.openqa.selenium.{By, WebDriver}
+import org.scalatest.Assertion
 
+object Completed extends CommonDetail {
+
+  def uniqueToPage(implicit wd: WebDriver): Assertion = {
+    readTitle shouldBe "We are processing your VAT repayments"
+    readMainMessage shouldBe "We are processing your VAT repayments"
+  }
+
+  def noRepayments(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
+
+  def viewProgressLink(implicit wd: WebDriver): Assertion = {
+    clickInProgress
+    noRepayments shouldBe "No in progress repayments content here"
+  }
+
+}

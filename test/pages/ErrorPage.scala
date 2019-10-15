@@ -28,6 +28,4 @@ object ErrorPage extends CommonPage {
     currentPath shouldBe s"""${path}${vrn.value}"""
     readTitle shouldBe "Sorry, there is a problem with the service"
   }
-
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 }

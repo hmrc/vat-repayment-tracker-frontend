@@ -17,44 +17,37 @@
 package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
-import pages.{ErrorPage, ManageOrTrack, OneRepayment, ViewRepaymentAccount}
-import play.api.Logger
-import play.api.http.Status
+import pages.{ErrorPage, InProgress}
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
 
-class OneRepaymentSpec extends ItSpec {
-
-  // def frozenTimeString: String = "2027-11-02T16:33:51.880"
+class InProgressSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
   "user is authorised and financial data found" in {
     setup()
-    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56")
-    OneRepayment.checkGuidance
-    OneRepayment.uniqueToPage
+    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_inprogress")
+    InProgress.checkGuidance
+    InProgress.uniqueToPage
   }
 
   "user is authorised and financial data found but partial" in {
     setup(true, true)
-    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56", partialAccount = true)
-    OneRepayment.checkGuidance
-    OneRepayment.uniqueToPage
+    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", partialAccount = true, appender = "_inprogress")
+    InProgress.checkGuidance
+    InProgress.uniqueToPage
   }
 
-  //TODO CHECK VIEW REPAYMENT FROM INTELLIJ
-  "click manager link" in {
+  "click completed link" in {
     setup()
-    OneRepayment.uniqueToPage
-    OneRepayment.clickManageAccount
-    ViewRepaymentAccount.assertPageIsDisplayed("Account holder", "****2222", "667788", vrn)
+    InProgress.completedLink
   }
 
   "user is authorised and address data found" in {
     setup(false)
-    OneRepayment.assertPageIsDisplayed(vrn, false, true, amount = "£5.56")
-    OneRepayment.uniqueToPage
+    InProgress.assertPageIsDisplayed(vrn, false, true, amount = "£5.56", appender = "_inprogress")
+    InProgress.uniqueToPage
   }
 
   "Get ShowResults authorised but wrong vrn should show error page" in {
@@ -74,13 +67,23 @@ class OneRepaymentSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialDataSingleOkNegative(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
     goToViaPath(path)
-    OneRepayment.assertPageIsDisplayed(vrn, amount = "£5.56")
+    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_inprogress")
   }
 
-  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false) = {
+  "multiple inprogress " in {
+    setup(true, true, false)
+    InProgress.uniqueToPage
+    InProgress.completedLink
+  }
+
+  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true) = {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkSingle(vrn)
+    if (singleRepayment)
+      DesWireMockResponses.financialsOkSingle(vrn)
+    else
+      DesWireMockResponses.financialsOkMultiple4(vrn)
     if (useBankDetails) {
       if (partialBankDetails)
         DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
@@ -89,6 +92,10 @@ class OneRepaymentSpec extends ItSpec {
     } else {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
+    if (singleRepayment)
+      DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
+    else
+      DesWireMockResponses.repaymentDetailsMultipleInProgress(vrn)
     goToViaPath(path)
   }
 

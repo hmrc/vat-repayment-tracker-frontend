@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package model.des
 
-import model.Vrn
-import org.openqa.selenium.WebDriver
-import org.scalatest.Assertion
+sealed trait RiskingStatus { def value: String }
 
-object MultipleDelayed extends CommonPage {
-
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
-
-  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "Your repayments are delayed"
-    readMainMessage() shouldBe "Your repayments are delayed"
-  }
-
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
-
-}
+case object INITIAL extends RiskingStatus { val value = "INITIAL" }
+case object SENT_FOR_RISKING extends RiskingStatus { val value = "SENT_FOR_RISKING" }
+case object CLAIM_QUERIED extends RiskingStatus { val value = "CLAIM_QUERIED" }
+case object REPAYMENT_ADJUSTED extends RiskingStatus { val value = "REPAYMENT_ADJUSTED" }
+case object ADJUSTMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSTMENT_TO_TAX_DUE" }
+case object REPAYMENT_APPROVED extends RiskingStatus { val value = "REPAYMENT_APPROVED" }

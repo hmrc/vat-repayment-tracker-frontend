@@ -41,16 +41,6 @@ object DesWireMockResponses {
 
   }
 
-  def financialDataOkTwo(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.financialDataOkTwo(vrn).toString()
-            .stripMargin)))
-
-  }
-
   def financialDataOkVPA(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
@@ -137,6 +127,66 @@ object DesWireMockResponses {
         .withStatus(404)
         .withBody(
           DesData.customerDataNotFound.toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailsNotFound(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(404)
+        .withBody(
+          DesData.repaymentDetailsNotFound.toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailSingleInProgress(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetailSingleInProgress.toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailSingleCompleted(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetailSingleCompleted.toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailsMultipleInProgress(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetailsMultipleInProgress.toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailsMultipleCompleted(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetailsMultipleCompleted.toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetails3Inprogree1Completed(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetails3Inprogree1Completed.toString()
             .stripMargin)))
 
   }

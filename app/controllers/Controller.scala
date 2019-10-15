@@ -29,6 +29,7 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
+import service.PaymentsOrchestratorService
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,13 +46,20 @@ class Controller @Inject() (
     actions:                      Actions,
     viewConfig:                   ViewConfig,
     directDebitBackendController: DirectDebitBackendConnector,
-    bankAccountCocConnector:      BankAccountCocConnector)(
+    bankAccountCocConnector:      BankAccountCocConnector,
+    paymentsOrchestratorService:  PaymentsOrchestratorService)(
     implicit
     ec: ExecutionContext)
 
   extends FrontendBaseController(cc) {
 
   import requestSupport._
+
+  def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
+    actions.securedAction(vrn).async { implicit request =>
+      Logger.warn(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
+      Future.successful(Ok("Not implemented yet"))
+    }
 
   def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
@@ -143,12 +151,14 @@ class Controller @Inject() (
     implicit request: Request[_] =>
       val financialDataF = desConnector.getFinancialData(vrn)
       val customerDataF = desConnector.getCustomerData(vrn)
+      val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
 
       val result = for {
         financialData <- financialDataF
         customerData <- customerDataF
+        repaymentDetails <- repaymentDetailsF
       } yield (
-        computeView(getAllRepaymentData(financialData, vrn), customerData, vrn)
+        computeView(paymentsOrchestratorService.getAllRepaymentData(financialData, repaymentDetails, vrn), customerData, vrn)
       )
 
       result
@@ -156,7 +166,7 @@ class Controller @Inject() (
   }
 
   private def computeView(
-      allRepaymentData: List[RepaymentData],
+      allRepaymentData: AllRepaymentData,
       customerData:     Option[CustomerInformation],
       vrn:              Vrn
   )(implicit request: Request[_]): Result = {
@@ -171,7 +181,35 @@ class Controller @Inject() (
       case None     =>
     }
 
-    if (allRepaymentData.size == 0) {
+    if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
+      Ok(views.inprogress_completed(
+        allRepaymentData.inProgressRepaymentData,
+        allRepaymentData.completedRepaymentData,
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist,
+        vrn
+      ))
+    } else if ((allRepaymentData.inProgressRepaymentData.size == 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
+      Ok(views.completed(
+        allRepaymentData.completedRepaymentData,
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist,
+        vrn
+      ))
+    } else if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size == 0)) {
+      Ok(views.inprogress(
+        allRepaymentData.inProgressRepaymentData,
+        bankDetailsExist,
+        bankDetails,
+        addressDetails,
+        addressDetailsExist,
+        vrn
+      ))
+    } else {
       Ok(
         views.no_vat_repayments(
           bankDetailsExist,
@@ -180,26 +218,8 @@ class Controller @Inject() (
           addressDetailsExist,
           vrn
         ))
-    } else if (allRepaymentData.size == 1) {
-      Ok(views.one_repayment(
-        allRepaymentData(0),
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else {
-      Ok(views.multiple_repayments(
-        allRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    }
 
+    }
   }
 
   def viewRepaymentAccount(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
@@ -214,22 +234,6 @@ class Controller @Inject() (
       }
 
       url
-
-  }
-
-  private def getAllRepaymentData(financialDataOption: Option[FinancialData], vrn: Vrn): List[RepaymentData] = {
-
-    financialDataOption match {
-      case Some(financialData) => {
-
-        financialData.financialTransactions.filter(f => f.chargeType == "VAT Return Credit Charge")
-          .map {
-            ft => RepaymentData(ft.periodKeyDescription, ft.originalAmount)
-
-          }.toList
-      }
-      case None => List[RepaymentData]()
-    }
 
   }
 

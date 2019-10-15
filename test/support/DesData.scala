@@ -34,6 +34,207 @@ object DesData {
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val directDebitDataNone: DirectDebitData = DirectDebitData(None)
 
+  val repaymentDetail: RepaymentDetailData = RepaymentDetailData(
+    LocalDate.parse("2001-01-01"),
+    LocalDate.parse("2001-01-01"),
+    LocalDate.parse("2001-01-01"),
+    "18AC",
+    "INITIAL",
+    1000,
+    1,
+    100.02
+  )
+
+  val repaymentsDetail: Seq[RepaymentDetailData] = Seq(repaymentDetail)
+
+  //language=JSON
+  val repaymentDetailJson: JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AC",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 100.02
+    }]
+""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetailSingleInProgress: JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AC",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 5.56
+    }]
+""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetailSingleCompleted: JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AC",
+        "riskingStatus": "ADJUSTMENT_TO_TAX_DUE",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 5.56
+    }]
+""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetailsMultipleInProgress: JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AA",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 796
+    },
+     {
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AB",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 3.59
+         },
+     {
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "2001-01-01",
+             "periodKey": "18AC",
+             "riskingStatus": "SENT_FOR_RISKING",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 10169.45
+         },
+          {
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "2001-01-01",
+             "periodKey": "18AD",
+             "riskingStatus": "CLAIM_QUERIED",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 796
+              }]
+""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetailsMultipleCompleted(): JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AA",
+        "riskingStatus": "REPAYMENT_ADJUSTED",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 796
+    },
+     {
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AB",
+        "riskingStatus": "REPAYMENT_ADJUSTED",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 3.59
+         },
+     {
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "2001-01-01",
+             "periodKey": "18AC",
+             "riskingStatus": "ADJUSTMENT_TO_TAX_DUE",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 10169.45
+         },
+          {
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "2001-01-01",
+             "periodKey": "18AD",
+             "riskingStatus": "REPAYMENT_APPROVED",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 796
+              }]
+""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetails3Inprogree1Completed(): JsValue = Json.parse(
+    s"""[{
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AA",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 796
+    },
+     {
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AB",
+        "riskingStatus": "SENT_FOR_RISKING",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 3.59
+         },
+     {
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "2001-01-01",
+             "periodKey": "18AC",
+             "riskingStatus": "CLAIM_QUERIED",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 10169.45
+         },
+          {
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "2001-01-01",
+             "periodKey": "18AD",
+             "riskingStatus": "REPAYMENT_APPROVED",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 797
+              }]
+""".stripMargin
+  )
+
+  //language=JSON
+  val repaymentDetailsNotFound: JsValue = Json.parse(
+    s"""{
+   "code": "NOT_FOUND",
+   "reason": "The remote endpoint has indicated that no data can be found"}
+""".stripMargin
+  )
+
   //language=JSON
   val directDebitDataJson: JsValue = Json.parse(
     s"""{
@@ -873,7 +1074,7 @@ object DesData {
                                                            "chargeReference": "XV002616013469",
                                                            "mainTransaction": "4733",
                                                            "subTransaction": "1174",
-                                                           "originalAmount": 796.0,
+                                                           "originalAmount": 797.0,
                                                            "outstandingAmount": 796.0,
                                                            "accruedInterest": 23.45,
                                                            "items": [
@@ -1001,7 +1202,7 @@ object DesData {
                                                            "chargeReference": "XV002616013469",
                                                            "mainTransaction": "4733",
                                                            "subTransaction": "1174",
-                                                           "originalAmount": 796.0,
+                                                           "originalAmount": 797.0,
                                                            "outstandingAmount": 796.0,
                                                            "accruedInterest": 23.45,
                                                            "items": [

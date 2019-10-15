@@ -18,7 +18,7 @@ package connectors
 
 import javax.inject.{Inject, Singleton}
 import model.Vrn
-import model.des.{CustomerInformation, DirectDebitData, FinancialData}
+import model.des.{CustomerInformation, DirectDebitData, FinancialData, RepaymentDetailData}
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,6 +39,7 @@ class PaymentsOrchestratorConnector @Inject() (
   private val financialsUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.financials-url")
   private val customerUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.customer-url")
   private val ddUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.dd-url")
+  private val repaymentDetailsUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.repayment-details-url")
 
   import req.RequestSupport._
 
@@ -57,13 +58,17 @@ class PaymentsOrchestratorConnector @Inject() (
   }
 
   def getDDData(vrn: Vrn)(implicit request: Request[_]): Future[Option[DirectDebitData]] = {
-
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-
     Logger.debug(s"Calling payments orchestrator for des api 1396 for vrn ${vrn}")
     val getDDURL: String = s"$serviceURL$ddUrl/${vrn.value}"
     Logger.debug(s"""Calling payments orchestrator for des api 1396 with url ${getDDURL}""")
     httpClient.GET[Option[DirectDebitData]](getDDURL)
+  }
+
+  def getRepaymentsDetails(vrn: Vrn)(implicit request: Request[_]): Future[Option[Seq[RepaymentDetailData]]] = {
+    Logger.debug(s"Calling payments orchestrator for des api 1533 for vrn ${vrn}")
+    val getRDURL: String = s"$serviceURL$repaymentDetailsUrl/${vrn.value}"
+    Logger.debug(s"""Calling payments orchestrator for des api 1533 with url ${getRDURL}""")
+    httpClient.GET[Option[Seq[RepaymentDetailData]]](getRDURL)
   }
 
 }
