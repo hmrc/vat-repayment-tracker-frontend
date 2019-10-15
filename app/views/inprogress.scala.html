@@ -27,7 +27,6 @@ viewsHelpers: views.ViewsHelpers,
 appConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
-guidance_delayed: views.html.partials.guidance_delayed,
 guidance_in_progress: views.html.partials.guidance_in_progress
 )
 
@@ -60,17 +59,17 @@ bodyClasses = None
                         <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#inProgress" role="tab" aria-controls="inProgress" tab-index="0" aria-selected="true" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
                     </li>
                     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
-                        <a class="govuk-tabs__tab" href="#completed" role="tab" aria-controls="completed" tab-index="1" aria-selected="false" id="tab_delayed">@{LangMessages.`Completed`.show}</a>
+                        <a class="govuk-tabs__tab" href="#completed" role="tab" aria-controls="completed" tab-index="1" aria-selected="false" id="tab_completed">@{LangMessages.`Completed`.show}</a>
                     </li>
                 </ul>
                 <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
-                    @multiple_repayments(inProgress,vrn)
+                    @multiple_repayments(inProgress,vrn,"_inprogress")
                     @guidance_in_progress()
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
-                    NO COMPLETED BLAH BLAH
+                    <p id="no-repayments">@{LangMessages.`No completed repayments content here`.show}</p>
                 </section>
             </div>
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)

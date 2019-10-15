@@ -33,5 +33,4 @@ object NoVatRepaymentsFoundPage extends CommonPage {
     readAccSortCode() shouldBe "Sort code: 66 77 88"
   }
 
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
 }

@@ -28,7 +28,8 @@ appConfig: ViewConfig
 
 @(
 repayments: List[RepaymentData],
-vrn : Vrn)(
+vrn : Vrn,
+appender: String)(
 implicit
 request: Request[_]
 )
@@ -49,9 +50,9 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td id="receivedOn">@onePayment.formatReturnCreationDate</td>
-      <td id="period">@onePayment.period</td>
-      <td id="amount">£@onePayment.formatAmount</td>
+        <td id="receivedOn@{appender}">@onePayment.formatReturnCreationDate</td>
+      <td id="period@{appender}">@onePayment.period</td>
+      <td id="amount@{appender}">£@onePayment.formatAmount</td>
         <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))'>@{LangMessages.`View progress`.show}</a></td>
     </tr>
     }

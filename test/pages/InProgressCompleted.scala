@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package pages.tests
-
-/* Copyright 2019 HM Revenue & Customs
+/*
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,31 +30,15 @@ package pages.tests
  * limitations under the License.
  */
 
-import model.{EnrolmentKeys, Vrn}
-import pages.{MultipleInProgress}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
+package pages
 
-class MultipleInProgressSpec extends ItSpec {
+import org.openqa.selenium.WebDriver
+import org.scalatest.Assertion
 
-  val vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
+object InProgressCompleted extends CommonDetail {
 
-  "user is authorised and financial data found - to date" in {
-    setup()
-    MultipleInProgress.assertPageIsDisplayed(vrn)
-  }
-
-  private def setup(useBankDetails: Boolean = true) = {
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkMultiple4(vrn)
-    if (useBankDetails) {
-      DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    } else {
-      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
-    }
-
-    goToViaPath(path)
+  def noRepayments(implicit webDriver: WebDriver): Assertion = {
+    idPresent("no-repayments") shouldBe false
   }
 
 }
-

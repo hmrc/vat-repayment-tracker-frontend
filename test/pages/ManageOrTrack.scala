@@ -19,7 +19,6 @@ package pages
 import model.Vrn
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
-import pages.ViewRepaymentAccount.{path, readTitle}
 
 object ManageOrTrack extends CommonPage {
 
@@ -50,17 +49,12 @@ object ManageOrTrack extends CommonPage {
 
   def dd(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("dd-label")).getText)
 
-  def idPresent(id: String)(implicit webDriver: WebDriver) = try {
-    webDriver.findElement(By.id(id))
-    true
-  } catch {
-    case _: Throwable => false
-  }
-
   def bank(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("bank-label")).getText)
 
   def vrt(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("vrt-label")).getText)
 
   def clickVrtLabel()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("vrt-label")).click())
+
+  def clickBankLabel()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("bank-label")).click())
 
 }

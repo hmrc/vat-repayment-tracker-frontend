@@ -16,20 +16,21 @@
 
 package pages
 
-import model.Vrn
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 
-object MultipleInProgress extends CommonPage {
+object Completed extends CommonDetail {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
-
-  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
+  def uniqueToPage(implicit wd: WebDriver): Assertion = {
     readTitle shouldBe "We are processing your VAT repayments"
-    readMainMessage() shouldBe "We are processing your VAT repayments"
+    readMainMessage shouldBe "We are processing your VAT repayments"
   }
 
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
+  def noRepayments(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
+
+  def viewProgressLink(implicit wd: WebDriver): Assertion = {
+    clickInProgress
+    noRepayments shouldBe "No in progress repayments content here"
+  }
 
 }

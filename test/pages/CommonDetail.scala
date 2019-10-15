@@ -27,16 +27,21 @@ trait CommonDetail extends CommonPage {
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
+  def clickInProgress()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())
+
+  def clickCompleted()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
+
   def assertPageIsDisplayed(
       vrn:            Vrn,
       checkBank:      Boolean = true,
       checkAddress:   Boolean = false,
       amount:         String,
-      partialAccount: Boolean = false)
+      partialAccount: Boolean = false,
+      appender:       String)
     (implicit wd: WebDriver): Assertion =
     {
       currentPath shouldBe s"""${path}${vrn.value}"""
-      readAmount shouldBe amount
+      readAmount(appender) shouldBe amount
       if (checkBank) {
         if (partialAccount)
           readAccName shouldBe "Name on account:"
@@ -50,19 +55,15 @@ trait CommonDetail extends CommonPage {
         Logger.error(readAddress())
         readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
       }
-      readPeriod shouldBe "March 2018"
+      readPeriod(appender) shouldBe "March 2018"
 
     }
 
-  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
-
   def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("amount")).getText)
+  def readAmount(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"amount${appender}")).getText)
 
-  def readRepayDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("repay-date")).getText)
+  def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"received-date${appender}")).getText)
 
-  def readReceivedDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("received-date")).getText)
-
-  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("period")).getText)
+  def readPeriod(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"period${appender}")).getText)
 }

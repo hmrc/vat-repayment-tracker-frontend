@@ -26,9 +26,9 @@ object LangMessages {
     welsh   = "Neges enghreifftiol"
   )
 
-  val `We are processing your VAT repayment` = Message(
-    english = "We are processing your VAT repayment"
-  )
+  //  val `We are processing your VAT repayment` = Message(
+  //    english = "We are processing your VAT repayment"
+  //  )
 
   val `We are processing your VAT repayments` = Message(
     english = "We are processing your VAT repayments"
@@ -38,13 +38,13 @@ object LangMessages {
     english = "Amount claimed"
   )
 
-  val `Estimated repayment date`: Message = Message(
-    english = "Estimated repayment date"
-  )
+  //  val `Estimated repayment date`: Message = Message(
+  //    english = "Estimated repayment date"
+  //  )
 
-  val `VAT Return received on`: Message = Message(
-    english = "VAT Return received on"
-  )
+  //  val `VAT Return received on`: Message = Message(
+  //    english = "VAT Return received on"
+  //  )
 
   val `Received on`: Message = Message(
     english = "Received on"
@@ -59,7 +59,10 @@ object LangMessages {
   )
 
   val `When we will repay you description`: Message = Message(
-    english = "We will usually repay you within 30 days of HMRC receiving your VAT Return. If you need to speak to someone about your repayment, only contact HMRC after 30 days have passed."
+    english = "We will usually repay you within 30 days of HMRC receiving your VAT Return. If you need to speak to someone about your repayment, only "
+  )
+  val `after 30 days have passed.`: Message = Message(
+    english = " after 30 days have passed."
   )
 
   val `No VAT repayments in progress`: Message = Message(
@@ -118,29 +121,29 @@ object LangMessages {
     english = "View your business details to update your repayment bank account"
   )
 
-  val `Your repayment is delayed`: Message = Message(
-    english = "Your repayment is delayed"
-  )
+  //  val `Your repayment is delayed`: Message = Message(
+  //    english = "Your repayment is delayed"
+  //  )
+  //
+  //  val `Your repayments are delayed`: Message = Message(
+  //    english = "Your repayments are delayed"
+  //  )
 
-  val `Your repayments are delayed`: Message = Message(
-    english = "Your repayments are delayed"
-  )
+  //  val `What happens next`: Message = Message(
+  //    english = "What happens next"
+  //  )
 
-  val `What happens next`: Message = Message(
-    english = "What happens next"
-  )
-
-  val `What happens next description`: Message = Message(
-    english = "You do not need to do anything right now.  We are working on paying you as soon as possible.  If you need to speak to someone about your repayment, you can "
-  )
+  //  val `What happens next description`: Message = Message(
+  //    english = "You do not need to do anything right now.  We are working on paying you as soon as possible.  If you need to speak to someone about your repayment, you can "
+  //  )
 
   val `Contact HMRC`: Message = Message(
     english = "contact HMRC"
   )
 
-  val `Delayed`: Message = Message(
-    english = "Delayed"
-  )
+  //  val `Delayed`: Message = Message(
+  //    english = "Delayed"
+  //  )
 
   val `In progress`: Message = Message(
     english = "In progress"
@@ -203,5 +206,9 @@ object LangMessages {
   val `View progress` = Message("View progress")
 
   val `Completed` = Message("Completed")
+
+  val `No completed repayments content here` = Message("No completed repayments content here")
+
+  val `No in progress repayments content here` = Message("No in progress repayments content here")
 
 }

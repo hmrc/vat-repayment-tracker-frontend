@@ -16,13 +16,10 @@
 
 package service
 
-import java.time.{Clock, LocalDate}
-
 import connectors.PaymentsOrchestratorConnector
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model.{AllRepaymentData, RepaymentData, Vrn}
-import play.api.Logger
 import views.Views
 
 import scala.concurrent.ExecutionContext

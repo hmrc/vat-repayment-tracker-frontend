@@ -105,6 +105,8 @@ trait CommonPage
 
   def readAccNumber()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
+  def readTitle()(implicit webDriver: WebDriver): String = webDriver.getTitle
+
   def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion = {
     globalErrors shouldBe defined
   }
@@ -119,6 +121,13 @@ trait CommonPage
 
   def containsText(text: String)(implicit driver: WebDriver): Boolean = {
     probing(_.getPageSource.contains(text))
+  }
+
+  def idPresent(id: String)(implicit webDriver: WebDriver) = try {
+    webDriver.findElement(By.id(id))
+    true
+  } catch {
+    case _: Throwable => false
   }
 
 }
