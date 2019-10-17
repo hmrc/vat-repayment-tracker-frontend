@@ -18,7 +18,7 @@ package support
 
 import java.time.LocalDate
 
-import model.Vrn
+import model.{Vrn, VrtRepaymentDetailData}
 import model.des._
 import play.api.libs.json.{JsValue, Json}
 
@@ -43,6 +43,27 @@ object DesData {
     1000,
     1,
     100.02
+  )
+
+  val vrn: Vrn = Vrn("2345678891")
+  val vrtRepaymentDetailData: VrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
+
+  //language=JSON
+  val vrtRepaymentDetailDataJson: JsValue = Json.parse(
+    s"""{
+        "creationDate": "${LocalDate.now()}",
+        "vrn": "2345678891",
+        "repaymentDetailsData": {
+        "returnCreationDate": "2001-01-01",
+        "sentForRiskingDate": "2001-01-01",
+        "lastUpdateReceivedDate": "2001-01-01",
+        "periodKey": "18AC",
+        "riskingStatus": "INITIAL",
+        "vatToPay_BOX5": 1000,
+        "supplementDelayDays": 1,
+        "originalPostingAmount": 100.02
+    }
+  }""".stripMargin
   )
 
   val repaymentsDetail: Seq[RepaymentDetailData] = Seq(repaymentDetail)

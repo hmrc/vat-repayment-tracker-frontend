@@ -16,28 +16,36 @@
 
 package service
 
-import connectors.PaymentsOrchestratorConnector
+import java.time.LocalDate
+import connectors.VatRepaymentTrackerBackendConnector
 import javax.inject.{Inject, Singleton}
 import model.des._
-import model.{AllRepaymentData, RepaymentData, Vrn}
+import model.{AllRepaymentData, RepaymentData, Vrn, VrtRepaymentDetailData}
+import play.api.Logger
+import play.api.mvc.Request
 import views.Views
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PaymentsOrchestratorService @Inject() (
-    desConnector: PaymentsOrchestratorConnector,
-    views:        Views)
-  (
-    implicit
-    ec: ExecutionContext) {
+class VrtService @Inject() (
+    views:                               Views,
+    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector
+)
+  (implicit ec: ExecutionContext) {
 
-  def getAllRepaymentData(financialData: Option[FinancialData], repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn): AllRepaymentData = {
+  def getAllRepaymentData(financialData: Option[FinancialData], repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn)(implicit request: Request[_]): AllRepaymentData = {
 
     financialData match {
       case Some(fd) => {
         repaymentDetails match {
           case Some(rd) => {
+            for {
+              r <- rd
+              vrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, r)
+              res = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
+            } yield (Logger.debug(s"cached vat repayment data for vrn : ${vrn}"))
+
             val data = getRepaymentData(fd, rd, vrn)
             val currentData: List[RepaymentData] = data.filter(f => f.riskingStatus == INITIAL.value || f.riskingStatus == SENT_FOR_RISKING.value || f.riskingStatus == CLAIM_QUERIED.value).toList
             val completed: List[RepaymentData] = data.filter(f => f.riskingStatus == REPAYMENT_ADJUSTED.value || f.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value || f.riskingStatus == REPAYMENT_APPROVED.value).toList
@@ -60,7 +68,7 @@ class PaymentsOrchestratorService @Inject() (
       fd <- financialData.financialTransactions.filter(f => f.chargeType == "VAT Return Credit Charge")
       rd <- repaymentDetails
       if (fd.periodKey == rd.periodKey)
-    } yield (RepaymentData(fd.periodKeyDescription, fd.originalAmount, rd.returnCreationDate, rd.riskingStatus, fd.periodKeyDescription))
+    } yield (RepaymentData(fd.periodKeyDescription, fd.originalAmount, rd.returnCreationDate, rd.riskingStatus, fd.periodKey))
 
   }
 

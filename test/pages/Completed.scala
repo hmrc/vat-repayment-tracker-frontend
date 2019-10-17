@@ -33,4 +33,13 @@ object Completed extends CommonDetail {
     noRepayments shouldBe "No in progress repayments content here"
   }
 
+  def checktabs(implicit wd: WebDriver): Assertion = {
+
+    idPresent("completed-exist") shouldBe true
+    idPresent("inprogress-exist") shouldBe false
+    idPresent("completed-none") shouldBe false
+    idPresent("inprogress-none") shouldBe true
+
+  }
+
 }

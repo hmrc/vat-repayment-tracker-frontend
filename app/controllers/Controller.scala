@@ -17,7 +17,7 @@
 package controllers
 
 import config.ViewConfig
-import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector}
+import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector, VatRepaymentTrackerBackendConnector}
 import controllers.action.Actions
 import format.{AddressFormter, DesFormatter}
 import javax.inject.{Inject, Singleton}
@@ -29,25 +29,26 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
-import service.PaymentsOrchestratorService
+import service.VrtService
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
-    cc:                           ControllerComponents,
-    errorHandler:                 ErrorHandler,
-    views:                        Views,
-    desConnector:                 PaymentsOrchestratorConnector,
-    requestSupport:               RequestSupport,
-    addressFormater:              AddressFormter,
-    desFormatter:                 DesFormatter,
-    actions:                      Actions,
-    viewConfig:                   ViewConfig,
-    directDebitBackendController: DirectDebitBackendConnector,
-    bankAccountCocConnector:      BankAccountCocConnector,
-    paymentsOrchestratorService:  PaymentsOrchestratorService)(
+    cc:                                  ControllerComponents,
+    errorHandler:                        ErrorHandler,
+    views:                               Views,
+    desConnector:                        PaymentsOrchestratorConnector,
+    requestSupport:                      RequestSupport,
+    addressFormater:                     AddressFormter,
+    desFormatter:                        DesFormatter,
+    actions:                             Actions,
+    viewConfig:                          ViewConfig,
+    directDebitBackendController:        DirectDebitBackendConnector,
+    bankAccountCocConnector:             BankAccountCocConnector,
+    paymentsOrchestratorService:         VrtService,
+    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector)(
     implicit
     ec: ExecutionContext)
 
@@ -58,7 +59,12 @@ class Controller @Inject() (
   def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
       Logger.warn(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
-      Future.successful(Ok("Not implemented yet"))
+      for {
+        vrd <- vatRepaymentTrackerBackendConnector.find(vrn, periodKey)
+      } yield {
+        vrd.map (m => Logger.debug(s"Returned ${m.toString}"))
+        Ok("Not implemented yet")
+      }
     }
 
   def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage): Action[AnyContent] =

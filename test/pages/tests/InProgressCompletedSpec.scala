@@ -45,14 +45,14 @@ class InProgressCompletedSpec extends ItSpec {
     setup()
     InProgress.checkGuidance
     InProgress.uniqueToPage
-    InProgressCompleted.noRepayments
+    InProgressCompleted.checktabs
   }
 
   "click completed link" in {
     setup()
     InProgress.clickCompleted
     Completed.uniqueToPage
-    InProgressCompleted.noRepayments
+    InProgressCompleted.checktabs
   }
 
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false) = {

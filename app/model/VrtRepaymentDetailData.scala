@@ -16,16 +16,14 @@
 
 package model
 
-import controllers.ValueClassBinder.valueClassBinder
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Format
-import play.api.mvc.PathBindable
+import java.time.LocalDate
 
-final case class PeriodKey(value: String)
+import play.api.libs.json.{Json, OFormat}
+import model.des.RepaymentDetailData
 
-object PeriodKey {
+final case class VrtRepaymentDetailData(_id: Option[String], creationDate: LocalDate, vrn: Vrn, repaymentDetailsData: RepaymentDetailData)
 
-  implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
-  implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
+object VrtRepaymentDetailData {
+  implicit val format: OFormat[VrtRepaymentDetailData] = Json.format[VrtRepaymentDetailData]
 
 }

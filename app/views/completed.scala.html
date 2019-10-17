@@ -65,10 +65,12 @@ bodyClasses = None
                 <section class="govuk-tabs__panel" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
+                    <div id="completed-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
                     <p id="no-repayments">@{LangMessages.`No in progress repayments content here`.show}</p>
+                    <div id="inprogress-none"></div>
                 </section>
             </div>
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)

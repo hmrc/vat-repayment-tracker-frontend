@@ -18,6 +18,7 @@ package pages
 
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
+import pages.Completed.idPresent
 
 object InProgress extends CommonDetail {
 
@@ -38,6 +39,13 @@ object InProgress extends CommonDetail {
   def completedLink(implicit wd: WebDriver): Assertion = {
     clickCompleted
     noRepayments shouldBe "No completed repayments content here"
+  }
+
+  def checktabs(implicit wd: WebDriver): Assertion = {
+    idPresent("completed-exist") shouldBe false
+    idPresent("inprogress-exist") shouldBe true
+    idPresent("completed-none") shouldBe true
+    idPresent("inprogress-none") shouldBe false
   }
 
 }
