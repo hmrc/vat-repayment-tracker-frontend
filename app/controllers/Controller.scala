@@ -16,12 +16,14 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import config.ViewConfig
 import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector, VatRepaymentTrackerBackendConnector}
 import controllers.action.Actions
-import format.{AddressFormter, DesFormatter}
+import formaters.{AddressFormter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
-import langswitch.ErrorMessages
+import langswitch.{ErrorMessages, LangMessages}
 import model._
 import model.des.{CustomerInformation, _}
 import play.api.Logger
@@ -48,7 +50,9 @@ class Controller @Inject() (
     directDebitBackendController:        DirectDebitBackendConnector,
     bankAccountCocConnector:             BankAccountCocConnector,
     paymentsOrchestratorService:         VrtService,
-    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector)(
+    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
+    viewProgressFormatter:               ViewProgressFormatter,
+    showResultsFormatter:                ShowResultsFormatter)(
     implicit
     ec: ExecutionContext)
 
@@ -56,14 +60,13 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
+  def viewProgress(vrn: Vrn, periodKey: PeriodKey, period: Period): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
-      Logger.warn(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
+      Logger.debug(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}, period: ${period}""")
       for {
         vrd <- vatRepaymentTrackerBackendConnector.find(vrn, periodKey)
       } yield {
-        vrd.map (m => Logger.debug(s"Returned ${m.toString}"))
-        Ok("Not implemented yet")
+        viewProgressFormatter.computeViewProgress(vrn, vrd, period)
       }
     }
 
@@ -164,68 +167,11 @@ class Controller @Inject() (
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
       } yield (
-        computeView(paymentsOrchestratorService.getAllRepaymentData(financialData, repaymentDetails, vrn), customerData, vrn)
+        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(financialData, repaymentDetails, vrn), customerData, vrn)
       )
 
       result
 
-  }
-
-  private def computeView(
-      allRepaymentData: AllRepaymentData,
-      customerData:     Option[CustomerInformation],
-      vrn:              Vrn
-  )(implicit request: Request[_]): Result = {
-
-    val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
-    val bankDetails = desFormatter.getBankDetails(customerData)
-    val addressDetails = desFormatter.getAddressDetails(customerData)
-    val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
-
-    bankDetails match {
-      case Some(bd) => if (!(bd.accountHolderName.isDefined)) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
-      case None     =>
-    }
-
-    if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
-      Ok(views.inprogress_completed(
-        allRepaymentData.inProgressRepaymentData,
-        allRepaymentData.completedRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else if ((allRepaymentData.inProgressRepaymentData.size == 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
-      Ok(views.completed(
-        allRepaymentData.completedRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size == 0)) {
-      Ok(views.inprogress(
-        allRepaymentData.inProgressRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else {
-      Ok(
-        views.no_vat_repayments(
-          bankDetailsExist,
-          bankDetails,
-          addressDetails,
-          addressDetailsExist,
-          vrn
-        ))
-
-    }
   }
 
   def viewRepaymentAccount(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {

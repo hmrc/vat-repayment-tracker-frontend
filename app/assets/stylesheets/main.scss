@@ -239,3 +239,59 @@ a {
         font-weight: 700;
     }
 }
+
+.hmrc-timeline {
+  border-left: 3px solid #005ea5;
+  margin: 0;
+  padding: 0;
+}
+
+.hmrc-timeline-event {
+  padding-bottom: 20px;
+  padding-left: 20px;
+  position: relative;
+  list-style: none;
+}
+
+.hmrc-timeline-event {
+  padding-bottom: 20px;
+  padding-left: 20px;
+  position: relative;
+  list-style: none;
+}
+
+@media (min-width: 40.0625em) {
+  .hmrc-timeline-event {
+    padding-bottom: 30px;
+  }
+}
+
+.hmrc-timeline-event:last-child {
+  padding-bottom: 0;
+}
+
+.hmrc-timeline-event-title {
+  margin-bottom: 5px;
+}
+
+@media (min-width: 40.0625em) {
+  .hmrc-timeline-event-title {
+    margin-bottom: 5px;
+  }
+}
+
+.hmrc-timeline-event-title:before {
+  background-color: #005ea5;
+  content: '';
+  height: 3px;
+  left: 0;
+  top: .5em;
+  position: absolute;
+  width: 12px;
+}
+
+.hmrc-timeline-event-meta {
+  display: block;
+  color: #6f777b;
+}
+

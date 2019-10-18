@@ -8,4 +8,4 @@ GET        /language/:language                                      @langswitch.
 POST       /manage-or-track-submit                                  controllers.Controller.manageOrTrackSubmit
 GET        /signout                                                 controllers.Controller.signout
 GET        /bank-account-coc/start-journey/vrn/:vrn/:returnPage     controllers.Controller.startBankAccountCocJourney(vrn : Vrn, returnPage : ReturnPage)
-GET        /view-progress/vrn/:vrn/:periodKey                       controllers.Controller.viewProgress(vrn : Vrn, periodKey : PeriodKey)
+GET        /view-progress/vrn/:vrn/:periodKey/:period               controllers.Controller.viewProgress(vrn : Vrn, periodKey : PeriodKey, period: Period)

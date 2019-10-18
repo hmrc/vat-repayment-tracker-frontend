@@ -17,7 +17,7 @@
 package langswitch
 
 import model.des.BankDetails
-import format.DesFormatter
+import formaters.DesFormatter
 
 object LangMessages {
 
@@ -178,5 +178,23 @@ object LangMessages {
   val `No completed repayments content here` = Message("No completed repayments content here")
 
   val `No in progress repayments content here` = Message("No in progress repayments content here")
+
+  val `Your repayment is being processed` = Message("Your repayment is being processed")
+
+  val `Your repayment is delayed` = Message("Your repayment is delayed")
+
+  val `VAT Return received on`: Message = Message(
+    english = "VAT Return received on"
+  )
+
+  val `Estimated repayment date`: Message = Message(
+    english = "Estimated repayment date"
+  )
+
+  val `What's happened so far` = Message("What's happened so far")
+
+  val `You must now pay some VAT` = Message("You most now pay some VAT")
+
+  val `Your repayment is complete` = Message("Your repayment is complete")
 
 }

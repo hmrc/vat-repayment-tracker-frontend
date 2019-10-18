@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package format
+package formaters
 
 import javax.inject.{Inject, Singleton}
 import model.des.Address

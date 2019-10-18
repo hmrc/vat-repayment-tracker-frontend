@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package format
+package formaters
+
+import java.text.DecimalFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
 import model.des.{BankDetails, CustomerInformation, DirectDebitData, DirectDebitDetails}
@@ -81,6 +85,16 @@ class DesFormatter @Inject() (addressFormater: AddressFormter) {
       ad <- ppob.address
     } yield addressFormater.getFormattedAddress(ad)
 
+  }
+
+  def formatAmount(amount: BigDecimal): String = {
+    val df = new DecimalFormat("#,###.00")
+    df.format(amount.abs)
+  }
+
+  def formatDate(date: LocalDate): String = {
+    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    date.format(pattern1)
   }
 
 }
