@@ -21,10 +21,16 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
+import langswitch.LangMessages
 import model.des.{BankDetails, CustomerInformation, DirectDebitData, DirectDebitDetails}
+import play.api.Logger
+import play.api.mvc.Request
+import req.RequestSupport
 
 @Singleton
-class DesFormatter @Inject() (addressFormater: AddressFormter) {
+class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: RequestSupport) {
+
+  import requestSupport._
 
   def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
 
@@ -95,6 +101,24 @@ class DesFormatter @Inject() (addressFormater: AddressFormter) {
   def formatDate(date: LocalDate): String = {
     val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
     date.format(pattern1)
+  }
+
+  def formatPeriodKey(periodKey: String)(implicit request: Request[_]) = {
+    val year: String = "20" + periodKey.take(2)
+    val quarter: String = periodKey.takeRight(2)
+
+    val quarterDes = quarter match {
+      case "AA" => LangMessages.period_AA.show
+      case "AB" => LangMessages.period_AB.show
+      case "AC" => LangMessages.period_AC.show
+      case "AD" => LangMessages.period_AD.show
+      case _    => throw new RuntimeException(s"Invalid periodkey : ${periodKey}")
+    }
+
+    val periodKeyDescription = s"""${quarterDes} ${year}"""
+
+    Logger.debug(s"""Received ${periodKey} returning ${periodKeyDescription}""")
+    periodKeyDescription
   }
 
 }

@@ -19,7 +19,7 @@ package model
 import java.time.LocalDate
 
 final case class WhatsHappendSoFar(
-    title:       String,
     date:        LocalDate,
+    title:       String,
     description: String
 )

@@ -17,10 +17,12 @@
 package service
 
 import java.time.LocalDate
+
 import connectors.VatRepaymentTrackerBackendConnector
+import formaters.DesFormatter
 import javax.inject.{Inject, Singleton}
 import model.des._
-import model.{AllRepaymentData, RepaymentData, Vrn, VrtRepaymentDetailData}
+import model._
 import play.api.Logger
 import play.api.mvc.Request
 import views.Views
@@ -30,50 +32,50 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class VrtService @Inject() (
     views:                               Views,
-    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector
+    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
+    desFormatter:                        DesFormatter
 )
   (implicit ec: ExecutionContext) {
 
-  def getAllRepaymentData(financialData: Option[FinancialData], repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn)(implicit request: Request[_]): AllRepaymentData = {
+  def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn)(implicit request: Request[_]): AllRepaymentData = {
 
-    financialData match {
-      case Some(fd) => {
-        repaymentDetails match {
-          case Some(rd) => {
-            for {
-              r <- rd
-              vrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, r)
-              res = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
-            } yield (Logger.debug(s"cached vat repayment data for vrn : ${vrn}"))
+    repaymentDetails match {
+      case Some(rd) => {
+        for {
+          r <- rd
+          vrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, r)
+          res = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
+        } yield (Logger.debug(s"cached vat repayment data for vrn : ${vrn}"))
 
-            val data = getRepaymentData(fd, rd, vrn)
-            val currentData: List[RepaymentData] = data.filter(f => f.riskingStatus == INITIAL.value || f.riskingStatus == SENT_FOR_RISKING.value || f.riskingStatus == CLAIM_QUERIED.value).toList
-            val completed: List[RepaymentData] = data.filter(f => f.riskingStatus == REPAYMENT_ADJUSTED.value || f.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value || f.riskingStatus == REPAYMENT_APPROVED.value).toList
-            AllRepaymentData(
-              currentData,
-              completed
-            )
-          }
-          case None => dealWithNodata
-        }
+        val data = getRepaymentData(rd, vrn)
+        // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
+        val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == INITIAL.value || f.riskingStatus == SENT_FOR_RISKING.value || f.riskingStatus == CLAIM_QUERIED.value).map(m =>
+          RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
+        val completed: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == REPAYMENT_ADJUSTED.value || f.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value || f.riskingStatus == REPAYMENT_APPROVED.value).map(m =>
+          RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
 
+        //if something is completed, remove from the current list
+        AllRepaymentData(
+          currentData.filterNot(completed.contains(_)),
+          completed
+        )
       }
       case None => dealWithNodata
     }
+
   }
 
-  private def getRepaymentData(financialData: FinancialData, repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn): Seq[RepaymentData] = {
+  //f.chargeType == "VAT Return Credit Charge"
+  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn)(implicit request: Request[_]): Seq[RepaymentData] = {
 
     for {
-      fd <- financialData.financialTransactions.filter(f => f.chargeType == "VAT Return Credit Charge")
       rd <- repaymentDetails
-      if (fd.periodKey == rd.periodKey)
-    } yield (RepaymentData(fd.periodKeyDescription, fd.originalAmount, rd.returnCreationDate, rd.riskingStatus, fd.periodKey))
+    } yield (RepaymentData(desFormatter.formatPeriodKey(rd.periodKey), rd.originalPostingAmount, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
 
   }
 
   private def dealWithNodata: AllRepaymentData = {
-    AllRepaymentData(List[RepaymentData](), List[RepaymentData]())
+    AllRepaymentData(List[RepaymentDataNoRiskingStatus](), List[RepaymentDataNoRiskingStatus]())
   }
 
 }

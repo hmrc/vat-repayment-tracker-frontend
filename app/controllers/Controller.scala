@@ -16,16 +16,14 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import config.ViewConfig
 import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector, VatRepaymentTrackerBackendConnector}
 import controllers.action.Actions
 import formaters.{AddressFormter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
-import langswitch.{ErrorMessages, LangMessages}
+import langswitch.ErrorMessages
 import model._
-import model.des.{CustomerInformation, _}
+import model.des._
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
@@ -60,13 +58,13 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def viewProgress(vrn: Vrn, periodKey: PeriodKey, period: Period): Action[AnyContent] =
+  def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
-      Logger.debug(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}, period: ${period}""")
+      Logger.debug(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
       for {
         vrd <- vatRepaymentTrackerBackendConnector.find(vrn, periodKey)
       } yield {
-        viewProgressFormatter.computeViewProgress(vrn, vrd, period)
+        viewProgressFormatter.computeViewProgress(vrn, vrd)
       }
     }
 
@@ -158,16 +156,14 @@ class Controller @Inject() (
 
   def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
     implicit request: Request[_] =>
-      val financialDataF = desConnector.getFinancialData(vrn)
       val customerDataF = desConnector.getCustomerData(vrn)
       val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
 
       val result = for {
-        financialData <- financialDataF
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
       } yield (
-        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(financialData, repaymentDetails, vrn), customerData, vrn)
+        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn), customerData, vrn)
       )
 
       result

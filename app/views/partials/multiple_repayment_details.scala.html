@@ -16,9 +16,8 @@
 
 @import config.ViewConfig
 @import model.des._
-@import model.RepaymentData
+@import model.RepaymentDataNoRiskingStatus
 @import model.PeriodKey
-@import model.Period
 @import model.Vrn
 @import langswitch.LangMessages
 @import formaters.DesFormatter
@@ -30,7 +29,7 @@ formatter: DesFormatter
 )
 
 @(
-repayments: List[RepaymentData],
+repayments: List[RepaymentDataNoRiskingStatus],
 vrn : Vrn,
 appender: String)(
 implicit
@@ -56,7 +55,7 @@ request: Request[_]
         <td id="receivedOn@{appender}">@{formatter.formatDate(onePayment.returnCreationDate)}</td>
       <td id="period@{appender}">@onePayment.period</td>
       <td id="amount@{appender}">£@{formatter.formatAmount(onePayment.amount)}</td>
-        <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey), Period(onePayment.period))'>@{LangMessages.`View progress`.show}</a></td>
+        <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))'>@{LangMessages.`View progress`.show}</a></td>
     </tr>
     }
   </tbody>

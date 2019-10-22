@@ -16,7 +16,7 @@
 
 @import config.ViewConfig
 @import model.des._
-@import model.RepaymentData
+@import model.RepaymentDataNoRiskingStatus
 @import langswitch.LangMessages
 @import model.Vrn
 
@@ -31,7 +31,7 @@ guidance_in_progress: views.html.partials.guidance_in_progress
 )
 
 @(
-completed: List[RepaymentData],
+completed: List[RepaymentDataNoRiskingStatus],
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
 address: Option[String],

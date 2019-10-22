@@ -48,21 +48,18 @@ bodyClasses = None
             @one_repayment(viewProgress)
             </br>
             <h2>@{LangMessages.`What's happened so far`.show}</h2>
+
+            @for(whsf <- viewProgress.whatsHappenedSoFar) {
             <ol class="hmrc-timeline">
                 <li class="hmrc-timeline-event">
-                    <h3 class="hmrc-timeline-event-title govuk-heading-m">Estimated payment date passed</h3>
-                    <p class="hmrc-timeline-event-meta">6 May 2019</p>
-                    <p>You do not need to do anything right now. We are working on paying you as soon as possible. If you need to speak to someone about your repayment, you can <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a></p>
-                </li>
-                <li class="hmrc-timeline-event">
-                    <h3 class="hmrc-timeline-event-title govuk-heading-m">Sending for further checks</h3>
-                    <p class="hmrc-timeline-event-meta">21 Apr 2019</p>
-                    <p>We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information. </p>
-
-                    <p>We added 3 days to your estimated repayment date</p>
-
+                    <h3 class="hmrc-timeline-event-title govuk-heading-m">@{whsf.date}</h3>
+                    <p class="hmrc-timeline-event-meta">@{whsf.title}</p>
+                    <p>@Html(whsf.description)</p>
                 </li>
             </ol>
+            }
+
+
         </div>
     </div>
 </main>

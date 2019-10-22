@@ -17,6 +17,6 @@
 package model
 
 final case class AllRepaymentData(
-    inProgressRepaymentData: List[RepaymentData],
-    completedRepaymentData:  List[RepaymentData]
+    inProgressRepaymentData: List[RepaymentDataNoRiskingStatus],
+    completedRepaymentData:  List[RepaymentDataNoRiskingStatus]
 )

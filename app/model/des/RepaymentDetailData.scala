@@ -23,13 +23,22 @@ import play.api.libs.json.{Json, OFormat}
 final case class RepaymentDetailData(
     returnCreationDate:     LocalDate,
     sentForRiskingDate:     LocalDate,
-    lastUpdateReceivedDate: LocalDate,
+    lastUpdateReceivedDate: Option[LocalDate],
     periodKey:              String,
     riskingStatus:          String,
     vatToPay_BOX5:          BigDecimal,
-    supplementDelayDays:    Int,
+    supplementDelayDays:    Option[Int],
     originalPostingAmount:  BigDecimal
-)
+) {
+  //For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
+  val sorted: Int = {
+    riskingStatus match {
+      case INITIAL.value          => 3
+      case SENT_FOR_RISKING.value => 2
+      case _                      => 1
+    }
+  }
+}
 
 object RepaymentDetailData {
   implicit val format: OFormat[RepaymentDetailData] = Json.format[RepaymentDetailData]

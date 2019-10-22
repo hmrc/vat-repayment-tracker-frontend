@@ -18,9 +18,10 @@ package model.des
 
 sealed trait RiskingStatus { def value: String }
 
-case object INITIAL extends RiskingStatus { val value = "INITIAL" }
-case object SENT_FOR_RISKING extends RiskingStatus { val value = "SENT_FOR_RISKING" }
-case object CLAIM_QUERIED extends RiskingStatus { val value = "CLAIM_QUERIED" }
-case object REPAYMENT_ADJUSTED extends RiskingStatus { val value = "REPAYMENT_ADJUSTED" }
-case object ADJUSTMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSTMENT_TO_TAX_DUE" }
-case object REPAYMENT_APPROVED extends RiskingStatus { val value = "REPAYMENT_APPROVED" }
+case object INITIAL extends RiskingStatus { val value = "INITIAL" } //S001
+case object SENT_FOR_RISKING extends RiskingStatus { val value = "SENT_FOR_RISKING" } //S002
+
+case object CLAIM_QUERIED extends RiskingStatus { val value = "CLAIM_QUERIED" } //S003
+case object REPAYMENT_ADJUSTED extends RiskingStatus { val value = "REPAYMENT_ADJUSTED" } //S004
+case object ADJUSTMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSTMENT_TO_TAX_DUE" } //S005
+case object REPAYMENT_APPROVED extends RiskingStatus { val value = "REPAYMENT_APPROVED" } //S006

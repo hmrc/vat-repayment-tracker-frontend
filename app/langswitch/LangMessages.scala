@@ -197,4 +197,42 @@ object LangMessages {
 
   val `Your repayment is complete` = Message("Your repayment is complete")
 
+  val `Checking VAT repayment` = Message("Checking VAT Repayment")
+
+  val `We have received your VAT return and are now checking the repayment amount` = Message("We have received your VAT return and are now checking the repayment amount")
+
+  val `Your VAT repayment amount changed` = Message("Your VAT repayment amount changed")
+
+  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"You claimed a VAT repayment of £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}")
+
+  val `Sending for further checks` = Message("Sending for further checks")
+
+  val `Sending for further checks (risking)` = Message("Sending for further checks (risking)")
+
+  val `Repayment approved` = Message("Repayment approved")
+
+  val `We will send this to your repayment bank account. Repayments are usually sent within 30 days of HMRC getting your VAT Return` = Message("We will send this to your repayment bank account. Repayments are usually sent within 30 days of HMRC getting your VAT Return")
+
+  val `VAT payment due` = Message("VAT payment due")
+
+  def `We calculated that the original amount you claimed of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"""We calculated that the original amount you claimed of £${originalPostingAmount} was incorrect. You now owe HMRC £${vatToPay_Box5}. If you want to find out why your repayment amount changed <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC</a>""")
+
+  val `Estimated repayment date has passed` = Message("Estimated repayment date has passed")
+
+  val `You do not need to do anything right now` = Message("""You do not need to do anything right now. We are working on paying you as soon as possible. If you need to speak to someone about your repayment, you can <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC</a>""")
+
+  val `Repayment complete` = Message("Repayment complete")
+
+  val `Your repayment has been approved` = Message("Your repayment has been approved")
+
+  val `We are making sure we pay you the right amount` = Message("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
+
+  def `We sent an adjusted payment of (bankdetails)`(bankDetails: BankDetails, amount: String) = s"""We sent an adjusted payment of ${amount} to your repayment bank account: Name: ${bankDetails.formatAccountHolderName}, Account number: ${bankDetails.bankAccountNumber}, Sort code: ${bankDetails.formatSortCode} """
+
+  def `We sent an adjusted payment of (address)`(address: String, amount: String) = s"""We sent an adjusted payment of ${amount} to your repayment postal address: ${address}"""
+
+  val period_AA = Message("1 January to 31 March")
+  val period_AB = Message("1 April to 30 June")
+  val period_AC = Message("1 July to 30 September")
+  val period_AD = Message("1 October to 31 December")
 }
