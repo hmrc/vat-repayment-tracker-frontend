@@ -39,6 +39,12 @@
   }
 
   ready(function() {
+    var mobileMediaQuery = '(max-width: 641px)'
+    var mq = w.matchMedia(mobileMediaQuery)
+    if(!mq.matches) { jsTabs() }
+  })
+
+  function jsTabs() {
     var tabs = d.querySelectorAll('.govuk-tabs')
     var tabSelectedClass = 'govuk-tabs__tab--selected'
     var panelHiddenClass = 'govuk-tabs__panel--hidden'
@@ -85,6 +91,6 @@
       
 
     })
-  })
+  }
   
 })(document,window);
