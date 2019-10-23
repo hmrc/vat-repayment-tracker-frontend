@@ -38,7 +38,8 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
     if (vrd.filter(f => f.repaymentDetailsData.riskingStatus == INITIAL.value).size > 0) {
       vrd
     } else {
-      val rdd: RepaymentDetailData = vrd(0).repaymentDetailsData.copy(riskingStatus = INITIAL.value)
+
+      val rdd: RepaymentDetailData = vrd(0).repaymentDetailsData.copy(riskingStatus          = INITIAL.value, lastUpdateReceivedDate = Some(vrd(0).repaymentDetailsData.returnCreationDate))
       val vrtRepaymentDetailData: VrtRepaymentDetailData = vrd(0).copy(repaymentDetailsData = rdd)
       vrtRepaymentDetailData :: vrd
     }

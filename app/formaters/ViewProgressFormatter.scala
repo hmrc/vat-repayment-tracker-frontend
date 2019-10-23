@@ -87,8 +87,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
 
     val containsInitialSatus: Boolean = vrd.filter(f => f.repaymentDetailsData.riskingStatus == INITIAL.value).size > 0
 
-    desFormatter.addMissingStatus(vrd.sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetailsOption, returnDebitChargeExists))
-
+    desFormatter.addMissingStatus(vrd).sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate)).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetailsOption, returnDebitChargeExists))
   }
 
   private def computeWhatsHappenedSoFar(estRepaymentDate:         LocalDate,
