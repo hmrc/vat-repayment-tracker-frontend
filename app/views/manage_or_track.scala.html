@@ -47,7 +47,7 @@ bodyClasses = None
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
    @if(form.hasErrors) { @viewsHelpers.errorSummary(LangMessages.`There is a problem`.show, form) }
-   <h1 id="main-message">@{LangMessages.`Manage or track`.show}</h1>
+
 
 
 
@@ -60,7 +60,9 @@ bodyClasses = None
    ) {
 
    <fieldset id="manage">
+
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
+    <h1 id="main-message">@{LangMessages.`Manage or track`.show}</h1>
      @views.html.partials.error_message_form_input("manage", form)
     @{
     ddDetailsOption.map(ddDetails =>
