@@ -18,6 +18,7 @@ package langswitch
 
 import model.des.BankDetails
 import formaters.DesFormatter
+import model.{PeriodKey, Vrn}
 
 object LangMessages {
 
@@ -199,19 +200,15 @@ object LangMessages {
 
   val `Checking VAT repayment` = Message("Checking VAT Repayment")
 
-  val `We have received your VAT return and are now checking the repayment amount` = Message("We have received your VAT return and are now checking the repayment amount")
+  val `We received your return` = Message("We received your return and are now checking the repayment amount")
 
   val `Your VAT repayment amount changed` = Message("Your VAT repayment amount changed")
 
-  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"You claimed a VAT repayment of £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}")
+  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"You claimed £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}.  This will reach your repayment bank account in 3 working days")
 
   val `Sending for further checks` = Message("Sending for further checks")
 
-  val `Sending for further checks (risking)` = Message("Sending for further checks (risking)")
-
   val `Repayment approved` = Message("Repayment approved")
-
-  val `We will send this to your repayment bank account. Repayments are usually sent within 30 days of HMRC getting your VAT Return` = Message("We will send this to your repayment bank account. Repayments are usually sent within 30 days of HMRC getting your VAT Return")
 
   val `VAT payment due` = Message("VAT payment due")
 
@@ -227,12 +224,29 @@ object LangMessages {
 
   val `We are making sure we pay you the right amount` = Message("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
 
-  def `We sent an adjusted payment of (bankdetails)`(bankDetails: BankDetails, amount: String) = s"""We sent an adjusted payment of ${amount} to your repayment bank account: Name: ${bankDetails.formatAccountHolderName}, Account number: ${bankDetails.bankAccountNumber}, Sort code: ${bankDetails.formatSortCode} """
-
-  def `We sent an adjusted payment of (address)`(address: String, amount: String) = s"""We sent an adjusted payment of ${amount} to your repayment postal address: ${address}"""
-
   val period_AA = Message("1 January to 31 March")
   val period_AB = Message("1 April to 30 June")
   val period_AC = Message("1 July to 30 September")
   val period_AD = Message("1 October to 31 December")
+
+  val `We will send this to your repayment bank account` = Message("This will reach your repayment bank account in 3 workings days")
+
+  val `We will send a cheque to your business address` = Message("We will send a cheque to your business address. This will reach you in 5 to 6 working days")
+
+  def `repayment-complete-bank-details`(name: String, number: String, sortCode: String, amount: String) =
+    Message(s"""We sent a payment of £${amount} to your repayment bank account:</br>Name: ${name}</br>Account number: ${number}</br>Sort code: ${sortCode}""")
+
+  def `repayment-complete-address`(address: String, amount: String) = Message(s"""We sent a payment of £${amount} as a cheque to </br> ${address}""")
+
+  def `repayment-complete-bank-details-adjusted`(name: String, number: String, sortCode: String, amount: String) =
+    Message(s"""We sent an adjusted payment of £${amount} to your repayment bank account:</br>Name: ${name}</br>Account number: ${number}</br>Sort code: ${sortCode}""")
+
+  def `repayment-complete-address-adjusted`(address: String, amount: String) = Message(s"""We sent you an adjusted payment of £${amount} as a cheque to </br> ${address}""")
+
+  val addressNotAvailable = Message("Address not available")
+
+  val `You now owe HMRC` = Message("You now owe HMRC")
+
+  val `We received your VAT payment` = Message(s"""We received your VAT payment. View your <a href=@{appConfig.viewVatAccount}>payments history</a>""")
+
 }

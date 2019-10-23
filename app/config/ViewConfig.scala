@@ -30,7 +30,8 @@ case class ViewConfig(
     viewVatAccount:              String,
     updateCorrespondenceAddress: String,
     feedbackBaseUrl:             String,
-    contactBaseUrl:              String) {
+    contactBaseUrl:              String,
+    paymentHistoryUrl:           String) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -51,7 +52,9 @@ case class ViewConfig(
     viewVatAccount              = servicesConfig.getString("urls.view-vat-account"),
     updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
     feedbackBaseUrl             = servicesConfig.getString("urls.feedback-base"),
-    contactBaseUrl              = servicesConfig.getString("urls.contact-frontend")
+    contactBaseUrl              = servicesConfig.getString("urls.contact-frontend"),
+    paymentHistoryUrl           = servicesConfig.getString("urls.payments-history")
+
   )
 
 }

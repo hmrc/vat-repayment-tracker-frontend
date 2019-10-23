@@ -18,7 +18,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
+import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
 class ManageOrTrackSpec extends ItSpec {
 
@@ -61,8 +61,8 @@ class ManageOrTrackSpec extends ItSpec {
   }
 
   private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkSingle(vrn)
     if (useBankDetails)
       DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     else

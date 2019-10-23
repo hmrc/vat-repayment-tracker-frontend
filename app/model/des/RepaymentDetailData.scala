@@ -22,11 +22,11 @@ import play.api.libs.json.{Json, OFormat}
 
 final case class RepaymentDetailData(
     returnCreationDate:     LocalDate,
-    sentForRiskingDate:     LocalDate,
+    sentForRiskingDate:     Option[LocalDate],
     lastUpdateReceivedDate: Option[LocalDate],
     periodKey:              String,
     riskingStatus:          String,
-    vatToPay_BOX5:          BigDecimal,
+    vatToPay_BOX5:          Option[BigDecimal],
     supplementDelayDays:    Option[Int],
     originalPostingAmount:  BigDecimal
 ) {

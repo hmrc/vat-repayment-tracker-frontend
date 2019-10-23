@@ -22,7 +22,8 @@ import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
 import langswitch.LangMessages
-import model.des.{BankDetails, CustomerInformation, DirectDebitData, DirectDebitDetails}
+import model.des._
+import model.{PeriodKey, VrtRepaymentDetailData}
 import play.api.Logger
 import play.api.mvc.Request
 import req.RequestSupport
@@ -31,6 +32,41 @@ import req.RequestSupport
 class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: RequestSupport) {
 
   import requestSupport._
+
+  def addMissingStatus(vrd: List[VrtRepaymentDetailData]): List[VrtRepaymentDetailData] = {
+
+    if (vrd.filter(f => f.repaymentDetailsData.riskingStatus == INITIAL.value).size > 0) {
+      vrd
+    } else {
+      val rdd: RepaymentDetailData = vrd(0).repaymentDetailsData.copy(riskingStatus = INITIAL.value)
+      val vrtRepaymentDetailData: VrtRepaymentDetailData = vrd(0).copy(repaymentDetailsData = rdd)
+      vrtRepaymentDetailData :: vrd
+    }
+  }
+
+  def getReturnDebitChargeExists(financialData: Option[FinancialData], periodKey: PeriodKey): Boolean = {
+
+    val transactionIterable = for {
+      fdAllOption <- financialData
+    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey == periodKey && f.chargeType == "VAT Return Debit Charge")))
+
+    transactionIterable match {
+      case Some(x) => if (x.size > 0) true else false
+      case None    => false
+    }
+  }
+
+  def getReturnCreditChargeExists(financialData: Option[FinancialData], periodKey: PeriodKey): Boolean = {
+
+    val transactionIterable = for {
+      fdAllOption <- financialData
+    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey == periodKey && f.chargeType == "VAT Return Credit Charge")))
+
+    transactionIterable match {
+      case Some(x) => if (x.size > 0) true else false
+      case None    => false
+    }
+  }
 
   def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
 

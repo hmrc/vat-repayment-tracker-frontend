@@ -60,11 +60,16 @@ class Controller @Inject() (
 
   def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
+
+      val customerDataF = desConnector.getCustomerData(vrn)
+      val financialDataF = desConnector.getFinancialData(vrn)
       Logger.debug(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
       for {
+        customerData <- customerDataF
+        financialData <- financialDataF
         vrd <- vatRepaymentTrackerBackendConnector.find(vrn, periodKey)
       } yield {
-        viewProgressFormatter.computeViewProgress(vrn, vrd)
+        viewProgressFormatter.computeViewProgress(vrn, periodKey, vrd, customerData, financialData)
       }
     }
 

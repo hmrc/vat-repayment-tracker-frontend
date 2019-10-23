@@ -34,7 +34,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages._
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
+import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
 class CompletedSpec extends ItSpec {
 
@@ -66,11 +66,9 @@ class CompletedSpec extends ItSpec {
   }
 
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true) = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    if (singleRepayment)
-      DesWireMockResponses.financialsOkSingle(vrn)
-    else
-      DesWireMockResponses.financialsOkMultiple4(vrn)
     if (useBankDetails) {
       if (partialBankDetails)
         DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
