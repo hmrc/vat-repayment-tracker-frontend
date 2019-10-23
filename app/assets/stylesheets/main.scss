@@ -137,7 +137,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* a11y */
-a {
+a,
+.error-summary a:link,
+.error-summary a:visited {
   &:focus {
     color: $govuk-focus-text-colour;
     background-color: $govuk-focus-colour;
@@ -240,58 +242,23 @@ a {
     }
 }
 
-.hmrc-timeline {
-  border-left: 3px solid #005ea5;
-  margin: 0;
-  padding: 0;
+#error-summary-heading {
+    font-size: 18px;
+    line-height: 1.11111;
+    margin-bottom: 15px;
+
+    @include break(desktop) {
+        font-size: 24px;
+        line-height: 1.25;
+        margin-bottom: 20px;
+    }
 }
 
-.hmrc-timeline-event {
-  padding-bottom: 20px;
-  padding-left: 20px;
-  position: relative;
-  list-style: none;
+//radio button overrides
+.multiple-choice {
+    input:focus + label:before {
+        border-width: 4px;
+        top: -2px;
+        left: -2px;
+    }
 }
-
-.hmrc-timeline-event {
-  padding-bottom: 20px;
-  padding-left: 20px;
-  position: relative;
-  list-style: none;
-}
-
-@media (min-width: 40.0625em) {
-  .hmrc-timeline-event {
-    padding-bottom: 30px;
-  }
-}
-
-.hmrc-timeline-event:last-child {
-  padding-bottom: 0;
-}
-
-.hmrc-timeline-event-title {
-  margin-bottom: 5px;
-}
-
-@media (min-width: 40.0625em) {
-  .hmrc-timeline-event-title {
-    margin-bottom: 5px;
-  }
-}
-
-.hmrc-timeline-event-title:before {
-  background-color: #005ea5;
-  content: '';
-  height: 3px;
-  left: 0;
-  top: .5em;
-  position: absolute;
-  width: 12px;
-}
-
-.hmrc-timeline-event-meta {
-  display: block;
-  color: #6f777b;
-}
-
