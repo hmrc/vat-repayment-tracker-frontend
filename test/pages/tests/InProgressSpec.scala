@@ -78,6 +78,11 @@ class InProgressSpec extends ItSpec {
     InProgress.completedLink
   }
 
+  "click view progress " in {
+    setup(true, true, false)
+    InProgress.clickViewProgress("_inprogress")
+  }
+
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)

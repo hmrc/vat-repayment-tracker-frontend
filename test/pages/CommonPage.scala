@@ -51,6 +51,8 @@ trait CommonPage
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
+  def clickViewProgress(appender: String)(implicit driver: WebDriver): Unit = probing(_.findElement(By.id(s"link${appender}")).click())
+
   /**
    * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
    * reports what was the page source

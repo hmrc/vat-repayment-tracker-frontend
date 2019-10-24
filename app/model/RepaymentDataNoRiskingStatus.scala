@@ -15,6 +15,7 @@
  */
 
 package model
+
 import java.time.LocalDate
 
 final case class RepaymentDataNoRiskingStatus(
@@ -22,4 +23,3 @@ final case class RepaymentDataNoRiskingStatus(
     amount:             BigDecimal,
     returnCreationDate: LocalDate,
     periodKey:          String)
-

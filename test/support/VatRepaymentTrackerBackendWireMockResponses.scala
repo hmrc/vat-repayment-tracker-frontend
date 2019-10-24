@@ -18,6 +18,7 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import model.{PeriodKey, Vrn}
 import play.api.http.Status
 
 object VatRepaymentTrackerBackendWireMockResponses {
@@ -30,5 +31,37 @@ object VatRepaymentTrackerBackendWireMockResponses {
             .withBody("")
             .withStatus(Status.CREATED)))
   }
+
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey) = {
+    stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.storedRepaymentDetails1(date, status1).toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String, periodKey: PeriodKey) = {
+    stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.storedRepaymentDetails2(date, status1, status2).toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String, periodKey: PeriodKey) = {
+    stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.storedRepaymentDetails3(date, status1, status2, status3).toString()
+            .stripMargin)))
+
+  }
+
+
 
 }

@@ -41,42 +41,22 @@ object DesWireMockResponses {
 
   }
 
-  def financialDataOkVPA(vrn: Vrn) = {
+  def financialsOkCredit(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.financialDataOkVPA(vrn).toString()
+          DesData.financialDataSingleCredit(vrn: Vrn).toString()
             .stripMargin)))
 
   }
 
-  def financialsOkMultiple4(vrn: Vrn) = {
+  def financialsOkDebit(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.financialDataOK4(vrn).toString()
-            .stripMargin)))
-
-  }
-
-  def financialsOkSingle(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.financialDataSingleOk(vrn: Vrn).toString()
-            .stripMargin)))
-
-  }
-
-  def financialDataSingleOkNegative(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.financialDataSingleOkNegative(vrn: Vrn).toString()
+          DesData.financialDataSingleDebit(vrn: Vrn).toString()
             .stripMargin)))
 
   }
@@ -141,6 +121,36 @@ object DesWireMockResponses {
 
   }
 
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetails1(date, status1).toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetails2(date, status1, status2).toString()
+            .stripMargin)))
+
+  }
+
+  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetails3(date, status1, status2, status3).toString()
+            .stripMargin)))
+
+  }
+
   def repaymentDetailSingleInProgress(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
@@ -190,5 +200,6 @@ object DesWireMockResponses {
             .stripMargin)))
 
   }
+
 
 }
