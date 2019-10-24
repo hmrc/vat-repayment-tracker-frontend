@@ -19,7 +19,10 @@ package model
 import java.time.LocalDate
 
 final case class WhatsHappendSoFar(
-    date:        LocalDate,
-    title:       String,
-    description: String
+    riskingStatus:     String,
+    date:              LocalDate,
+    title:             String,
+    description:       String,
+    amountDescription: String,
+    pageTitle:         String
 )

@@ -249,4 +249,15 @@ object LangMessages {
 
   val `We received your VAT payment` = Message(s"""We received your VAT payment. View your <a href=@{appConfig.viewVatAccount}>payments history</a>""")
 
+  val `Amount you claimed` = Message("Amount you claimed")
+
+  val `Amount we'll pay you` = Message("Amount we'll pay you")
+
+  val `Amount to pay` = Message("Amount to pay")
+
+  val `Amount we paid you` = Message("Amount we paid you")
+
+  val `Amount you paid` = Message("Amount you paid")
+
+  val `You need to make a VAT payment` = Message("You need to make a VAT payment")
 }

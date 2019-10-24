@@ -19,7 +19,6 @@ package model
 import java.time.LocalDate
 
 final case class ViewProgress(
-    title:                  String,
     amount:                 BigDecimal,
     returnCreationDate:     LocalDate,
     estimatedRepaymentDate: LocalDate,

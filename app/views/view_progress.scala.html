@@ -18,17 +18,21 @@
 @import model.des._
 @import model._
 @import langswitch.LangMessages
+@import formaters.DesFormatter
 
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
 appConfig: ViewConfig,
-one_repayment: views.html.partials.single_repayment_detail
+formatter: DesFormatter
 )
 
 @(
 vrn: Vrn,
-viewProgress: ViewProgress
+viewProgress: ViewProgress,
+showEstimatedRepaymentDat: Boolean,
+amountDescription: String,
+pageTitle: String
 )(
 implicit
 request: Request[_]
@@ -44,17 +48,31 @@ bodyClasses = None
 <main class="govuk-main-wrapper" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{viewProgress.title}</h1>
-            @one_repayment(viewProgress)
+            <h1 id="main-message">@{pageTitle}</h1>
+            <div class="govuk-grid-row govuk-!-margin-bottom-9">
+                <div class="govuk-grid-column-one-half">
+                    <h2 class="govuk-body govuk-!-margin-bottom-0">@{amountDescription}</h2>
+                    <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                </div>
+
+                @{
+                if (showEstimatedRepaymentDat) {
+                <div class="govuk-grid-column-one-half">
+                    <h2 class="govuk-body govuk-!-margin-bottom-0">{LangMessages.`Estimated repayment date`.show}</h2>
+                    <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{formatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
+                </div>
+                }
+                }
+            </div>
             </br>
             <h2>@{LangMessages.`What's happened so far`.show}</h2>
 
             @for(whsf <- viewProgress.whatsHappenedSoFar) {
             <ol class="hmrc-timeline">
                 <li class="hmrc-timeline-event">
-                    <h3 class="hmrc-timeline-event-title govuk-heading-m">@{whsf.date}</h3>
-                    <p class="hmrc-timeline-event-meta">@{whsf.title}</p>
-                    <p>@Html(whsf.description)</p>
+                    <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}_date">@{whsf.date}</h3>
+                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}_event">@{whsf.title}</p>
+                    <p id="@{whsf.riskingStatus}_description">@Html(whsf.description)</p>
                 </li>
             </ol>
             }

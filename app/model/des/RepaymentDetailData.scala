@@ -35,6 +35,7 @@ final case class RepaymentDetailData(
     riskingStatus match {
       case INITIAL.value          => 3
       case SENT_FOR_RISKING.value => 2
+      case CLAIM_QUERIED.value    => 2
       case _                      => 1
     }
   }
