@@ -17,6 +17,8 @@
 package pages
 
 import java.io.{FileInputStream, FileOutputStream}
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import org.openqa.selenium.{By, OutputType, TakesScreenshot, WebDriver}
 import org.scalatest.Assertion
@@ -130,6 +132,11 @@ trait CommonPage
     true
   } catch {
     case _: Throwable => false
+  }
+
+  def formatDate(date: LocalDate): String = {
+    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    date.format(pattern1)
   }
 
 }

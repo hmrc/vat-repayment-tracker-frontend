@@ -26,7 +26,7 @@ final case class RepaymentDetailData(
     lastUpdateReceivedDate: Option[LocalDate],
     periodKey:              String,
     riskingStatus:          String,
-    vatToPay_BOX5:          Option[BigDecimal],
+    vatToPay_BOX5:          BigDecimal,
     supplementDelayDays:    Option[Int],
     originalPostingAmount:  BigDecimal
 ) {

@@ -151,16 +151,6 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailSingleInProgress(vrn: Vrn) = {
-    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          DesData.repaymentDetailSingleInProgress.toString()
-            .stripMargin)))
-
-  }
-
   def repaymentDetailSingleCompleted(vrn: Vrn) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
@@ -200,6 +190,5 @@ object DesWireMockResponses {
             .stripMargin)))
 
   }
-
 
 }

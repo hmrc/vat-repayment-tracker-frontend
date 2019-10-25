@@ -70,7 +70,7 @@ class VrtService @Inject() (
 
     for {
       rd <- repaymentDetails
-    } yield (RepaymentData(desFormatter.formatPeriodKey(rd.periodKey), rd.originalPostingAmount, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
+    } yield (RepaymentData(desFormatter.formatPeriodKey(rd.periodKey), rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
 
   }
 

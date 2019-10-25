@@ -69,7 +69,7 @@ bodyClasses = None
 
             @for(whsf <- viewProgress.whatsHappenedSoFar) {
             <ol class="hmrc-timeline">
-                <li class="hmrc-timeline-event">
+                <li class="hmrc-timeline-event" id="@{whsf.riskingStatus}_timeline">
                     <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}_date">@{whsf.date}</h3>
                     <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}_event">@{whsf.title}</p>
                     <p id="@{whsf.riskingStatus}_description">@Html(whsf.description)</p>

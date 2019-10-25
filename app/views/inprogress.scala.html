@@ -70,7 +70,8 @@ bodyClasses = None
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
-                    <p id="no-repayments">@{LangMessages.`No completed repayments content here`.show}</p>
+                    <h3 class="govuk-heading-m" id="no-repayments">@{LangMessages.`You have no completed repayments`.show}</h3>
+                    <p>@Html(LangMessages.`no-completed-desc`(appConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-none"></div>
                 </section>
             </div>

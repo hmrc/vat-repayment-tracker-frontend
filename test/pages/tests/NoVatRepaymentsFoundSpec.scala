@@ -34,5 +34,4 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
 
   }
 
-
 }

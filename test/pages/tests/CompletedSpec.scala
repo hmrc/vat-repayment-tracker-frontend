@@ -43,14 +43,14 @@ class CompletedSpec extends ItSpec {
 
   "user is authorised and financial data found" in {
     setup()
-    Completed.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_completed")
+    Completed.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_completed")
     Completed.uniqueToPage
     Completed.checktabs
   }
 
   "user is authorised and financial data found but partial" in {
     setup(true, true)
-    Completed.assertPageIsDisplayed(vrn, amount = "£5.56", partialAccount = true, appender = "_completed")
+    Completed.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_completed")
     Completed.uniqueToPage
   }
 

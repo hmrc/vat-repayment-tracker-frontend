@@ -30,7 +30,7 @@ object Completed extends CommonDetail {
 
   def viewProgressLink(implicit wd: WebDriver): Assertion = {
     clickInProgress
-    noRepayments shouldBe "No in progress repayments content here"
+    noRepayments shouldBe "No repayments in progress"
   }
 
   def checktabs(implicit wd: WebDriver): Assertion = {

@@ -62,6 +62,4 @@ object VatRepaymentTrackerBackendWireMockResponses {
 
   }
 
-
-
 }

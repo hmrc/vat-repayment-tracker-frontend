@@ -42,7 +42,7 @@ object DesData {
     Option(LocalDate.parse("2001-01-01")),
     "18AC",
     "INITIAL",
-    Option(BigDecimal(1000)),
+    BigDecimal(1000),
     Option(1),
     100.02
   )
@@ -86,21 +86,6 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetailSingleInProgress: JsValue = Json.parse(
-    s"""[{
-        "returnCreationDate": "2001-01-01",
-        "sentForRiskingDate": "2001-01-01",
-        "lastUpdateReceivedDate": "2001-01-01",
-        "periodKey": "18AC",
-        "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 1000,
-        "supplementDelayDays": 1,
-        "originalPostingAmount": 5.56
-    }]
-""".stripMargin
-  )
-
-  //language=JSON
   def repaymentDetailSingleCompleted: JsValue = Json.parse(
     s"""[{
         "returnCreationDate": "2001-01-01",
@@ -108,7 +93,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AC",
         "riskingStatus": "ADJUSTMENT_TO_TAX_DUE",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
     }]
@@ -123,9 +108,9 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AA",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
-        "originalPostingAmount": 796
+        "originalPostingAmount": 5.56
     },
      {
         "returnCreationDate": "2001-01-01",
@@ -133,9 +118,9 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AB",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
-        "originalPostingAmount": 3.59
+        "originalPostingAmount": 5.56
          },
      {
              "returnCreationDate": "2001-01-01",
@@ -143,9 +128,9 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AC",
              "riskingStatus": "SENT_FOR_RISKING",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
-             "originalPostingAmount": 10169.45
+             "originalPostingAmount": 5.56
          },
           {
              "returnCreationDate": "2001-01-01",
@@ -153,9 +138,9 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AD",
              "riskingStatus": "CLAIM_QUERIED",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
-             "originalPostingAmount": 796
+             "originalPostingAmount": 5.56
               }]
 """.stripMargin
   )
@@ -168,9 +153,9 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AA",
         "riskingStatus": "REPAYMENT_ADJUSTED",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
-        "originalPostingAmount": 796
+        "originalPostingAmount": 5.56
     },
      {
         "returnCreationDate": "2001-01-01",
@@ -178,9 +163,9 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AB",
         "riskingStatus": "REPAYMENT_ADJUSTED",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
-        "originalPostingAmount": 3.59
+        "originalPostingAmount": 5.56
          },
      {
              "returnCreationDate": "2001-01-01",
@@ -188,9 +173,9 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AC",
              "riskingStatus": "ADJUSTMENT_TO_TAX_DUE",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
-             "originalPostingAmount": 10169.45
+             "originalPostingAmount":5.56
          },
           {
              "returnCreationDate": "2001-01-01",
@@ -198,9 +183,9 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AD",
              "riskingStatus": "REPAYMENT_APPROVED",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
-             "originalPostingAmount": 796
+             "originalPostingAmount": 5.56
               }]
 """.stripMargin
   )
@@ -213,9 +198,9 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AA",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
-        "originalPostingAmount": 796
+        "originalPostingAmount": 5.56
     },
      {
         "returnCreationDate": "2001-01-01",
@@ -223,9 +208,9 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AB",
         "riskingStatus": "SENT_FOR_RISKING",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
-        "originalPostingAmount": 3.59
+        "originalPostingAmount": 5.56
          },
      {
              "returnCreationDate": "2001-01-01",
@@ -233,9 +218,9 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AC",
              "riskingStatus": "CLAIM_QUERIED",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
-             "originalPostingAmount": 10169.45
+             "originalPostingAmount": 5.56
          },
           {
              "returnCreationDate": "2001-01-01",
@@ -243,9 +228,9 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AD",
              "riskingStatus": "REPAYMENT_APPROVED",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
-             "originalPostingAmount": 797
+             "originalPostingAmount": 5.56
               }]
 """.stripMargin
   )
@@ -654,7 +639,6 @@ object DesData {
       }
            """.stripMargin)
 
-
   //language=JSON
   def storedRepaymentDetails1(date: String, status1: String): JsValue = Json.parse(
     s"""[
@@ -668,7 +652,7 @@ object DesData {
                "lastUpdateReceivedDate":"${date}",
                "periodKey":"18AC",
                "riskingStatus":"${status1}",
-               "vatToPay_BOX5":1000,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -690,7 +674,7 @@ object DesData {
                "lastUpdateReceivedDate":"${date}",
                "periodKey":"18AC",
                "riskingStatus":"${status1}",
-               "vatToPay_BOX5":1000,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -705,7 +689,7 @@ object DesData {
                "lastUpdateReceivedDate":"${date}",
                "periodKey":"18AC",
                "riskingStatus":"${status2}",
-               "vatToPay_BOX5":10,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -713,8 +697,6 @@ object DesData {
              ]
 """.stripMargin
   )
-
-
 
   //language=JSON
   def storedRepaymentDetails3(date: String, status1: String, status2: String, status3: String): JsValue = Json.parse(
@@ -729,7 +711,7 @@ object DesData {
                "lastUpdateReceivedDate":"${date}",
                "periodKey":"18AC",
                "riskingStatus":"${status1}",
-               "vatToPay_BOX5":1000,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -744,7 +726,7 @@ object DesData {
                "lastUpdateReceivedDate":"${date}",
                "periodKey":"18AC",
                "riskingStatus":"${status2}",
-               "vatToPay_BOX5":10,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -759,7 +741,7 @@ object DesData {
                "lastUpdateReceivedDate":"2019-10-24",
                "periodKey":"18AC",
                "riskingStatus":"${status3}",
-               "vatToPay_BOX5":1000,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -776,7 +758,7 @@ object DesData {
         "lastUpdateReceivedDate": "${date}",
         "periodKey": "18AC",
         "riskingStatus": "${status1}",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,
         "originalPostingAmount": 5.56
     }]
@@ -792,7 +774,7 @@ object DesData {
              "lastUpdateReceivedDate": "${date}",
              "periodKey": "18AC",
              "riskingStatus": "${status1}",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          },
@@ -802,14 +784,12 @@ object DesData {
         "lastUpdateReceivedDate": "${date}",
         "periodKey": "18AC",
         "riskingStatus": "${status2}",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,
         "originalPostingAmount": 5.56
     }]
 """.stripMargin
   )
-
-
 
   //language=JSON
   def repaymentDetails3(date: String, status1: String, status2: String, status3: String): JsValue = Json.parse(
@@ -820,7 +800,7 @@ object DesData {
              "lastUpdateReceivedDate": "${date}",
              "periodKey": "18AC",
              "riskingStatus": "${status1}",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          },
@@ -830,7 +810,7 @@ object DesData {
         "lastUpdateReceivedDate": "${date}",
         "periodKey": "18AC",
         "riskingStatus": "${status2}",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,
         "originalPostingAmount": 5.56
     },
@@ -840,7 +820,7 @@ object DesData {
              "lastUpdateReceivedDate": "${date}",
              "periodKey": "18AC",
              "riskingStatus": "${status3}",
-             "vatToPay_BOX5": 10,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          }]
@@ -872,13 +852,13 @@ object DesData {
                                                            "chargeReference": "XV002616013469",
                                                            "mainTransaction": "4708",
                                                            "subTransaction": "1175",
-                                                           "originalAmount": 5.56,
-                                                           "outstandingAmount": 5.56,
+                                                           "originalAmount": 6.56,
+                                                           "outstandingAmount": 6.56,
                                                            "items": [
                                                                {
                                                                    "subItem": "000",
                                                                    "dueDate": "2018-08-24",
-                                                                   "amount": 5.56,
+                                                                   "amount": 6.56,
                                                                    "clearingDate": "2018-03-01"
                                                                }
                                                            ]
@@ -912,13 +892,13 @@ object DesData {
                                                            "chargeReference": "XV002616013469",
                                                            "mainTransaction": "4708",
                                                            "subTransaction": "1175",
-                                                           "originalAmount": 5.56,
-                                                           "outstandingAmount": 5.56,
+                                                           "originalAmount": 6.56,
+                                                           "outstandingAmount": 6.56,
                                                            "items": [
                                                                {
                                                                    "subItem": "000",
                                                                    "dueDate": "2018-08-24",
-                                                                   "amount": 5.56,
+                                                                   "amount": 6.56,
                                                                    "clearingDate": "2018-03-01"
                                                                }
                                                            ]

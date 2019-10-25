@@ -38,7 +38,7 @@ object InProgress extends CommonDetail {
 
   def completedLink(implicit wd: WebDriver): Assertion = {
     clickCompleted
-    noRepayments shouldBe "No completed repayments content here"
+    noRepayments shouldBe "You have no completed repayments"
   }
 
   def checktabs(implicit wd: WebDriver): Assertion = {

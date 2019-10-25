@@ -69,7 +69,8 @@ bodyClasses = None
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
-                    <p id="no-repayments">@{LangMessages.`No in progress repayments content here`.show}</p>
+                    <h3 class="govuk-heading-m" id="no-repayments">@{LangMessages.`No repayments in progress`.show}</h3>
+                    <p>@Html(LangMessages.`no-in-progress-desc`.show)</p>
                     <div id="inprogress-none"></div>
                 </section>
             </div>
