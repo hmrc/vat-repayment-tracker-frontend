@@ -174,6 +174,8 @@ object LangMessages {
 
   val `View progress` = Message("View progress")
 
+  val `View history` = Message("View history")
+
   val `Completed` = Message("Completed")
 
   val `No completed repayments content here` = Message("No completed repayments content here")

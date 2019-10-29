@@ -55,7 +55,7 @@
 */
 
 @mixin _space($space, $attr: 'margin', $direction: 'bottom') {
-  #{attr}-#{$direction}: map-get($govuk-spacing-points, $space)
+  #{$attr}-#{$direction}: map-get($govuk-spacing-points, $space)
 }
 
 @mixin _space-margin($space, $direction) {
@@ -63,6 +63,10 @@
 }
 @mixin _space-padding($space, $direction) {
   @include _space($space, 'padding', $direction)
+}
+
+@mixin govuk-responsive-padding($space, $direction) {
+    padding-#{$direction}: map-get($govuk-spacing-points, $space);
 }
 
 
