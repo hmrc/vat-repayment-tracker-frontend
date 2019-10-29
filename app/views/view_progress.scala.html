@@ -64,18 +64,17 @@ bodyClasses = None
                 }
                 }
             </div>
-            </br>
             <h2>@{LangMessages.`What's happened so far`.show}</h2>
 
-            @for(whsf <- viewProgress.whatsHappenedSoFar) {
             <ol class="hmrc-timeline">
+            @for(whsf <- viewProgress.whatsHappenedSoFar) {
                 <li class="hmrc-timeline-event" id="@{whsf.riskingStatus}_timeline">
-                    <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}_date">@{whsf.date}</h3>
-                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}_event">@{whsf.title}</p>
+                    <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}_event">@{whsf.title}</h3>
+                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}_date">@{formatter.formatDate(whsf.date)}</p>
                     <p id="@{whsf.riskingStatus}_description">@Html(whsf.description)</p>
                 </li>
-            </ol>
             }
+            </ol>
 
 
         </div>

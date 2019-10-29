@@ -1,0 +1,40 @@
+@import "utils/settings";
+@import "utils/helpers";
+
+.hmrc-timeline {
+
+    border-left: 3px solid $govuk-blue;
+
+    margin: 0;
+    padding: 0;
+
+    &-event {
+      @include _space(4, 'padding', 'left');
+      @include _space(6, 'padding', 'bottom');
+      position: relative;
+      list-style: none;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+
+    }
+
+    &-event-title {
+        @include _space(1, 'margin', 'bottom')
+
+        &:before {
+          background-color: $govuk-blue;
+          content: '';
+          height: 3px;
+          left: 0;
+          top: .5em;
+          position: absolute;
+          width: map-get($govuk-spacing-points, 4) * 0.6;
+        }
+    }
+
+    &-event-meta {
+        display: block;
+    }
+}
