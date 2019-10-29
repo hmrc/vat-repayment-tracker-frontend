@@ -17,37 +17,40 @@
 package controllers
 
 import config.ViewConfig
-import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector}
+import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector, VatRepaymentTrackerBackendConnector}
 import controllers.action.Actions
-import format.{AddressFormter, DesFormatter}
+import formaters.{AddressFormter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model._
-import model.des.{CustomerInformation, _}
+import model.des._
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.mvc._
 import req.RequestSupport
-import service.PaymentsOrchestratorService
+import service.VrtService
 import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
-    cc:                           ControllerComponents,
-    errorHandler:                 ErrorHandler,
-    views:                        Views,
-    desConnector:                 PaymentsOrchestratorConnector,
-    requestSupport:               RequestSupport,
-    addressFormater:              AddressFormter,
-    desFormatter:                 DesFormatter,
-    actions:                      Actions,
-    viewConfig:                   ViewConfig,
-    directDebitBackendController: DirectDebitBackendConnector,
-    bankAccountCocConnector:      BankAccountCocConnector,
-    paymentsOrchestratorService:  PaymentsOrchestratorService)(
+    cc:                                  ControllerComponents,
+    errorHandler:                        ErrorHandler,
+    views:                               Views,
+    desConnector:                        PaymentsOrchestratorConnector,
+    requestSupport:                      RequestSupport,
+    addressFormater:                     AddressFormter,
+    desFormatter:                        DesFormatter,
+    actions:                             Actions,
+    viewConfig:                          ViewConfig,
+    directDebitBackendController:        DirectDebitBackendConnector,
+    bankAccountCocConnector:             BankAccountCocConnector,
+    paymentsOrchestratorService:         VrtService,
+    vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
+    viewProgressFormatter:               ViewProgressFormatter,
+    showResultsFormatter:                ShowResultsFormatter)(
     implicit
     ec: ExecutionContext)
 
@@ -57,8 +60,17 @@ class Controller @Inject() (
 
   def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
-      Logger.warn(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
-      Future.successful(Ok("Not implemented yet"))
+
+      val customerDataF = desConnector.getCustomerData(vrn)
+      val financialDataF = desConnector.getFinancialData(vrn)
+      Logger.debug(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
+      for {
+        customerData <- customerDataF
+        financialData <- financialDataF
+        vrd <- vatRepaymentTrackerBackendConnector.find(vrn, periodKey)
+      } yield {
+        viewProgressFormatter.computeViewProgress(vrn, periodKey, vrd, customerData, financialData)
+      }
     }
 
   def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage): Action[AnyContent] =
@@ -149,77 +161,18 @@ class Controller @Inject() (
 
   def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
     implicit request: Request[_] =>
-      val financialDataF = desConnector.getFinancialData(vrn)
       val customerDataF = desConnector.getCustomerData(vrn)
       val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
 
       val result = for {
-        financialData <- financialDataF
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
       } yield (
-        computeView(paymentsOrchestratorService.getAllRepaymentData(financialData, repaymentDetails, vrn), customerData, vrn)
+        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn), customerData, vrn)
       )
 
       result
 
-  }
-
-  private def computeView(
-      allRepaymentData: AllRepaymentData,
-      customerData:     Option[CustomerInformation],
-      vrn:              Vrn
-  )(implicit request: Request[_]): Result = {
-
-    val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
-    val bankDetails = desFormatter.getBankDetails(customerData)
-    val addressDetails = desFormatter.getAddressDetails(customerData)
-    val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
-
-    bankDetails match {
-      case Some(bd) => if (!(bd.accountHolderName.isDefined)) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
-      case None     =>
-    }
-
-    if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
-      Ok(views.inprogress_completed(
-        allRepaymentData.inProgressRepaymentData,
-        allRepaymentData.completedRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else if ((allRepaymentData.inProgressRepaymentData.size == 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
-      Ok(views.completed(
-        allRepaymentData.completedRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size == 0)) {
-      Ok(views.inprogress(
-        allRepaymentData.inProgressRepaymentData,
-        bankDetailsExist,
-        bankDetails,
-        addressDetails,
-        addressDetailsExist,
-        vrn
-      ))
-    } else {
-      Ok(
-        views.no_vat_repayments(
-          bankDetailsExist,
-          bankDetails,
-          addressDetails,
-          addressDetailsExist,
-          vrn
-        ))
-
-    }
   }
 
   def viewRepaymentAccount(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {

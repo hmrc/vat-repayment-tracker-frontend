@@ -17,6 +17,8 @@
 package pages
 
 import java.io.{FileInputStream, FileOutputStream}
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import org.openqa.selenium.{By, OutputType, TakesScreenshot, WebDriver}
 import org.scalatest.Assertion
@@ -50,6 +52,8 @@ trait CommonPage
   def getPageHeader(implicit driver: WebDriver): String = probing(_.findElement(By.className("heading-large")).getText)
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
+
+  def clickViewProgress(appender: String)(implicit driver: WebDriver): Unit = probing(_.findElement(By.id(s"link${appender}")).click())
 
   /**
    * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
@@ -128,6 +132,11 @@ trait CommonPage
     true
   } catch {
     case _: Throwable => false
+  }
+
+  def formatDate(date: LocalDate): String = {
+    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    date.format(pattern1)
   }
 
 }

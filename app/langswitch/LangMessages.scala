@@ -17,7 +17,8 @@
 package langswitch
 
 import model.des.BankDetails
-import format.DesFormatter
+import formaters.DesFormatter
+import model.{PeriodKey, Vrn}
 
 object LangMessages {
 
@@ -179,4 +180,92 @@ object LangMessages {
 
   val `No in progress repayments content here` = Message("No in progress repayments content here")
 
+  val `Your repayment is being processed` = Message("Your repayment is being processed")
+
+  val `Your repayment is delayed` = Message("Your repayment is delayed")
+
+  val `VAT Return received on`: Message = Message(
+    english = "VAT Return received on"
+  )
+
+  val `Estimated repayment date`: Message = Message(
+    english = "Estimated repayment date"
+  )
+
+  val `What's happened so far` = Message("What's happened so far")
+
+  val `You must now pay some VAT` = Message("You most now pay some VAT")
+
+  val `Your repayment is complete` = Message("Your repayment is complete")
+
+  val `Checking VAT repayment` = Message("Checking VAT Repayment")
+
+  val `We received your return` = Message("We received your return and are now checking the repayment amount")
+
+  val `Your VAT repayment amount changed` = Message("Your VAT repayment amount changed")
+
+  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"You claimed £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}.  This will reach your repayment bank account in 3 working days")
+
+  val `Sending for further checks` = Message("Sending for further checks")
+
+  val `Repayment approved` = Message("Repayment approved")
+
+  val `VAT payment due` = Message("VAT payment due")
+
+  def `We calculated that the original amount you claimed of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"""We calculated that the original amount you claimed of £${originalPostingAmount} was incorrect. You now owe HMRC £${vatToPay_Box5}. If you want to find out why your repayment amount changed <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a>""")
+
+  val `Estimated repayment date has passed` = Message("Estimated repayment date has passed")
+
+  val `You do not need to do anything right now` = Message("""You do not need to do anything right now. We are working on paying you as soon as possible. If you need to speak to someone about your repayment, you can <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a>""")
+
+  val `Repayment complete` = Message("Repayment complete")
+
+  val `Your repayment has been approved` = Message("Your repayment has been approved")
+
+  val `We are making sure we pay you the right amount` = Message("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
+
+  val period_AA = Message("1 January to 31 March")
+  val period_AB = Message("1 April to 30 June")
+  val period_AC = Message("1 July to 30 September")
+  val period_AD = Message("1 October to 31 December")
+
+  val `We will send this to your repayment bank account` = Message("This will reach your repayment bank account in 3 workings days.")
+
+  val `We will send a cheque to your business address` = Message("We will send a cheque to your business address. This will reach you in 5 to 6 working days.")
+
+  def `repayment-complete-bank-details`(name: String, number: String, sortCode: String, amount: String) =
+    Message(s"""We sent a payment of £${amount} to your repayment bank account:</br>Name: ${name}</br>Account number: ${number}</br>Sort code: ${sortCode}.""")
+
+  def `repayment-complete-address`(address: String, amount: String) = Message(s"""We sent a payment of £${amount} as a cheque to </br> ${address}.""")
+
+  def `repayment-complete-bank-details-adjusted`(name: String, number: String, sortCode: String, amount: String) =
+    Message(s"""We sent an adjusted payment of £${amount} to your repayment bank account:</br>Name: ${name}</br>Account number: ${number}</br>Sort code: ${sortCode}.""")
+
+  def `repayment-complete-address-adjusted`(address: String, amount: String) = Message(s"""We sent you an adjusted payment of £${amount} as a cheque to </br> ${address}.""")
+
+  val addressNotAvailable = Message("Address not available")
+
+  val `You now owe HMRC` = Message("You now owe HMRC")
+
+  val `We received your VAT payment` = Message(s"""We received your VAT payment. View your <a href=@{appConfig.viewVatAccount}>payments history.</a>""")
+
+  val `Amount you claimed` = Message("Amount you claimed")
+
+  val `Amount we'll pay you` = Message("Amount we'll pay you")
+
+  val `Amount to pay` = Message("Amount to pay")
+
+  val `Amount we paid you` = Message("Amount we paid you")
+
+  val `Amount you paid` = Message("Amount you paid")
+
+  val `You need to make a VAT payment` = Message("You need to make a VAT payment")
+
+  val `You have no completed repayments` = Message("You have no completed repayments")
+
+  val `No repayments in progress` = Message("No repayments in progress")
+
+  val `no-in-progress-desc` = Message("""If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</br></br>If you submitted your return early check this page after your accounting period has ended.""")
+
+  def `no-completed-desc`(url: String) = Message(s"""Completed repayments will only show here for 60 days after your repayment date. View your <a href="${url}">VAT payments history.</a>""")
 }

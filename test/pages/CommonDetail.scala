@@ -55,7 +55,7 @@ trait CommonDetail extends CommonPage {
         Logger.error(readAddress())
         readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
       }
-      readPeriod(appender) shouldBe "March 2018"
+      readPeriod(appender) shouldBe "1 July to 30 September 2018"
 
     }
 

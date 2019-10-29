@@ -16,6 +16,9 @@
 
 package controllers
 
+import java.time.LocalDate
+
+import model.des.INITIAL
 import model.{EnrolmentKeys, Vrn}
 import play.api.Logger
 import play.api.http.Status
@@ -26,9 +29,9 @@ class ControllerSpec extends ItSpec {
 
   "Get ShowResults authorised" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkSingle(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }

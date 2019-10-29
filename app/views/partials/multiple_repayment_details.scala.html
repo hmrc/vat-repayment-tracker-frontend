@@ -16,18 +16,20 @@
 
 @import config.ViewConfig
 @import model.des._
-@import model.RepaymentData
+@import model.RepaymentDataNoRiskingStatus
 @import model.PeriodKey
 @import model.Vrn
 @import langswitch.LangMessages
+@import formaters.DesFormatter
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+appConfig: ViewConfig,
+formatter: DesFormatter
 )
 
 @(
-repayments: List[RepaymentData],
+repayments: List[RepaymentDataNoRiskingStatus],
 vrn : Vrn,
 appender: String)(
 implicit
@@ -50,10 +52,10 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td id="receivedOn@{appender}">@onePayment.formatReturnCreationDate</td>
+        <td id="receivedOn@{appender}">@{formatter.formatDate(onePayment.returnCreationDate)}</td>
       <td id="period@{appender}">@onePayment.period</td>
-      <td id="amount@{appender}">£@onePayment.formatAmount</td>
-        <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))'>@{LangMessages.`View progress`.show}</a></td>
+      <td id="amount@{appender}">£@{formatter.formatAmount(onePayment.amount)}</td>
+        <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))' id="link@{appender}">@{LangMessages.`View progress`.show}</a></td>
     </tr>
     }
   </tbody>

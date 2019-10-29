@@ -16,16 +16,16 @@
 
 package model
 
-import controllers.ValueClassBinder.valueClassBinder
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Format
-import play.api.mvc.PathBindable
+import play.api.libs.json.Json
+import support.{DesData, UnitSpec}
 
-final case class PeriodKey(value: String)
+class VrtRepaymentDetailDataSpec extends UnitSpec {
 
-object PeriodKey {
+  "to json" in {
+    Json.toJson(DesData.vrtRepaymentDetailData) shouldBe DesData.vrtRepaymentDetailDataJson
+  }
 
-  implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
-  implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
-
+  "from json" in {
+    DesData.vrtRepaymentDetailDataJson.as[VrtRepaymentDetailData] shouldBe DesData.vrtRepaymentDetailData
+  }
 }

@@ -16,7 +16,7 @@
 
 @import config.ViewConfig
 @import model.des._
-@import model.RepaymentData
+@import model.RepaymentDataNoRiskingStatus
 @import langswitch.LangMessages
 @import model.Vrn
 
@@ -31,7 +31,7 @@ guidance_in_progress: views.html.partials.guidance_in_progress
 )
 
 @(
-inProgress: List[RepaymentData],
+inProgress: List[RepaymentDataNoRiskingStatus],
 showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
 address: Option[String],
@@ -66,10 +66,13 @@ bodyClasses = None
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     @guidance_in_progress()
+                    <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
-                    <p id="no-repayments">@{LangMessages.`No completed repayments content here`.show}</p>
+                    <h3 class="govuk-heading-m" id="no-repayments">@{LangMessages.`You have no completed repayments`.show}</h3>
+                    <p>@Html(LangMessages.`no-completed-desc`(appConfig.paymentHistoryUrl).show)</p>
+                    <div id="completed-none"></div>
                 </section>
             </div>
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)

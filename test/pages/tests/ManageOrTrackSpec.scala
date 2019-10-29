@@ -16,9 +16,12 @@
 
 package pages.tests
 
+import java.time.LocalDate
+
+import model.des.INITIAL
 import model.{EnrolmentKeys, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
+import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
 class ManageOrTrackSpec extends ItSpec {
 
@@ -50,7 +53,7 @@ class ManageOrTrackSpec extends ItSpec {
     setup(true, true)
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
-    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
   }
 
   "click bankLabel" in {
@@ -61,8 +64,8 @@ class ManageOrTrackSpec extends ItSpec {
   }
 
   private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkSingle(vrn)
     if (useBankDetails)
       DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     else
@@ -74,7 +77,7 @@ class ManageOrTrackSpec extends ItSpec {
     else
       DesWireMockResponses.ddNotFound(vrn)
 
-    DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
 
     goToViaPath(path)
   }

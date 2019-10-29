@@ -34,7 +34,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages._
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
+import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
 class InProgressCompletedSpec extends ItSpec {
 
@@ -45,19 +45,19 @@ class InProgressCompletedSpec extends ItSpec {
     setup()
     InProgress.checkGuidance
     InProgress.uniqueToPage
-    InProgressCompleted.noRepayments
+    InProgressCompleted.checktabs
   }
 
   "click completed link" in {
     setup()
     InProgress.clickCompleted
     Completed.uniqueToPage
-    InProgressCompleted.noRepayments
+    InProgressCompleted.checktabs
   }
 
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false) = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsOkMultiple4(vrn)
     if (useBankDetails) {
       if (partialBankDetails)
         DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)

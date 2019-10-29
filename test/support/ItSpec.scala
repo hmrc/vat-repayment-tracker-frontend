@@ -105,6 +105,7 @@ trait ItSpec
   def configMap = Map[String, Any](
     "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
     "microservice.services.direct-debit-backend.port" -> WireMockSupport.port, "microservice.services.bank-account-coc.port" -> WireMockSupport.port,
+    "microservice.services.vat-repayment-tracker-backend.port" -> WireMockSupport.port,
     "urls.login" -> "http://localhost:11111/auth-login-stub/gg-sign-in"
   )
 

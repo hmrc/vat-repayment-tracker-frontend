@@ -1,0 +1,86 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.ViewConfig
+@import model.des._
+@import model._
+@import langswitch.LangMessages
+@import formaters.DesFormatter
+
+@this(
+mainTemplate: views.html.main_template,
+viewsHelpers: views.ViewsHelpers,
+appConfig: ViewConfig,
+formatter: DesFormatter
+)
+
+@(
+vrn: Vrn,
+viewProgress: ViewProgress,
+showEstimatedRepaymentDat: Boolean,
+amountDescription: String,
+pageTitle: String
+)(
+implicit
+request: Request[_]
+)
+
+@import viewsHelpers.requestSupport._
+
+@mainTemplate(
+title =LangMessages.heading_bta.show,
+headerTitle = LangMessages.heading_bta.show,
+bodyClasses = None
+) {
+<main class="govuk-main-wrapper" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 id="main-message">@{pageTitle}</h1>
+            <div class="govuk-grid-row govuk-!-margin-bottom-9">
+                <div class="govuk-grid-column-one-half">
+                    <h2 class="govuk-body govuk-!-margin-bottom-0">@{amountDescription}</h2>
+                    <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                </div>
+
+                @{
+                if (showEstimatedRepaymentDat) {
+                <div class="govuk-grid-column-one-half">
+                    <h2 class="govuk-body govuk-!-margin-bottom-0">{LangMessages.`Estimated repayment date`.show}</h2>
+                    <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{formatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
+                </div>
+                }
+                }
+            </div>
+            </br>
+            <h2>@{LangMessages.`What's happened so far`.show}</h2>
+
+            @for(whsf <- viewProgress.whatsHappenedSoFar) {
+            <ol class="hmrc-timeline">
+                <li class="hmrc-timeline-event" id="@{whsf.riskingStatus}_timeline">
+                    <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}_date">@{whsf.date}</h3>
+                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}_event">@{whsf.title}</p>
+                    <p id="@{whsf.riskingStatus}_description">@Html(whsf.description)</p>
+                </li>
+            </ol>
+            }
+
+
+        </div>
+    </div>
+</main>
+}
+
+

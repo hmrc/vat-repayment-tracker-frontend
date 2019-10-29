@@ -16,9 +16,12 @@
 
 package pages.tests
 
+import java.time.LocalDate
+
+import model.des.INITIAL
 import model.{EnrolmentKeys, Vrn}
 import pages.{ErrorPage, InProgress}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec}
+import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
 class InProgressSpec extends ItSpec {
 
@@ -27,14 +30,15 @@ class InProgressSpec extends ItSpec {
 
   "user is authorised and financial data found" in {
     setup()
-    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
     InProgress.checkGuidance
     InProgress.uniqueToPage
+    InProgress.checktabs
   }
 
   "user is authorised and financial data found but partial" in {
     setup(true, true)
-    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", partialAccount = true, appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_inprogress")
     InProgress.checkGuidance
     InProgress.uniqueToPage
   }
@@ -46,7 +50,7 @@ class InProgressSpec extends ItSpec {
 
   "user is authorised and address data found" in {
     setup(false)
-    InProgress.assertPageIsDisplayed(vrn, false, true, amount = "£5.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(vrn, false, true, amount = "£6.56", appender = "_inprogress")
     InProgress.uniqueToPage
   }
 
@@ -65,11 +69,10 @@ class InProgressSpec extends ItSpec {
 
   "check negative amount" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialDataSingleOkNegative(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
     goToViaPath(path)
-    InProgress.assertPageIsDisplayed(vrn, amount = "£5.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
   }
 
   "multiple inprogress " in {
@@ -78,12 +81,14 @@ class InProgressSpec extends ItSpec {
     InProgress.completedLink
   }
 
+  "click view progress " in {
+    setup(true, true, false)
+    InProgress.clickViewProgress("_inprogress")
+  }
+
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true) = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    if (singleRepayment)
-      DesWireMockResponses.financialsOkSingle(vrn)
-    else
-      DesWireMockResponses.financialsOkMultiple4(vrn)
     if (useBankDetails) {
       if (partialBankDetails)
         DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
@@ -93,7 +98,7 @@ class InProgressSpec extends ItSpec {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
     if (singleRepayment)
-      DesWireMockResponses.repaymentDetailSingleInProgress(vrn)
+      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
     else
       DesWireMockResponses.repaymentDetailsMultipleInProgress(vrn)
     goToViaPath(path)

@@ -37,8 +37,13 @@ import org.scalatest.Assertion
 
 object InProgressCompleted extends CommonDetail {
 
-  def noRepayments(implicit webDriver: WebDriver): Assertion = {
-    idPresent("no-repayments") shouldBe false
+  def checktabs(implicit wd: WebDriver): Assertion = {
+
+    idPresent("completed-exist") shouldBe true
+    idPresent("inprogress-exist") shouldBe true
+    idPresent("completed-none") shouldBe false
+    idPresent("inprogress-none") shouldBe false
+
   }
 
 }

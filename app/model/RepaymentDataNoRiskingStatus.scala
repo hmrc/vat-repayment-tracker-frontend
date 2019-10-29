@@ -16,16 +16,10 @@
 
 package model
 
-import controllers.ValueClassBinder.valueClassBinder
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Format
-import play.api.mvc.PathBindable
+import java.time.LocalDate
 
-final case class PeriodKey(value: String)
-
-object PeriodKey {
-
-  implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
-  implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
-
-}
+final case class RepaymentDataNoRiskingStatus(
+    period:             String,
+    amount:             BigDecimal,
+    returnCreationDate: LocalDate,
+    periodKey:          String)

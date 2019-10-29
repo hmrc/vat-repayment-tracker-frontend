@@ -34,13 +34,4 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
 
   }
 
-  "user is authorised and VAT Return Credit Charge not present " in {
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialDataOkVPA(vrn)
-    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    goToViaPath(path)
-    NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
-
-  }
-
 }
