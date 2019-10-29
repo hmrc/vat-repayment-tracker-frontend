@@ -24,5 +24,6 @@ final case class WhatsHappendSoFar(
     title:             String,
     description:       String,
     amountDescription: String,
-    pageTitle:         String
+    pageTitle:         String,
+    complete:          String    = ""
 )
