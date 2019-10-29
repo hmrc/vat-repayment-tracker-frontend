@@ -39,6 +39,7 @@ case class ViewConfig(
   val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
   val supportLanguages: Boolean = false
   val signOut = s"$frontendBaseUrl/$appName/signout"
+  val showResultsUrl = s"$frontendBaseUrl/$appName/show-results/vrn/"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -54,7 +55,6 @@ case class ViewConfig(
     feedbackBaseUrl             = servicesConfig.getString("urls.feedback-base"),
     contactBaseUrl              = servicesConfig.getString("urls.contact-frontend"),
     paymentHistoryUrl           = servicesConfig.getString("urls.payments-history")
-
   )
 
 }

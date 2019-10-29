@@ -25,6 +25,8 @@ trait CommonDetail extends CommonPage {
 
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
+  def breadCrumbsExists()(implicit driver: WebDriver) = idPresent("viewVatAccount") shouldBe true
+
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
   def clickInProgress()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())

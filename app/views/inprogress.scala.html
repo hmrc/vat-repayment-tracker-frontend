@@ -27,7 +27,8 @@ viewsHelpers: views.ViewsHelpers,
 appConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
-guidance_in_progress: views.html.partials.guidance_in_progress
+guidance_in_progress: views.html.partials.guidance_in_progress,
+bread_crumbs: views.html.partials.bread_crumbs
 )
 
 @(
@@ -49,6 +50,7 @@ headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
 
+@bread_crumbs()
 <main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:one_in_progress_multiple_delayed">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

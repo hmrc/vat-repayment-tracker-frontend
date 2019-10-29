@@ -48,4 +48,6 @@ object ViewProgress extends CommonPage {
 
   def checkMainMessage(mainMessage: String)(implicit webDriver: WebDriver): Assertion = readMainMessage shouldBe mainMessage
 
+  def backExists()(implicit driver: WebDriver) = idPresent("back") shouldBe true
+
 }
