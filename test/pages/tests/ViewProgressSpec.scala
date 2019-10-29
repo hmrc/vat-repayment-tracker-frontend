@@ -39,6 +39,7 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, CLAIM_QUERIED.value, REPAYMENT_ADJUSTED.value, ADJUSTMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.backExists()
   }
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {

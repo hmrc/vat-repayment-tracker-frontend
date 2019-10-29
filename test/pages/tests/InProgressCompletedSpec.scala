@@ -46,6 +46,7 @@ class InProgressCompletedSpec extends ItSpec {
     InProgress.checkGuidance
     InProgress.uniqueToPage
     InProgressCompleted.checktabs
+    InProgressCompleted.breadCrumbsExists
   }
 
   "click completed link" in {

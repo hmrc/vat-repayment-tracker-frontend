@@ -34,6 +34,7 @@ class InProgressSpec extends ItSpec {
     InProgress.checkGuidance
     InProgress.uniqueToPage
     InProgress.checktabs
+    InProgress.breadCrumbsExists
   }
 
   "user is authorised and financial data found but partial" in {

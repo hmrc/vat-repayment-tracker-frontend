@@ -268,4 +268,8 @@ object LangMessages {
   val `no-in-progress-desc` = Message("""If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</br></br>If you submitted your return early check this page after your accounting period has ended.""")
 
   def `no-completed-desc`(url: String) = Message(s"""Completed repayments will only show here for 60 days after your repayment date. View your <a href="${url}">VAT payments history.</a>""")
+
+  val `Your VAT account` = Message("Your VAT account")
+
+  val Back = Message("Back")
 }
