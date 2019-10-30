@@ -69,7 +69,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
                                             returnDebitChargeExists:  Boolean)(implicit request: Request[_]): List[WhatsHappendSoFar] = {
     implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
 
-   //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
+    //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
 
     val nonCompleteRows: List[WhatsHappendSoFar] = desFormatter.addMissingStatus(vrd).sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate)).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
 
