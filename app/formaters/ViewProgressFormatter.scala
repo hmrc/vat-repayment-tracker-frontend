@@ -69,16 +69,28 @@ class ViewProgressFormatter @Inject() (views:          Views,
                                             returnDebitChargeExists:  Boolean)(implicit request: Request[_]): List[WhatsHappendSoFar] = {
     implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
 
-    desFormatter.addMissingStatus(vrd).sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate)).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetailsOption, returnDebitChargeExists))
+    //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
+
+    val nonCompleteRows: List[WhatsHappendSoFar] = desFormatter.addMissingStatus(vrd).sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate)).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
+
+    val completedCreditRows: List[WhatsHappendSoFar] = if (returnCreditChargeExists)
+      vrd.filter(f => (f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED.value || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED.value))
+        .map (m => computeWhatsHappenedSoFarCompleteCreditCharge(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
+    else List()
+
+    val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => (f.repaymentDetailsData.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value))
+      .map (m => computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate, m))
+    else List()
+
+    completedCreditRows ::: completedDebitRows ::: nonCompleteRows
+
   }
 
-  private def computeWhatsHappenedSoFar(estRepaymentDate:         LocalDate,
-                                        vrtRepaymentDetailData:   VrtRepaymentDetailData,
-                                        bankDetailsExist:         Boolean,
-                                        returnCreditChargeExists: Boolean,
-                                        addressDetails:           Option[String],
-                                        bankDetailsOption:        Option[BankDetails],
-                                        returnDebitChargeExists:  Boolean)(implicit request: Request[_]): WhatsHappendSoFar = {
+  private def computeWhatsHappenedSoFar(estRepaymentDate:       LocalDate,
+                                        vrtRepaymentDetailData: VrtRepaymentDetailData,
+                                        bankDetailsExist:       Boolean,
+                                        addressDetails:         Option[String],
+                                        bankDetailsOption:      Option[BankDetails])(implicit request: Request[_]): WhatsHappendSoFar = {
 
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
 
@@ -140,81 +152,99 @@ class ViewProgressFormatter @Inject() (views:          Views,
       }
 
       case REPAYMENT_ADJUSTED.value => {
-        if (returnCreditChargeExists) {
-          //id:7
-          WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
-                            vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                            LangMessages.`Repayment complete`.show,
-            if (bankDetailsExist) {
-              bankDetailsOption match {
-                case Some(bankDetails) => LangMessages.`repayment-complete-bank-details-adjusted`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
-                case None              => throw new RuntimeException("No Bank details")
-              }
-
-            } else {
-              LangMessages.`repayment-complete-address-adjusted`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
-            }, LangMessages.`Amount we paid you`.show,
-                            LangMessages.`Your repayment is complete`.show)
-        } else
-          //id: 3
-          WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
-                            vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                            LangMessages.`Your VAT repayment amount changed`.show,
-            if (bankDetailsExist) {
-              bankDetailsOption match {
-                case Some(bankDetails) => LangMessages.`You claimed a VAT repayment of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
-                case None              => throw new RuntimeException("No Bank details")
-              }
-            } else {
-              LangMessages.`We will send a cheque to your business address`.show
-            }, LangMessages.`Amount we'll pay you`.show,
-                            LangMessages.`Your repayment has been approved`.show)
+        //id: 3
+        WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`Your VAT repayment amount changed`.show,
+          if (bankDetailsExist) {
+            bankDetailsOption match {
+              case Some(bankDetails) => LangMessages.`You claimed a VAT repayment of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+              case None              => throw new RuntimeException("No Bank details")
+            }
+          } else {
+            LangMessages.`We will send a cheque to your business address`.show
+          }, LangMessages.`Amount we'll pay you`.show,
+                          LangMessages.`Your repayment has been approved`.show)
       }
 
       case ADJUSTMENT_TO_TAX_DUE.value => {
-        if (returnDebitChargeExists)
-          //id:8 -- to complete
-          WhatsHappendSoFar(ADJUSTMENT_TO_TAX_DUE.value,
-                            vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                            LangMessages.`Repayment complete`.show,
-                            LangMessages.`We received your VAT payment`.show,
-                            LangMessages.`Amount you paid`.show,
-                            LangMessages.`Your repayment is complete`.show)
-        else {
-          //id:5
-          WhatsHappendSoFar(ADJUSTMENT_TO_TAX_DUE.value,
-                            vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                            LangMessages.`You now owe HMRC`.show,
-                            LangMessages.`We calculated that the original amount you claimed of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount),
-                                                                                                 desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show,
-                            LangMessages.`Amount to pay`.show, LangMessages.`You need to make a VAT payment`.show)
-        }
+        //id:5
+        WhatsHappendSoFar(ADJUSTMENT_TO_TAX_DUE.value,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`You now owe HMRC`.show,
+                          LangMessages.`We calculated that the original amount you claimed of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount),
+                                                                                               desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show,
+                          LangMessages.`Amount to pay`.show, LangMessages.`You need to make a VAT payment`.show)
       }
 
       case REPAYMENT_APPROVED.value =>
-        if (returnCreditChargeExists) {
-          //id: 9
-          WhatsHappendSoFar(REPAYMENT_APPROVED.value,
-                            vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                            LangMessages.`Repayment complete`.show,
-            if (bankDetailsExist) {
-              bankDetailsOption match {
-                case Some(bankDetails) => LangMessages.`repayment-complete-bank-details`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
-                case None              => throw new RuntimeException("No Bank details")
-              }
-
-            } else {
-              LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
-            }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show)
-        } else {
-          //id:6
-          WhatsHappendSoFar(REPAYMENT_APPROVED.value,
-                            vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                            LangMessages.`Repayment approved`.show,
-            if (bankDetailsExist) LangMessages.`We will send this to your repayment bank account`.show else LangMessages.`We will send a cheque to your business address`.show,
-                            LangMessages.`Amount we'll pay you`.show, LangMessages.`Your repayment has been approved`.show)
-        }
+        //id:6
+        WhatsHappendSoFar(REPAYMENT_APPROVED.value,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`Repayment approved`.show,
+          if (bankDetailsExist) LangMessages.`We will send this to your repayment bank account`.show else LangMessages.`We will send a cheque to your business address`.show,
+                          LangMessages.`Amount we'll pay you`.show, LangMessages.`Your repayment has been approved`.show)
     }
+  }
+
+  private def computeWhatsHappenedSoFarCompleteCreditCharge(estRepaymentDate:       LocalDate,
+                                                            vrtRepaymentDetailData: VrtRepaymentDetailData,
+                                                            bankDetailsExist:       Boolean,
+                                                            addressDetails:         Option[String],
+                                                            bankDetailsOption:      Option[BankDetails])(implicit request: Request[_]): WhatsHappendSoFar = {
+
+    vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
+
+      case REPAYMENT_ADJUSTED.value => {
+        //id:7
+        WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`Repayment complete`.show,
+          if (bankDetailsExist) {
+            bankDetailsOption match {
+              case Some(bankDetails) => LangMessages.`repayment-complete-bank-details-adjusted`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+              case None              => throw new RuntimeException("No Bank details")
+            }
+
+          } else {
+            LangMessages.`repayment-complete-address-adjusted`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+          }, LangMessages.`Amount we paid you`.show,
+                          LangMessages.`Your repayment is complete`.show, "_Y")
+      }
+      case REPAYMENT_APPROVED.value => {
+        //id: 9
+        WhatsHappendSoFar(REPAYMENT_APPROVED.value,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`Repayment complete`.show,
+          if (bankDetailsExist) {
+            bankDetailsOption match {
+              case Some(bankDetails) => LangMessages.`repayment-complete-bank-details`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+              case None              => throw new RuntimeException("No Bank details")
+            }
+
+          } else {
+            LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+          }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show, "_Y")
+      }
+    }
+
+  }
+
+  private def computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate:       LocalDate,
+                                                           vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_]): WhatsHappendSoFar = {
+
+    vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
+      case ADJUSTMENT_TO_TAX_DUE.value => {
+        //id:8 -- to complete
+        WhatsHappendSoFar(ADJUSTMENT_TO_TAX_DUE.value,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`Repayment complete`.show,
+                          LangMessages.`We received your VAT payment`.show,
+                          LangMessages.`Amount you paid`.show,
+                          LangMessages.`Your repayment is complete`.show, "_Y")
+      }
+    }
+
   }
 
   private def getEstimatedRepaymentDate(returnCreationDate: LocalDate, supplementDelayDays: Option[Int]): LocalDate =
