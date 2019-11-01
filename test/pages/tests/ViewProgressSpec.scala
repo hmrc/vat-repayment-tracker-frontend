@@ -32,7 +32,7 @@ class ViewProgressSpec extends ItSpec {
   val ft_debit: Int = 3
 
   "id: 1 click view progress basic" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AC"), ft = ft_404)
+    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(6)
@@ -43,7 +43,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AC"), ft = ft_404, status1 = CLAIM_QUERIED.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(6)
@@ -53,7 +53,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AC"), ft = ft_404, status1 = SENT_FOR_RISKING.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING.value)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(6)
@@ -63,7 +63,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
-    setup(useBankDetails = true, inPast = true, rdsp = 1, periodKey = PeriodKey("18AC"), ft = ft_404, status1 = CLAIM_QUERIED.value)
+    setup(useBankDetails = true, inPast = true, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(-44) //50 -6
@@ -73,7 +73,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 3 , REPAYMENT_ADJUSTED" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AC"), ft = ft_404, status2 = REPAYMENT_ADJUSTED.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_ADJUSTED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
@@ -83,7 +83,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 5, ADJUSTMENT_TO_TAX_DUE" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AC"), ft = ft_404, status2 = ADJUSTMENT_TO_TAX_DUE.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = ADJUSTMENT_TO_TAX_DUE.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
@@ -93,7 +93,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 6, REPAYMENT_APPROVED" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AC"), ft = ft_404, status2 = REPAYMENT_APPROVED.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_APPROVED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
@@ -103,7 +103,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AC"), ft = ft_credit, status2 = REPAYMENT_ADJUSTED.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_ADJUSTED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
@@ -113,7 +113,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 8, ADJUSTED_TO_TAX_DUE AND Debit Charge Exists" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AC"), ft = ft_debit, status2 = ADJUSTMENT_TO_TAX_DUE.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_debit, status2 = ADJUSTMENT_TO_TAX_DUE.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
@@ -123,7 +123,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AC"), ft = ft_credit, status2 = REPAYMENT_APPROVED.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_APPROVED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
@@ -133,7 +133,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "check 3 status" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 3, periodKey = PeriodKey("18AC"), ft = ft_credit, status3 = REPAYMENT_APPROVED.value)
+    setup(useBankDetails = true, inPast = false, rdsp = 3, periodKey = PeriodKey("18AG"), ft = ft_credit, status3 = REPAYMENT_APPROVED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
