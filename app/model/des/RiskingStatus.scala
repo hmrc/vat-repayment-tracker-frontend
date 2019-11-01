@@ -23,5 +23,7 @@ case object SENT_FOR_RISKING extends RiskingStatus { val value = "SENT_FOR_RISKI
 
 case object CLAIM_QUERIED extends RiskingStatus { val value = "CLAIM_QUERIED" } //S003
 case object REPAYMENT_ADJUSTED extends RiskingStatus { val value = "REPAYMENT_ADJUSTED" } //S004
-case object ADJUSTMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSTMENT_TO_TAX_DUE" } //S005
+
+//This is spelt wrong in the DES schema !!!
+case object ADJUSMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSMENT_TO_TAX_DUE" } //S005
 case object REPAYMENT_APPROVED extends RiskingStatus { val value = "REPAYMENT_APPROVED" } //S006

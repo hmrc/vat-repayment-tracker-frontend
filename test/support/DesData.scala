@@ -92,7 +92,7 @@ object DesData {
         "sentForRiskingDate": "2001-01-01",
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AG",
-        "riskingStatus": "ADJUSTMENT_TO_TAX_DUE",
+        "riskingStatus": "ADJUSMENT_TO_TAX_DUE",
         "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
@@ -172,7 +172,7 @@ object DesData {
              "sentForRiskingDate": "2001-01-01",
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AG",
-             "riskingStatus": "ADJUSTMENT_TO_TAX_DUE",
+             "riskingStatus": "ADJUSMENT_TO_TAX_DUE",
              "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount":5.56
