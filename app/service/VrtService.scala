@@ -51,7 +51,7 @@ class VrtService @Inject() (
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
         val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == INITIAL.value || f.riskingStatus == SENT_FOR_RISKING.value || f.riskingStatus == CLAIM_QUERIED.value).map(m =>
           RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
-        val completed: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == REPAYMENT_ADJUSTED.value || f.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value || f.riskingStatus == REPAYMENT_APPROVED.value).map(m =>
+        val completed: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == REPAYMENT_ADJUSTED.value || f.riskingStatus == ADJUSMENT_TO_TAX_DUE.value || f.riskingStatus == REPAYMENT_APPROVED.value).map(m =>
           RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
 
         //if something is completed, remove from the current list

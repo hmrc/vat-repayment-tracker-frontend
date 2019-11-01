@@ -226,10 +226,10 @@ object LangMessages {
 
   val `We are making sure we pay you the right amount` = Message("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
 
-  val period_AA = Message("1 January to 31 March")
-  val period_AB = Message("1 April to 30 June")
-  val period_AC = Message("1 July to 30 September")
-  val period_AD = Message("1 October to 31 December")
+  val period_1 = Message("1 January to 31 March")
+  val period_2 = Message("1 April to 30 June")
+  val period_3 = Message("1 July to 30 September")
+  val period_4 = Message("1 October to 31 December")
 
   val `We will send this to your repayment bank account` = Message("This will reach your repayment bank account in 3 workings days.")
 

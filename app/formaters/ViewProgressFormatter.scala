@@ -78,7 +78,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
         .map (m => computeWhatsHappenedSoFarCompleteCreditCharge(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
     else List()
 
-    val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => (f.repaymentDetailsData.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value))
+    val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => (f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE.value))
       .map (m => computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate, m))
     else List()
 
@@ -167,9 +167,9 @@ class ViewProgressFormatter @Inject() (views:          Views,
                           LangMessages.`Your repayment has been approved`.show)
       }
 
-      case ADJUSTMENT_TO_TAX_DUE.value => {
+      case ADJUSMENT_TO_TAX_DUE.value => {
         //id:5
-        WhatsHappendSoFar(ADJUSTMENT_TO_TAX_DUE.value,
+        WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE.value,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`You now owe HMRC`.show,
                           LangMessages.`We calculated that the original amount you claimed of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount),
@@ -234,9 +234,9 @@ class ViewProgressFormatter @Inject() (views:          Views,
                                                            vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_]): WhatsHappendSoFar = {
 
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
-      case ADJUSTMENT_TO_TAX_DUE.value => {
+      case ADJUSMENT_TO_TAX_DUE.value => {
         //id:8 -- to complete
-        WhatsHappendSoFar(ADJUSTMENT_TO_TAX_DUE.value,
+        WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE.value,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment complete`.show,
                           LangMessages.`We received your VAT payment`.show,
@@ -255,7 +255,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
   private def showEstimatedRepaymentDate(vrd: List[VrtRepaymentDetailData]): Boolean = {
 
     vrd.filter(f => (f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED.value ||
-      f.repaymentDetailsData.riskingStatus == ADJUSTMENT_TO_TAX_DUE.value) || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED.value).size == 0
+      f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE.value) || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED.value).size == 0
 
   }
 
