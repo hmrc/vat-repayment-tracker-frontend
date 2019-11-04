@@ -31,7 +31,9 @@ case class ViewConfig(
     updateCorrespondenceAddress: String,
     feedbackBaseUrl:             String,
     contactBaseUrl:              String,
-    paymentHistoryUrl:           String) {
+    paymentHistoryUrl:           String,
+    payFrontendUrl:              String,
+    payFrontendSj:               String) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -40,6 +42,7 @@ case class ViewConfig(
   val supportLanguages: Boolean = false
   val signOut = s"$frontendBaseUrl/$appName/signout"
   val showResultsUrl = s"$frontendBaseUrl/$appName/show-results/vrn/"
+  val paynowurl = s"$payFrontendUrl$payFrontendSj"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -54,7 +57,9 @@ case class ViewConfig(
     updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
     feedbackBaseUrl             = servicesConfig.getString("urls.feedback-base"),
     contactBaseUrl              = servicesConfig.getString("urls.contact-frontend"),
-    paymentHistoryUrl           = servicesConfig.getString("urls.payments-history")
+    paymentHistoryUrl           = servicesConfig.getString("urls.payments-history"),
+    payFrontendUrl              = servicesConfig.baseUrl("pay-frontend"),
+    payFrontendSj               = servicesConfig.getString("microservice.services.pay-frontend.sj-url")
   )
 
 }

@@ -32,7 +32,8 @@ vrn: Vrn,
 viewProgress: ViewProgress,
 showEstimatedRepaymentDat: Boolean,
 amountDescription: String,
-pageTitle: String
+pageTitle: String,
+amountUrl: String
 )(
 implicit
 request: Request[_]
@@ -54,7 +55,8 @@ bodyClasses = None
             <div class="govuk-grid-row govuk-!-margin-bottom-9">
                 <div class="govuk-grid-column-one-half">
                     <h2 class="govuk-body govuk-!-margin-bottom-0">@{amountDescription}</h2>
-                    <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                    <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                    <p>@Html(amountUrl)</p>
                 </div>
 
                 @{

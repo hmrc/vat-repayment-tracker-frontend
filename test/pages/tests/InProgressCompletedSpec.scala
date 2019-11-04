@@ -43,7 +43,6 @@ class InProgressCompletedSpec extends ItSpec {
 
   "user is authorised and financial data found" in {
     setup()
-    InProgress.checkGuidance
     InProgress.uniqueToPage
     InProgressCompleted.checktabs
     InProgressCompleted.breadCrumbsExists

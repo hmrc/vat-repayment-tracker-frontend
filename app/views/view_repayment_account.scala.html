@@ -55,9 +55,6 @@ bodyClasses = None
      <dd class="summary-list__value">
       @{bankDetails.accountHolderName}
      </dd>
-     <dd class="summary-list__actions">
-      <a href='@routes.Controller.startBankAccountCocJourney(vrn,returnPage)'>@{LangMessages.`Change`.show}</a>
-     </dd>
     </div>
     <div class="summary-list__row" id="acc-sort-code">
      <dt class="summary-list__key">
@@ -76,6 +73,7 @@ bodyClasses = None
      </dd>
     </div>
    </dl>
+   <a href='@routes.Controller.startBankAccountCocJourney(vrn,returnPage)'>@{LangMessages.`Change account details`.show}</a>
 
   </div>
  </div>

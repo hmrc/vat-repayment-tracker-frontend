@@ -31,7 +31,6 @@ class InProgressSpec extends ItSpec {
   "user is authorised and financial data found" in {
     setup()
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
-    InProgress.checkGuidance
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
@@ -40,7 +39,6 @@ class InProgressSpec extends ItSpec {
   "user is authorised and financial data found but partial" in {
     setup(true, true)
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_inprogress")
-    InProgress.checkGuidance
     InProgress.uniqueToPage
   }
 
