@@ -60,15 +60,14 @@ class ViewProgressFormatter @Inject() (views:          Views,
       desFormatter.formatPeriodKey(periodKey.value),
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
 
-    Ok(views.view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle, computeAmountUrl(viewProgress.whatsHappenedSoFar(0))))
+    Ok(views.view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
+                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue()))
   }
 
-  private def computeAmountUrl(whatsHappendSoFar: WhatsHappendSoFar)(implicit request: Request[_]): String = {
-    if (whatsHappendSoFar.isComplete) {
-      LangMessages.`view payments history`(viewConfig.viewVatAccount).show
-    } else if (whatsHappendSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE.value) {
-      LangMessages.`pay now`(viewConfig.paynowurl).show
-    } else ""
+  private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {
+    if (whatsHappendSoFar.isComplete) false
+    else if (whatsHappendSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE.value) true
+    else false
   }
 
   private def computeWhatsHappenedSoFarList(estRepaymentDate:         LocalDate,

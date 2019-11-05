@@ -46,7 +46,7 @@ class BankAccountCocConnector @Inject() (
     val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, false, bkUrl, bkUrl, bkUrl)
     Logger.debug(s"Calling bank-account-coc start journey for vrn ${vrn}")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
-    Logger.debug(s"Calling ank-account-coc start journey for vrn with url ${startJourneyURL})")
+    Logger.debug(s"Calling bank-account-coc start journey for vrn with url ${startJourneyURL})")
     httpClient.POST[ViewRepaymentRequest, NextUrl](startJourneyURL, viewRepaymentRequest)
 
   }

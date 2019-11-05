@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package model
+package model.payapi
 
-import java.time.LocalDate
+import model.Vrn
+import play.api.libs.json.{Format, Json}
 
-final case class ViewProgress(
-    amount:                 BigDecimal,
-    returnCreationDate:     LocalDate,
-    estimatedRepaymentDate: LocalDate,
-    period:                 String,
-    whatsHappenedSoFar:     List[WhatsHappendSoFar])
+final case class SpjRequestBtaVat(
+    amountInPence: Long,
+    returnUrl:     String,
+    backUrl:       String,
+    vrn:           Vrn
+)
+
+object SpjRequestBtaVat {
+  implicit val format: Format[SpjRequestBtaVat] = Json.format[SpjRequestBtaVat]
+}

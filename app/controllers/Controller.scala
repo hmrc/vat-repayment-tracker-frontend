@@ -17,7 +17,7 @@
 package controllers
 
 import config.ViewConfig
-import connectors.{BankAccountCocConnector, DirectDebitBackendConnector, PaymentsOrchestratorConnector, VatRepaymentTrackerBackendConnector}
+import connectors._
 import controllers.action.Actions
 import formaters.{AddressFormter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
@@ -50,13 +50,21 @@ class Controller @Inject() (
     paymentsOrchestratorService:         VrtService,
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
     viewProgressFormatter:               ViewProgressFormatter,
-    showResultsFormatter:                ShowResultsFormatter)(
+    showResultsFormatter:                ShowResultsFormatter,
+    payApiConnector:                     PayApiConnector)(
     implicit
     ec: ExecutionContext)
 
   extends FrontendBaseController(cc) {
 
   import requestSupport._
+
+  def startPaymentsJourney(vrn: Vrn, amountInPence: Long): Action[AnyContent] =
+    actions.securedAction(vrn).async { implicit request =>
+      for {
+        response <- payApiConnector.startJourney(amountInPence, vrn)
+      } yield Redirect(response.nextUrl)
+    }
 
   def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>

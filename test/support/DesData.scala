@@ -21,7 +21,6 @@ import java.time.LocalDate
 import model.{Vrn, VrtRepaymentDetailData}
 import model.des._
 import play.api.libs.json.{JsValue, Json}
-import support.DesData.item
 
 object DesData {
 
@@ -30,8 +29,7 @@ object DesData {
   val ppob: PPOB = PPOB(Some(address))
   val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation))
-  val item = Item(Option(LocalDate.parse("2018-03-31")))
-  val transaction: Transaction = Transaction("VAT Return Credit Charge", "18AC", "March 2018", LocalDate.parse("2018-03-01"), LocalDate.parse("2018-03-31"), BigDecimal(5.56), BigDecimal(5.56), Option(Seq(item)))
+  val transaction: Transaction = Transaction("VAT Return Credit Charge", "18AC")
   val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val directDebitDataNone: DirectDebitData = DirectDebitData(None)
@@ -291,19 +289,7 @@ object DesData {
           "financialTransactions":[
              {
                 "chargeType": "VAT Return Credit Charge",
-                "periodKey":"18AC",
-                "periodKeyDescription":"March 2018",
-                "taxPeriodFrom":"2018-03-01",
-                "taxPeriodTo":"2018-03-31",
-                "originalAmount":5.56,
-                "outstandingAmount":5.56,
-       "items": [
-                       {
-                         "clearingDate":"2018-03-31"
-                       }
-                       ]
-             }
-          ]
+                "periodKey":"18AC"
        }
      """.stripMargin
   )
@@ -506,6 +492,7 @@ object DesData {
      }
        """.stripMargin)
 
+  //language=JSON
   val customerDataOkWithoutBankDetails: JsValue = Json.parse(
     s"""
      {

@@ -58,4 +58,11 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
+  "check call to pay-api" in {
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PayApiWireMockResponses.payOk
+    val result = connector.startPaymentsJourney(vrn, 10000).futureValue
+    result.status shouldBe Status.OK
+  }
+
 }

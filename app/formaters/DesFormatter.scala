@@ -157,7 +157,10 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
       case "J" => LangMessages.period_4.show
       case "K" => LangMessages.period_4.show
       case "L" => LangMessages.period_4.show
-      case _   => throw new RuntimeException(s"Invalid month : ${periodKey}")
+      case _ => {
+        Logger.warn(s"invalid periodKey, could not match month: ${periodKey}")
+        ""
+      }
     }
 
     val periodKeyDescription = s"""${monthDes} ${year}"""

@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package model
+package support
 
-import java.time.LocalDate
+import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
-final case class ViewProgress(
-    amount:                 BigDecimal,
-    returnCreationDate:     LocalDate,
-    estimatedRepaymentDate: LocalDate,
-    period:                 String,
-    whatsHappenedSoFar:     List[WhatsHappendSoFar])
+object PayApiWireMockResponses {
+
+  def payOk: StubMapping = {
+    stubFor(post(urlEqualTo("/pay-api/bta/vat/journey/start"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          s"""
+           {"journeyId":"fnksafnsagjsgd", nextUrl":"https://www.development.tax.service.gov.uk/pay-api"}
+       """.stripMargin)))
+
+  }
+
+}
+

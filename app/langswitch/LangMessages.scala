@@ -273,8 +273,8 @@ object LangMessages {
 
   val Back = Message("Back")
 
-  def `view payments history`(url: String) = Message(s"""<a href=${url}>View payments history</a>""")
+  val `View payments history` = Message("View payments history")
 
-  def `pay now`(url: String) = Message(s"""<a href=${url}>Pay now</a>""")
+  val `Pay now` = Message("Pay now")
 
 }
