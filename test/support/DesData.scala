@@ -28,7 +28,7 @@ object DesData {
   val ppob: PPOB = PPOB(Some(address))
   val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation))
-  val transaction: Transaction = Transaction("VAT Return Credit Charge", "18AC")
+  val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"))
   val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val directDebitDataNone: DirectDebitData = DirectDebitData(None)

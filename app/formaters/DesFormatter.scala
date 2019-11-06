@@ -49,7 +49,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey == periodKey.value && f.chargeType == "VAT Return Debit Charge")))
+    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey.getOrElse("ZZ") == periodKey.value && f.chargeType == "VAT Return Debit Charge")))
 
     transactionIterable match {
       case Some(x) => if (x.size > 0) true else false
@@ -61,7 +61,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey == periodKey.value && f.chargeType == "VAT Return Credit Charge")))
+    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey.getOrElse("ZZ") == periodKey.value && f.chargeType == "VAT Return Credit Charge")))
 
     transactionIterable match {
       case Some(x) => if (x.size > 0) true else false

@@ -38,7 +38,7 @@ object FinancialData {
 
 final case class Transaction(
     chargeType: String,
-    periodKey:  String)
+    periodKey:  Option[String])
 
 object Transaction {
   implicit val format: OFormat[Transaction] = Json.format[Transaction]
