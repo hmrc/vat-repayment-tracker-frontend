@@ -21,7 +21,6 @@ import java.time.LocalDate
 import model.{Vrn, VrtRepaymentDetailData}
 import model.des._
 import play.api.libs.json.{JsValue, Json}
-
 object DesData {
 
   val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"))
@@ -290,6 +289,8 @@ object DesData {
              {
                 "chargeType": "VAT Return Credit Charge",
                 "periodKey":"18AC"
+             }
+          ]
        }
      """.stripMargin
   )
@@ -492,7 +493,6 @@ object DesData {
      }
        """.stripMargin)
 
-  //language=JSON
   val customerDataOkWithoutBankDetails: JsValue = Json.parse(
     s"""
      {

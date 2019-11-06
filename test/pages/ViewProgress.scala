@@ -50,4 +50,8 @@ object ViewProgress extends CommonPage {
 
   def backExists()(implicit driver: WebDriver) = idPresent("back") shouldBe true
 
+  def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver) = idPresent("history-url") shouldBe expectedValue
+
+  def payUrl(expectedValue: Boolean)(implicit driver: WebDriver) = idPresent("pay-url") shouldBe expectedValue
+
 }

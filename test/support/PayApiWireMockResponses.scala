@@ -18,6 +18,7 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.libs.json.JsObject
 
 object PayApiWireMockResponses {
 
@@ -26,10 +27,12 @@ object PayApiWireMockResponses {
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          s"""
-           {"journeyId":"fnksafnsagjsgd", nextUrl":"https://www.development.tax.service.gov.uk/pay-api"}
-       """.stripMargin)))
-
+          """
+      {
+        "journeyId": "TestJourneyId-44f9-ad7f-01e1d3d8f151",
+        "nextUrl": "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"
+      }
+    """.stripMargin)))
   }
 
 }

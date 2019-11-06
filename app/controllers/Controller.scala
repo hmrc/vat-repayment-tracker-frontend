@@ -63,7 +63,10 @@ class Controller @Inject() (
     actions.securedAction(vrn).async { implicit request =>
       for {
         response <- payApiConnector.startJourney(amountInPence, vrn)
-      } yield Redirect(response.nextUrl)
+      } yield {
+        Logger.debug(s"received ${response.toString}")
+        Redirect(response.nextUrl)
+      }
     }
 
   def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
