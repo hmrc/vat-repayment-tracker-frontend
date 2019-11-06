@@ -39,12 +39,11 @@ request: Request[_]
 @import viewsHelpers.requestSupport._
 
 
-
-<table class="govuk-table">
+<table class="govuk-table" xmlns:font-weight="http://www.w3.org/1999/xhtml">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header">@{LangMessages.`Received on`.show}</th>
-      <th scope="col" class="govuk-table__header">@{LangMessages.`VAT Return period`.show}</th>
+      <th scope="col" class="govuk-table__header">@{LangMessages.`Accounting period`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`Amount claimed`.show}</th>
         <th scope="col" class="govuk-table__header"></th>
     </tr>
@@ -52,7 +51,7 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td id="receivedOn@{appender}">@{formatter.formatDate(onePayment.returnCreationDate)}</td>
+        <td id="receivedOn@{appender}" class="add-bold">@{formatter.formatDate(onePayment.returnCreationDate)}</td>
       <td id="period@{appender}">@onePayment.period</td>
       <td id="amount@{appender}">£@{formatter.formatAmount(onePayment.amount)}</td>
         <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))' id="link@{appender}">

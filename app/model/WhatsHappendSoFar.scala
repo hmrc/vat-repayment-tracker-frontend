@@ -26,4 +26,6 @@ final case class WhatsHappendSoFar(
     amountDescription: String,
     pageTitle:         String,
     complete:          String    = ""
-)
+) {
+  val isComplete = complete.equals("_Y")
+}

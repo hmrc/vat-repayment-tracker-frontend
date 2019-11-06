@@ -9,3 +9,4 @@ POST       /manage-or-track-submit                                  controllers.
 GET        /signout                                                 controllers.Controller.signout
 GET        /bank-account-coc/start-journey/vrn/:vrn/:returnPage     controllers.Controller.startBankAccountCocJourney(vrn : Vrn, returnPage : ReturnPage)
 GET        /view-progress/vrn/:vrn/:periodKey                       controllers.Controller.viewProgress(vrn : Vrn, periodKey : PeriodKey)
+GET        /spj/vrn/:vrn/:amountInPence                             controllers.Controller.startPaymentsJourney(vrn : Vrn, amountInPence : Long)

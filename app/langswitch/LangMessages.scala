@@ -17,8 +17,6 @@
 package langswitch
 
 import model.des.BankDetails
-import formaters.DesFormatter
-import model.{PeriodKey, Vrn}
 
 object LangMessages {
 
@@ -39,8 +37,8 @@ object LangMessages {
     english = "Received on"
   )
 
-  val `VAT Return period`: Message = Message(
-    english = "VAT Return period"
+  val `Accounting period`: Message = Message(
+    english = "Accounting period"
   )
 
   val `When we will repay you`: Message = Message(
@@ -90,8 +88,8 @@ object LangMessages {
     english = "Manage your repayment bank account"
   )
 
-  val `Change`: Message = Message(
-    english = "Change"
+  val `Change account details`: Message = Message(
+    english = "Change account details"
   )
 
   val `Your repayment details`: Message = Message(
@@ -119,19 +117,19 @@ object LangMessages {
   )
 
   val `Currently sent to`: Message = Message(
-    english = "Your cheque is currently send to:"
+    english = "We'll send your cheque to:"
   )
 
   val `For faster payment next time`: Message = Message(
     english = "For faster payment next time"
   )
 
-  val `add a repayment account`: Message = Message(
-    english = "add a repayment account"
+  val `add a repayment bank account`: Message = Message(
+    english = "add a repayment bank account"
   )
 
-  val `Update your correspondence address`: Message = Message(
-    english = "Update your correspondence address"
+  val `Update your business address`: Message = Message(
+    english = "Update your business address"
   )
 
   val `Manage or track`: Message = Message(
@@ -200,13 +198,13 @@ object LangMessages {
 
   val `Your repayment is complete` = Message("Your repayment is complete")
 
-  val `Checking VAT repayment` = Message("Checking VAT Repayment")
+  val `Checking amount` = Message("Checking amount")
 
-  val `We received your return` = Message("We received your return and are now checking the repayment amount")
+  val `We received your return` = Message("We received your return and are now checking the repayment amount we owe you.")
 
-  val `Your VAT repayment amount changed` = Message("Your VAT repayment amount changed")
+  val `Repayment amount changed` = Message("Repayment amount changed")
 
-  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"You claimed £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}.  This will reach your repayment bank account in 3 working days")
+  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String, url: String) = Message(s"You claimed £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount.  <br><br>If you do not receive a letter in the next few days, check your <a href=url>VAT payments history.</a> We may have used the amount to pay off a VAT charge on your account.")
 
   val `Sending for further checks` = Message("Sending for further checks")
 
@@ -218,7 +216,7 @@ object LangMessages {
 
   val `Estimated repayment date has passed` = Message("Estimated repayment date has passed")
 
-  val `You do not need to do anything right now` = Message("""You do not need to do anything right now. We are working on paying you as soon as possible. If you need to speak to someone about your repayment, you can <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a>""")
+  val `You do not need to do anything right now` = Message("""You do not need to do anything right now. We are working on paying you as soon as possible. </br>If you need to speak to someone about your repayment, you can <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a>""")
 
   val `Repayment complete` = Message("Repayment complete")
 
@@ -233,7 +231,7 @@ object LangMessages {
 
   val `We will send this to your repayment bank account` = Message("This will reach your repayment bank account in 3 workings days.")
 
-  val `We will send a cheque to your business address` = Message("We will send a cheque to your business address. This will reach you in 5 to 6 working days.")
+  def `We will send a cheque to your business address`(url: String) = Message("We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  <br><br>If you do not receive a letter in the next few days, check your <a href=url>VAT payments history.</a> We may have used the amount to pay off a VAT charge on your account.")
 
   def `repayment-complete-bank-details`(name: String, number: String, sortCode: String, amount: String) =
     Message(s"""We sent a payment of £${amount} to your repayment bank account:</br>Name: ${name}</br>Account number: ${number}</br>Sort code: ${sortCode}.""")
@@ -249,7 +247,7 @@ object LangMessages {
 
   val `You now owe HMRC` = Message("You now owe HMRC")
 
-  val `We received your VAT payment` = Message(s"""We received your VAT payment. View your <a href=@{appConfig.viewVatAccount}>payments history.</a>""")
+  val `We received your VAT payment` = Message(s"""We received your VAT payment.""")
 
   val `Amount you claimed` = Message("Amount you claimed")
 
@@ -274,4 +272,9 @@ object LangMessages {
   val `Your VAT account` = Message("Your VAT account")
 
   val Back = Message("Back")
+
+  val `View payments history` = Message("View payments history")
+
+  val `Pay now` = Message("Pay now")
+
 }

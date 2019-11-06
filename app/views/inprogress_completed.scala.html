@@ -27,7 +27,6 @@ viewsHelpers: views.ViewsHelpers,
 appConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
-guidance_in_progress: views.html.partials.guidance_in_progress,
 bread_crumbs: views.html.partials.bread_crumbs
 )
 
@@ -68,12 +67,12 @@ bodyClasses = None
                 <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
                     @multiple_repayments(inProgress,vrn,"_inprogress")
-                    @guidance_in_progress()
                     <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
+                    <p>@Html(LangMessages.`no-completed-desc`(appConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-exist"></div>
                 </section>
             </div>

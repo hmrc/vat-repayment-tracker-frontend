@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package model
+package model.payapi
 
-import java.time.LocalDate
+import play.api.libs.json.{Json, OFormat}
 
-final case class ViewProgress(
-    amount:                 BigDecimal,
-    returnCreationDate:     LocalDate,
-    estimatedRepaymentDate: LocalDate,
-    period:                 String,
-    whatsHappenedSoFar:     List[WhatsHappendSoFar])
+final case class SpjResponse(
+    journeyId: String,
+    nextUrl:   String
+)
+
+object SpjResponse {
+  implicit val format: OFormat[SpjResponse] = Json.format[SpjResponse]
+}

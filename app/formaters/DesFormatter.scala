@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.{Inject, Singleton}
 import langswitch.LangMessages
 import model.des._
-import model.{PeriodKey, VrtRepaymentDetailData}
+import model.{ChargeType, PeriodKey, VrtRepaymentDetailData}
 import play.api.Logger
 import play.api.mvc.Request
 import req.RequestSupport
@@ -49,7 +49,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey == periodKey.value && f.chargeType == "VAT Return Debit Charge")))
+    } yield (fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnDebitCharge, periodKey)))
 
     transactionIterable match {
       case Some(x) => if (x.size > 0) true else false
@@ -61,13 +61,16 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield (fdAllOption.financialTransactions.filter(f => (f.periodKey == periodKey.value && f.chargeType == "VAT Return Credit Charge")))
+    } yield (fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey)))
 
     transactionIterable match {
       case Some(x) => if (x.size > 0) true else false
       case None    => false
     }
   }
+
+  private def financialTransactionsPredicate(transaction: Transaction, chargeType: String, periodKey: PeriodKey): Boolean =
+    transaction.periodKey.getOrElse("ZZ") == periodKey.value && transaction.chargeType == chargeType
 
   def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
 
@@ -157,7 +160,10 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
       case "J" => LangMessages.period_4.show
       case "K" => LangMessages.period_4.show
       case "L" => LangMessages.period_4.show
-      case _   => throw new RuntimeException(s"Invalid month : ${periodKey}")
+      case _ => {
+        Logger.warn(s"invalid periodKey, could not match month: ${periodKey}")
+        ""
+      }
     }
 
     val periodKeyDescription = s"""${monthDes} ${year}"""

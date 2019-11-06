@@ -18,6 +18,7 @@ package formaters
 
 import java.time.LocalDate
 
+import config.ViewConfig
 import javax.inject.{Inject, Singleton}
 import langswitch.LangMessages
 import model._
@@ -32,7 +33,8 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class ViewProgressFormatter @Inject() (views:          Views,
                                        requestSupport: RequestSupport,
-                                       desFormatter:   DesFormatter)(implicit ec: ExecutionContext) extends Results {
+                                       desFormatter:   DesFormatter,
+                                       viewConfig:     ViewConfig)(implicit ec: ExecutionContext) extends Results {
 
   import requestSupport._
 
@@ -57,7 +59,15 @@ class ViewProgressFormatter @Inject() (views:          Views,
       estRepaymentDate,
       desFormatter.formatPeriodKey(periodKey.value),
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
-    Ok(views.view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle))
+
+    Ok(views.view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
+                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue()))
+  }
+
+  private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {
+    if (whatsHappendSoFar.isComplete) false
+    else if (whatsHappendSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE.value) true
+    else false
   }
 
   private def computeWhatsHappenedSoFarList(estRepaymentDate:         LocalDate,
@@ -97,7 +107,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
       //id:1
       case INITIAL.value => WhatsHappendSoFar(INITIAL.value,
                                               vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                                              LangMessages.`Checking VAT repayment`.show,
+                                              LangMessages.`Checking amount`.show,
                                               LangMessages.`We received your return`.show,
                                               LangMessages.`Amount you claimed`.show,
                                               LangMessages.`Your repayment is being processed`.show
@@ -155,14 +165,14 @@ class ViewProgressFormatter @Inject() (views:          Views,
         //id: 3
         WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                          LangMessages.`Your VAT repayment amount changed`.show,
+                          LangMessages.`Repayment amount changed`.show,
           if (bankDetailsExist) {
             bankDetailsOption match {
-              case Some(bankDetails) => LangMessages.`You claimed a VAT repayment of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+              case Some(bankDetails) => LangMessages.`You claimed a VAT repayment of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5), viewConfig.viewVatAccount).show
               case None              => throw new RuntimeException("No Bank details")
             }
           } else {
-            LangMessages.`We will send a cheque to your business address`.show
+            LangMessages.`We will send a cheque to your business address`(viewConfig.viewVatAccount).show
           }, LangMessages.`Amount we'll pay you`.show,
                           LangMessages.`Your repayment has been approved`.show)
       }
@@ -182,7 +192,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
         WhatsHappendSoFar(REPAYMENT_APPROVED.value,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment approved`.show,
-          if (bankDetailsExist) LangMessages.`We will send this to your repayment bank account`.show else LangMessages.`We will send a cheque to your business address`.show,
+          if (bankDetailsExist) LangMessages.`We will send this to your repayment bank account`.show else LangMessages.`We will send a cheque to your business address`(viewConfig.viewVatAccount).show,
                           LangMessages.`Amount we'll pay you`.show, LangMessages.`Your repayment has been approved`.show)
     }
   }

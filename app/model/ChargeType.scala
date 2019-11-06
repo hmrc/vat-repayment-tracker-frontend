@@ -16,11 +16,9 @@
 
 package model
 
-import java.time.LocalDate
+object ChargeType {
 
-final case class ViewProgress(
-    amount:                 BigDecimal,
-    returnCreationDate:     LocalDate,
-    estimatedRepaymentDate: LocalDate,
-    period:                 String,
-    whatsHappenedSoFar:     List[WhatsHappendSoFar])
+  val vatReturnDebitCharge = "VAT Return Debit Charge"
+  val vatReturnCreditCharge = "VAT Return Credit Charge"
+
+}

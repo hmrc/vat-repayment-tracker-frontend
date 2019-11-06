@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.ViewConfig
-@import model.des._
-@import model.RepaymentData
-@import langswitch.LangMessages
+package support
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
-)
+import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.libs.json.JsObject
 
-@(
-)(
-implicit
-request: Request[_]
-)
+object PayApiWireMockResponses {
 
-@import viewsHelpers.requestSupport._
+  def payOk: StubMapping = {
+    stubFor(post(urlEqualTo("/pay-api/bta/vat/journey/start"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          """
+      {
+        "journeyId": "TestJourneyId-44f9-ad7f-01e1d3d8f151",
+        "nextUrl": "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"
+      }
+    """.stripMargin)))
+  }
 
-<h3 id="whenpay">@{LangMessages.`When we will repay you`.show}</h3>
-<p id="whenpay-desc">@{LangMessages.`When we will repay you description`.show} <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">@{LangMessages.`Contact HMRC`.show}</a>@{LangMessages.`after 30 days have passed.`.show}</p>
+}
+

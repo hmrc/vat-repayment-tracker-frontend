@@ -50,6 +50,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(CLAIM_QUERIED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(false)
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
@@ -60,6 +62,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(SENT_FOR_RISKING.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(false)
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
@@ -70,6 +74,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(CLAIM_QUERIED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is delayed")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(false)
   }
 
   "id: 3 , REPAYMENT_ADJUSTED" in {
@@ -80,6 +86,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(s"${REPAYMENT_ADJUSTED}_Y", CLAIM_QUERIED.value, SENT_FOR_RISKING.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment has been approved")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(false)
   }
 
   "id: 5, ADJUSMENT_TO_TAX_DUE" in {
@@ -90,6 +98,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(ADJUSMENT_TO_TAX_DUE.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(s"${ADJUSMENT_TO_TAX_DUE.value}_Y", CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("You need to make a VAT payment")
+    ViewProgress.payUrl(true)
+    ViewProgress.historyUrl(false)
   }
 
   "id: 6, REPAYMENT_APPROVED" in {
@@ -100,6 +110,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(s"${REPAYMENT_APPROVED.value}_Y", CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment has been approved")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(false)
   }
 
   "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists" in {
@@ -110,6 +122,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(s"${REPAYMENT_ADJUSTED.value}_Y", REPAYMENT_ADJUSTED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_APPROVED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(true)
   }
 
   "id: 8, ADJUSMENT_TO_TAX_DUE AND Debit Charge Exists" in {
@@ -120,6 +134,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(s"${ADJUSMENT_TO_TAX_DUE.value}_Y", ADJUSMENT_TO_TAX_DUE.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_APPROVED.value, REPAYMENT_ADJUSTED.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(true)
   }
 
   "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists" in {
@@ -130,6 +146,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(s"${REPAYMENT_APPROVED.value}_Y", REPAYMENT_APPROVED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(true)
   }
 
   "check 3 status" in {
@@ -140,6 +158,8 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.checkStatusExists(List(s"${REPAYMENT_APPROVED.value}_Y", REPAYMENT_APPROVED.value, INITIAL.value, CLAIM_QUERIED.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(true)
 
   }
 

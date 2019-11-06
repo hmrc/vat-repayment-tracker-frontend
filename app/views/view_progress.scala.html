@@ -32,7 +32,10 @@ vrn: Vrn,
 viewProgress: ViewProgress,
 showEstimatedRepaymentDat: Boolean,
 amountDescription: String,
-pageTitle: String
+pageTitle: String,
+showHistoryUrl: Boolean,
+showPayUrl: Boolean,
+amountInPence: Long
 )(
 implicit
 request: Request[_]
@@ -54,7 +57,18 @@ bodyClasses = None
             <div class="govuk-grid-row govuk-!-margin-bottom-9">
                 <div class="govuk-grid-column-one-half">
                     <h2 class="govuk-body govuk-!-margin-bottom-0">@{amountDescription}</h2>
-                    <p class="heading-h2 govuk-!-padding-top-1" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                    <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                    @{
+                    if (showHistoryUrl) {
+                    <p id="history-url"><a href={appConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
+                    }
+                    }
+                    @{
+                    if (showPayUrl) {
+
+                    <p id="pay-url"><a href={routes.Controller.startPaymentsJourney(vrn,amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
+                    }
+                    }
                 </div>
 
                 @{
