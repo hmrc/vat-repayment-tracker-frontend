@@ -31,10 +31,11 @@ import req.RequestSupport
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ViewProgressFormatter @Inject() (views:          Views,
-                                       requestSupport: RequestSupport,
-                                       desFormatter:   DesFormatter,
-                                       viewConfig:     ViewConfig)(implicit ec: ExecutionContext) extends Results {
+class ViewProgressFormatter @Inject() (views:           Views,
+                                       requestSupport:  RequestSupport,
+                                       desFormatter:    DesFormatter,
+                                       viewConfig:      ViewConfig,
+                                       periodFormatter: PeriodFormatter)(implicit ec: ExecutionContext) extends Results {
 
   import requestSupport._
 
@@ -57,7 +58,7 @@ class ViewProgressFormatter @Inject() (views:          Views,
       vrd(0).repaymentDetailsData.vatToPay_BOX5,
       vrd(0).repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
-      desFormatter.formatPeriodKey(periodKey.value),
+      periodFormatter.formatPeriodKey(periodKey.value),
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
 
     Ok(views.view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,

@@ -19,7 +19,7 @@ package service
 import java.time.LocalDate
 
 import connectors.VatRepaymentTrackerBackendConnector
-import formaters.DesFormatter
+import formaters.{DesFormatter, PeriodFormatter}
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model._
@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext
 class VrtService @Inject() (
     views:                               Views,
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
-    desFormatter:                        DesFormatter
+    periodFormatter:                     PeriodFormatter
 )
   (implicit ec: ExecutionContext) {
 
@@ -70,7 +70,7 @@ class VrtService @Inject() (
 
     for {
       rd <- repaymentDetails
-    } yield (RepaymentData(desFormatter.formatPeriodKey(rd.periodKey), rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
+    } yield (RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
 
   }
 
