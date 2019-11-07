@@ -143,33 +143,4 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
     date.format(pattern1)
   }
 
-  def formatPeriodKey(periodKey: String)(implicit request: Request[_]) = {
-    val year: String = "20" + periodKey.take(2)
-    val month: String = periodKey.takeRight(1)
-
-    val monthDes = month match {
-      case "A" => LangMessages.period_1.show
-      case "B" => LangMessages.period_1.show
-      case "C" => LangMessages.period_1.show
-      case "D" => LangMessages.period_2.show
-      case "E" => LangMessages.period_2.show
-      case "F" => LangMessages.period_2.show
-      case "G" => LangMessages.period_3.show
-      case "H" => LangMessages.period_3.show
-      case "I" => LangMessages.period_3.show
-      case "J" => LangMessages.period_4.show
-      case "K" => LangMessages.period_4.show
-      case "L" => LangMessages.period_4.show
-      case _ => {
-        Logger.warn(s"invalid periodKey, could not match month: ${periodKey}")
-        ""
-      }
-    }
-
-    val periodKeyDescription = s"""${monthDes} ${year}"""
-
-    Logger.debug(s"""Received ${periodKey} returning ${periodKeyDescription}""")
-    periodKeyDescription
-  }
-
 }
