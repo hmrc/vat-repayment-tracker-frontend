@@ -174,12 +174,14 @@ class Controller @Inject() (
     implicit request: Request[_] =>
       val customerDataF = desConnector.getCustomerData(vrn)
       val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
+      val financialDataF = desConnector.getFinancialData(vrn)
 
       val result = for {
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
+        financialData <- financialDataF
       } yield (
-        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn), customerData, vrn)
+        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn, financialData), customerData, vrn)
       )
 
       result

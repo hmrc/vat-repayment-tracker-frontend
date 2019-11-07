@@ -32,6 +32,9 @@ package pages.tests
  * limitations under the License.
  */
 
+import java.time.LocalDate
+
+import model.des.{ADJUSMENT_TO_TAX_DUE, INITIAL}
 import model.{EnrolmentKeys, Vrn}
 import pages._
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
@@ -40,6 +43,10 @@ class InProgressCompletedSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
+
+  val ft_404: Int = 1
+  val ft_credit: Int = 2
+  val ft_debit: Int = 3
 
   "user is authorised and financial data found" in {
     setup()
@@ -55,7 +62,20 @@ class InProgressCompletedSpec extends ItSpec {
     InProgressCompleted.checktabs
   }
 
-  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false) = {
+  "click completed link inpast but not completed" in {
+    setup(inPast = true)
+    InProgress.clickCompleted
+    Completed.uniqueToPage
+    InProgressCompleted.checktabs
+  }
+
+  "click completed link inpast completed" in {
+    setup(inPast = true, ft = ft_debit)
+    InProgressCompleted.checktabsInPast
+    InProgress.completedLink
+  }
+
+  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, ft: Int = ft_404, inPast: Boolean = false) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
@@ -66,7 +86,18 @@ class InProgressCompletedSpec extends ItSpec {
     } else {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
-    DesWireMockResponses.repaymentDetails3Inprogree1Completed(vrn)
+
+    if (inPast)
+      DesWireMockResponses.repaymentDetails2DifferentPeriods(LocalDate.now().toString, LocalDate.now().minusDays(70).toString, INITIAL.value, ADJUSMENT_TO_TAX_DUE.value, vrn)
+    else
+      DesWireMockResponses.repaymentDetails3Inprogree1Completed(vrn)
+
+    ft match {
+      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
+      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
+      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+    }
+
     goToViaPath(path)
   }
 

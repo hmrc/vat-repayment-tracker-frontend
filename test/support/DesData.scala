@@ -83,6 +83,32 @@ object DesData {
   )
 
   //language=JSON
+  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: String, status2: String): JsValue = Json.parse(
+    s"""[
+     {
+             "returnCreationDate": "${date}",
+             "sentForRiskingDate": "${date}",
+             "lastUpdateReceivedDate": "${date}",
+             "periodKey": "18AF",
+             "riskingStatus": "${status1}",
+             "vatToPay_BOX5": 1000,
+             "supplementDelayDays": 6,
+             "originalPostingAmount": 5.56
+         },
+         {
+        "returnCreationDate": "${date2}",
+        "sentForRiskingDate": "${date2}",
+        "lastUpdateReceivedDate": "${date2}",
+        "periodKey": "18AG",
+        "riskingStatus": "${status2}",
+        "vatToPay_BOX5": 1001,
+        "supplementDelayDays": 6,
+        "originalPostingAmount": 5.56
+    }]
+""".stripMargin
+  )
+
+  //language=JSON
   def repaymentDetailSingleCompleted: JsValue = Json.parse(
     s"""[{
         "returnCreationDate": "2001-01-01",

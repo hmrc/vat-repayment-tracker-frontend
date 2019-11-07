@@ -28,6 +28,10 @@ class ManageOrTrackSpec extends ItSpec {
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}"""
 
+  val ft_404: Int = 1
+  val ft_credit: Int = 2
+  val ft_debit: Int = 3
+
   "user is authorised, bank dd option, manage bank option " in {
     setup(true, true)
     ManageOrTrack.assertPageIsDisplayed(vrn, true, true)
@@ -63,7 +67,7 @@ class ManageOrTrackSpec extends ItSpec {
     ViewRepaymentAccount.assertPageIsDisplayed(vrn)
   }
 
-  private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true) = {
+  private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true, ft: Int = ft_404) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails)
@@ -78,6 +82,12 @@ class ManageOrTrackSpec extends ItSpec {
       DesWireMockResponses.ddNotFound(vrn)
 
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
+
+    ft match {
+      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
+      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
+      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+    }
 
     goToViaPath(path)
   }

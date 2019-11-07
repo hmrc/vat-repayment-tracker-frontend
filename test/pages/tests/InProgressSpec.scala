@@ -28,6 +28,10 @@ class InProgressSpec extends ItSpec {
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
+  val ft_404: Int = 1
+  val ft_credit: Int = 2
+  val ft_debit: Int = 3
+
   "user is authorised and financial data found" in {
     setup()
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
@@ -85,7 +89,7 @@ class InProgressSpec extends ItSpec {
     InProgress.clickViewProgress("_inprogress")
   }
 
-  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true) = {
+  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
@@ -100,6 +104,13 @@ class InProgressSpec extends ItSpec {
       DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
     else
       DesWireMockResponses.repaymentDetailsMultipleInProgress(vrn)
+
+    ft match {
+      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
+      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
+      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+    }
+
     goToViaPath(path)
   }
 
