@@ -46,4 +46,13 @@ object InProgressCompleted extends CommonDetail {
 
   }
 
+  def checktabsInPast(implicit wd: WebDriver): Assertion = {
+
+    idPresent("completed-exist") shouldBe false
+    idPresent("inprogress-exist") shouldBe true
+    idPresent("completed-none") shouldBe true
+    idPresent("inprogress-none") shouldBe false
+
+  }
+
 }

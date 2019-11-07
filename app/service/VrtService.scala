@@ -33,11 +33,12 @@ import scala.concurrent.ExecutionContext
 class VrtService @Inject() (
     views:                               Views,
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
-    periodFormatter:                     PeriodFormatter
+    periodFormatter:                     PeriodFormatter,
+    desFormatter:                        DesFormatter
 )
   (implicit ec: ExecutionContext) {
 
-  def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn)(implicit request: Request[_]): AllRepaymentData = {
+  def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_]): AllRepaymentData = {
 
     repaymentDetails match {
       case Some(rd) => {
@@ -47,7 +48,7 @@ class VrtService @Inject() (
           res = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
         } yield (Logger.debug(s"cached vat repayment data for vrn : ${vrn}"))
 
-        val data = getRepaymentData(rd, vrn)
+        val data = getRepaymentData(rd, vrn, financialData)
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
         val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == INITIAL.value || f.riskingStatus == SENT_FOR_RISKING.value || f.riskingStatus == CLAIM_QUERIED.value).map(m =>
           RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
@@ -65,13 +66,19 @@ class VrtService @Inject() (
 
   }
 
-  //f.chargeType == "VAT Return Credit Charge"
-  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn)(implicit request: Request[_]): Seq[RepaymentData] = {
+  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_]): Seq[RepaymentData] = {
 
     for {
       rd <- repaymentDetails
+      if (outDatedPredicate(rd, financialData)) == false
     } yield (RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
 
+  }
+
+  private def outDatedPredicate(repaymentDetailData: RepaymentDetailData, financialData: Option[FinancialData]): Boolean = {
+    repaymentDetailData.lastUpdateReceivedDate.getOrElse(LocalDate.now()).isBefore(LocalDate.now().minusDays(60)) && (
+      desFormatter.getReturnDebitChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey)) || desFormatter.getReturnCreditChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey))
+    )
   }
 
   private def dealWithNodata: AllRepaymentData = {

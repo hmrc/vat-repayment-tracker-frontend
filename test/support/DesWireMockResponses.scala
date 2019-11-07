@@ -191,4 +191,14 @@ object DesWireMockResponses {
 
   }
 
+  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: String, status2: String, vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.repaymentDetails2DifferentPeriods(date, date2, status1, status2).toString()
+            .stripMargin)))
+
+  }
+
 }
