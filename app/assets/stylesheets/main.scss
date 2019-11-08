@@ -153,7 +153,7 @@ a,
 }
 
 .multiple-choice [type=radio]:focus+label::before {
-    color: $govuk-focus-text-colour;
+    box-shadow: 0 0 0 4px $govuk-focus-colour;
 }
 
 
