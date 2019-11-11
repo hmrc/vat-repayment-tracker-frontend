@@ -192,7 +192,9 @@ object LangMessages {
     english = "Estimated repayment date"
   )
 
-  val `What's happened so far` = Message("What's happened so far")
+  val `Your repayment progress` = Message("Your repayment progress")
+
+  val `Your repayment history` = Message("Your repayment history")
 
   val `You must now pay some VAT` = Message("You most now pay some VAT")
 

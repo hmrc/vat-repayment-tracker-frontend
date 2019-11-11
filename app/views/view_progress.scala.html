@@ -80,7 +80,17 @@ bodyClasses = None
                 }
                 }
             </div>
-            <h2>@{LangMessages.`What's happened so far`.show}</h2>
+
+            @{
+                if (viewProgress.isComplete) {
+                <h2>{LangMessages.`Your repayment history`.show}</h2>
+                }
+                else {
+                <h2>{LangMessages.`Your repayment progress`.show}</h2>
+                }
+            }
+
+
 
             <ol class="hmrc-timeline">
             @for(whsf <- viewProgress.whatsHappenedSoFar) {
