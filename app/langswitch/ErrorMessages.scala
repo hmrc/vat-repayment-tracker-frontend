@@ -63,7 +63,7 @@ object ErrorMessages {
     english = "You do not have access to this service"
   )
   val `choose an option` = Message(
-    "Please choose an option"
+    "Select whether to manage your accounts or track a VAT repayment"
   )
   val `VRN missing` = Message(
     "VRN missing"
