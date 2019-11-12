@@ -19,7 +19,7 @@ package pages.tests
 import java.time.LocalDate
 
 import model.des.INITIAL
-import model.{EnrolmentKeys, Vrn}
+import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{ErrorPage, InProgress}
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
@@ -28,6 +28,7 @@ class InProgressSpec extends ItSpec {
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
 
+  val periodKey = PeriodKey("18AG")
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
@@ -73,7 +74,7 @@ class InProgressSpec extends ItSpec {
   "check negative amount" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     goToViaPath(path)
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
   }
@@ -101,7 +102,7 @@ class InProgressSpec extends ItSpec {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
     if (singleRepayment)
-      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
+      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     else
       DesWireMockResponses.repaymentDetailsMultipleInProgress(vrn)
 

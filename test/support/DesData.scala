@@ -18,7 +18,7 @@ package support
 
 import java.time.LocalDate
 
-import model.{Vrn, VrtRepaymentDetailData}
+import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
 import model.des._
 import play.api.libs.json.{JsValue, Json}
 object DesData {
@@ -653,7 +653,7 @@ object DesData {
            """.stripMargin)
 
   //language=JSON
-  def storedRepaymentDetails1(date: String, status1: String): JsValue = Json.parse(
+  def storedRepaymentDetails1(date: String, status1: String, periodKey: PeriodKey): JsValue = Json.parse(
     s"""[
              {
                "_id":"5db1c9826b00005f47616c61",
@@ -663,7 +663,7 @@ object DesData {
                "returnCreationDate":"${date}",
                "sentForRiskingDate":"${date}",
                "lastUpdateReceivedDate":"${date}",
-               "periodKey":"18AC",
+               "periodKey": "${periodKey.value}",
                "riskingStatus":"${status1}",
                "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
@@ -764,12 +764,12 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails1(date: String, status1: String): JsValue = Json.parse(
+  def repaymentDetails1(date: String, status1: String, periodKey: PeriodKey): JsValue = Json.parse(
     s"""[{
         "returnCreationDate": "${date}",
         "sentForRiskingDate": "${date}",
         "lastUpdateReceivedDate": "${date}",
-        "periodKey": "18AG",
+        "periodKey": "${periodKey.value}",
         "riskingStatus": "${status1}",
         "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,

@@ -16,10 +16,13 @@
 
 package model
 
+import java.time.Period
+
 import controllers.ValueClassBinder.valueClassBinder
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
+import play.utils.UriEncoding
 
 final case class PeriodKey(value: String)
 
@@ -27,5 +30,14 @@ object PeriodKey {
 
   implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
   implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
+
+  //  def escapePeriodKeyHash(periodKey:PeriodKey) = {
+  //    if (periodKey.value.length != 4) throw new RuntimeException(s"Invalid Length period key ${periodKey.value}")
+  //
+  //    if (periodKey.value.startsWith("#")) {
+  //      encode
+  //    }
+  //    else periodKey
+  //  }
 
 }
