@@ -192,7 +192,9 @@ object LangMessages {
     english = "Estimated repayment date"
   )
 
-  val `What's happened so far` = Message("What's happened so far")
+  val `Your repayment progress` = Message("Your repayment progress")
+
+  val `Your repayment history` = Message("Your repayment history")
 
   val `You must now pay some VAT` = Message("You most now pay some VAT")
 
@@ -204,7 +206,7 @@ object LangMessages {
 
   val `Repayment amount changed` = Message("Repayment amount changed")
 
-  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String, url: String) = Message(s"You claimed £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount.  <br><br>If you do not receive a letter in the next few days, check your <a href=url>VAT payments history.</a> We may have used the amount to pay off a VAT charge on your account.")
+  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String, url: String) = Message(s"You claimed £${originalPostingAmount}. We calculated this amount was incorrect so we will repay you £${vatToPay_Box5}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. <br><br>If you do not receive a letter in the next few days, check your <a href=${url}>VAT payments history</a>.")
 
   val `Sending for further checks` = Message("Sending for further checks")
 
@@ -272,7 +274,7 @@ object LangMessages {
 
   val `We will send this to your repayment bank account` = Message("This will reach your repayment bank account in 3 workings days.")
 
-  def `We will send a cheque to your business address`(url: String) = Message("We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  <br><br>If you do not receive a letter in the next few days, check your <a href=url>VAT payments history.</a> We may have used the amount to pay off a VAT charge on your account.")
+  def `We will send a cheque to your business address`(url: String) = Message(s"We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  <br><br>If you do not receive a letter in the next few days, check your <a href=${url}>VAT payments history</a>.")
 
   def `repayment-complete-bank-details`(name: String, number: String, sortCode: String, amount: String) =
     Message(s"""We sent a payment of £${amount} to your repayment bank account:</br>Name: ${name}</br>Account number: ${number}</br>Sort code: ${sortCode}.""")
