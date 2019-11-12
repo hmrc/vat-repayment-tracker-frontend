@@ -23,4 +23,7 @@ final case class ViewProgress(
     returnCreationDate:     LocalDate,
     estimatedRepaymentDate: LocalDate,
     period:                 String,
-    whatsHappenedSoFar:     List[WhatsHappendSoFar])
+    whatsHappenedSoFar:     List[WhatsHappendSoFar]) {
+
+  val isComplete: Boolean = whatsHappenedSoFar.exists(_.isComplete)
+}
