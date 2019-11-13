@@ -134,7 +134,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
   }
 
   def formatAmount(amount: BigDecimal): String = {
-    val df = new DecimalFormat("#,###.00")
+    val df = new DecimalFormat("#,##0.00")
     df.format(amount.abs)
   }
 
