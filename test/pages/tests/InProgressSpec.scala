@@ -18,7 +18,7 @@ package pages.tests
 
 import java.time.LocalDate
 
-import model.des.INITIAL
+import model.des.{CLAIM_QUERIED, INITIAL}
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{ErrorPage, InProgress}
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
@@ -36,6 +36,14 @@ class InProgressSpec extends ItSpec {
   "user is authorised and financial data found" in {
     setup()
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
+    InProgress.uniqueToPage
+    InProgress.checktabs
+    InProgress.breadCrumbsExists
+  }
+
+  "user is authorised and financial data found, CLAIM_QUERIED" in {
+    setup(status1 = CLAIM_QUERIED.value)
+    InProgress.assertPageIsDisplayed(vrn, amount = "£0.00", appender = "_inprogress")
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
@@ -90,7 +98,7 @@ class InProgressSpec extends ItSpec {
     InProgress.clickViewProgress("_inprogress")
   }
 
-  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404) = {
+  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404, status1: String = INITIAL.value) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
@@ -102,7 +110,7 @@ class InProgressSpec extends ItSpec {
       DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
     if (singleRepayment)
-      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
     else
       DesWireMockResponses.repaymentDetailsMultipleInProgress(vrn)
 

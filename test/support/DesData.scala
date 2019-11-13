@@ -667,7 +667,7 @@ object DesData {
                "riskingStatus":"${status1}",
                "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
-               "originalPostingAmount":5.56
+               "originalPostingAmount":0
              }
              }
              ]
@@ -773,7 +773,7 @@ object DesData {
         "riskingStatus": "${status1}",
         "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,
-        "originalPostingAmount": 5.56
+        "originalPostingAmount": 0
     }]
 """.stripMargin
   )

@@ -55,7 +55,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
     val estRepaymentDate = getEstimatedRepaymentDate(vrd(0).repaymentDetailsData.returnCreationDate, vrd(0).repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
-      vrd(0).repaymentDetailsData.vatToPay_BOX5,
+      if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED.value) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5,
       vrd(0).repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
       periodFormatter.formatPeriodKey(periodKey.value),

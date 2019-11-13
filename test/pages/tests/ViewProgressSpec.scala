@@ -45,7 +45,7 @@ class ViewProgressSpec extends ItSpec {
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
     setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
     InProgress.clickViewProgress("_inprogress")
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(CLAIM_QUERIED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
@@ -69,7 +69,7 @@ class ViewProgressSpec extends ItSpec {
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
     setup(useBankDetails = true, inPast = true, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
     InProgress.clickViewProgress("_inprogress")
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(-44) //50 -6
     ViewProgress.checkStatusExists(List(CLAIM_QUERIED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
