@@ -19,18 +19,19 @@ package controllers
 import java.time.LocalDate
 
 import model.des.INITIAL
-import model.{EnrolmentKeys, Vrn}
+import model.{EnrolmentKeys, PeriodKey, Vrn}
 import play.api.Logger
 import play.api.http.Status
 import support._
 
 class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
+  val periodKey = PeriodKey("18AG")
 
   "Get ShowResults authorised" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK

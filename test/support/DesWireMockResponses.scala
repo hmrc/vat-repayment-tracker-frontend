@@ -17,7 +17,7 @@
 package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import model.Vrn
+import model.{PeriodKey, Vrn}
 
 object DesWireMockResponses {
 
@@ -121,12 +121,12 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailS1(vrn: Vrn, date: String, status1: String) = {
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.repaymentDetails1(date, status1).toString()
+          DesData.repaymentDetails1(date, status1, periodKey).toString()
             .stripMargin)))
 
   }

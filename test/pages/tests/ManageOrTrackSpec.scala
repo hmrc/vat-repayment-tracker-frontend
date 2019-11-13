@@ -19,7 +19,7 @@ package pages.tests
 import java.time.LocalDate
 
 import model.des.INITIAL
-import model.{EnrolmentKeys, Vrn}
+import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
 import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
@@ -27,6 +27,7 @@ class ManageOrTrackSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}"""
+  val periodKey = PeriodKey("18AG")
 
   val ft_404: Int = 1
   val ft_credit: Int = 2
@@ -81,7 +82,7 @@ class ManageOrTrackSpec extends ItSpec {
     else
       DesWireMockResponses.ddNotFound(vrn)
 
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
 
     ft match {
       case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)

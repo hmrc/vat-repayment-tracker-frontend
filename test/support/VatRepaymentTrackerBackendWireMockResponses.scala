@@ -37,7 +37,7 @@ object VatRepaymentTrackerBackendWireMockResponses {
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.storedRepaymentDetails1(date, status1).toString()
+          DesData.storedRepaymentDetails1(date, status1, periodKey).toString()
             .stripMargin)))
 
   }

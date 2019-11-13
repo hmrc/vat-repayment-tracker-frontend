@@ -163,8 +163,20 @@ class ViewProgressSpec extends ItSpec {
 
   }
 
+  "id: 2 , add in INITIAL status (SENT_FOR_RISKING) , #001 status" in {
+    setup(useBankDetails   = true, inPast = false, rdsp = 1, periodKey = PeriodKey("#001"), ft = ft_404, status1 = SENT_FOR_RISKING.value, periodKeyBackend = PeriodKey("%23001"))
+    InProgress.clickViewProgress("_inprogress")
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepaymentDate(6)
+    ViewProgress.checkStatusExists(List(SENT_FOR_RISKING.value, INITIAL.value))
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
+    ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.payUrl(false)
+    ViewProgress.historyUrl(false)
+  }
+
   private def setup(useBankDetails: Boolean = true, inPast: Boolean = false,
-                    status1: String = INITIAL.value, status2: String = CLAIM_QUERIED.value, status3: String = "", rdsp: Int, periodKey: PeriodKey, ft: Int) = {
+                    status1: String = INITIAL.value, status2: String = CLAIM_QUERIED.value, status3: String = "", rdsp: Int, periodKey: PeriodKey, ft: Int, periodKeyBackend: PeriodKey = PeriodKey("18AG")) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
@@ -175,8 +187,8 @@ class ViewProgressSpec extends ItSpec {
     val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
     rdsp match {
       case 1 => {
-        DesWireMockResponses.repaymentDetailS1(vrn, date.toString, status1)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKey)
+        DesWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKey)
+        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
       }
       case 2 => {
         DesWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2)
