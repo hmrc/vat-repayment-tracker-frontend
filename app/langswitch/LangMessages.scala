@@ -97,7 +97,7 @@ object LangMessages {
   )
 
   val `Your repayment details`: Message = Message(
-    english = "Your repayment bank details"
+    english = "Your repayment details"
   )
 
   val `Track your VAT repayments`: Message = Message(
