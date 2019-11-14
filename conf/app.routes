@@ -1,12 +1,12 @@
 # microservice specific routes
 
 GET        /show-results/vrn/:vrn                                   controllers.Controller.showResults(vrn : Vrn)
-GET        /view-repayment-account/vrn/:vrn                         controllers.Controller.viewRepaymentAccount(vrn : Vrn)
+GET        /view-repayment-account/vrn/:vrn                         controllers.Controller.viewRepaymentAccount(vrn : Vrn, audit : Boolean ?= false)
 GET        /manage-or-track/vrn/:vrn                                controllers.Controller.manageOrTrack(vrn : Vrn)
 GET        /assets/*file                                            @controllers.Assets.at(path="/public", file)
 GET        /language/:language                                      @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
 POST       /manage-or-track-submit                                  controllers.Controller.manageOrTrackSubmit
 GET        /signout                                                 controllers.Controller.signout
-GET        /bank-account-coc/start-journey/vrn/:vrn/:returnPage     controllers.Controller.startBankAccountCocJourney(vrn : Vrn, returnPage : ReturnPage)
+GET        /bank-account-coc/start-journey/vrn/:vrn/:returnPage     controllers.Controller.startBankAccountCocJourney(vrn : Vrn, returnPage : ReturnPage, audit : Boolean ?= false)
 GET        /view-progress/vrn/:vrn/:periodKey                       controllers.Controller.viewProgress(vrn : Vrn, periodKey : PeriodKey)
 GET        /spj/vrn/:vrn/:amountInPence                             controllers.Controller.startPaymentsJourney(vrn : Vrn, amountInPence : Long)
