@@ -92,6 +92,10 @@ object LangMessages {
     english = "Change account details"
   )
 
+  val `Your repayment bank details`: Message = Message(
+    english = "Your repayment bank details"
+  )
+
   val `Your repayment details`: Message = Message(
     english = "Your repayment details"
   )
