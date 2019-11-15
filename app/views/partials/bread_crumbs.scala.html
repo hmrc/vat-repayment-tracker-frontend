@@ -23,6 +23,7 @@ appConfig: ViewConfig
 )
 
 @(
+currentPage : String
 )(
 implicit
 request: Request[_]
@@ -37,6 +38,6 @@ request: Request[_]
         <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" id="viewVatAccount" href="@{appConfig.viewVatAccount}">@{LangMessages.`Your VAT account`.show}</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">@{LangMessages.`Track your VAT repayments`.show}</li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">@{currentPage}</li>
     </ol>
 </div>

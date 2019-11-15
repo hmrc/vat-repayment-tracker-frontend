@@ -137,7 +137,7 @@ object LangMessages {
   )
 
   val `Manage or track`: Message = Message(
-    english = "Manage bank accounts or track repayments"
+    english = "Manage Direct Debit and repayment bank account or track repayments"
   )
 
   val heading_bta: Message = Message(
@@ -323,5 +323,7 @@ object LangMessages {
   val `View payments history` = Message("View payments history")
 
   val `Pay now` = Message("Pay now")
+
+  val `Payment and repayments` = Message("Payment and repayments")
 
 }
