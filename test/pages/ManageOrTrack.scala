@@ -44,7 +44,7 @@ object ManageOrTrack extends CommonPage {
       idPresent("nobank-label") shouldBe nobankDisplayed
       idPresent("nodd-label") shouldBe noddDisplayed
 
-      readMainMessage shouldBe "Manage bank accounts or track repayments"
+      readMainMessage shouldBe "Manage Direct Debit and repayment bank account or track repayments"
     }
 
   def dd(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("dd-label")).getText)

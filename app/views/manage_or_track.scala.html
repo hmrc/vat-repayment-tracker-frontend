@@ -24,7 +24,8 @@
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+appConfig: ViewConfig,
+bread_crumbs: views.html.partials.bread_crumbs
 )
 @(
 vrn: Vrn,
@@ -43,6 +44,7 @@ title = LangMessages.heading_bta.show,
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
+@bread_crumbs({LangMessages.`Payment and repayments`.show})
 <main class="govuk-main-wrapper" role="main">
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
