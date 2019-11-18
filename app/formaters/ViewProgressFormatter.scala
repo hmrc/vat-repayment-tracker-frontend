@@ -173,7 +173,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
               case None              => throw new RuntimeException("No Bank details")
             }
           } else {
-            LangMessages.`We will send a cheque to your business address`(viewConfig.viewVatAccount).show
+            LangMessages.`You claimed a VAT repayment of post`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5), viewConfig.viewVatAccount).show
           }, LangMessages.`Amount we'll pay you`.show,
                           LangMessages.`Your repayment has been approved`.show)
       }
