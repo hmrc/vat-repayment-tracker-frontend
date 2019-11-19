@@ -17,7 +17,7 @@
 package connectors
 
 import model.{ReturnPage, Vrn}
-import support.{BankAccountCocWireMockResponses, ItSpec}
+import support.{AuditWireMockResponses, BankAccountCocWireMockResponses, ItSpec}
 
 class BankAccountCocConnectorSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
@@ -26,6 +26,7 @@ class BankAccountCocConnectorSpec extends ItSpec {
 
   "Start Journey" in {
     BankAccountCocWireMockResponses.bankOk
+    AuditWireMockResponses.auditIsAvailable
     val result = bankAccountCocConnector.startJourney(vrn, ReturnPage("manage-or-track")).futureValue
     result.nextUrl shouldBe "https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"
   }

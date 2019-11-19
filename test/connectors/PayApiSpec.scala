@@ -17,7 +17,7 @@
 package connectors
 
 import model.{EnrolmentKeys, Vrn}
-import support.{AuthWireMockResponses, ItSpec, PayApiWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, PayApiWireMockResponses}
 
 class PayApiSpec extends ItSpec {
 
@@ -26,6 +26,7 @@ class PayApiSpec extends ItSpec {
   val payApiConnector: PayApiConnector = injector.instanceOf[PayApiConnector]
 
   "check call to pay-api" in {
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     PayApiWireMockResponses.payOk
     val response = payApiConnector.startJourney(10000, vrn).futureValue

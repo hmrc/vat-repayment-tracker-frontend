@@ -16,8 +16,9 @@
 
 package connectors
 
+import formaters.DesFormatter
 import javax.inject.{Inject, Singleton}
-import model.des.RiskingStatus
+import model.RepaymentDataNoRiskingStatus
 import play.api.Logger
 import play.api.mvc.Request
 import req.RequestSupport
@@ -25,30 +26,47 @@ import req.RequestSupport._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model.DataEvent
-
 import scala.concurrent.ExecutionContext
 
 @Singleton
 class Auditor @Inject() (
-    auditConnector: AuditConnector)(
+    auditConnector: AuditConnector,
+    desFormatter:   DesFormatter)(
     implicit
     ec: ExecutionContext) {
 
   def audit(
-      riskingStatus:   String,
+      inProgress:      List[RepaymentDataNoRiskingStatus],
       auditTypeIn:     String,
       transactionName: String)(
       implicit
       request: Request[_]) = {
 
-    Logger.debug(s"About to audit ${riskingStatus}, ${auditTypeIn}, ${transactionName}")
-    auditConnector.sendEvent(
-      DataEvent(
-        auditSource = "vat-repayment-tracker-frontend",
-        auditType   = auditTypeIn,
-        tags        = Auditor.auditTags(request, transactionName),
-        detail      = AuditData.auditData(riskingStatus)))
+    Logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, ${auditTypeIn}, ${transactionName}")
+    val event = DataEvent(
+      auditSource = "vat-repayment-tracker-frontend",
+      auditType   = auditTypeIn,
+      tags        = Auditor.auditTags(request, transactionName),
+      detail      = convertToMap(inProgress)
+    )
 
+    auditConnector.sendEvent(event)
+
+  }
+
+  private def convertToMap(inProgressList: List[RepaymentDataNoRiskingStatus]): Map[String, String] = {
+
+    inProgressList.zipWithIndex map (m => createMap(m._1, m._2)) reduceOption (_ ++ _) match {
+      case Some(x) => x
+      case None    => Map.empty
+    }
+
+  }
+
+  private def createMap(inProgress: RepaymentDataNoRiskingStatus, row: Int): Map[String, String] = {
+    Map(
+      (s"inprogress_${row}", s"returnCreationDate: ${desFormatter.formatDate(inProgress.returnCreationDate)}, periodKey: ${inProgress.periodKey}, amount: ${desFormatter.formatAmount(inProgress.amount)}")
+    )
   }
 }
 
@@ -70,12 +88,3 @@ object Auditor {
 
 }
 
-object AuditData {
-
-  def auditData(riskingStatus: String)(implicit request: Request[_]): Map[String, String] = {
-
-    Map(
-      "riskingStatus" -> riskingStatus
-    )
-  }
-}

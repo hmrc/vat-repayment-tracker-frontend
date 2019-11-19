@@ -29,6 +29,7 @@ class ControllerSpec extends ItSpec {
   val periodKey = PeriodKey("18AG")
 
   "Get ShowResults authorised" in {
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
@@ -39,6 +40,7 @@ class ControllerSpec extends ItSpec {
 
   "Get ShowResults not authorised redirect to login stub" in {
     AuthWireMockResponses.authFailed
+    AuditWireMockResponses.auditIsAvailable
     GgStub.signInPage(9863, vrn)
     val result = connector.showResults(vrn).futureValue
     result.body should include ("Sign in using Government Gateway")
@@ -46,6 +48,7 @@ class ControllerSpec extends ItSpec {
   }
 
   "Get view repayment account authorised" in {
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     val result = connector.viewRepaymentAccount(vrn).futureValue

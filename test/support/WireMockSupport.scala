@@ -36,6 +36,7 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   override protected def beforeAll(): Unit = wireMockServer.start()
 
   override protected def afterAll(): Unit = wireMockServer.stop()
+
 }
 
 object WireMockSupport {

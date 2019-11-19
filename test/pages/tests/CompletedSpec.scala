@@ -34,7 +34,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages._
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support._
 
 class CompletedSpec extends ItSpec {
 
@@ -70,8 +70,17 @@ class CompletedSpec extends ItSpec {
     Completed.viewProgressLink
   }
 
+  "check audit" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(ft              = ft_debit, singleRepayment = false)
+    InProgress.clickManageAccount
+    InProgress.clickCallBac
+    AuditWireMockResponses.bacWasAuditedNoDetails
+  }
+
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    AuditWireMockResponses.auditIsAvailable
 
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {

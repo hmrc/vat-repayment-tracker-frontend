@@ -88,15 +88,20 @@ class Controller @Inject() (
   def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
 
-      val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
-
       if (audit) {
         Logger.debug("startBankAccountCocJourney... trying to audit")
+        val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
+        val financialDataF = desConnector.getFinancialData(vrn)
+
         for {
           repaymentDetails <- repaymentDetailsF
-          auditRes <- auditor.audit("TODO", "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
+          financialData <- financialDataF
+          allRepayments = paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn, financialData)
+          auditRes <- auditor.audit(allRepayments.inProgressRepaymentData, "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
           nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
-        } yield Redirect(nextUrl.nextUrl)
+        } yield {
+          Redirect(nextUrl.nextUrl)
+        }
       } else {
         Logger.debug("startBankAccountCocJourney... will not audit")
         for {

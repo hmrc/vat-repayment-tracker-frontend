@@ -21,7 +21,7 @@ import java.time.LocalDate
 import model.des._
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ViewProgress}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support._
 
 class ViewProgressSpec extends ItSpec {
 
@@ -178,6 +178,7 @@ class ViewProgressSpec extends ItSpec {
   private def setup(useBankDetails: Boolean = true, inPast: Boolean = false,
                     status1: String = INITIAL.value, status2: String = CLAIM_QUERIED.value, status3: String = "", rdsp: Int, periodKey: PeriodKey, ft: Int, periodKeyBackend: PeriodKey = PeriodKey("18AG")) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
       DesWireMockResponses.customerDataOkWithBankDetails(vrn)
