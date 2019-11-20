@@ -107,6 +107,7 @@ trait ItSpec
     "microservice.services.direct-debit-backend.port" -> WireMockSupport.port, "microservice.services.bank-account-coc.port" -> WireMockSupport.port,
     "microservice.services.vat-repayment-tracker-backend.port" -> WireMockSupport.port,
     "microservice.services.pay-api.port" -> WireMockSupport.port,
+    "auditing.consumer.baseUri.port" -> WireMockSupport.port,
     "urls.login" -> "http://localhost:11111/auth-login-stub/gg-sign-in"
   )
 

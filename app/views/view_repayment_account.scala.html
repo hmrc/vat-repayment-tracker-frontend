@@ -28,7 +28,8 @@ appConfig: ViewConfig
 @(
 bankDetailsOption: Option[BankDetails],
 vrn: Vrn,
-returnPage : ReturnPage
+returnPage : ReturnPage,
+audit: Boolean
 )(
 implicit
 request: Request[_]
@@ -73,7 +74,7 @@ bodyClasses = None
      </dd>
     </div>
    </dl>
-   <a href='@routes.Controller.startBankAccountCocJourney(vrn,returnPage)'>@{LangMessages.`Change account details`.show}</a>
+   <a href='@routes.Controller.startBankAccountCocJourney(vrn,returnPage,audit)' id="call-bac">@{LangMessages.`Change account details`.show}</a>
 
   </div>
  </div>

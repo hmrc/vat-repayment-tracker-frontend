@@ -37,7 +37,7 @@ import java.time.LocalDate
 import model.des.{ADJUSMENT_TO_TAX_DUE, INITIAL}
 import model.{EnrolmentKeys, Vrn}
 import pages._
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support._
 
 class InProgressCompletedSpec extends ItSpec {
 
@@ -77,6 +77,7 @@ class InProgressCompletedSpec extends ItSpec {
 
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, ft: Int = ft_404, inPast: Boolean = false) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
       if (partialBankDetails)

@@ -51,7 +51,8 @@ class Controller @Inject() (
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
     viewProgressFormatter:               ViewProgressFormatter,
     showResultsFormatter:                ShowResultsFormatter,
-    payApiConnector:                     PayApiConnector)(
+    payApiConnector:                     PayApiConnector,
+    auditor:                             Auditor)(
     implicit
     ec: ExecutionContext)
 
@@ -84,12 +85,29 @@ class Controller @Inject() (
       }
     }
 
-  def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage): Action[AnyContent] =
+  def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
     actions.securedAction(vrn).async { implicit request =>
 
-      for {
-        nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
-      } yield Redirect(nextUrl.nextUrl)
+      if (audit) {
+        Logger.debug("startBankAccountCocJourney... trying to audit")
+        val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
+        val financialDataF = desConnector.getFinancialData(vrn)
+
+        for {
+          repaymentDetails <- repaymentDetailsF
+          financialData <- financialDataF
+          allRepayments = paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn, financialData)
+          auditRes <- auditor.audit(allRepayments.inProgressRepaymentData, "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
+          nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
+        } yield {
+          Redirect(nextUrl.nextUrl)
+        }
+      } else {
+        Logger.debug("startBankAccountCocJourney... will not audit")
+        for {
+          nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
+        } yield Redirect(nextUrl.nextUrl)
+      }
 
     }
 
@@ -146,7 +164,7 @@ class Controller @Inject() (
                 case Some(choice) => {
                   choice match {
                     case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showResults(vrn))
-                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(vrn))
+                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(vrn, false))
                     case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(vrn, ReturnPage("manage-or-track")))
                     case ManageOrTrackOptions.nodd.value =>
                       for {
@@ -188,7 +206,7 @@ class Controller @Inject() (
 
   }
 
-  def viewRepaymentAccount(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
+  def viewRepaymentAccount(vrn: Vrn, audit: Boolean): Action[AnyContent] = actions.securedAction(vrn).async {
     implicit request: Request[_] =>
 
       val customerDataF = desConnector.getCustomerData(vrn)
@@ -196,7 +214,7 @@ class Controller @Inject() (
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(views.view_repayment_account(bankDetails, vrn, ReturnPage("view-repayment-account")))
+        Ok(views.view_repayment_account(bankDetails, vrn, ReturnPage("view-repayment-account"), audit))
       }
 
       url

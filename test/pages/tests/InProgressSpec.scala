@@ -20,8 +20,10 @@ import java.time.LocalDate
 
 import model.des.{CLAIM_QUERIED, INITIAL}
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import pages.{ErrorPage, InProgress}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import pages.{ErrorPage, InProgress, ViewRepaymentAccount}
+import support._
+import com.github.tomakehurst.wiremock.client.MappingBuilder
+import com.github.tomakehurst.wiremock.client.WireMock._
 
 class InProgressSpec extends ItSpec {
 
@@ -32,6 +34,12 @@ class InProgressSpec extends ItSpec {
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
+
+  val details: Map[String, String] = Map(
+    ("inprogress_0", "returnCreationDate: 01 Jan 2001, periodKey: 18AA, amount: 6.56"),
+    ("inprogress_1", "returnCreationDate: 01 Jan 2001, periodKey: 18AD, amount: 6.56"),
+    ("inprogress_2", "returnCreationDate: 01 Jan 2001, periodKey: 18AJ, amount: 5.56")
+  )
 
   "user is authorised and financial data found" in {
     setup()
@@ -67,6 +75,7 @@ class InProgressSpec extends ItSpec {
   }
 
   "Get ShowResults authorised but wrong vrn should show error page" in {
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     goToViaPath(path)
     ErrorPage.assertPageIsDisplayed(vrn)
@@ -74,12 +83,14 @@ class InProgressSpec extends ItSpec {
 
   "Get ShowResult logged in but wrong VRN" in {
     val vrnOther: Vrn = Vrn("2345678891")
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrnOther, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     goToViaPath(path)
     ErrorPage.assertPageIsDisplayed(vrn)
   }
 
   "check negative amount" in {
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
@@ -98,8 +109,24 @@ class InProgressSpec extends ItSpec {
     InProgress.clickViewProgress("_inprogress")
   }
 
+  "click clickManageAccount" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(ft              = ft_debit, useBankDetails = false, singleRepayment = false)
+    InProgress.clickCallBac
+    AuditWireMockResponses.bacWasAudited(details)
+  }
+
+  "click view repayment account then clickManageAccount" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(ft              = ft_debit, singleRepayment = false)
+    InProgress.clickManageAccount
+    InProgress.clickCallBac
+    AuditWireMockResponses.bacWasAudited(details)
+  }
+
   private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404, status1: String = INITIAL.value) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails) {
       if (partialBankDetails)

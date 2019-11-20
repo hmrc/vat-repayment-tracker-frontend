@@ -21,7 +21,7 @@ import java.time.LocalDate
 import model.des.INITIAL
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
-import support.{AuthWireMockResponses, DesWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support._
 
 class ManageOrTrackSpec extends ItSpec {
 
@@ -62,13 +62,17 @@ class ManageOrTrackSpec extends ItSpec {
   }
 
   "click bankLabel" in {
+    BankAccountCocWireMockResponses.bankOk
     setup(true, true)
     ManageOrTrack.clickBankLabel()
     ManageOrTrack.clickContinue()
     ViewRepaymentAccount.assertPageIsDisplayed(vrn)
+    ManageOrTrack.clickCallBac
+    AuditWireMockResponses.bacWasNotAudited()
   }
 
   private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true, ft: Int = ft_404) = {
+    AuditWireMockResponses.auditIsAvailable
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     if (useBankDetails)
