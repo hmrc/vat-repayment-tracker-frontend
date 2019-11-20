@@ -55,18 +55,14 @@ class Auditor @Inject() (
   }
 
   private def convertToMap(inProgressList: List[RepaymentDataNoRiskingStatus]): Map[String, String] = {
-
-    inProgressList.zipWithIndex map (m => createMap(m._1, m._2)) reduceOption (_ ++ _) match {
-      case Some(x) => x
-      case None    => Map.empty
-    }
-
-  }
-
-  private def createMap(inProgress: RepaymentDataNoRiskingStatus, row: Int): Map[String, String] = {
-    Map(
-      (s"inprogress_${row}", s"returnCreationDate: ${desFormatter.formatDate(inProgress.returnCreationDate)}, periodKey: ${inProgress.periodKey}, amount: ${desFormatter.formatAmount(inProgress.amount)}")
-    )
+    inProgressList
+      .zipWithIndex
+      .map{
+        case (row, index) =>
+          val k = s"inprogress_${index}"
+          val v = s"returnCreationDate: ${desFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${desFormatter.formatAmount(row.amount)}"
+          k -> v
+      }.toMap
   }
 }
 
