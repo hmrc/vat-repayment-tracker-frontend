@@ -2,8 +2,6 @@
 ->         /vat-repayment-tracker-frontend              app.Routes
 ->         /                          health.Routes
 ->         /template                  template.Routes
+->         /vat-repayment-tracker     guidance.Routes
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
-#Move these when frontend is removed from app.routes default url
-GET        /vat-repayment-tracker/show-vrt              controllers.Controller.showVrt
-GET        /vat-repayment-tracker/non-mtd-user          controllers.Controller.nonMtdUser
