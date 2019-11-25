@@ -62,25 +62,25 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get showVrt authorised" in {
-    AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
-    val result = connector.showVrt.futureValue
-    result.status shouldBe Status.OK
-  }
-
-  "Get showVrt authorised  on-mtd" in {
-    AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
-    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
-    val result = connector.showVrt.futureValue
-    result.body should include ("You cannot use this service")
-    result.status shouldBe Status.OK
-  }
+  //  "Get showVrt authorised" in {
+  //    AuditWireMockResponses.auditIsAvailable
+  //    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+  //    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+  //    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+  //    VatRepaymentTrackerBackendWireMockResponses.storeOk
+  //    val result = connector.showVrt.futureValue
+  //    result.status shouldBe Status.OK
+  //  }
+  //
+  //  "Get showVrt authorised  on-mtd" in {
+  //    AuditWireMockResponses.auditIsAvailable
+  //    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
+  //    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+  //    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+  //    VatRepaymentTrackerBackendWireMockResponses.storeOk
+  //    val result = connector.showVrt.futureValue
+  //    result.body should include ("You cannot use this service")
+  //    result.status shouldBe Status.OK
+  //  }
 
 }

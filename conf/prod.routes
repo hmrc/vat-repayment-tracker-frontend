@@ -4,5 +4,3 @@
 ->         /template                  template.Routes
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
-GET        /vat-repayment-tracker/show-vrt              controllers.Controller.showVrt
-GET        /vat-repayment-tracker/non-mtd-user          controllers.Controller.nonMtdUser

@@ -114,11 +114,11 @@ class InProgressSpec extends ItSpec {
     AuditWireMockResponses.bacWasAudited(details)
   }
 
-  "Get ShowResults authorised but non-mtd vrn should show error page" in {
-    setup(enrolmentIn = EnrolmentKeys.vatVarEnrolmentKey)
-    goToViaPath(path)
-    NonMtdUser.assertPageIsDisplayed
-  }
+  //  "Get ShowResults authorised but non-mtd vrn should show error page" in {
+  //    setup(enrolmentIn = EnrolmentKeys.vatVarEnrolmentKey)
+  //    goToViaPath(path)
+  //    NonMtdUser.assertPageIsDisplayed
+  //  }
 
   private def setup(
       useBankDetails:     Boolean = true,
