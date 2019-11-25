@@ -17,8 +17,10 @@
 package controllers.action
 
 import com.google.inject.Inject
+import config.ViewConfig
 import model.Vrn
 import play.api.Logger
+import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
 
@@ -28,52 +30,38 @@ class Actions @Inject() (
     authoriseAction:      AuthenticatedAction,
     af:                   AuthorisedFunctions,
     cc:                   ControllerComponents,
+    viewConfig:           ViewConfig,
     unhappyPathResponses: UnhappyPathResponses)(implicit ec: ExecutionContext) {
 
-  def securedAction(vrn: Vrn): ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateVrn(vrn)
+  def securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction
 
-  private def validateVrn(vrn: Vrn): ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
+  def securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateMtdVrn
+
+  private def validateMtdVrn: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
     new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
 
       override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
 
-        vrnCheck(request, vrn)
-      }
-
-      override protected def executionContext: ExecutionContext = ec
-    }
-
-  def securedActionFromSession: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateVrnFromSession
-
-  private def validateVrnFromSession: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
-    new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
-
-      override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
-        val vrn = request.sessionVrn
-        vrnCheck(request, vrn)
-
-      }
-
-      override protected def executionContext: ExecutionContext = ec
-    }
-
-  private def vrnCheck[A](request: AuthenticatedRequest[A], vrn: Vrn): Future[Either[Result, AuthenticatedRequest[A]]] = {
-    request.enrolmentsVrn match {
-      case Some(typedVrn) => {
-        if (typedVrn.vrn.value == vrn.value) {
-          Future.successful(Right(request))
-        } else {
-          Logger.debug(s"""User logged in and passed vrn: ${vrn.value}, has enrolment for ${typedVrn.vrn.value}""")
-          implicit val req: AuthenticatedRequest[_] = request
-          Future.successful(Left(unhappyPathResponses.unauthorised(vrn)))
+        request.enrolmentsVrn match {
+          case Some(typedVrn) => {
+            if (Vrn.isMtdEnroled(typedVrn)) {
+              Future.successful(Right(request))
+            } else {
+              Logger.debug(s"""User logged in with ${typedVrn.vrn.value}, this is non-mtd""")
+              implicit val req: AuthenticatedRequest[_] = request
+              Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
+            }
+          }
+          case None => {
+            Logger.debug(s"""User logged in but have no enrolments""")
+            implicit val req: AuthenticatedRequest[_] = request
+            Future.successful(Left(unhappyPathResponses.unauthorised))
+          }
         }
+
       }
-      case None => {
-        Logger.debug(s"""User logged in and passed vrn: ${vrn.value}, but have not enrolments""")
-        implicit val req: AuthenticatedRequest[_] = request
-        Future.successful(Left(unhappyPathResponses.unauthorised))
-      }
+
+      override protected def executionContext: ExecutionContext = ec
     }
-  }
 
 }

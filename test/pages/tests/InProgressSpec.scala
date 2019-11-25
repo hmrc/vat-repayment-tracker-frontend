@@ -20,10 +20,8 @@ import java.time.LocalDate
 
 import model.des.{CLAIM_QUERIED, INITIAL}
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import pages.{ErrorPage, InProgress, ViewRepaymentAccount}
+import pages.{ErrorPage, InProgress, NonMtdUser}
 import support._
-import com.github.tomakehurst.wiremock.client.MappingBuilder
-import com.github.tomakehurst.wiremock.client.WireMock._
 
 class InProgressSpec extends ItSpec {
 
@@ -81,14 +79,6 @@ class InProgressSpec extends ItSpec {
     ErrorPage.assertPageIsDisplayed(vrn)
   }
 
-  "Get ShowResult logged in but wrong VRN" in {
-    val vrnOther: Vrn = Vrn("2345678891")
-    AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrnOther, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    goToViaPath(path)
-    ErrorPage.assertPageIsDisplayed(vrn)
-  }
-
   "check negative amount" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
@@ -124,10 +114,23 @@ class InProgressSpec extends ItSpec {
     AuditWireMockResponses.bacWasAudited(details)
   }
 
-  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404, status1: String = INITIAL.value) = {
+  "Get ShowResults authorised but non-mtd vrn should show error page" in {
+    setup(enrolmentIn = EnrolmentKeys.vatVarEnrolmentKey)
+    goToViaPath(path)
+    NonMtdUser.assertPageIsDisplayed
+  }
+
+  private def setup(
+      useBankDetails:     Boolean = true,
+      partialBankDetails: Boolean = false,
+      singleRepayment:    Boolean = true,
+      ft:                 Int     = ft_404,
+      status1:            String  = INITIAL.value,
+      enrolmentIn:        String  = EnrolmentKeys.mtdVatEnrolmentKey
+  ) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = enrolmentIn)
     if (useBankDetails) {
       if (partialBankDetails)
         DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)

@@ -54,7 +54,7 @@ request: Request[_]
         <td id="receivedOn@{appender}" class="add-bold">@{formatter.formatDate(onePayment.returnCreationDate)}</td>
       <td id="period@{appender}">@onePayment.period</td>
       <td id="amount@{appender}">£@{formatter.formatAmount(onePayment.amount)}</td>
-        <td><a href='@routes.Controller.viewProgress(vrn,PeriodKey(onePayment.periodKey))' id="link@{appender}">
+        <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' id="link@{appender}">
             @if(appender == "_completed"){
                 @{LangMessages.`View history`.show}
             } else{

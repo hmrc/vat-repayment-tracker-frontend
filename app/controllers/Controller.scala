@@ -18,7 +18,7 @@ package controllers
 
 import config.ViewConfig
 import connectors._
-import controllers.action.Actions
+import controllers.action.{Actions, AuthenticatedRequest}
 import formaters.{AddressFormter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
@@ -27,7 +27,7 @@ import model.des._
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
-import play.api.mvc._
+import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
 import views.Views
@@ -60,52 +60,75 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def startPaymentsJourney(vrn: Vrn, amountInPence: Long): Action[AnyContent] =
-    actions.securedAction(vrn).async { implicit request =>
+  def nonMtdUser(): Action[AnyContent] = actions.securedAction.async { implicit request =>
+    Future.successful(Ok(views.non_mtd_user()))
+  }
+
+  def showVrt: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+    implicit request: AuthenticatedRequest[_] =>
+
+      val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
+      val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
+      val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
+
+      val result = for {
+        customerData <- customerDataF
+        repaymentDetails <- repaymentDetailsF
+        financialData <- financialDataF
+      } yield (
+        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
+      )
+
+      result
+
+  }
+
+  def startPaymentsJourney(amountInPence: Long): Action[AnyContent] =
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
       for {
-        response <- payApiConnector.startJourney(amountInPence, vrn)
+        response <- payApiConnector.startJourney(amountInPence, request.typedVrn.vrn)
       } yield {
         Logger.debug(s"received ${response.toString}")
         Redirect(response.nextUrl)
       }
     }
 
-  def viewProgress(vrn: Vrn, periodKey: PeriodKey): Action[AnyContent] =
-    actions.securedAction(vrn).async { implicit request =>
+  def viewProgress(periodKey: PeriodKey): Action[AnyContent] =
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
 
-      val customerDataF = desConnector.getCustomerData(vrn)
-      val financialDataF = desConnector.getFinancialData(vrn)
-      Logger.debug(s"""received vrn : ${vrn.value}, periodKey: ${periodKey.value}""")
+      val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
+      val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
+      Logger.debug(s"""received vrn : ${request.typedVrn.vrn.value}, periodKey: ${periodKey.value}""")
       for {
         customerData <- customerDataF
         financialData <- financialDataF
-        vrd <- vatRepaymentTrackerBackendConnector.find(vrn, periodKey)
+        vrd <- vatRepaymentTrackerBackendConnector.find(request.typedVrn.vrn, periodKey)
       } yield {
-        viewProgressFormatter.computeViewProgress(vrn, periodKey, vrd, customerData, financialData)
+        viewProgressFormatter.computeViewProgress(request.typedVrn.vrn, periodKey, vrd, customerData, financialData)
       }
     }
 
-  def startBankAccountCocJourney(vrn: Vrn, returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
-    actions.securedAction(vrn).async { implicit request =>
+  def startBankAccountCocJourney(returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
 
       if (audit) {
         Logger.debug("startBankAccountCocJourney... trying to audit")
-        val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
-        val financialDataF = desConnector.getFinancialData(vrn)
+        val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
+        val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
 
         for {
           repaymentDetails <- repaymentDetailsF
           financialData <- financialDataF
-          allRepayments = paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn, financialData)
+          allRepayments = paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
           auditRes <- auditor.audit(allRepayments.inProgressRepaymentData, "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
-          nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
+          nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
         } yield {
           Redirect(nextUrl.nextUrl)
         }
       } else {
         Logger.debug("startBankAccountCocJourney... will not audit")
         for {
-          nextUrl <- bankAccountCocConnector.startJourney(vrn, returnPage)
+          nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
         } yield Redirect(nextUrl.nextUrl)
       }
 
@@ -116,10 +139,11 @@ class Controller @Inject() (
       Redirect(viewConfig.feedbackUrlForLogout).withNewSession
     }
 
+  //This needs moving to vat-repayment-tracker and the VRN argument removing
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
-    actions.securedAction(vrn).async { implicit request =>
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
 
-      manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
+      manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
     }
 
   private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(
@@ -134,7 +158,7 @@ class Controller @Inject() (
     } yield {
       val bankDetails: Option[BankDetails] = desFormatter.getBankDetails(customerData)
       val ddDetails: Option[BankDetails] = desFormatter.getDDData(ddData)
-      Ok(views.manage_or_track(vrn, bankDetails, ddDetails, form)).addingToSession(("vrn", vrn.value))
+      Ok(views.manage_or_track(vrn, bankDetails, ddDetails, form))
     }
     chosenUrl
 
@@ -145,17 +169,13 @@ class Controller @Inject() (
       "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
   }
 
-  def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionFromSession.async {
-    implicit request =>
-
-      val vrn = request.session.get("vrn") match {
-        case Some(vrnString) => Vrn(vrnString)
-        case None            => throw new RuntimeException("Could not get VRN from session")
-      }
+  //securedfromsession
+  def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+    implicit request: AuthenticatedRequest[_] =>
 
       manageOrTrackForm.bindFromRequest().fold(
         formWithErrors => {
-          manageOrTrackView(vrn, formWithErrors)
+          manageOrTrackView(request.typedVrn.vrn, formWithErrors)
         },
         {
           valueInForm =>
@@ -163,21 +183,21 @@ class Controller @Inject() (
               valueInForm.choice match {
                 case Some(choice) => {
                   choice match {
-                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showResults(vrn))
-                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(vrn, false))
-                    case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(vrn, ReturnPage("manage-or-track")))
+                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showResults(request.typedVrn.vrn))
+                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(false))
+                    case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(ReturnPage("manage-or-track")))
                     case ManageOrTrackOptions.nodd.value =>
                       for {
-                        nextUrl <- directDebitBackendController.startJourney(vrn)
+                        nextUrl <- directDebitBackendController.startJourney(request.typedVrn.vrn)
                       } yield Redirect(nextUrl.nextUrl)
                     case ManageOrTrackOptions.dd.value =>
                       for {
-                        nextUrl <- directDebitBackendController.startJourney(vrn)
+                        nextUrl <- directDebitBackendController.startJourney(request.typedVrn.vrn)
                       } yield Redirect(nextUrl.nextUrl)
                   }
                 }
                 case None => {
-                  manageOrTrackView(vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", ErrorMessages.`choose an option`.show))
+                  manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", ErrorMessages.`choose an option`.show))
                 }
               }
             }
@@ -188,33 +208,34 @@ class Controller @Inject() (
 
   //------------------------------------------------------------------------------------------------------------------------------
 
-  def showResults(vrn: Vrn): Action[AnyContent] = actions.securedAction(vrn).async {
-    implicit request: Request[_] =>
-      val customerDataF = desConnector.getCustomerData(vrn)
-      val repaymentDetailsF = desConnector.getRepaymentsDetails(vrn)
-      val financialDataF = desConnector.getFinancialData(vrn)
+  //deprecate this when the URL changes to vat-repayment-tracker
+  def showResults(vrn: Vrn): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+    implicit request: AuthenticatedRequest[_] =>
+      val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
+      val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
+      val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
 
       val result = for {
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
         financialData <- financialDataF
       } yield (
-        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrn, financialData), customerData, vrn)
+        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
       )
 
       result
 
   }
 
-  def viewRepaymentAccount(vrn: Vrn, audit: Boolean): Action[AnyContent] = actions.securedAction(vrn).async {
-    implicit request: Request[_] =>
+  def viewRepaymentAccount(audit: Boolean): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+    implicit request: AuthenticatedRequest[_] =>
 
-      val customerDataF = desConnector.getCustomerData(vrn)
+      val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
       val url = for {
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(views.view_repayment_account(bankDetails, vrn, ReturnPage("view-repayment-account"), audit))
+        Ok(views.view_repayment_account(bankDetails, request.typedVrn.vrn, ReturnPage("view-repayment-account"), audit))
       }
 
       url
