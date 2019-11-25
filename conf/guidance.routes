@@ -1,4 +1,0 @@
-#Move these when frontend is removed from app.routes default url
-
-GET        /show-vrt              controllers.Controller.showVrt
-GET        /non-mtd-user          controllers.Controller.nonMtdUser
