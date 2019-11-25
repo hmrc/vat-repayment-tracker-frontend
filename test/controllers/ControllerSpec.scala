@@ -41,7 +41,7 @@ class ControllerSpec extends ItSpec {
   "Get ShowResults not authorised redirect to login stub" in {
     AuthWireMockResponses.authFailed
     AuditWireMockResponses.auditIsAvailable
-    GgStub.signInPage(9863, vrn)
+    GgStub.signInPage(19001, vrn)
     val result = connector.showResults(vrn).futureValue
     result.body should include ("Sign in using Government Gateway")
     result.status shouldBe Status.OK
@@ -51,14 +51,35 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    val result = connector.viewRepaymentAccount(vrn).futureValue
+    val result = connector.viewRepaymentAccount.futureValue
     result.status shouldBe Status.OK
   }
 
   "Get startBankAccountCocJourney authorised" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     BankAccountCocWireMockResponses.bankOk
-    val result = connector.startBankAccountCocJourney(vrn).futureValue
+    val result = connector.startBankAccountCocJourney.futureValue
+    result.status shouldBe Status.OK
+  }
+
+  "Get showVrt authorised" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    val result = connector.showVrt.futureValue
+    result.status shouldBe Status.OK
+  }
+
+  "Get showVrt authorised  on-mtd" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    val result = connector.showVrt.futureValue
+    result.body should include ("You cannot use this service")
     result.status shouldBe Status.OK
   }
 

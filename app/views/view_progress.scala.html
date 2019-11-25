@@ -66,7 +66,7 @@ bodyClasses = None
                     @{
                     if (showPayUrl) {
 
-                    <p id="pay-url"><a href={routes.Controller.startPaymentsJourney(vrn,amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
+                    <p id="pay-url"><a href={routes.Controller.startPaymentsJourney(amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
                     }
                     }
                 </div>

@@ -30,16 +30,18 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
 
-  def viewRepaymentAccount(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
-    s"http://localhost:$port/vat-repayment-tracker-frontend/view-repayment-account/vrn/${vrn.value}")
+  def viewRepaymentAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+    s"http://localhost:$port/vat-repayment-tracker-frontend/view-repayment-account")
 
-  def viewDDAccount(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
-    s"http://localhost:$port/vat-repayment-tracker-frontend/view-dd-account/vrn/${vrn.value}")
+  def viewDDAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+    s"http://localhost:$port/vat-repayment-tracker-frontend/view-dd-account")
 
-  def startBankAccountCocJourney(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
-    s"http://localhost:$port/vat-repayment-tracker-frontend/bank-account-coc/start-journey/vrn/${vrn.value}/manage-or-track")
+  def startBankAccountCocJourney(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+    s"http://localhost:$port/vat-repayment-tracker-frontend/bank-account-coc/start-journey/manage-or-track")
 
-  def startPaymentsJourney(vrn: Vrn, amountInPence: Long)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
-    s"http://localhost:$port/vat-repayment-tracker-frontend/spj/vrn/${vrn.value}/${amountInPence})")
+  def startPaymentsJourney(amountInPence: Long)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+    s"http://localhost:$port/vat-repayment-tracker-frontend/spj/${amountInPence})")
+
+  def showVrt(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker/show-vrt")
 
 }

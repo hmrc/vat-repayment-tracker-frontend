@@ -43,7 +43,7 @@ request: Request[_]
  <p id="acc-name" class="govuk-!-margin-bottom-1">@{LangMessages.`Name on account`.show} <strong>@{bankDetails.formatAccountHolderName}</strong></p>
  <p id="acc-sort-code" class="govuk-!-margin-bottom-1">@{LangMessages.`Sort code`.show} <strong>@{bankDetails.formatSortCode}</strong></p>
  <p id="acc-number">@{LangMessages.`Account number`.show} <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
- <p><a href='@routes.Controller.viewRepaymentAccount(vrn,true)' id="manage-account">@{LangMessages.`Manage your repayment bank account`.show}</a></p>
+ <p><a href='@routes.Controller.viewRepaymentAccount(true)' id="manage-account">@{LangMessages.`Manage your repayment bank account`.show}</a></p>
  }
 }
 
@@ -52,7 +52,7 @@ request: Request[_]
 <h3>@{LangMessages.`Your repayment details`.show}</h3>
 <p>@{LangMessages.`Currently sent to`.show}</p>
 <p id="address">@Html(address.getOrElse(""))</p>
-<p>@{LangMessages.`For faster payment next time`.show} <a href='@routes.Controller.startBankAccountCocJourney(vrn,ReturnPage("show-results"),true)' id="call-bac">@{LangMessages.`add a repayment bank account`.show}</a></p>
+<p>@{LangMessages.`For faster payment next time`.show} <a href='@routes.Controller.startBankAccountCocJourney(ReturnPage("show-results"),true)' id="call-bac">@{LangMessages.`add a repayment bank account`.show}</a></p>
 <p><a href=@{appConfig.updateCorrespondenceAddress}>@{LangMessages.`Update your business address`.show}</a></p>
 }
 

@@ -328,4 +328,8 @@ object LangMessages {
 
   val `Payment and repayments` = Message("Payment and repayments")
 
+  val `You cannot use this service` = Message("You cannot use this service")
+
+  def `non-mtd-desc`(url: String) = Message(s"""You have not signed up to Making Tax Digital. Go back to your <a href="${url}">Business Tax account.</a>""")
+
 }
