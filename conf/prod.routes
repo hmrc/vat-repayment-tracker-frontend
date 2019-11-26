@@ -1,8 +1,20 @@
 # Add all the application routes to the app.routes file
-->         /vat-repayment-tracker-frontend              app.Routes
 ->         /                          health.Routes
 ->         /template                  template.Routes
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
-GET        /vat-repayment-tracker/show-vrt             controllers.Controller.showVrt
-GET        /vat-repayment-tracker/non-mtd-user             controllers.Controller.nonMtdUser
+
+GET        /assets/*file                                   @controllers.Assets.at(path="/public", file)
+GET        /language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
+
+GET        /vat-repayment-tracker/show-vrt                                                controllers.Controller.showVrt
+GET        /vat-repayment-tracker/non-mtd-user                                            controllers.Controller.nonMtdUser
+
+GET        /vat-repayment-tracker-frontend/show-results/vrn/:vrn                          controllers.Controller.showResults(vrn : Vrn)
+GET        /vat-repayment-tracker-frontend/view-repayment-account                         controllers.Controller.viewRepaymentAccount(audit : Boolean ?= false)
+GET        /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn                       controllers.Controller.manageOrTrack(vrn : Vrn)
+POST       /vat-repayment-tracker-frontend/manage-or-track-submit                         controllers.Controller.manageOrTrackSubmit
+GET        /vat-repayment-tracker-frontend/signout                                        controllers.Controller.signout
+GET        /vat-repayment-tracker-frontend/bank-account-coc/start-journey/:returnPage     controllers.Controller.startBankAccountCocJourney(returnPage : ReturnPage, audit : Boolean ?= false)
+GET        /vat-repayment-tracker-frontend/view-progress/:periodKey                       controllers.Controller.viewProgress(periodKey : PeriodKey)
+GET        /vat-repayment-tracker-frontend/spj/:amountInPence                             controllers.Controller.startPaymentsJourney(amountInPence : Long)
