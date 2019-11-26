@@ -72,11 +72,11 @@ class InProgressSpec extends ItSpec {
     InProgress.uniqueToPage
   }
 
-  "Get ShowResults authorised but wrong vrn should show error page" in {
+  "Get ShowResults authorised, no enrolments" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     goToViaPath(path)
-    ErrorPage.assertPageIsDisplayed(vrn)
+    NonMtdUser.assertPageIsDisplayed
   }
 
   "check negative amount" in {

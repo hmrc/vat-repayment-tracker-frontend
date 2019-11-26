@@ -55,7 +55,7 @@ class Actions @Inject() (
           case None => {
             Logger.debug(s"""User logged in but have no enrolments""")
             implicit val req: AuthenticatedRequest[_] = request
-            Future.successful(Left(unhappyPathResponses.unauthorised))
+            Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
           }
         }
 

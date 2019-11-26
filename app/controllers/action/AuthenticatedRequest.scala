@@ -37,12 +37,7 @@ final class AuthenticatedRequest[A](val request:    Request[A],
     }.flatten
   }
 
-  def sessionVrn = request.session.get("vrn") match {
-    case Some(vrnString) => Vrn(vrnString)
-    case None            => throw new RuntimeException("Could not get VRN from session")
-  }
-
-  val typedVrn: TypedVrn = {
+  def typedVrn: TypedVrn = {
     enrolmentsVrn match {
       case Some(x) => x
       case None    => throw new RuntimeException("No vrn available")

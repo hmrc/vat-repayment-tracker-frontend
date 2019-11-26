@@ -79,7 +79,7 @@ class ControllerSpec extends ItSpec {
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showVrt.futureValue
-    result.body should include ("You cannot use this service")
+    result.body should include ("You cannot access this service")
     result.status shouldBe Status.OK
   }
 
