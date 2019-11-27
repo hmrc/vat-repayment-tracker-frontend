@@ -4,8 +4,8 @@
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
 
-GET        /assets/*file                                   @controllers.Assets.at(path="/public", file)
-GET        /language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
+GET        /vat-repayment-tracker-frontend/assets/*file                                   @controllers.Assets.at(path="/public", file)
+GET        /vat-repayment-tracker-frontend/language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
 
 GET        /vat-repayment-tracker/show-vrt                                                controllers.Controller.showVrt
 GET        /vat-repayment-tracker/non-mtd-user                                            controllers.Controller.nonMtdUser
