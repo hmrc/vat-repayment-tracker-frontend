@@ -34,7 +34,7 @@ object ManageOrTrack extends CommonPage {
     (implicit wd: WebDriver): Assertion =
     {
       currentPath shouldBe s"""${path}${vrn.value}"""
-      readTitle shouldBe "Business tax account"
+      readTitle shouldBe "Manage Direct Debit and repayment bank account or track repayments - Business tax account - GOV.UK"
       if (ddDisplayed) dd shouldBe "Manage your Direct Debit"
       if (bankDisplayed) bank shouldBe "Manage your repayment bank account"
       vrt shouldBe "Track your VAT repayments"

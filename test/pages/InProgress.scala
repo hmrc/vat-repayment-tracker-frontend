@@ -23,7 +23,7 @@ import pages.Completed.idPresent
 object InProgress extends CommonDetail {
 
   def uniqueToPage(implicit wd: WebDriver): Assertion = {
-    readTitle shouldBe "We are processing your VAT repayments"
+    readTitle shouldBe "We are processing your VAT repayments - Business tax account - GOV.UK"
     readMainMessage shouldBe "We are processing your VAT repayments"
   }
 

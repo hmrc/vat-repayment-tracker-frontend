@@ -38,7 +38,7 @@ request: Request[_]
 @import viewsHelpers.requestSupport._
 
 @mainTemplate(
-title =LangMessages.heading_bta.show,
+title = s"${LangMessages.`Sent to this account`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {

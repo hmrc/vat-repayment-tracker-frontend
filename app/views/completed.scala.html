@@ -43,7 +43,7 @@ request: Request[_]
 
 @import viewsHelpers.requestSupport._
 @mainTemplate(
-title =LangMessages.`We are processing your VAT repayments`.show,
+title =s"${LangMessages.`We are processing your VAT repayments`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
