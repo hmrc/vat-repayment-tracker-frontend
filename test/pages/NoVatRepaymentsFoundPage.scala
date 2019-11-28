@@ -26,7 +26,7 @@ object NoVatRepaymentsFoundPage extends CommonPage {
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}${vrn.value}"""
-    readTitle shouldBe "No VAT repayments in progress"
+    readTitle shouldBe "No VAT repayments in progress - Business tax account - GOV.UK"
     readMainMessage shouldBe "No VAT repayments in progress"
     readAccName shouldBe "Name on account: Account holder"
     readAccNumber shouldBe "Account number: ****2222"
