@@ -43,7 +43,7 @@ class DirectDebitBackendConnector @Inject() (
 
   def startJourney(vrn: Vrn)(implicit request: Request[_]): Future[NextUrl] = {
     val retUrl: String = s"$serviceUrl$rUrl"
-    val bkUrl: String = s"$bUrl${vrn.value}"
+    val bkUrl: String = s"$bUrl"
     Logger.debug(s"Using return url : ${retUrl}")
     Logger.debug(s"Using back url : ${bkUrl}")
 

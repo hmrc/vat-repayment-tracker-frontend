@@ -23,7 +23,7 @@ import play.api.Logger
 
 trait CommonDetail extends CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
+  val path = "/vat-repayment-tracker/show-vrt"
 
   def breadCrumbsExists()(implicit driver: WebDriver) = idPresent("viewVatAccount") shouldBe true
 
@@ -44,7 +44,7 @@ trait CommonDetail extends CommonPage {
       appender:       String)
     (implicit wd: WebDriver): Assertion =
     {
-      currentPath shouldBe s"""${path}${vrn.value}"""
+      currentPath shouldBe s"""${path}"""
       readAmount(appender) shouldBe amount
       if (checkBank) {
         if (partialAccount)

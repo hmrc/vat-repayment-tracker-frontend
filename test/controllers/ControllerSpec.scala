@@ -72,13 +72,55 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get showVrt authorised  on-mtd" in {
+  "Get showVrt authorised  no-mtd" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showVrt.futureValue
+    result.body should include ("You cannot access this service")
+    result.status shouldBe Status.OK
+  }
+
+  "Get manageOrTrackVRT authorised" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    val result = connector.manageOrTrackVrt.futureValue
+    result.status shouldBe Status.OK
+  }
+
+  "Get showVrt manageOrTrackVRT  no-mtd" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    val result = connector.manageOrTrackVrt.futureValue
+    result.body should include ("You cannot access this service")
+    result.status shouldBe Status.OK
+  }
+
+  "Get manageOrTrack authorised" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    val result = connector.manageOrTrack(vrn).futureValue
+    result.status shouldBe Status.OK
+  }
+
+  "Get showVrt manageOrTrack no-mtd" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    val result = connector.manageOrTrack(vrn).futureValue
     result.body should include ("You cannot access this service")
     result.status shouldBe Status.OK
   }

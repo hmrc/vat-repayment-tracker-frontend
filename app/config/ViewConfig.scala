@@ -39,8 +39,8 @@ case class ViewConfig(
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
   val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
   val supportLanguages: Boolean = false
-  val signOut = s"$frontendBaseUrl/$appName/signout"
-  val showResultsUrl = s"$frontendBaseUrl/$appName/show-results/vrn/"
+  val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
+  val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
 
   @Inject
