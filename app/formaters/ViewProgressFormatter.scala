@@ -55,7 +55,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
     val estRepaymentDate = getEstimatedRepaymentDate(vrd(0).repaymentDetailsData.returnCreationDate, vrd(0).repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
-      if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED.value) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5,
+      if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED.value) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5_InPounds,
       vrd(0).repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
       periodFormatter.formatPeriodKey(periodKey.value),
@@ -169,11 +169,11 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           LangMessages.`Repayment amount changed`.show,
           if (bankDetailsExist) {
             bankDetailsOption match {
-              case Some(bankDetails) => LangMessages.`You claimed a VAT repayment of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5), viewConfig.viewVatAccount).show
+              case Some(bankDetails) => LangMessages.`You claimed a VAT repayment of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds), viewConfig.viewVatAccount).show
               case None              => throw new RuntimeException("No Bank details")
             }
           } else {
-            LangMessages.`You claimed a VAT repayment of post`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5), viewConfig.viewVatAccount).show
+            LangMessages.`You claimed a VAT repayment of post`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds), viewConfig.viewVatAccount).show
           }, LangMessages.`Amount we'll pay you`.show,
                           LangMessages.`Your repayment has been approved`.show)
       }
@@ -184,7 +184,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`You now owe HMRC`.show,
                           LangMessages.`We calculated that the original amount you claimed of`(desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount),
-                                                                                               desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show,
+                                                                                               desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds)).show,
                           LangMessages.`Amount to pay`.show, LangMessages.`You need to make a VAT payment`.show)
       }
 
@@ -213,12 +213,12 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           LangMessages.`Repayment complete`.show,
           if (bankDetailsExist) {
             bankDetailsOption match {
-              case Some(bankDetails) => LangMessages.`repayment-complete-bank-details-adjusted`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+              case Some(bankDetails) => LangMessages.`repayment-complete-bank-details-adjusted`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds)).show
               case None              => throw new RuntimeException("No Bank details")
             }
 
           } else {
-            LangMessages.`repayment-complete-address-adjusted`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+            LangMessages.`repayment-complete-address-adjusted`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds)).show
           }, LangMessages.`Amount we paid you`.show,
                           LangMessages.`Your repayment is complete`.show, "_Y")
       }
@@ -229,12 +229,12 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           LangMessages.`Repayment complete`.show,
           if (bankDetailsExist) {
             bankDetailsOption match {
-              case Some(bankDetails) => LangMessages.`repayment-complete-bank-details`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+              case Some(bankDetails) => LangMessages.`repayment-complete-bank-details`(bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds)).show
               case None              => throw new RuntimeException("No Bank details")
             }
 
           } else {
-            LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
+            LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), desFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5_InPounds)).show
           }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show, "_Y")
       }
     }
