@@ -26,7 +26,7 @@ import support._
 class ManageOrTrackSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}"""
+  val path = s"""/vat-repayment-tracker/manage-or-track-vrt"""
   val periodKey = PeriodKey("18AG")
 
   val ft_404: Int = 1
@@ -66,7 +66,7 @@ class ManageOrTrackSpec extends ItSpec {
     setup(true, true)
     ManageOrTrack.clickBankLabel()
     ManageOrTrack.clickContinue()
-    ViewRepaymentAccount.assertPageIsDisplayed(vrn)
+    ViewRepaymentAccount.assertPageIsDisplayed(vrn, """/vat-repayment-tracker/view-repayment-account""")
     ManageOrTrack.clickCallBac
     AuditWireMockResponses.bacWasNotAudited()
   }

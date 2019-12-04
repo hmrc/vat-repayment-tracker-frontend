@@ -22,7 +22,7 @@ import org.scalatest.Assertion
 
 object ManageOrTrack extends CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/manage-or-track/vrn/"
+  val path = "/vat-repayment-tracker/manage-or-track-vrt"
 
   def assertPageIsDisplayed(
       vrn:             Vrn,
@@ -33,7 +33,7 @@ object ManageOrTrack extends CommonPage {
   )
     (implicit wd: WebDriver): Assertion =
     {
-      currentPath shouldBe s"""${path}${vrn.value}"""
+      currentPath shouldBe s"""${path}"""
       readTitle shouldBe "Manage Direct Debit and repayment bank account or track repayments - Business tax account - GOV.UK"
       if (ddDisplayed) dd shouldBe "Manage your Direct Debit"
       if (bankDisplayed) bank shouldBe "Manage your repayment bank account"

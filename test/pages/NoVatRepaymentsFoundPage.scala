@@ -22,10 +22,10 @@ import org.scalatest.Assertion
 
 object NoVatRepaymentsFoundPage extends CommonPage {
 
-  val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
+  val path = "/vat-repayment-tracker/show-vrt"
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
+    currentPath shouldBe s"""${path}"""
     readTitle shouldBe "No VAT repayments in progress - Business tax account - GOV.UK"
     readMainMessage shouldBe "No VAT repayments in progress"
     readAccName shouldBe "Name on account: Account holder"

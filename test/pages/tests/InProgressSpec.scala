@@ -26,7 +26,7 @@ import support._
 class InProgressSpec extends ItSpec {
 
   val vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
+  val path = s"""/vat-repayment-tracker/show-vrt"""
 
   val periodKey = PeriodKey("18AG")
   val ft_404: Int = 1

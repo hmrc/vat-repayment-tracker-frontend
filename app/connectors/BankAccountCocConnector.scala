@@ -41,7 +41,7 @@ class BankAccountCocConnector @Inject() (
 
   def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
 
-    val bkUrl: String = s"$bUrl${returnPage.value}/vrn/${vrn.value}"
+    val bkUrl: String = s"$bUrl${returnPage.value}"
     Logger.debug(s"Using back url : ${bkUrl}")
     val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, false, bkUrl, bkUrl, bkUrl)
     Logger.debug(s"Calling bank-account-coc start journey for vrn ${vrn}")

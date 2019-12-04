@@ -139,7 +139,13 @@ class Controller @Inject() (
       Redirect(viewConfig.feedbackUrlForLogout).withNewSession
     }
 
-  //This needs moving to vat-repayment-tracker and the VRN argument removing
+  def manageOrTrackVrt: Action[AnyContent] =
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
+
+      manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
+    }
+
+  //deprecate this when the URL changes to vat-repayment-tracker
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
     actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
 
@@ -169,7 +175,6 @@ class Controller @Inject() (
       "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
   }
 
-  //securedfromsession
   def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
 
@@ -183,9 +188,9 @@ class Controller @Inject() (
               valueInForm.choice match {
                 case Some(choice) => {
                   choice match {
-                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showResults(request.typedVrn.vrn))
+                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showVrt())
                     case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(false))
-                    case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(ReturnPage("manage-or-track")))
+                    case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(ReturnPage("manage-or-track-vrt")))
                     case ManageOrTrackOptions.nodd.value =>
                       for {
                         nextUrl <- directDebitBackendController.startJourney(request.typedVrn.vrn)
