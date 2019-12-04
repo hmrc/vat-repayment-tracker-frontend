@@ -28,13 +28,20 @@ final class AuthenticatedRequest[A](val request:    Request[A],
   val enrolmentsVrn: Option[TypedVrn] = {
     import model.EnrolmentKeys._
 
-    enrolments.enrolments.collectFirst {
+    val mtd = enrolments.enrolments.collectFirst {
       case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
         identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => MtdVrn(Vrn(vrn)) }
+    }.flatten
 
+    val nonMtd = enrolments.enrolments.collectFirst {
       case Enrolment(key, identifiers, _, _) if Set(vatDecEnrolmentKey, vatVarEnrolmentKey).contains(key) =>
         identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => ClassicVrn(Vrn(vrn)) }
     }.flatten
+
+    mtd match {
+      case Some(x) => mtd
+      case None    => nonMtd
+    }
   }
 
   def typedVrn: TypedVrn = {

@@ -40,7 +40,7 @@ final case class RepaymentDetailData(
     }
   }
 
-  def vatToPay_BOX5_InPounds : BigDecimal = vatToPay_BOX5 / 100
+  def vatToPay_BOX5_InPounds: BigDecimal = vatToPay_BOX5 / 100
 }
 
 object RepaymentDetailData {
