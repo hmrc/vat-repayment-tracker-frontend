@@ -218,11 +218,11 @@ object LangMessages {
 
   val `VAT payment due` = Message("VAT payment due")
 
-  def `We calculated that the original amount you claimed of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"""We calculated that the original amount you claimed of £${originalPostingAmount} was incorrect. You now owe HMRC £${vatToPay_Box5}. If you want to find out why your repayment amount changed <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a>""")
+  def `We calculated that the original amount you claimed of`(originalPostingAmount: String, vatToPay_Box5: String) = Message(s"""We calculated that the original amount you claimed of £${originalPostingAmount} was incorrect. You now owe HMRC £${vatToPay_Box5}.  <br>We have sent you a letter to explain that your repayment amount changed.""")
 
   val `Estimated repayment date has passed` = Message("Estimated repayment date has passed")
 
-  val `You do not need to do anything right now` = Message("""You do not need to do anything right now. We are working on paying you as soon as possible. </br>If you need to speak to someone about your repayment, you can <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">contact HMRC.</a>""")
+  val `You do not need to do anything right now` = Message("""You do not need to do anything right now. We are working on repaying you as soon as possible. </br>We have sent you a letter to explain that your repayment is delayed.""")
 
   val `Repayment complete` = Message("Repayment complete")
 
