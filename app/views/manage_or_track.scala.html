@@ -1,5 +1,5 @@
 @*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,8 @@ bread_crumbs: views.html.partials.bread_crumbs
 vrn: Vrn,
 bankDetailsOption : Option[BankDetails],
 ddDetailsOption : Option[BankDetails],
-form: Form[ManageOrTrack]
+form: Form[ManageOrTrack],
+inflightBankDetails : Boolean
 )(
 implicit
 request: Request[_]
@@ -78,13 +79,14 @@ bodyClasses = None
     }
     }
     @{
+
     bankDetailsOption.map(bankDetails =>
     views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.bank.toString, ManageOrTrackOptions.bank.toString, LangMessages.`Manage your repayment bank account`.show, Some(LangMessages.accountAndSortCode(bankDetails).show), None)
     )
     }
     <!-- No Bank -->
     @{
-    if (!(bankDetailsOption.isDefined)) {
+    if ((!(bankDetailsOption.isDefined))  && (!(inflightBankDetails))){
      views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nobank.toString, ManageOrTrackOptions.nobank.toString, LangMessages.`Set up a repayment bank account`.show, Some(LangMessages.`Tell HMRC where to pay your money`.show), None)
     }
     }

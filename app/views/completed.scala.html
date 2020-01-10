@@ -1,5 +1,5 @@
 @*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@ showBankDetails: Boolean,
 bankDetails: Option[BankDetails],
 address: Option[String],
 addressExists: Boolean,
-vrn: Vrn)(
+vrn: Vrn,
+inflightBankDetails : Boolean)(
 implicit
 request: Request[_]
 )
@@ -75,7 +76,7 @@ bodyClasses = None
                     <div id="inprogress-none"></div>
                 </section>
             </div>
-            @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)
+            @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
         </div>
     </div>
 </main>

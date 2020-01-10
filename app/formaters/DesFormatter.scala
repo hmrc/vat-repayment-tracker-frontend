@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,6 +141,18 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
   def formatDate(date: LocalDate): String = {
     val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
     date.format(pattern1)
+  }
+
+  def bankDetailsInFlight(customerData: Option[CustomerInformation]): Boolean = {
+    val optBankDetails = for {
+      cd <- customerData
+      bankDetails <- cd.bankDetailsChangeIndicatorExists
+    } yield bankDetails
+
+    optBankDetails match {
+      case Some(x) => x
+      case None    => false
+    }
   }
 
 }

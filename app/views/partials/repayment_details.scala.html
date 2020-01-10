@@ -1,5 +1,5 @@
 @*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ showBankDetails: Boolean,
 bankDetailsOption: Option[BankDetails],
 address: Option[String],
 addressExists: Boolean,
-vrn: Vrn)(
+vrn: Vrn,
+inflightBankDetails : Boolean)(
 implicit
 request: Request[_]
 )
@@ -48,7 +49,7 @@ request: Request[_]
 }
 
 
-@if(addressExists && (!(showBankDetails))) {
+@if((addressExists && (!(showBankDetails))) && (!(inflightBankDetails))) {
 <h3>@{LangMessages.`Your repayment details`.show}</h3>
 <p>@{LangMessages.`Currently sent to`.show}</p>
 <p id="address">@Html(address.getOrElse(""))</p>

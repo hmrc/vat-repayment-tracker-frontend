@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,7 +126,8 @@ class InProgressSpec extends ItSpec {
       singleRepayment:    Boolean = true,
       ft:                 Int     = ft_404,
       status1:            String  = INITIAL.value,
-      enrolmentIn:        String  = EnrolmentKeys.mtdVatEnrolmentKey
+      enrolmentIn:        String  = EnrolmentKeys.mtdVatEnrolmentKey,
+      inflight:           Boolean = false
   ) = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     AuditWireMockResponses.auditIsAvailable
@@ -137,8 +138,12 @@ class InProgressSpec extends ItSpec {
       else
         DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     } else {
-      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+      if (inflight)
+        DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+      else
+        DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
     }
+
     if (singleRepayment)
       DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
     else
