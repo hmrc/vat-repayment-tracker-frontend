@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,17 @@ class CompletedSpec extends ItSpec {
     Completed.uniqueToPage
     Completed.checktabs
     Completed.breadCrumbsExists
+    Completed.containsBAC(false)
+  }
+
+  "BAC shown" in {
+    setup(useBankDetails = false)
+    Completed.containsBAC(true)
+  }
+
+  "BAC not shown" in {
+    setup(useBankDetails = false, inflight = true)
+    Completed.containsBAC(false)
   }
 
   "user is authorised and financial data found but partial" in {
@@ -76,32 +87,43 @@ class CompletedSpec extends ItSpec {
     InProgress.clickManageAccount
     InProgress.clickCallBac
     AuditWireMockResponses.bacWasAuditedNoDetails
+
   }
 
-  private def setup(useBankDetails: Boolean = true, partialBankDetails: Boolean = false, singleRepayment: Boolean = true, ft: Int = ft_404) = {
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
-    AuditWireMockResponses.auditIsAvailable
+  private def setup(
+      useBankDetails:     Boolean = true,
+      partialBankDetails: Boolean = false,
+      singleRepayment:    Boolean = true,
+      ft:                 Int     = ft_404,
+      inflight:           Boolean = false) =
+    {
+      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      AuditWireMockResponses.auditIsAvailable
 
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    if (useBankDetails) {
-      if (partialBankDetails)
-        DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
+      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+      if (useBankDetails) {
+        if (partialBankDetails)
+          DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
+        else
+          DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+      } else {
+        if (inflight)
+          DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+        else
+          DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+      }
+
+      if (singleRepayment)
+        DesWireMockResponses.repaymentDetailSingleCompleted(vrn)
       else
-        DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    } else {
-      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
-    }
-    if (singleRepayment)
-      DesWireMockResponses.repaymentDetailSingleCompleted(vrn)
-    else
-      DesWireMockResponses.repaymentDetailsMultipleCompleted(vrn)
+        DesWireMockResponses.repaymentDetailsMultipleCompleted(vrn)
 
-    ft match {
-      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      ft match {
+        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
+        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
+        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      }
+      goToViaPath(path)
     }
-    goToViaPath(path)
-  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,10 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
 object InProgressCompleted extends CommonDetail {
+
+  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("For faster payment next time") shouldBe result
+  }
 
   def checktabs(implicit wd: WebDriver): Assertion = {
 

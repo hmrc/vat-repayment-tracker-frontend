@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,9 +162,10 @@ class Controller @Inject() (
       customerData <- customerDataF
       ddData <- ddDataF
     } yield {
+
       val bankDetails: Option[BankDetails] = desFormatter.getBankDetails(customerData)
       val ddDetails: Option[BankDetails] = desFormatter.getDDData(ddData)
-      Ok(views.manage_or_track(vrn, bankDetails, ddDetails, form))
+      Ok(views.manage_or_track(vrn, bankDetails, ddDetails, form, desFormatter.bankDetailsInFlight(customerData)))
     }
     chosenUrl
 

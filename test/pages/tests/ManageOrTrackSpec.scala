@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +54,11 @@ class ManageOrTrackSpec extends ItSpec {
     ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = true)
   }
 
+  "user is authorised, manage no bank or dd option but inflight bank " in {
+    setup(false, false, inflight = true)
+    ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = false)
+  }
+
   "click vrtLabel" in {
     setup(true, true)
     ManageOrTrack.clickVrtLabel()
@@ -71,30 +76,39 @@ class ManageOrTrackSpec extends ItSpec {
     AuditWireMockResponses.bacWasNotAudited()
   }
 
-  private def setup(useBankDetails: Boolean = true, useDdDetails: Boolean = true, ft: Int = ft_404) = {
-    AuditWireMockResponses.auditIsAvailable
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    if (useBankDetails)
-      DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    else
-      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+  private def setup(
+      useBankDetails: Boolean = true,
+      useDdDetails:   Boolean = true,
+      ft:             Int     = ft_404,
+      inflight:       Boolean = false) =
+    {
+      AuditWireMockResponses.auditIsAvailable
+      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
 
-    //Show dd radio button
-    if (useDdDetails)
-      DesWireMockResponses.ddOk(vrn)
-    else
-      DesWireMockResponses.ddNotFound(vrn)
+      if (inflight)
+        DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+      else {
+        if (useBankDetails)
+          DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+        else
+          DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+      }
+      //Show dd radio button
+      if (useDdDetails)
+        DesWireMockResponses.ddOk(vrn)
+      else
+        DesWireMockResponses.ddNotFound(vrn)
 
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
 
-    ft match {
-      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      ft match {
+        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
+        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
+        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      }
+
+      goToViaPath(path)
     }
-
-    goToViaPath(path)
-  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,27 @@ import support.{DesData, UnitSpec}
 class CustomerInformationSpec extends UnitSpec {
 
   "to json" in {
-    Json.toJson(DesData.customerInformation) shouldBe DesData.approvedInformationJson
+    Json.toJson(DesData.approvedCustomerInformation) shouldBe DesData.approvedInformationJson
   }
 
   "from json" in {
-    DesData.approvedInformationJson.as[CustomerInformation] shouldBe DesData.customerInformation
+    DesData.approvedInformationJson.as[CustomerInformation] shouldBe DesData.approvedCustomerInformation
+  }
+
+  "bank details change Indicator exist" in {
+    DesData.customerInformation.bankDetailsChangeIndicatorExists shouldBe Some(true)
+  }
+
+  "PPOB change Indicator not exist" in {
+    DesData.customerInformation.PPOBDetailsChangeIndicatorExists shouldBe Some(false)
+  }
+
+  "bank details change Indicator not exist as None" in {
+    DesData.approvedCustomerInformation.bankDetailsChangeIndicatorExists shouldBe None
+  }
+
+  "PPOB change Indicator not exist as None" in {
+    DesData.approvedCustomerInformation.PPOBDetailsChangeIndicatorExists shouldBe None
   }
 
   "empty bankdetails should be false" in {

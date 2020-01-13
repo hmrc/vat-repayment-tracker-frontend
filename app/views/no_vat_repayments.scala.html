@@ -1,5 +1,5 @@
 @*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,8 @@
   bankDetails: Option[BankDetails],
   address: Option[String],
   addressExists: Boolean,
-  vrn: Vrn)(
+  vrn: Vrn,
+  inflightBankDetails : Boolean)(
   implicit
   request: Request[_]
 )
@@ -50,7 +51,7 @@
       <p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
       <p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
       <p class="govuk-!-margin-bottom-9"><a href=@{appConfig.viewVatAccount}>@{LangMessages.`View your VAT account`.show}</a></p>
-      @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn)
+      @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
     </div>
   </div>
 </main>

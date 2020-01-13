@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,13 @@ package pages
 import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
-
 object NoVatRepaymentsFoundPage extends CommonPage {
 
   val path = "/vat-repayment-tracker/show-vrt"
+
+  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("For faster payment next time") shouldBe result
+  }
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""${path}"""

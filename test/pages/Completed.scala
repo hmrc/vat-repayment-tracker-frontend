@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,10 @@ object Completed extends CommonDetail {
     idPresent("completed-none") shouldBe false
     idPresent("inprogress-none") shouldBe true
 
+  }
+
+  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("For faster payment next time") shouldBe result
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ class ShowResultsFormatter @Inject() (views:        Views,
     val bankDetails = desFormatter.getBankDetails(customerData)
     val addressDetails = desFormatter.getAddressDetails(customerData)
     val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
+    val inflightBankDetails = desFormatter.bankDetailsInFlight(customerData)
 
     bankDetails match {
       case Some(bd) => if (!(bd.accountHolderName.isDefined)) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
@@ -53,7 +54,8 @@ class ShowResultsFormatter @Inject() (views:        Views,
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        vrn
+        vrn,
+        inflightBankDetails
       ))
     } else if ((allRepaymentData.inProgressRepaymentData.size == 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
       Ok(views.completed(
@@ -62,7 +64,8 @@ class ShowResultsFormatter @Inject() (views:        Views,
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        vrn
+        vrn,
+        inflightBankDetails
       ))
     } else if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size == 0)) {
       Ok(views.inprogress(
@@ -71,7 +74,8 @@ class ShowResultsFormatter @Inject() (views:        Views,
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        vrn
+        vrn,
+        inflightBankDetails
       ))
     } else {
       Ok(
@@ -80,7 +84,8 @@ class ShowResultsFormatter @Inject() (views:        Views,
           bankDetails,
           addressDetails,
           addressDetailsExist,
-          vrn
+          vrn,
+          inflightBankDetails
         ))
 
     }

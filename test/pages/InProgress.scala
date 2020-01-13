@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,12 @@ package pages
 
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
-import pages.Completed.idPresent
 
 object InProgress extends CommonDetail {
+
+  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("For faster payment next time") shouldBe result
+  }
 
   def uniqueToPage(implicit wd: WebDriver): Assertion = {
     readTitle shouldBe "We are processing your VAT repayments - Business tax account - GOV.UK"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,16 @@ object DesWireMockResponses {
         .withStatus(200)
         .withBody(
           DesData.customerDataOk.toString()
+            .stripMargin)))
+
+  }
+
+  def customerDataOkWithoutBankDetailsInflight(vrn: Vrn) = {
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.customerDataOkWithoutBankDetailsInflight.toString()
             .stripMargin)))
 
   }

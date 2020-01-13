@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,37 +175,45 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.historyUrl(false)
   }
 
-  private def setup(useBankDetails: Boolean = true, inPast: Boolean = false,
-                    status1: String = INITIAL.value, status2: String = CLAIM_QUERIED.value, status3: String = "", rdsp: Int, periodKey: PeriodKey, ft: Int, periodKeyBackend: PeriodKey = PeriodKey("18AG")) = {
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
-    AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    if (useBankDetails) {
-      DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    } else {
-      DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
-    }
-    val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
-    rdsp match {
-      case 1 => {
-        DesWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKey)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
+  private def setup(
+      useBankDetails: Boolean = true,
+      inPast:         Boolean = false,
+      status1:        String  = INITIAL.value,
+      status2:        String  = CLAIM_QUERIED.value,
+      status3:        String  = "", rdsp: Int,
+      periodKey:        PeriodKey,
+      ft:               Int,
+      periodKeyBackend: PeriodKey = PeriodKey("18AG")) =
+    {
+      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      AuditWireMockResponses.auditIsAvailable
+      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+      if (useBankDetails) {
+        DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+      } else {
+        DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
       }
-      case 2 => {
-        DesWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2, periodKey)
+      val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
+      rdsp match {
+        case 1 => {
+          DesWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKey)
+          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
+        }
+        case 2 => {
+          DesWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2)
+          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2, periodKey)
+        }
+        case 3 => {
+          DesWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
+          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
+        }
       }
-      case 3 => {
-        DesWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
-      }
-    }
 
-    ft match {
-      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      ft match {
+        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
+        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
+        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      }
+      goToViaPath(path)
     }
-    goToViaPath(path)
-  }
 }
