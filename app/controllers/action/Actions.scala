@@ -18,7 +18,7 @@ package controllers.action
 
 import com.google.inject.Inject
 import config.ViewConfig
-import model.Vrn
+import model.TypedVrn
 import play.api.Logger
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
@@ -42,18 +42,10 @@ class Actions @Inject() (
 
       override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
 
-        request.enrolmentsVrn match {
-          case Some(typedVrn) => {
-            if (Vrn.isMtdEnroled(typedVrn)) {
-              Future.successful(Right(request))
-            } else {
-              Logger.debug(s"""User logged in with ${typedVrn.vrn.value}, this is non-mtd""")
-              implicit val req: AuthenticatedRequest[_] = request
-              Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
-            }
-          }
-          case None => {
-            Logger.debug(s"""User logged in but have no enrolments""")
+        request.typedVrn match {
+          case TypedVrn.MtdVrn(vrn) => Future.successful(Right(request))
+          case _ => {
+            Logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
             implicit val req: AuthenticatedRequest[_] = request
             Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
           }

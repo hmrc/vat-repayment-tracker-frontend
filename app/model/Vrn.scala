@@ -36,8 +36,8 @@ object Vrn {
   def validVrnKey(vrnKey: String): Boolean = validVrnKeys.contains(vrnKey)
 
   def isMtdEnroled(typedVrn: TypedVrn): Boolean = typedVrn match {
-    case _: ClassicVrn => false
-    case _: MtdVrn     => true
+    case _: MtdVrn => true
+    case _         => false
   }
 
 }
@@ -51,6 +51,8 @@ object TypedVrn {
   final case class ClassicVrn(vrn: Vrn) extends TypedVrn
 
   final case class MtdVrn(vrn: Vrn) extends TypedVrn
+
+  final case class PartialMigrationVrn(vrn: Vrn) extends TypedVrn
 
 }
 

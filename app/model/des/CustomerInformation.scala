@@ -39,6 +39,21 @@ final case class CustomerInformation(approvedInformation: Option[ApprovedInforma
     } yield pPOBDetails
   }
 
+  def isPartiallyMigrated = {
+    val pOpt: Option[Boolean] = for {
+      approved <- approvedInformation
+      cd <- approved.customerDetails
+    } yield cd.isPartialMigration match {
+      case Some(x) => x
+      case None    => false
+    }
+
+    pOpt match {
+      case Some(x) => x
+      case None    => false
+    }
+  }
+
 }
 
 object CustomerInformation {
@@ -61,8 +76,9 @@ object ChangeIndicators {
 
 final case class ApprovedInformation
   (
-    bankDetails: Option[BankDetails],
-    PPOB:        Option[PPOB]
+    customerDetails: Option[CustomerDetails],
+    bankDetails:     Option[BankDetails],
+    PPOB:            Option[PPOB]
 ) {
 
   val bankDetailsExist = bankDetails match {
@@ -71,6 +87,17 @@ final case class ApprovedInformation
   }
 
   val addressExists = PPOB.isDefined
+
+}
+
+final case class CustomerDetails(
+    welshIndicator:     Option[Boolean],
+    isPartialMigration: Option[Boolean]
+)
+
+object CustomerDetails {
+
+  implicit val format: OFormat[CustomerDetails] = Json.format[CustomerDetails]
 
 }
 
