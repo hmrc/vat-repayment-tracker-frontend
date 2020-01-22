@@ -20,8 +20,6 @@ import java.time.LocalDate
 
 import model.des.{CLAIM_QUERIED, INITIAL}
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import pages.ErrorPage.readTitle
-import pages.classic.NoVatRepaymentsFoundClassicPage
 import pages.{InProgress, NonMtdUser}
 import support._
 
@@ -78,7 +76,7 @@ class InProgressSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     goToViaPath(path)
-    readTitle shouldBe "Sorry, there is a problem with the service - Business tax account - GOV.UK"
+    NonMtdUser.assertPageIsDisplayed
   }
 
   "7. check negative amount" in {

@@ -31,7 +31,10 @@ class Actions @Inject() (
     af:                   AuthorisedFunctions,
     cc:                   ControllerComponents,
     viewConfig:           ViewConfig,
-    unhappyPathResponses: UnhappyPathResponses)(implicit ec: ExecutionContext) {
+    unhappyPathResponses: UnhappyPathResponses,
+    loggedInAction:       LoggedInAction)(implicit ec: ExecutionContext) {
+
+  def loggedIn: ActionBuilder[Request, AnyContent] = loggedInAction
 
   def securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction
 
@@ -46,6 +49,7 @@ class Actions @Inject() (
           case TypedVrn.MtdVrn(vrn) => Future.successful(Right(request))
           case _ => {
             Logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
+            if (request.isPartialMigration) Logger.warn("Partially migrated user tried to access MTD authorised VRT")
             implicit val req: AuthenticatedRequest[_] = request
             Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
           }

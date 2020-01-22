@@ -88,7 +88,7 @@ class AuthenticatedAction @Inject() (
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
       case e: AuthorisationException =>
         Logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        badResponses.unauthorised
+        Redirect(viewConfig.nonMtdUser)
     }
   }
 
