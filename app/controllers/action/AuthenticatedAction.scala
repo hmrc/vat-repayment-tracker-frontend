@@ -18,11 +18,15 @@ package controllers.action
 
 import com.google.inject.Inject
 import config.ViewConfig
+import connectors.PaymentsOrchestratorConnector
+import model.EnrolmentKeys.{vatDecEnrolmentKey, vatVarEnrolmentKey, _}
+import model.TypedVrn.{ClassicVrn, MtdVrn}
+import model.{TypedVrn, Vrn}
 import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc._
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -32,14 +36,53 @@ class AuthenticatedAction @Inject() (
     af:           AuthorisedFunctions,
     viewConfig:   ViewConfig,
     badResponses: UnhappyPathResponses,
-    cc:           MessagesControllerComponents)(implicit ec: ExecutionContext) extends ActionBuilder[AuthenticatedRequest, AnyContent] {
+    cc:           MessagesControllerComponents,
+    orchestrator: PaymentsOrchestratorConnector)(implicit ec: ExecutionContext) extends ActionBuilder[AuthenticatedRequest, AnyContent] {
+
+  private def isPartial(mtdVrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
+    for {
+      customer <- orchestrator.getCustomerData(mtdVrn.vrn)
+    } yield {
+      customer match {
+        case Some(x) => x.isPartiallyMigrated
+        case None    => false
+      }
+    }
+  }
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
     implicit val r: Request[A] = request
 
     af.authorised.retrieve(Retrievals.allEnrolments) { enrolments =>
-      block(new AuthenticatedRequest(request, enrolments))
+
+      val mtd = enrolments.enrolments.collectFirst {
+        case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
+          identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => MtdVrn(Vrn(vrn)) }
+      }.flatten
+
+      val nonMtd = enrolments.enrolments.collectFirst {
+        case Enrolment(key, identifiers, _, _) if Set(vatDecEnrolmentKey, vatVarEnrolmentKey).contains(key) =>
+          identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => ClassicVrn(Vrn(vrn)) }
+      }.flatten
+
+      val typedVrn: TypedVrn = (mtd, nonMtd) match {
+        case (Some(mdt), None)    => mdt
+        case (None, Some(nonMdt)) => nonMdt
+        case (Some(mdt), Some(_)) => mdt
+        case _                    => throw new InsufficientEnrolments
+
+      }
+
+      if (Vrn.isMtdEnroled(typedVrn)) {
+        isPartial(typedVrn).flatMap(isPartialResult =>
+
+          block(new AuthenticatedRequest(request, enrolments, if (isPartialResult) ClassicVrn(typedVrn.vrn) else typedVrn, isPartialResult))
+
+        )
+      } else
+        block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+
     }.recover {
       case _: NoActiveSession =>
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))

@@ -45,7 +45,7 @@ class CompletedSpec extends ItSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  "user is authorised and financial data found" in {
+  "1. user is authorised and financial data found" in {
     setup()
     Completed.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_completed")
     Completed.uniqueToPage
@@ -54,34 +54,34 @@ class CompletedSpec extends ItSpec {
     Completed.containsBAC(false)
   }
 
-  "BAC shown" in {
+  "2. BAC shown" in {
     setup(useBankDetails = false)
     Completed.containsBAC(true)
   }
 
-  "BAC not shown" in {
+  "3. BAC not shown" in {
     setup(useBankDetails = false, inflight = true)
     Completed.containsBAC(false)
   }
 
-  "user is authorised and financial data found but partial" in {
+  "4. user is authorised and financial data found but partial" in {
     setup(true, true)
     Completed.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_completed")
     Completed.uniqueToPage
   }
 
-  "click in completed link" in {
+  "5. click in completed link" in {
     setup()
     Completed.viewProgressLink
   }
 
-  "multiple completed " in {
+  "6. multiple completed " in {
     setup(true, true, false)
     Completed.uniqueToPage
     Completed.viewProgressLink
   }
 
-  "check audit" in {
+  "7. check audit" in {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, singleRepayment = false)
     InProgress.clickManageAccount

@@ -25,11 +25,12 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
   val vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
 
-  "user is authorised and no financial data found" in {
+  "1. user is authorised and no financial data found" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.financialsNotFound(vrn)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    DesWireMockResponses.repaymentDetailsNotFound(vrn)
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
 

@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.action
+package pages.classic
 
-import model.TypedVrn
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.Enrolments
+import model.Vrn
+import org.openqa.selenium.WebDriver
+import org.scalatest.Assertion
+import pages.CommonPage
 
-final class AuthenticatedRequest[A](val request:            Request[A],
-                                    val enrolments:         Enrolments,
-                                    val typedVrn:           TypedVrn,
-                                    val isPartialMigration: Boolean
-) extends WrappedRequest[A](request) {
+object NoVatRepaymentsFoundClassicPage extends CommonPage {
 
+  val path = "/vat-repayment-tracker/show-vrt"
+
+  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}"""
+    readTitle shouldBe "No VAT repayments in progress - Business tax account - GOV.UK"
+  }
 }

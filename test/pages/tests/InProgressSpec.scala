@@ -20,7 +20,9 @@ import java.time.LocalDate
 
 import model.des.{CLAIM_QUERIED, INITIAL}
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import pages.{ErrorPage, InProgress, NonMtdUser}
+import pages.ErrorPage.readTitle
+import pages.classic.NoVatRepaymentsFoundClassicPage
+import pages.{InProgress, NonMtdUser}
 import support._
 
 class InProgressSpec extends ItSpec {
@@ -39,7 +41,7 @@ class InProgressSpec extends ItSpec {
     ("inprogress_2", "returnCreationDate: 01 Jan 2001, periodKey: 18AJ, amount: 5.56")
   )
 
-  "user is authorised and financial data found" in {
+  "1. user is authorised and financial data found" in {
     setup()
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
     InProgress.uniqueToPage
@@ -47,7 +49,7 @@ class InProgressSpec extends ItSpec {
     InProgress.breadCrumbsExists
   }
 
-  "user is authorised and financial data found, CLAIM_QUERIED" in {
+  "2. user is authorised and financial data found, CLAIM_QUERIED" in {
     setup(status1 = CLAIM_QUERIED.value)
     InProgress.assertPageIsDisplayed(vrn, amount = "£0.00", appender = "_inprogress")
     InProgress.uniqueToPage
@@ -55,69 +57,65 @@ class InProgressSpec extends ItSpec {
     InProgress.breadCrumbsExists
   }
 
-  "user is authorised and financial data found but partial" in {
+  "3. user is authorised and financial data found but partial" in {
     setup(true, true)
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_inprogress")
     InProgress.uniqueToPage
   }
 
-  "click completed link" in {
+  "4. click completed link" in {
     setup()
     InProgress.completedLink
   }
 
-  "user is authorised and address data found" in {
+  "5. user is authorised and address data found" in {
     setup(false)
     InProgress.assertPageIsDisplayed(vrn, false, true, amount = "£6.56", appender = "_inprogress")
     InProgress.uniqueToPage
   }
 
-  "Get ShowResults authorised, no enrolments" in {
+  "6. Get ShowResults authorised, no enrolments" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
     goToViaPath(path)
-    NonMtdUser.assertPageIsDisplayed
+    readTitle shouldBe "Sorry, there is a problem with the service - Business tax account - GOV.UK"
   }
 
-  "check negative amount" in {
+  "7. check negative amount" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey, true)
+    DesWireMockResponses.financialsOkCredit(vrn)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
   }
 
-  "multiple inprogress " in {
+  "8. multiple inprogress " in {
     setup(true, true, false)
     InProgress.uniqueToPage
     InProgress.completedLink
   }
 
-  "click view progress " in {
+  "9. click view progress " in {
     setup(true, true, false)
     InProgress.clickViewProgress("_inprogress")
   }
 
-  "click clickManageAccount" in {
+  "10. click clickManageAccount" in {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, useBankDetails = false, singleRepayment = false)
     InProgress.clickCallBac
     AuditWireMockResponses.bacWasAudited(details)
   }
 
-  "click view repayment account then clickManageAccount" in {
+  "11. click view repayment account then clickManageAccount" in {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, singleRepayment = false)
     InProgress.clickManageAccount
     InProgress.clickCallBac
     AuditWireMockResponses.bacWasAudited(details)
-  }
-
-  "Get ShowResults authorised but non-mtd vrn should show error page" in {
-    setup(enrolmentIn = EnrolmentKeys.vatVarEnrolmentKey)
-    goToViaPath(path)
-    NonMtdUser.assertPageIsDisplayed
   }
 
   private def setup(

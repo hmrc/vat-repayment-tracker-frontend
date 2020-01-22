@@ -48,37 +48,37 @@ class InProgressCompletedSpec extends ItSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  "user is authorised and financial data found" in {
+  "1. user is authorised and financial data found" in {
     setup()
     InProgress.uniqueToPage
     InProgressCompleted.checktabs
     InProgressCompleted.breadCrumbsExists
   }
-  "BAC shown" in {
+  "2. BAC shown" in {
     setup(useBankDetails = false)
     InProgressCompleted.containsBAC(true)
   }
 
-  "BAC not shown" in {
+  "3. BAC not shown" in {
     setup(useBankDetails = false, inflight = true)
     InProgressCompleted.containsBAC(false)
   }
 
-  "click completed link" in {
+  "4. click completed link" in {
     setup()
     InProgress.clickCompleted
     Completed.uniqueToPage
     InProgressCompleted.checktabs
   }
 
-  "click completed link inpast but not completed" in {
+  "5. click completed link inpast but not completed" in {
     setup(inPast = true)
     InProgress.clickCompleted
     Completed.uniqueToPage
     InProgressCompleted.checktabs
   }
 
-  "click completed link inpast completed" in {
+  "6. click completed link inpast completed" in {
     setup(inPast = true, ft = ft_debit)
     InProgressCompleted.checktabsInPast
     InProgress.completedLink

@@ -26,7 +26,8 @@ object DesData {
   val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"))
   val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   val ppob: PPOB = PPOB(Some(address))
-  val approvedInformation = ApprovedInformation(Some(bankDetails), Some(ppob))
+  val customerDetails: CustomerDetails = CustomerDetails(Some(true), Some(false))
+  val approvedInformation = ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
 
   val changeIndicators = ChangeIndicators(Some(true), Some(false))
   val inFlightInformation = InFlightInformation(Some(changeIndicators))
@@ -291,6 +292,10 @@ object DesData {
     s"""
        {
           "approvedInformation":{
+             "customerDetails": {
+                       "welshIndicator": true,
+                       "isPartialMigration": false
+              },
              "bankDetails":{
                 "accountHolderName":"Account holder",
                 "bankAccountNumber":"11112222",
@@ -431,8 +436,7 @@ object DesData {
      }
        """.stripMargin)
 
-  // language=JSON
-  val customerDataOk: JsValue = Json.parse(
+  def customerDataOk(isPartial: Boolean = false): JsValue = Json.parse(
     s"""
      {
          "approvedInformation": {
@@ -447,7 +451,7 @@ object DesData {
                  "welshIndicator": true,
                  "partyType": "50",
                  "optionToTax": true,
-                 "isPartialMigration": false,
+                 "isPartialMigration": ${isPartial},
                  "isInsolvent": false,
                  "overseasIndicator": true
              },
@@ -862,14 +866,14 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails1(date: String, status1: String, periodKey: PeriodKey): JsValue = Json.parse(
+  def repaymentDetails1(date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
     s"""[{
         "returnCreationDate": "${date}",
         "sentForRiskingDate": "${date}",
         "lastUpdateReceivedDate": "${date}",
         "periodKey": "${periodKey.value}",
         "riskingStatus": "${status1}",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": "${if (negativeAmt) -656 else 656}",
         "supplementDelayDays": 6,
         "originalPostingAmount": 0
     }]
