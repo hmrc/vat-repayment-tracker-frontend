@@ -41,12 +41,13 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
+        <p>@{ClassicMessages.no_returns_line1.show}</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li>@{ClassicMessages.no_returns_line1.show}</li>
             <li>@{ClassicMessages.no_returns_line2.show}</li>
             <li>@{ClassicMessages.no_returns_line3.show}</li>
+            <li>@{ClassicMessages.no_returns_line4.show}</li>
         </ul>
-        <p>@{ClassicMessages.no_returns_line4.show}</p>
+
       <p class="govuk-!-margin-bottom-9"><a href=@{appConfig.btaUrl}>@{ClassicMessages.view_bta.show}</a></p>
     </div>
   </div>

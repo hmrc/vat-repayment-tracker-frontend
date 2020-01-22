@@ -436,8 +436,7 @@ object DesData {
      }
        """.stripMargin)
 
-  // language=JSON
-  val customerDataOk: JsValue = Json.parse(
+  def customerDataOk(isPartial: Boolean = false): JsValue = Json.parse(
     s"""
      {
          "approvedInformation": {
@@ -452,102 +451,7 @@ object DesData {
                  "welshIndicator": true,
                  "partyType": "50",
                  "optionToTax": true,
-                 "isPartialMigration": false,
-                 "isInsolvent": false,
-                 "overseasIndicator": true
-             },
-             "PPOB": {
-                 "address": {
-                     "line1": "VAT PPOB Line1",
-                     "line2": "VAT PPOB Line2",
-                     "line3": "VAT PPOB Line3",
-                     "line4": "VAT PPOB Line4",
-                     "postCode": "TF3 4ER",
-                     "countryCode": "GB"
-                 },
-                 "contactDetails": {
-                     "primaryPhoneNumber": "012345678901",
-                     "mobileNumber": "012345678902",
-                     "faxNumber": "012345678903",
-                     "emailAddress": "lewis.hay@digital.hmrc.gov.uk",
-                     "emailVerified": true
-                 },
-                 "websiteAddress": "www.tumbleweed.com"
-             },
-             "bankDetails": {
-                 "accountHolderName": "Account holder",
-                 "bankAccountNumber": "11112222",
-                 "sortCode": "667788"
-             },
-             "businessActivities": {
-                 "primaryMainCode": "10410",
-                 "mainCode2": "10611",
-                 "mainCode3": "10710",
-                 "mainCode4": "10720"
-             },
-             "flatRateScheme": {
-                 "FRSCategory": "003",
-                 "FRSPercentage": 59.99,
-                 "startDate": "0001-01-01",
-                 "endDate": "9999-12-31",
-                 "limitedCostTrader": true
-             },
-             "returnPeriod": {
-                 "stdReturnPeriod": "MM"
-             }
-         },
-         "inFlightInformation": {
-             "changeIndicators": {
-                 "organisationDetails": false,
-                 "PPOBDetails": false,
-                 "correspondenceContactDetails": false,
-                 "bankDetails": false,
-                 "returnPeriod": false,
-                 "flatRateScheme": false,
-                 "businessActivities": false,
-                 "deregister": false,
-                 "effectiveDateOfRegistration": false,
-                 "mandationStatus": true
-             },
-             "inFlightChanges": {
-                 "bankDetails": {
-                     "formInformation": {
-                         "formBundle": "092000001020",
-                         "dateReceived": "2019-03-04"
-                     },
-                     "accountHolderName": "Account holder",
-                     "bankAccountNumber": "11112222",
-                     "sortCode": "667788"
-                 },
-                 "mandationStatus": {
-                     "formInformation": {
-                         "formBundle": "092000002124",
-                         "dateReceived": "2019-08-15"
-                     },
-                     "mandationStatus": "3"
-                 }
-             }
-         }
-     }
-       """.stripMargin)
-
-  // language=JSON
-  val customerDataOkPartial: JsValue = Json.parse(
-    s"""
-     {
-         "approvedInformation": {
-             "customerDetails": {
-                 "nameIsReadOnly": true,
-                 "organisationName": "TAXPAYER NAME_1",
-                 "dataOrigin": "0001",
-                 "mandationStatus": "1",
-                 "registrationReason": "0001",
-                 "effectiveRegistrationDate": "2017-01-02",
-                 "businessStartDate": "2017-01-01",
-                 "welshIndicator": true,
-                 "partyType": "50",
-                 "optionToTax": true,
-                 "isPartialMigration": true,
+                 "isPartialMigration": ${isPartial},
                  "isInsolvent": false,
                  "overseasIndicator": true
              },

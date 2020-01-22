@@ -66,7 +66,7 @@ object DesWireMockResponses {
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          if (partial) DesData.customerDataOkPartial.toString() else DesData.customerDataOk.toString()
+          DesData.customerDataOk(partial).toString()
             .stripMargin)))
 
   }
