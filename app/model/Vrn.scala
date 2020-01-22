@@ -52,7 +52,5 @@ object TypedVrn {
 
   final case class MtdVrn(vrn: Vrn) extends TypedVrn
 
-  final case class PartialMigrationVrn(vrn: Vrn) extends TypedVrn
-
 }
 

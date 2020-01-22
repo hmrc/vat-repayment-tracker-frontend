@@ -20,9 +20,10 @@ import model.TypedVrn
 import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.auth.core.Enrolments
 
-final class AuthenticatedRequest[A](val request:    Request[A],
-                                    val enrolments: Enrolments,
-                                    val typedVrn:   TypedVrn
+final class AuthenticatedRequest[A](val request:            Request[A],
+                                    val enrolments:         Enrolments,
+                                    val typedVrn:           TypedVrn,
+                                    val isPartialMigration: Boolean
 ) extends WrappedRequest[A](request) {
 
 }

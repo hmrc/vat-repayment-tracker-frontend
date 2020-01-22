@@ -28,17 +28,18 @@ class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
   val periodKey = PeriodKey("18AG")
 
-  "Get ShowResults authorised" in {
+  "1. Get ShowResults authorised" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    DesWireMockResponses.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }
 
-  "Get ShowResults not authorised redirect to login stub" in {
+  "2. Get ShowResults not authorised redirect to login stub" in {
     AuthWireMockResponses.authFailed
     AuditWireMockResponses.auditIsAvailable
     GgStub.signInPage(19001, vrn)
@@ -47,7 +48,7 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get view repayment account authorised" in {
+  "3. Get view repayment account authorised" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
@@ -55,45 +56,50 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get startBankAccountCocJourney authorised" in {
+  "4. Get startBankAccountCocJourney authorised" in {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     BankAccountCocWireMockResponses.bankOk
+    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+    AuditWireMockResponses.auditIsAvailable
     val result = connector.startBankAccountCocJourney.futureValue
     result.status shouldBe Status.OK
   }
 
-  "Get showVrt authorised" in {
+  "5. Get showVrt authorised" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    DesWireMockResponses.financialsOkCredit(vrn)
     val result = connector.showVrt.futureValue
     result.status shouldBe Status.OK
   }
 
-  "Get showVrt authorised  no-mtd" in {
+  //Update to matcb classic changes later
+  "6. Get showVrt authorised  no-mtd" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showVrt.futureValue
-    result.body should include ("You cannot access this service")
+    result.body should include ("No VAT repayments in progress")
     result.status shouldBe Status.OK
   }
 
-  "Get manageOrTrackVRT authorised" in {
+  "7. Get manageOrTrackVRT authorised" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    DesWireMockResponses.ddOk(vrn)
     val result = connector.manageOrTrackVrt.futureValue
     result.status shouldBe Status.OK
   }
 
-  "Get showVrt manageOrTrackVRT  no-mtd" in {
+  "8. Get showVrt manageOrTrackVRT  no-mtd" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
@@ -104,7 +110,7 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get manageOrTrack authorised" in {
+  "9. Get manageOrTrack authorised" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
@@ -114,12 +120,13 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  "Get showVrt manageOrTrack no-mtd" in {
+  "10. Get showVrt manageOrTrack no-mtd" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
+    DesWireMockResponses.ddOk(vrn)
     val result = connector.manageOrTrack(vrn).futureValue
     result.body should include ("You cannot access this service")
     result.status shouldBe Status.OK

@@ -33,40 +33,40 @@ class ManageOrTrackSpec extends ItSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  "user is authorised, bank dd option, manage bank option " in {
+  "1. user is authorised, bank dd option, manage bank option " in {
     setup(true, true)
     ManageOrTrack.assertPageIsDisplayed(vrn, true, true)
   }
 
-  "user is authorised, manage dd option " in {
+  "2. user is authorised, manage dd option " in {
     setup(false, true)
     ManageOrTrack.assertPageIsDisplayed(vrn, true, false, nobankDisplayed = true)
   }
 
-  "user is authorised, manage bank option " in {
+  "3. user is authorised, manage bank option " in {
     setup(true, false)
     ManageOrTrack.assertPageIsDisplayed(vrn, false, true, noddDisplayed = true)
 
   }
 
-  "user is authorised, manage no bank or dd option " in {
+  "4. user is authorised, manage no bank or dd option " in {
     setup(false, false)
     ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = true)
   }
 
-  "user is authorised, manage no bank or dd option but inflight bank " in {
+  "5. user is authorised, manage no bank or dd option but inflight bank " in {
     setup(false, false, inflight = true)
     ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = false)
   }
 
-  "click vrtLabel" in {
+  "6. click vrtLabel" in {
     setup(true, true)
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
   }
 
-  "click bankLabel" in {
+  "7. click bankLabel" in {
     BankAccountCocWireMockResponses.bankOk
     setup(true, true)
     ManageOrTrack.clickBankLabel()

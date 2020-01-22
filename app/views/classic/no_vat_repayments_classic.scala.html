@@ -1,0 +1,55 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import langswitch.LangMessages
+@import langswitch.ClassicMessages
+@import config.ViewConfig
+
+@this(
+  mainTemplate: views.html.main_template,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: ViewConfig
+)
+
+@(
+  )(
+  implicit
+  request: Request[_]
+)
+
+@import viewsHelpers.requestSupport._
+
+@mainTemplate(
+  title = s"${LangMessages.`No VAT repayments in progress`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
+  headerTitle = LangMessages.heading_bta.show,
+  bodyClasses = None
+) {
+<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:none_in_progress">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@{ClassicMessages.no_returns_line1.show}</li>
+            <li>@{ClassicMessages.no_returns_line2.show}</li>
+            <li>@{ClassicMessages.no_returns_line3.show}</li>
+        </ul>
+        <p>@{ClassicMessages.no_returns_line4.show}</p>
+      <p class="govuk-!-margin-bottom-9"><a href=@{appConfig.btaUrl}>@{ClassicMessages.view_bta.show}</a></p>
+    </div>
+  </div>
+</main>
+
+}

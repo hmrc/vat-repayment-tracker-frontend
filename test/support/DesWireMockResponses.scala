@@ -61,12 +61,12 @@ object DesWireMockResponses {
 
   }
 
-  def customerDataOkWithBankDetails(vrn: Vrn) = {
+  def customerDataOkWithBankDetails(vrn: Vrn, partial: Boolean = false) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.customerDataOk.toString()
+          if (partial) DesData.customerDataOkPartial.toString() else DesData.customerDataOk.toString()
             .stripMargin)))
 
   }
@@ -131,12 +131,12 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey) = {
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean = false) = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.repaymentDetails1(date, status1, periodKey).toString()
+          DesData.repaymentDetails1(date, status1, periodKey, negativeAmt).toString()
             .stripMargin)))
 
   }

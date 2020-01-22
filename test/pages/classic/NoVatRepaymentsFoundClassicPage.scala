@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
-package exceptions
+package pages.classic
 
-class VrnException extends RuntimeException
+import model.Vrn
+import org.openqa.selenium.WebDriver
+import org.scalatest.Assertion
+import pages.CommonPage
+
+object NoVatRepaymentsFoundClassicPage extends CommonPage {
+
+  val path = "/vat-repayment-tracker/show-vrt"
+
+  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""${path}"""
+    readTitle shouldBe "No VAT repayments in progress - Business tax account - GOV.UK"
+  }
+}

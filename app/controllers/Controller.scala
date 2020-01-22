@@ -64,22 +64,29 @@ class Controller @Inject() (
     Future.successful(Ok(views.non_mtd_user()))
   }
 
-  def showVrt: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+  def showVrt: Action[AnyContent] = actions.securedAction.async {
     implicit request: AuthenticatedRequest[_] =>
 
-      val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
-      val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
-      val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
-
-      val result = for {
-        customerData <- customerDataF
-        repaymentDetails <- repaymentDetailsF
-        financialData <- financialDataF
-      } yield (
-        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
-      )
-
-      result
+      Logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
+      request.typedVrn match {
+        case TypedVrn.ClassicVrn(vrn) => {
+          Logger.debug("Received a classic VRN")
+          Future.successful(Ok(views.no_vat_repayments_classic()))
+        }
+        case TypedVrn.MtdVrn(vrn) => {
+          Logger.debug("Received a  MTD VRN")
+          val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
+          val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
+          val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
+          for {
+            customerData <- customerDataF
+            repaymentDetails <- repaymentDetailsF
+            financialData <- financialDataF
+          } yield (
+            showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
+          )
+        }
+      }
 
   }
 
