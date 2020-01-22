@@ -39,20 +39,13 @@ final case class CustomerInformation(approvedInformation: Option[ApprovedInforma
     } yield pPOBDetails
   }
 
-  def isPartiallyMigrated = {
-    val pOpt: Option[Boolean] = for {
+  val isPartiallyMigrated: Boolean = {
+    for {
       approved <- approvedInformation
       cd <- approved.customerDetails
-    } yield cd.isPartialMigration match {
-      case Some(x) => x
-      case None    => false
-    }
-
-    pOpt match {
-      case Some(x) => x
-      case None    => false
-    }
-  }
+      isPartialMigration <- cd.isPartialMigration
+    } yield isPartialMigration
+  }.getOrElse(false)
 
 }
 

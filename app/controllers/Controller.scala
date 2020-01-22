@@ -60,7 +60,7 @@ class Controller @Inject() (
 
   import requestSupport._
 
-  def nonMtdUser(): Action[AnyContent] = actions.securedAction.async { implicit request =>
+  def nonMtdUser(): Action[AnyContent] = actions.loggedIn.async { implicit request =>
     Future.successful(Ok(views.non_mtd_user()))
   }
 

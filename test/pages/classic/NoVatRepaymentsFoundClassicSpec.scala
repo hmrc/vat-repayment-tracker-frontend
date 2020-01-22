@@ -38,6 +38,13 @@ class NoVatRepaymentsFoundClassicSpec extends ItSpec {
     NoVatRepaymentsFoundClassicPage.assertPageIsDisplayed(vrn)
   }
 
+  "3. Get ShowResults authorised, no results when calling customer API" in {
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    DesWireMockResponses.customerNotFound(vrn)
+    setup
+    NoVatRepaymentsFoundClassicPage.assertPageIsDisplayed(vrn)
+  }
+
   private def setup() = {
 
     AuditWireMockResponses.auditIsAvailable
