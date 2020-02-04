@@ -71,7 +71,7 @@ class Controller @Inject() (
       request.typedVrn match {
         case TypedVrn.ClassicVrn(vrn) => {
           Logger.debug("Received a classic VRN")
-          Future.successful(Ok(views.no_vat_repayments_classic()))
+          Future.successful(Ok(views.non_mtd_user()))
         }
         case TypedVrn.MtdVrn(vrn) => {
           Logger.debug("Received a  MTD VRN")

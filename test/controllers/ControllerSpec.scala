@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import model.des.INITIAL
 import model.{EnrolmentKeys, PeriodKey, Vrn}
+import pages.NonMtdUser
 import play.api.Logger
 import play.api.http.Status
 import support._
@@ -76,7 +77,7 @@ class ControllerSpec extends ItSpec {
     result.status shouldBe Status.OK
   }
 
-  //Update to matcb classic changes later
+  //Update to match classic changes later
   "6. Get showVrt authorised  no-mtd" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
@@ -84,8 +85,7 @@ class ControllerSpec extends ItSpec {
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk
     val result = connector.showVrt.futureValue
-    result.body should include ("No VAT repayments in progress")
-    result.status shouldBe Status.OK
+    result.body should include("You cannot access this service")
   }
 
   "7. Get manageOrTrackVRT authorised" in {

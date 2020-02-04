@@ -28,8 +28,6 @@ class Views @Inject() (
     val view_progress:          _root_.views.html.view_progress,
     //error pages
     val errorTemplate: _root_.views.html.error.error_template,
-    val non_mtd_user:  _root_.views.html.non_mtd_user,
-    //classic
-    val no_vat_repayments_classic: _root_.views.html.classic.no_vat_repayments_classic
+    val non_mtd_user:  _root_.views.html.non_mtd_user
 
 )
