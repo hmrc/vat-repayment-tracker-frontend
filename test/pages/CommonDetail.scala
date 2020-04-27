@@ -25,7 +25,7 @@ trait CommonDetail extends CommonPage {
 
   val path = "/vat-repayment-tracker/show-vrt"
 
-  def breadCrumbsExists()(implicit driver: WebDriver) = idPresent("viewVatAccount") shouldBe true
+  def breadCrumbsExists()(implicit driver: WebDriver): Assertion = idPresent("viewVatAccount") shouldBe true
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
@@ -44,7 +44,7 @@ trait CommonDetail extends CommonPage {
       appender:       String)
     (implicit wd: WebDriver): Assertion =
     {
-      currentPath shouldBe s"""${path}"""
+      currentPath shouldBe s"""$path"""
       readAmount(appender) shouldBe amount
       if (checkBank) {
         if (partialAccount)
@@ -64,9 +64,9 @@ trait CommonDetail extends CommonPage {
 
   def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readAmount(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"amount${appender}")).getText)
+  def readAmount(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"amount$appender")).getText)
 
-  def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"received-date${appender}")).getText)
+  def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"received-date$appender")).getText)
 
-  def readPeriod(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"period${appender}")).getText)
+  def readPeriod(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"period$appender")).getText)
 }

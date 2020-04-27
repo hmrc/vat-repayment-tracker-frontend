@@ -23,8 +23,6 @@ final case class Country(countryCode: String, countryName: String)
 @Singleton
 class CountriesService {
 
-  private val pattern = "([A-Z]{3})=(.*)".r
-
   private val countries = List(
     Country("AFG", "Afghanistan"),
     Country("ALB", "Albania"),
@@ -279,6 +277,6 @@ class CountriesService {
   )
 
   def getCountry(countryCode: String): String = {
-    countries.find(f => f.countryCode == countryCode).fold(throw new RuntimeException(s"""No Countrycode for ${countryCode}"""))(_.countryName)
+    countries.find(f => f.countryCode == countryCode).fold(throw new RuntimeException(s"""No Countrycode for $countryCode"""))(_.countryName)
   }
 }

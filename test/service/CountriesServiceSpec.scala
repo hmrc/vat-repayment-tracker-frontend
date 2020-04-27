@@ -16,13 +16,11 @@
 
 package service
 
-package service
-
 import support.ItSpec
 
 class CountriesServiceSpec extends ItSpec {
 
-  val countryService = injector.instanceOf[CountriesService]
+  val countryService: CountriesService = injector.instanceOf[CountriesService]
   "countryService" - {
 
     "should Return a country when Given  a code " in {

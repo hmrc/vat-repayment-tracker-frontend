@@ -27,5 +27,5 @@ final case class WhatsHappendSoFar(
     pageTitle:         String,
     complete:          String    = ""
 ) {
-  val isComplete = complete.equals("_Y")
+  val isComplete: Boolean = complete.equals("_Y")
 }

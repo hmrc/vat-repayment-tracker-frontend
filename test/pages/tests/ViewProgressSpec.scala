@@ -25,14 +25,14 @@ import support._
 
 class ViewProgressSpec extends ItSpec {
 
-  val vrn = Vrn("234567890")
+  val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
   "id: 1 click view progress basic" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
+    setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(6)
@@ -43,136 +43,136 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
+    setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(CLAIM_QUERIED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is being processed")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING.value)
+    setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING.value)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(SENT_FOR_RISKING.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is being processed")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
-    setup(useBankDetails = true, inPast = true, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
+    setup(inPast    = true, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED.value)
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(-44) //50 -6
     ViewProgress.checkStatusExists(List(CLAIM_QUERIED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is delayed")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 3 , REPAYMENT_ADJUSTED" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_ADJUSTED.value)
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_ADJUSTED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(s"${REPAYMENT_ADJUSTED}_Y", CLAIM_QUERIED.value, SENT_FOR_RISKING.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment has been approved")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 5, ADJUSMENT_TO_TAX_DUE" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = ADJUSMENT_TO_TAX_DUE.value)
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = ADJUSMENT_TO_TAX_DUE.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(ADJUSMENT_TO_TAX_DUE.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(s"${ADJUSMENT_TO_TAX_DUE.value}_Y", CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("You need to make a VAT payment")
-    ViewProgress.payUrl(true)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 6, REPAYMENT_APPROVED" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_APPROVED.value)
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_APPROVED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(s"${REPAYMENT_APPROVED.value}_Y", CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment has been approved")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_ADJUSTED.value)
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_ADJUSTED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(s"${REPAYMENT_ADJUSTED.value}_Y", REPAYMENT_ADJUSTED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_APPROVED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(true)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
   }
 
   "id: 8, ADJUSMENT_TO_TAX_DUE AND Debit Charge Exists" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_debit, status2 = ADJUSMENT_TO_TAX_DUE.value)
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_debit, status2 = ADJUSMENT_TO_TAX_DUE.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(s"${ADJUSMENT_TO_TAX_DUE.value}_Y", ADJUSMENT_TO_TAX_DUE.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_APPROVED.value, REPAYMENT_ADJUSTED.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(true)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
   }
 
   "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_APPROVED.value)
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_APPROVED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(s"${REPAYMENT_APPROVED.value}_Y", REPAYMENT_APPROVED.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(true)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
   }
 
   "check 3 status" in {
-    setup(useBankDetails = true, inPast = false, rdsp = 3, periodKey = PeriodKey("18AG"), ft = ft_credit, status3 = REPAYMENT_APPROVED.value)
+    setup(rdsp      = 3, periodKey = PeriodKey("18AG"), ft = ft_credit, status3 = REPAYMENT_APPROVED.value)
     InProgress.clickViewProgress("_completed")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(s"${REPAYMENT_APPROVED.value}_Y", REPAYMENT_APPROVED.value, INITIAL.value, CLAIM_QUERIED.value))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value))
     ViewProgress.checkMainMessage("Your repayment is complete")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(true)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
 
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING) , #001 status" in {
-    setup(useBankDetails   = true, inPast = false, rdsp = 1, periodKey = PeriodKey("#001"), ft = ft_404, status1 = SENT_FOR_RISKING.value, periodKeyBackend = PeriodKey("%23001"))
+    setup(rdsp             = 1, periodKey = PeriodKey("#001"), ft = ft_404, status1 = SENT_FOR_RISKING.value, periodKeyBackend = PeriodKey("%23001"))
     InProgress.clickViewProgress("_inprogress")
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(SENT_FOR_RISKING.value, INITIAL.value))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED.value, REPAYMENT_ADJUSTED.value, ADJUSMENT_TO_TAX_DUE.value, REPAYMENT_APPROVED.value))
     ViewProgress.checkMainMessage("Your repayment is being processed")
-    ViewProgress.payUrl(false)
-    ViewProgress.historyUrl(false)
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   private def setup(
@@ -183,9 +183,9 @@ class ViewProgressSpec extends ItSpec {
       status3:        String  = "", rdsp: Int,
       periodKey:        PeriodKey,
       ft:               Int,
-      periodKeyBackend: PeriodKey = PeriodKey("18AG")) =
+      periodKeyBackend: PeriodKey = PeriodKey("18AG")): Unit =
     {
-      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       if (useBankDetails) {
@@ -195,18 +195,15 @@ class ViewProgressSpec extends ItSpec {
       }
       val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
       rdsp match {
-        case 1 => {
+        case 1 =>
           DesWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKey)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
-        }
-        case 2 => {
+        case 2 =>
           DesWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2, periodKey)
-        }
-        case 3 => {
+        case 3 =>
           DesWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
-        }
       }
 
       ft match {

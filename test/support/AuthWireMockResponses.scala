@@ -102,7 +102,7 @@ object AuthWireMockResponses {
                "affinityGroup": "$affinityGroup",
                "allEnrolments": [
                         {
-                          "key": "${enrolment}",
+                          "key": "$enrolment",
                           "identifiers": [
                             {
                               "key": "VRN",

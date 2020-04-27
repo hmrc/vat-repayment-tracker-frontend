@@ -38,7 +38,7 @@ import support._
 
 class CompletedSpec extends ItSpec {
 
-  val vrn = Vrn("234567890")
+  val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
 
   val ft_404: Int = 1
@@ -51,21 +51,21 @@ class CompletedSpec extends ItSpec {
     Completed.uniqueToPage
     Completed.checktabs
     Completed.breadCrumbsExists
-    Completed.containsBAC(false)
+    Completed.containsBAC(result = false)
   }
 
   "2. BAC shown" in {
     setup(useBankDetails = false)
-    Completed.containsBAC(true)
+    Completed.containsBAC(result = true)
   }
 
   "3. BAC not shown" in {
     setup(useBankDetails = false, inflight = true)
-    Completed.containsBAC(false)
+    Completed.containsBAC(result = false)
   }
 
   "4. user is authorised and financial data found but partial" in {
-    setup(true, true)
+    setup(partialBankDetails = true)
     Completed.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_completed")
     Completed.uniqueToPage
   }
@@ -76,7 +76,7 @@ class CompletedSpec extends ItSpec {
   }
 
   "6. multiple completed " in {
-    setup(true, true, false)
+    setup(partialBankDetails = true, singleRepayment = false)
     Completed.uniqueToPage
     Completed.viewProgressLink
   }
@@ -86,7 +86,7 @@ class CompletedSpec extends ItSpec {
     setup(ft              = ft_debit, singleRepayment = false)
     InProgress.clickManageAccount
     InProgress.clickCallBac
-    AuditWireMockResponses.bacWasAuditedNoDetails
+    AuditWireMockResponses.bacWasAuditedNoDetails()
 
   }
 
@@ -95,9 +95,9 @@ class CompletedSpec extends ItSpec {
       partialBankDetails: Boolean = false,
       singleRepayment:    Boolean = true,
       ft:                 Int     = ft_404,
-      inflight:           Boolean = false) =
+      inflight:           Boolean = false): Unit =
     {
-      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuditWireMockResponses.auditIsAvailable
 
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)

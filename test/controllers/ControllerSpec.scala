@@ -20,14 +20,12 @@ import java.time.LocalDate
 
 import model.des.INITIAL
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import pages.NonMtdUser
-import play.api.Logger
 import play.api.http.Status
 import support._
 
 class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
-  val periodKey = PeriodKey("18AG")
+  val periodKey: PeriodKey = PeriodKey("18AG")
 
   "1. Get ShowResults authorised" in {
     AuditWireMockResponses.auditIsAvailable
@@ -35,7 +33,7 @@ class ControllerSpec extends ItSpec {
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     DesWireMockResponses.financialsOkCredit(vrn)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.showResults(vrn).futureValue
     result.status shouldBe Status.OK
   }
@@ -71,7 +69,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     DesWireMockResponses.financialsOkCredit(vrn)
     val result = connector.showVrt.futureValue
     result.status shouldBe Status.OK
@@ -83,7 +81,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.showVrt.futureValue
     result.body should include("You cannot access this service")
   }
@@ -93,7 +91,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     DesWireMockResponses.ddOk(vrn)
     val result = connector.manageOrTrackVrt.futureValue
     result.status shouldBe Status.OK
@@ -104,7 +102,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.manageOrTrackVrt.futureValue
     result.body should include ("You cannot access this service")
     result.status shouldBe Status.OK
@@ -115,7 +113,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.manageOrTrack(vrn).futureValue
     result.status shouldBe Status.OK
   }
@@ -125,7 +123,7 @@ class ControllerSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     DesWireMockResponses.ddOk(vrn)
     val result = connector.manageOrTrack(vrn).futureValue
     result.body should include ("You cannot access this service")

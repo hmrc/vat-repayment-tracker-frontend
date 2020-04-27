@@ -23,7 +23,7 @@ import org.scalatest.Assertion
 object ViewRepaymentAccount extends CommonPage {
 
   def assertPageIsDisplayed(vrn: Vrn, path: String = "/vat-repayment-tracker-frontend/view-repayment-account")(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}"""
+    currentPath shouldBe s"""$path"""
     readTitle shouldBe "Your VAT repayments will be sent to this account - Business tax account - GOV.UK"
     //readAccName() shouldBe s"""Account number: ${accountHolderName}"""
     readAccNumber should include ("****2222")

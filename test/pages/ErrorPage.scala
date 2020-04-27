@@ -25,7 +25,7 @@ object ErrorPage extends CommonPage {
   val path = "/vat-repayment-tracker-frontend/show-results/vrn/"
 
   def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""${path}${vrn.value}"""
+    currentPath shouldBe s"""$path${vrn.value}"""
     readTitle shouldBe "Sorry, there is a problem with the service"
   }
 }

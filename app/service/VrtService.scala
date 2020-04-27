@@ -41,12 +41,12 @@ class VrtService @Inject() (
   def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_]): AllRepaymentData = {
 
     repaymentDetails match {
-      case Some(rd) => {
+      case Some(rd) =>
         for {
           r <- rd
           vrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, r)
-          res = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
-        } yield (Logger.debug(s"cached vat repayment data for vrn : ${vrn}"))
+          _ = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
+        } yield Logger.debug(s"cached vat repayment data for vrn : $vrn")
 
         val data = getRepaymentData(rd, vrn, financialData)
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
@@ -60,7 +60,6 @@ class VrtService @Inject() (
           currentData.filterNot(completed.contains(_)),
           completed
         )
-      }
       case None => dealWithNodata
     }
 
@@ -70,8 +69,8 @@ class VrtService @Inject() (
 
     for {
       rd <- repaymentDetails
-      if (outDatedPredicate(rd, financialData)) == false
-    } yield (RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED.value) rd.originalPostingAmount else rd.vatToPay_BOX5_InPounds, rd.returnCreationDate, rd.riskingStatus, rd.periodKey))
+      if !outDatedPredicate(rd, financialData)
+    } yield RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED.value) rd.originalPostingAmount else rd.vatToPay_BOX5_InPounds, rd.returnCreationDate, rd.riskingStatus, rd.periodKey)
 
   }
 

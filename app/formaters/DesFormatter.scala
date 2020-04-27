@@ -21,21 +21,19 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import javax.inject.{Inject, Singleton}
-import langswitch.LangMessages
 import model.des._
 import model.{ChargeType, PeriodKey, VrtRepaymentDetailData}
-import play.api.Logger
 import play.api.mvc.Request
 import req.RequestSupport
 
 @Singleton
-class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: RequestSupport) {
+class DesFormatter @Inject() (addressFormater: AddressFormater, requestSupport: RequestSupport) {
 
   import requestSupport._
 
   def addMissingStatus(vrd: List[VrtRepaymentDetailData]): List[VrtRepaymentDetailData] = {
 
-    if (vrd.filter(f => f.repaymentDetailsData.riskingStatus == INITIAL.value).size > 0) {
+    if (vrd.exists(f => f.repaymentDetailsData.riskingStatus == INITIAL.value)) {
       vrd
     } else {
 
@@ -49,10 +47,10 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield (fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnDebitCharge, periodKey)))
+    } yield fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnDebitCharge, periodKey))
 
     transactionIterable match {
-      case Some(x) => if (x.size > 0) true else false
+      case Some(x) => if (x.nonEmpty) true else false
       case None    => false
     }
   }
@@ -61,10 +59,10 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield (fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey)))
+    } yield fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey))
 
     transactionIterable match {
-      case Some(x) => if (x.size > 0) true else false
+      case Some(x) => if (x.nonEmpty) true else false
       case None    => false
     }
   }
@@ -89,7 +87,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
       cd <- customerData
       ai <- cd.approvedInformation
       bd <- ai.bankDetails
-    } yield (bd)
+    } yield bd
   }
 
   def getAddressDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
@@ -105,7 +103,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
     val maybeExists = for {
       cd <- customerData
       ai <- cd.approvedInformation
-    } yield (ai.addressExists)
+    } yield ai.addressExists
 
     maybeExists.getOrElse(false)
 
@@ -117,7 +115,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormter, requestSupport: R
       dd <- directDebitData
       ddDetailsOption <- dd.directDebitDetails
       ddDetails <- ddDetailsOption.headOption
-    } yield (ddDetails)
+    } yield ddDetails
 
     ddDetail.map(detail => BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode)))
 

@@ -43,12 +43,12 @@ class PayApiConnector @Inject() (
 
   def startJourney(amountInPence: Long, vrn: Vrn)(implicit request: Request[_]): Future[SpjResponse] = {
 
-    val bUrl: String = s"${viewConfig.frontendBaseUrl}${payBackUrl}${vrn.value}"
+    val bUrl: String = s"${viewConfig.frontendBaseUrl}$payBackUrl${vrn.value}"
     val journeyRequest: SpjRequestBtaVat = SpjRequestBtaVat(amountInPence, bUrl, bUrl, vrn)
-    Logger.debug(s"Using back url : ${bUrl}")
-    Logger.debug(s"Calling pay-api start journey for vrn ${vrn}")
+    Logger.debug(s"Using back url : $bUrl")
+    Logger.debug(s"Calling pay-api start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
-    Logger.debug(s"Calling pay-api start journey for vrn with url ${startJourneyURL})")
+    Logger.debug(s"Calling pay-api start journey for vrn with url $startJourneyURL)")
     httpClient.POST[SpjRequestBtaVat, SpjResponse](startJourneyURL, journeyRequest)
 
   }

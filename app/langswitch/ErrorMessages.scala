@@ -20,60 +20,60 @@ import model.Vrn
 
 object ErrorMessages {
 
-  val badRequest400Title = Message(
+  val badRequest400Title: Message = Message(
     "Bad request - 400"
   )
-  val badRequest400Heading = Message(
+  val badRequest400Heading: Message = Message(
     "Bad request"
   )
-  val badRequest400Message = Message(
+  val badRequest400Message: Message = Message(
     "Please check that you have entered the correct web address."
   )
 
-  val pageNotFound404Title = Message(
+  val pageNotFound404Title: Message = Message(
     "Page not found - 404"
   )
-  val pageNotFound404Heading = Message(
+  val pageNotFound404Heading: Message = Message(
     "This page can’t be found"
   )
-  val pageNotFound404Message = Message(
+  val pageNotFound404Message: Message = Message(
     "Please check that you have entered the correct web address."
   )
 
-  val authProblemTitle = Message(
+  val authProblemTitle: Message = Message(
     "More than one session is open"
   )
-  val authProblemHeading = Message(
+  val authProblemHeading: Message = Message(
     "More than one session is open"
   )
-  val authProblemMessage = Message(
+  val authProblemMessage: Message = Message(
     "To continue, please close one session or start again."
   )
 
-  val internalServerError500Title = Message(
+  val internalServerError500Title: Message = Message(
     "Sorry, we are experiencing technical difficulties - 500"
   )
-  val internalServerError500Heading = Message(
+  val internalServerError500Heading: Message = Message(
     "Sorry, we’re experiencing technical difficulties"
   )
-  val internalServerError500Message = Message(
+  val internalServerError500Message: Message = Message(
     "Please try again in a few minutes."
   )
   val `You do not have access to this service`: Message = Message(
     english = "You do not have access to this service"
   )
-  val `choose an option` = Message(
+  val `choose an option`: Message = Message(
     "Select whether to manage your accounts or track a VAT repayment"
   )
-  val `VRN missing` = Message(
+  val `VRN missing`: Message = Message(
     "VRN missing"
   )
 
-  val `general error title` = Message(
+  val `general error title`: Message = Message(
     "Sorry, there is a problem with the service"
   )
 
-  val `try again later` = Message(
+  val `try again later`: Message = Message(
     "Try again later."
   )
 

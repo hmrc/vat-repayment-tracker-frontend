@@ -17,7 +17,7 @@
 package model
 
 import controllers.ValueClassBinder.valueClassBinder
-import model.TypedVrn.{ClassicVrn, MtdVrn}
+import model.TypedVrn.MtdVrn
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable

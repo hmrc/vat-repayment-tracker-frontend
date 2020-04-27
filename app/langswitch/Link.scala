@@ -36,7 +36,7 @@ case object SameWindow extends Target {
 
 case object NewWindow extends Target {
   override val targetName = "_blank"
-  override val hiddenInfo = Some("link opens in a new window")
+  override val hiddenInfo: Option[String] = Some("link opens in a new window")
 }
 
 trait PossibleSso {

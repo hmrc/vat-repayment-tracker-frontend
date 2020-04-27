@@ -47,12 +47,11 @@ class Actions @Inject() (
 
         request.typedVrn match {
           case TypedVrn.MtdVrn(vrn) => Future.successful(Right(request))
-          case _ => {
+          case _ =>
             Logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
             if (request.isPartialMigration) Logger.warn("Partially migrated user tried to access MTD authorised VRT")
             implicit val req: AuthenticatedRequest[_] = request
             Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
-          }
         }
 
       }

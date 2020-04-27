@@ -47,7 +47,7 @@ import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 import play.api.mvc.{AnyContentAsEmpty, Request, Result}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
-import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -72,9 +72,9 @@ trait ItSpec
 
   implicit lazy val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
-  lazy val servicesConfig = fakeApplication.injector.instanceOf[ServicesConfig]
-  lazy val config = fakeApplication.injector.instanceOf[Configuration]
-  lazy val env = fakeApplication.injector.instanceOf[Environment]
+  lazy val servicesConfig: ServicesConfig = fakeApplication().injector.instanceOf[ServicesConfig]
+  lazy val config: Configuration = fakeApplication().injector.instanceOf[Configuration]
+  lazy val env: Environment = fakeApplication().injector.instanceOf[Environment]
   lazy val overridingsModule: AbstractModule = new AbstractModule {
 
     override def configure(): Unit = ()
@@ -88,21 +88,21 @@ trait ItSpec
   }
   val baseUrl: String = s"http://localhost:$WireMockSupport.port"
 
-  override implicit val patienceConfig = PatienceConfig(
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(
     timeout  = scaled(Span(3, Seconds)),
     interval = scaled(Span(300, Millis)))
 
-  implicit val emptyHC = HeaderCarrier()
+  implicit val emptyHC: HeaderCarrier = HeaderCarrier()
   val webdriverUr: String = s"http://localhost:$port"
-  val connector = injector.instanceOf[TestConnector]
+  val connector: TestConnector = injector.instanceOf[TestConnector]
 
-  def httpClient = fakeApplication().injector.instanceOf[HttpClient]
+  def httpClient: HttpClient = fakeApplication().injector.instanceOf[HttpClient]
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
     .configure(configMap).build()
 
-  def configMap = Map[String, Any](
+  def configMap: Map[String, Any] = Map[String, Any](
     "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
     "microservice.services.direct-debit-backend.port" -> WireMockSupport.port, "microservice.services.bank-account-coc.port" -> WireMockSupport.port,
     "microservice.services.vat-repayment-tracker-backend.port" -> WireMockSupport.port,
@@ -118,13 +118,13 @@ trait ItSpec
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
 
-  def status(of: Result) = of.header.status
+  def status(of: Result): Int = of.header.status
 
   protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
 
-  def goToViaPath(path: String) = webDriver.get(s"$webdriverUr$path")
+  def goToViaPath(path: String): Unit = webDriver.get(s"$webdriverUr$path")
 
-  implicit val request = FakeRequest()
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
 }
 

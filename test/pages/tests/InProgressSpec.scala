@@ -25,10 +25,10 @@ import support._
 
 class InProgressSpec extends ItSpec {
 
-  val vrn = Vrn("234567890")
+  val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
 
-  val periodKey = PeriodKey("18AG")
+  val periodKey: PeriodKey = PeriodKey("18AG")
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
@@ -56,7 +56,7 @@ class InProgressSpec extends ItSpec {
   }
 
   "3. user is authorised and financial data found but partial" in {
-    setup(true, true)
+    setup(partialBankDetails = true)
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_inprogress")
     InProgress.uniqueToPage
   }
@@ -67,8 +67,8 @@ class InProgressSpec extends ItSpec {
   }
 
   "5. user is authorised and address data found" in {
-    setup(false)
-    InProgress.assertPageIsDisplayed(vrn, false, true, amount = "£6.56", appender = "_inprogress")
+    setup(useBankDetails = false)
+    InProgress.assertPageIsDisplayed(vrn, checkBank = false, checkAddress = true, amount = "£6.56", appender = "_inprogress")
     InProgress.uniqueToPage
   }
 
@@ -83,7 +83,7 @@ class InProgressSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey, true)
+    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey, negativeAmt = true)
     DesWireMockResponses.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
@@ -91,13 +91,13 @@ class InProgressSpec extends ItSpec {
   }
 
   "8. multiple inprogress " in {
-    setup(true, true, false)
+    setup(partialBankDetails = true, singleRepayment = false)
     InProgress.uniqueToPage
     InProgress.completedLink
   }
 
   "9. click view progress " in {
-    setup(true, true, false)
+    setup(partialBankDetails = true, singleRepayment = false)
     InProgress.clickViewProgress("_inprogress")
   }
 
@@ -124,8 +124,8 @@ class InProgressSpec extends ItSpec {
       status1:            String  = INITIAL.value,
       enrolmentIn:        String  = EnrolmentKeys.mtdVatEnrolmentKey,
       inflight:           Boolean = false
-  ) = {
-    VatRepaymentTrackerBackendWireMockResponses.storeOk
+  ): Unit = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = enrolmentIn)
     if (useBankDetails) {
