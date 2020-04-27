@@ -23,6 +23,7 @@ import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import req.RequestSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
