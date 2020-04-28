@@ -53,7 +53,7 @@ trait CommonPage
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
-  def clickViewProgress(appender: String)(implicit driver: WebDriver): Unit = probing(_.findElement(By.id(s"link${appender}")).click())
+  def clickViewProgress(appender: String)(implicit driver: WebDriver): Unit = probing(_.findElement(By.id(s"link$appender")).click())
 
   /**
    * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
@@ -117,17 +117,17 @@ trait CommonPage
 
   def globalErrors(implicit driver: WebDriver): Option[Element] = id("error-summary-display").findElement
 
-  def getByStringIdOption(id: String)(implicit driver: WebDriver) = try {
+  def getByStringIdOption(id: String)(implicit driver: WebDriver): Option[String] = try {
     Some(driver.findElement(By.id(id)).getText)
   } catch {
-    case ex: org.openqa.selenium.NoSuchElementException => None
+    case _: org.openqa.selenium.NoSuchElementException => None
   }
 
   def containsText(text: String)(implicit driver: WebDriver): Boolean = {
     probing(_.getPageSource.contains(text))
   }
 
-  def idPresent(id: String)(implicit webDriver: WebDriver) = try {
+  def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
     true
   } catch {

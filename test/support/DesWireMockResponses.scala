@@ -17,11 +17,12 @@
 package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.{PeriodKey, Vrn}
 
 object DesWireMockResponses {
 
-  def ddOk(vrn: Vrn) = {
+  def ddOk(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -31,7 +32,7 @@ object DesWireMockResponses {
 
   }
 
-  def ddNotFound(vrn: Vrn) = {
+  def ddNotFound(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
@@ -41,7 +42,7 @@ object DesWireMockResponses {
 
   }
 
-  def financialsOkCredit(vrn: Vrn) = {
+  def financialsOkCredit(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -51,7 +52,7 @@ object DesWireMockResponses {
 
   }
 
-  def financialsOkDebit(vrn: Vrn) = {
+  def financialsOkDebit(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -61,7 +62,7 @@ object DesWireMockResponses {
 
   }
 
-  def customerDataOkWithBankDetails(vrn: Vrn, partial: Boolean = false) = {
+  def customerDataOkWithBankDetails(vrn: Vrn, partial: Boolean = false): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -71,7 +72,7 @@ object DesWireMockResponses {
 
   }
 
-  def customerDataOkWithoutBankDetailsInflight(vrn: Vrn) = {
+  def customerDataOkWithoutBankDetailsInflight(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -81,7 +82,7 @@ object DesWireMockResponses {
 
   }
 
-  def customerDataOkWithPartialBankDetails(vrn: Vrn) = {
+  def customerDataOkWithPartialBankDetails(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -91,7 +92,7 @@ object DesWireMockResponses {
 
   }
 
-  def customerDataOkWithoutBankDetails(vrn: Vrn) = {
+  def customerDataOkWithoutBankDetails(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -101,7 +102,7 @@ object DesWireMockResponses {
 
   }
 
-  def financialsNotFound(vrn: Vrn) = {
+  def financialsNotFound(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
@@ -111,7 +112,7 @@ object DesWireMockResponses {
 
   }
 
-  def customerNotFound(vrn: Vrn) = {
+  def customerNotFound(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
@@ -121,7 +122,7 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailsNotFound(vrn: Vrn) = {
+  def repaymentDetailsNotFound(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(404)
@@ -131,7 +132,7 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean = false) = {
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean = false): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -141,7 +142,7 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String) = {
+  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -151,7 +152,7 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String) = {
+  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -161,7 +162,7 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailSingleCompleted(vrn: Vrn) = {
+  def repaymentDetailSingleCompleted(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -171,7 +172,7 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailsMultipleInProgress(vrn: Vrn) = {
+  def repaymentDetailsMultipleInProgress(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -181,27 +182,27 @@ object DesWireMockResponses {
 
   }
 
-  def repaymentDetailsMultipleCompleted(vrn: Vrn) = {
+  def repaymentDetailsMultipleCompleted(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.repaymentDetailsMultipleCompleted.toString()
+          DesData.repaymentDetailsMultipleCompleted().toString()
             .stripMargin)))
 
   }
 
-  def repaymentDetails3Inprogree1Completed(vrn: Vrn) = {
+  def repaymentDetails3Inprogree1Completed(vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          DesData.repaymentDetails3Inprogree1Completed.toString()
+          DesData.repaymentDetails3Inprogree1Completed().toString()
             .stripMargin)))
 
   }
 
-  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: String, status2: String, vrn: Vrn) = {
+  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: String, status2: String, vrn: Vrn): StubMapping = {
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)

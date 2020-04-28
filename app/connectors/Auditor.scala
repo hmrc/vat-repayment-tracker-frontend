@@ -24,9 +24,10 @@ import play.api.mvc.Request
 import req.RequestSupport
 import req.RequestSupport._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import scala.concurrent.ExecutionContext
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Auditor @Inject() (
@@ -40,9 +41,9 @@ class Auditor @Inject() (
       auditTypeIn:     String,
       transactionName: String)(
       implicit
-      request: Request[_]) = {
+      request: Request[_]): Future[AuditResult] = {
 
-    Logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, ${auditTypeIn}, ${transactionName}")
+    Logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, $auditTypeIn, $transactionName")
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
       auditType   = auditTypeIn,
@@ -59,7 +60,7 @@ class Auditor @Inject() (
       .zipWithIndex
       .map{
         case (row, index) =>
-          val k = s"inprogress_${index}"
+          val k = s"inprogress_$index"
           val v = s"returnCreationDate: ${desFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${desFormatter.formatAmount(row.amount)}"
           k -> v
       }.toMap

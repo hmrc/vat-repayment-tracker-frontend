@@ -26,7 +26,7 @@ abstract class FrontendBaseController(cc: ControllerComponents)
 
   override val controllerComponents: ControllerComponents = cc
 
-  val Action = controllerComponents.actionBuilder
+  val Action: ActionBuilder[Request, AnyContent] = controllerComponents.actionBuilder
 
   implicit def toFutureResult(result: Result): Future[Result] = Future.successful(result)
 }

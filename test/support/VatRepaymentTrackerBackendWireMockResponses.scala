@@ -32,7 +32,7 @@ object VatRepaymentTrackerBackendWireMockResponses {
             .withStatus(Status.CREATED)))
   }
 
-  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey) = {
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey): StubMapping = {
     stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -42,7 +42,7 @@ object VatRepaymentTrackerBackendWireMockResponses {
 
   }
 
-  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String, periodKey: PeriodKey) = {
+  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String, periodKey: PeriodKey): StubMapping = {
     stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -52,7 +52,7 @@ object VatRepaymentTrackerBackendWireMockResponses {
 
   }
 
-  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String, periodKey: PeriodKey) = {
+  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String, periodKey: PeriodKey): StubMapping = {
     stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
       .willReturn(aResponse()
         .withStatus(200)

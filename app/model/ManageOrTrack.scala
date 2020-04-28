@@ -18,6 +18,8 @@ package model
 
 import enumeratum._
 
+import scala.collection.immutable
+
 case class ManageOrTrack(choice: Option[String])
 
 sealed abstract class ManageOrTrackOption extends EnumEntry {
@@ -26,7 +28,7 @@ sealed abstract class ManageOrTrackOption extends EnumEntry {
 
 object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
 
-  override def values = findValues
+  override def values: immutable.IndexedSeq[ManageOrTrackOption] = findValues
 
   case object vrt extends ManageOrTrackOption {
     override val value: String = "vrt"

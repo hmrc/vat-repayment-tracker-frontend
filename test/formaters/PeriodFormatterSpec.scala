@@ -20,7 +20,7 @@ import support.ItSpec
 
 class PeriodFormatterSpec extends ItSpec {
 
-  val periodFormatter = injector.instanceOf[PeriodFormatter]
+  val periodFormatter: PeriodFormatter = injector.instanceOf[PeriodFormatter]
 
   val monthly: Seq[(String, String)] = Seq(
     ("19AA", "1 January to 31 January 2019"),
@@ -72,21 +72,21 @@ class PeriodFormatterSpec extends ItSpec {
 
   monthly foreach (period =>
 
-    s"${period} monthly check " in {
+    s"$period monthly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
   )
 
   quarterly foreach (period =>
 
-    s"${period} quarterly check " in {
+    s"$period quarterly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
   )
 
   yearly foreach (period =>
 
-    s"${period} yearly check " in {
+    s"$period yearly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
   )

@@ -21,7 +21,7 @@ import model.des.Address
 import service.CountriesService
 
 @Singleton
-class AddressFormter @Inject() (countriesService: CountriesService) {
+class AddressFormater @Inject() (countriesService: CountriesService) {
 
   val lineReturn = "<br>"
 

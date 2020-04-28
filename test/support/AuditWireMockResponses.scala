@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.scalatest.Matchers
 import play.api.Logger
-import play.api.libs.json.{JsDefined, JsValue, Json}
+import play.api.libs.json.Json
 
 import scala.collection.JavaConverters._
 
@@ -45,13 +45,13 @@ object AuditWireMockResponses extends Matchers {
 
   }
 
-  def bacWasNotAudited() = {
+  def bacWasNotAudited(): Unit = {
 
     verify(postRequestedFor(urlEqualTo("/write/audit")))
     val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains("initiateChangeVATRepaymentBankAccount"))
     mayPaymentAuditEvent match {
-      case Some(x) => "expected 0 audit events" shouldBe "got 1 audit event"
+      case Some(_) => "expected 0 audit events" shouldBe "got 1 audit event"
       case None    =>
     }
     ()

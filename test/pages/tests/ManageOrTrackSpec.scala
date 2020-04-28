@@ -25,42 +25,42 @@ import support._
 
 class ManageOrTrackSpec extends ItSpec {
 
-  val vrn = Vrn("234567890")
+  val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/manage-or-track-vrt"""
-  val periodKey = PeriodKey("18AG")
+  val periodKey: PeriodKey = PeriodKey("18AG")
 
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
   "1. user is authorised, bank dd option, manage bank option " in {
-    setup(true, true)
-    ManageOrTrack.assertPageIsDisplayed(vrn, true, true)
+    setup()
+    ManageOrTrack.assertPageIsDisplayed(vrn, ddDisplayed = true, bankDisplayed = true)
   }
 
   "2. user is authorised, manage dd option " in {
-    setup(false, true)
-    ManageOrTrack.assertPageIsDisplayed(vrn, true, false, nobankDisplayed = true)
+    setup(useBankDetails = false)
+    ManageOrTrack.assertPageIsDisplayed(vrn, ddDisplayed = true, nobankDisplayed = true)
   }
 
   "3. user is authorised, manage bank option " in {
-    setup(true, false)
-    ManageOrTrack.assertPageIsDisplayed(vrn, false, true, noddDisplayed = true)
+    setup(useDdDetails = false)
+    ManageOrTrack.assertPageIsDisplayed(vrn, bankDisplayed = true, noddDisplayed = true)
 
   }
 
   "4. user is authorised, manage no bank or dd option " in {
-    setup(false, false)
-    ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = true)
+    setup(useBankDetails = false, useDdDetails = false)
+    ManageOrTrack.assertPageIsDisplayed(vrn, noddDisplayed = true, nobankDisplayed = true)
   }
 
   "5. user is authorised, manage no bank or dd option but inflight bank " in {
-    setup(false, false, inflight = true)
-    ManageOrTrack.assertPageIsDisplayed(vrn, false, false, noddDisplayed = true, nobankDisplayed = false)
+    setup(useBankDetails = false, useDdDetails = false, inflight = true)
+    ManageOrTrack.assertPageIsDisplayed(vrn, noddDisplayed = true)
   }
 
   "6. click vrtLabel" in {
-    setup(true, true)
+    setup()
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
@@ -68,7 +68,7 @@ class ManageOrTrackSpec extends ItSpec {
 
   "7. click bankLabel" in {
     BankAccountCocWireMockResponses.bankOk
-    setup(true, true)
+    setup()
     ManageOrTrack.clickBankLabel()
     ManageOrTrack.clickContinue()
     ViewRepaymentAccount.assertPageIsDisplayed(vrn, """/vat-repayment-tracker/view-repayment-account""")
@@ -80,10 +80,10 @@ class ManageOrTrackSpec extends ItSpec {
       useBankDetails: Boolean = true,
       useDdDetails:   Boolean = true,
       ft:             Int     = ft_404,
-      inflight:       Boolean = false) =
+      inflight:       Boolean = false): Unit =
     {
       AuditWireMockResponses.auditIsAvailable
-      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
 
       if (inflight)

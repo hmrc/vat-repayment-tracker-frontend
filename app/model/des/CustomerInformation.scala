@@ -19,8 +19,8 @@ package model.des
 import play.api.libs.json._
 
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation], inFlightInformation: Option[InFlightInformation]) {
-  val approvedInformationExists = approvedInformation.isDefined
-  val inFlightInformationExists = inFlightInformation.isDefined
+  val approvedInformationExists: Boolean = approvedInformation.isDefined
+  val inFlightInformationExists: Boolean = inFlightInformation.isDefined
 
   val bankDetailsChangeIndicatorExists: Option[Boolean] = {
     for {
@@ -74,12 +74,12 @@ final case class ApprovedInformation
     PPOB:            Option[PPOB]
 ) {
 
-  val bankDetailsExist = bankDetails match {
+  val bankDetailsExist: Boolean = bankDetails match {
     case Some(bde) => bde.detailsExist
     case None      => false
   }
 
-  val addressExists = PPOB.isDefined
+  val addressExists: Boolean = PPOB.isDefined
 
 }
 

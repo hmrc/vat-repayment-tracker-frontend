@@ -41,7 +41,7 @@ import support._
 
 class InProgressCompletedSpec extends ItSpec {
 
-  val vrn = Vrn("234567890")
+  val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
 
   val ft_404: Int = 1
@@ -56,12 +56,12 @@ class InProgressCompletedSpec extends ItSpec {
   }
   "2. BAC shown" in {
     setup(useBankDetails = false)
-    InProgressCompleted.containsBAC(true)
+    InProgressCompleted.containsBAC(result = true)
   }
 
   "3. BAC not shown" in {
     setup(useBankDetails = false, inflight = true)
-    InProgressCompleted.containsBAC(false)
+    InProgressCompleted.containsBAC(result = false)
   }
 
   "4. click completed link" in {
@@ -89,9 +89,9 @@ class InProgressCompletedSpec extends ItSpec {
       partialBankDetails: Boolean = false,
       ft:                 Int     = ft_404,
       inPast:             Boolean = false,
-      inflight:           Boolean = false) =
+      inflight:           Boolean = false): Unit =
     {
-      VatRepaymentTrackerBackendWireMockResponses.storeOk
+      VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       if (useBankDetails) {

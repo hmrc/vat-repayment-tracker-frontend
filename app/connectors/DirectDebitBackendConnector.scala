@@ -17,13 +17,13 @@
 package connectors
 
 import javax.inject.{Inject, Singleton}
-import model.{NextUrl, Vrn}
 import model.dd.CreateVATJourneyRequest
+import model.{NextUrl, Vrn}
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
-import req.RequestSupport
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import req.RequestSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,13 +44,13 @@ class DirectDebitBackendConnector @Inject() (
   def startJourney(vrn: Vrn)(implicit request: Request[_]): Future[NextUrl] = {
     val retUrl: String = s"$serviceUrl$rUrl"
     val bkUrl: String = s"$bUrl"
-    Logger.debug(s"Using return url : ${retUrl}")
-    Logger.debug(s"Using back url : ${bkUrl}")
+    Logger.debug(s"Using return url : $retUrl")
+    Logger.debug(s"Using back url : $bkUrl")
 
     val createVATJourneyRequest: CreateVATJourneyRequest = CreateVATJourneyRequest(userId    = vrn.value, returnUrl = retUrl, backUrl = bkUrl)
-    Logger.debug(s"Calling direct-debit-backend start journey for vrn ${vrn}")
+    Logger.debug(s"Calling direct-debit-backend start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$sjUrl"
-    Logger.debug(s"Calling direct-debit-backend start journey for vrn with url ${startJourneyURL})")
+    Logger.debug(s"Calling direct-debit-backend start journey for vrn with url $startJourneyURL)")
     httpClient.POST[CreateVATJourneyRequest, NextUrl](startJourneyURL, createVATJourneyRequest)
   }
 

@@ -22,7 +22,7 @@ import support.{AuditWireMockResponses, AuthWireMockResponses, DesWireMockRespon
 
 class NoVatRepaymentsFoundSpec extends ItSpec {
 
-  val vrn = Vrn("234567890")
+  val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
 
   "1. user is authorised and no financial data found" in {

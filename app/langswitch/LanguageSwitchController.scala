@@ -48,7 +48,7 @@ class LanguageSwitchController @Inject() (
     result.withLang(language.toPlayLang)
   }
 
-  def noReferrerContent(l: Language)(implicit request: Request[_]) = Ok(
+  def noReferrerContent(l: Language)(implicit request: Request[_]): Result = Ok(
     views.errorTemplate(
       pageTitle = missingRefererHeader(l).show,
       heading   = missingRefererHeader(l).show,

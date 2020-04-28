@@ -19,7 +19,7 @@ package controllers
 import config.ViewConfig
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
-import formaters.{AddressFormter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
+import formaters.{AddressFormater, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model._
@@ -41,7 +41,7 @@ class Controller @Inject() (
     views:                               Views,
     desConnector:                        PaymentsOrchestratorConnector,
     requestSupport:                      RequestSupport,
-    addressFormater:                     AddressFormter,
+    addressFormater:                     AddressFormater,
     desFormatter:                        DesFormatter,
     actions:                             Actions,
     viewConfig:                          ViewConfig,
@@ -69,11 +69,10 @@ class Controller @Inject() (
 
       Logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
       request.typedVrn match {
-        case TypedVrn.ClassicVrn(vrn) => {
+        case TypedVrn.ClassicVrn(_) =>
           Logger.debug("Received a classic VRN")
           Future.successful(Ok(views.non_mtd_user()))
-        }
-        case TypedVrn.MtdVrn(vrn) => {
+        case TypedVrn.MtdVrn(_) =>
           Logger.debug("Received a  MTD VRN")
           val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
           val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
@@ -82,10 +81,7 @@ class Controller @Inject() (
             customerData <- customerDataF
             repaymentDetails <- repaymentDetailsF
             financialData <- financialDataF
-          } yield (
-            showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
-          )
-        }
+          } yield showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
       }
 
   }
@@ -127,7 +123,7 @@ class Controller @Inject() (
           repaymentDetails <- repaymentDetailsF
           financialData <- financialDataF
           allRepayments = paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
-          auditRes <- auditor.audit(allRepayments.inProgressRepaymentData, "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
+          _ <- auditor.audit(allRepayments.inProgressRepaymentData, "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
           nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
         } yield {
           Redirect(nextUrl.nextUrl)
@@ -194,10 +190,10 @@ class Controller @Inject() (
           valueInForm =>
             {
               valueInForm.choice match {
-                case Some(choice) => {
+                case Some(choice) =>
                   choice match {
                     case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showVrt())
-                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount(false))
+                    case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount())
                     case ManageOrTrackOptions.nobank.value => Redirect(routes.Controller.startBankAccountCocJourney(ReturnPage("manage-or-track-vrt")))
                     case ManageOrTrackOptions.nodd.value =>
                       for {
@@ -208,10 +204,8 @@ class Controller @Inject() (
                         nextUrl <- directDebitBackendController.startJourney(request.typedVrn.vrn)
                       } yield Redirect(nextUrl.nextUrl)
                   }
-                }
-                case None => {
+                case None =>
                   manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", ErrorMessages.`choose an option`.show))
-                }
               }
             }
         }
@@ -232,9 +226,7 @@ class Controller @Inject() (
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
         financialData <- financialDataF
-      } yield (
-        showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
-      )
+      } yield showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
 
       result
 

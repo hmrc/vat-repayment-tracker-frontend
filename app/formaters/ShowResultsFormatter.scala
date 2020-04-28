@@ -42,11 +42,11 @@ class ShowResultsFormatter @Inject() (views:        Views,
     val inflightBankDetails = desFormatter.bankDetailsInFlight(customerData)
 
     bankDetails match {
-      case Some(bd) => if (!(bd.accountHolderName.isDefined)) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
+      case Some(bd) => if (bd.accountHolderName.isEmpty) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
       case None     =>
     }
 
-    if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
+    if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
       Ok(views.inprogress_completed(
         allRepaymentData.inProgressRepaymentData,
         allRepaymentData.completedRepaymentData,
@@ -57,7 +57,7 @@ class ShowResultsFormatter @Inject() (views:        Views,
         vrn,
         inflightBankDetails
       ))
-    } else if ((allRepaymentData.inProgressRepaymentData.size == 0) && (allRepaymentData.completedRepaymentData.size > 0)) {
+    } else if (allRepaymentData.inProgressRepaymentData.isEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
       Ok(views.completed(
         allRepaymentData.completedRepaymentData,
         bankDetailsExist,
@@ -67,7 +67,7 @@ class ShowResultsFormatter @Inject() (views:        Views,
         vrn,
         inflightBankDetails
       ))
-    } else if ((allRepaymentData.inProgressRepaymentData.size > 0) && (allRepaymentData.completedRepaymentData.size == 0)) {
+    } else if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty) {
       Ok(views.inprogress(
         allRepaymentData.inProgressRepaymentData,
         bankDetailsExist,

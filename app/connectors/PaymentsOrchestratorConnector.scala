@@ -42,30 +42,30 @@ class PaymentsOrchestratorConnector @Inject() (
   import req.RequestSupport._
 
   def getFinancialData(vrn: Vrn)(implicit request: Request[_]): Future[Option[FinancialData]] = {
-    Logger.debug(s"Calling payments orchestrator for des api 1166 for vrn ${vrn}")
+    Logger.debug(s"Calling payments orchestrator for des api 1166 for vrn $vrn")
     val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn.value}"
-    Logger.debug(s"""Calling payments orchestrator for des api 1166 with url ${getFinancialURL}""")
+    Logger.debug(s"""Calling payments orchestrator for des api 1166 with url $getFinancialURL""")
     httpClient.GET[Option[FinancialData]](getFinancialURL)
   }
 
   def getCustomerData(vrn: Vrn)(implicit request: Request[_]): Future[Option[CustomerInformation]] = {
-    Logger.debug(s"Calling payments orchestrator for des api 1363 for vrn ${vrn}")
+    Logger.debug(s"Calling payments orchestrator for des api 1363 for vrn $vrn")
     val getCustomerURL: String = s"$serviceURL$customerUrl/${vrn.value}"
-    Logger.debug(s"""Calling payments orchestrator for des api 1363 with url ${getCustomerURL}""")
+    Logger.debug(s"""Calling payments orchestrator for des api 1363 with url $getCustomerURL""")
     httpClient.GET[Option[CustomerInformation]](getCustomerURL)
   }
 
   def getDDData(vrn: Vrn)(implicit request: Request[_]): Future[Option[DirectDebitData]] = {
-    Logger.debug(s"Calling payments orchestrator for des api 1396 for vrn ${vrn}")
+    Logger.debug(s"Calling payments orchestrator for des api 1396 for vrn $vrn")
     val getDDURL: String = s"$serviceURL$ddUrl/${vrn.value}"
-    Logger.debug(s"""Calling payments orchestrator for des api 1396 with url ${getDDURL}""")
+    Logger.debug(s"""Calling payments orchestrator for des api 1396 with url $getDDURL""")
     httpClient.GET[Option[DirectDebitData]](getDDURL)
   }
 
   def getRepaymentsDetails(vrn: Vrn)(implicit request: Request[_]): Future[Option[Seq[RepaymentDetailData]]] = {
-    Logger.debug(s"Calling payments orchestrator for des api 1533 for vrn ${vrn}")
+    Logger.debug(s"Calling payments orchestrator for des api 1533 for vrn $vrn")
     val getRDURL: String = s"$serviceURL$repaymentDetailsUrl/${vrn.value}"
-    Logger.debug(s"""Calling payments orchestrator for des api 1533 with url ${getRDURL}""")
+    Logger.debug(s"""Calling payments orchestrator for des api 1533 with url $getRDURL""")
     httpClient.GET[Option[Seq[RepaymentDetailData]]](getRDURL)
   }
 

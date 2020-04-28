@@ -28,9 +28,9 @@ object ViewProgress extends CommonPage {
   def checkEstimatedRepaymentDate(daysAdded: Int)(implicit webDriver: WebDriver): Assertion = probing(_.findElement(By.id(s"repay-date")).getText) shouldBe
     formatDate(LocalDate.now().plusDays(30 + daysAdded))
 
-  def checkEstimatedRepeaymentDateNotPresent(implicit webDriver: WebDriver) = idPresent("repay-date") shouldBe false
+  def checkEstimatedRepeaymentDateNotPresent(implicit webDriver: WebDriver): Assertion = idPresent("repay-date") shouldBe false
 
-  def checkStatusExists(statusList: List[String])(implicit webDriver: WebDriver) = {
+  def checkStatusExists(statusList: List[String])(implicit webDriver: WebDriver): Unit = {
 
     statusList foreach (e =>
       idPresent(s"${e}_timeline") shouldBe true
@@ -38,7 +38,7 @@ object ViewProgress extends CommonPage {
 
   }
 
-  def checkStatusNotPresent(statusList: List[String])(implicit webDriver: WebDriver) = {
+  def checkStatusNotPresent(statusList: List[String])(implicit webDriver: WebDriver): Unit = {
 
     statusList foreach (e =>
       idPresent(s"${e}_timeline") shouldBe false
@@ -48,10 +48,10 @@ object ViewProgress extends CommonPage {
 
   def checkMainMessage(mainMessage: String)(implicit webDriver: WebDriver): Assertion = readMainMessage shouldBe mainMessage
 
-  def backExists()(implicit driver: WebDriver) = idPresent("back") shouldBe true
+  def backExists()(implicit driver: WebDriver): Assertion = idPresent("back") shouldBe true
 
-  def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver) = idPresent("history-url") shouldBe expectedValue
+  def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("history-url") shouldBe expectedValue
 
-  def payUrl(expectedValue: Boolean)(implicit driver: WebDriver) = idPresent("pay-url") shouldBe expectedValue
+  def payUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("pay-url") shouldBe expectedValue
 
 }
