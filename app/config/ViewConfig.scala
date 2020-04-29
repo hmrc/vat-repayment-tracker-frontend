@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.Inject
+import model.Vrn
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 case class ViewConfig(
@@ -42,6 +43,7 @@ case class ViewConfig(
   val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
+  def vatVariationsUrl(vrn: Vrn) = s"https://www.tax.service.gov.uk/vat-variations/org/${vrn.value}/introduction"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(

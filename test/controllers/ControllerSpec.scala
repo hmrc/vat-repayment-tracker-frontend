@@ -76,14 +76,15 @@ class ControllerSpec extends ItSpec {
   }
 
   //Update to match classic changes later
-  "6. Get showVrt authorised  no-mtd" in {
+  "6. Get showVrt authorised no-mtd, no vat repayments" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     DesWireMockResponses.customerDataOkWithBankDetails(vrn)
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
+    VatWireMockResponses.calendar404(vrn)
     val result = connector.showVrt.futureValue
-    result.body should include("You cannot access this service")
+    result.body should include("No VAT repayments in progress")
   }
 
   "7. Get manageOrTrackVRT authorised" in {

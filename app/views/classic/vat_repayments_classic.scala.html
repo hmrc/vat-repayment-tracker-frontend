@@ -1,0 +1,62 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import langswitch.LangMessages
+@import langswitch.ClassicMessages
+@import config.ViewConfig
+@import model.Vrn
+
+
+@this(
+  mainTemplate: views.html.main_template,
+  viewsHelpers: views.ViewsHelpers,
+  appConfig: ViewConfig,
+  repaymentDetails: views.html.classic.partials.repayment_details_classic
+)
+
+@(
+  vrn: Vrn,
+  receivedOn: String
+ )(
+  implicit
+  request: Request[_]
+)
+
+@import viewsHelpers.requestSupport._
+
+@mainTemplate(
+  title = s"${ClassicMessages.your_vat_repayments.show} - ${LangMessages.heading_bta.show} - GOV.UK",
+  headerTitle = LangMessages.heading_bta.show,
+  bodyClasses = None
+) {
+<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:none_in_progress_classic">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="main-message">@{ClassicMessages.your_vat_repayments.show}</h1>
+        <p>@{ClassicMessages.returns_line1.show}
+            <span>
+                <br>
+                <strong id="receivedOn" name="receivedOn">@{receivedOn}</strong>
+            </span>
+        </p>
+
+        <p>@{ClassicMessages.returns_line2.show}<span><br>@{ClassicMessages.returns_line3.show}</span></p>
+        @repaymentDetails(vrn)
+    </div>
+  </div>
+</main>
+
+}

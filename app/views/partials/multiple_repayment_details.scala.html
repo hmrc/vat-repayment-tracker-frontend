@@ -20,12 +20,11 @@
 @import model.PeriodKey
 @import model.Vrn
 @import langswitch.LangMessages
-@import formaters.DesFormatter
+@import formaters.CommonFormatter
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig,
-formatter: DesFormatter
+appConfig: ViewConfig
 )
 
 @(
@@ -51,9 +50,9 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td id="receivedOn@{appender}" class="add-bold">@{formatter.formatDate(onePayment.returnCreationDate)}</td>
+        <td id="receivedOn@{appender}" class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
       <td id="period@{appender}">@onePayment.period</td>
-      <td id="amount@{appender}">£@{formatter.formatAmount(onePayment.amount)}</td>
+      <td id="amount@{appender}">£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
         <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' id="link@{appender}">
             @if(appender == "_completed"){
                 @{LangMessages.`View history`.show}

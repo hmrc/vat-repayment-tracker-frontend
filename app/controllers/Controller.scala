@@ -19,7 +19,7 @@ package controllers
 import config.ViewConfig
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
-import formaters.{AddressFormater, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
+import formaters.{AddressFormatter, DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
 import model._
@@ -41,7 +41,7 @@ class Controller @Inject() (
     views:                               Views,
     desConnector:                        PaymentsOrchestratorConnector,
     requestSupport:                      RequestSupport,
-    addressFormater:                     AddressFormater,
+    addressFormater:                     AddressFormatter,
     desFormatter:                        DesFormatter,
     actions:                             Actions,
     viewConfig:                          ViewConfig,
@@ -52,7 +52,8 @@ class Controller @Inject() (
     viewProgressFormatter:               ViewProgressFormatter,
     showResultsFormatter:                ShowResultsFormatter,
     payApiConnector:                     PayApiConnector,
-    auditor:                             Auditor)(
+    auditor:                             Auditor,
+    vatConnector:                        VatConnector)(
     implicit
     ec: ExecutionContext)
 
@@ -69,9 +70,14 @@ class Controller @Inject() (
 
       Logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
       request.typedVrn match {
-        case TypedVrn.ClassicVrn(_) =>
+
+        case TypedVrn.ClassicVrn(vrn) =>
           Logger.debug("Received a classic VRN")
-          Future.successful(Ok(views.non_mtd_user()))
+          val calendarDataF = vatConnector.calendar(vrn)
+          for {
+            calendarData <- calendarDataF
+          } yield showResultsFormatter.computeViewClassic(vrn, calendarData)
+
         case TypedVrn.MtdVrn(_) =>
           Logger.debug("Received a  MTD VRN")
           val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
