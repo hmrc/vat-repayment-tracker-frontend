@@ -16,6 +16,12 @@
 
 package model.vat
 
-import uk.gov.hmrc.http.HttpResponse
+import support.{UnitSpec, VatData}
 
-case class MicroServiceException(message: String, response: HttpResponse) extends Exception(message)
+class VatDesignatoryDetailsAddressSpec extends UnitSpec {
+
+  "from json" in {
+    VatData.vatDesignatoryDetailsAddressJson.as[VatDesignatoryDetailsAddress] shouldBe VatData.vatDesignatoryDetailsAddress
+  }
+
+}

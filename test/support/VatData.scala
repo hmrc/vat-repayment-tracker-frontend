@@ -18,7 +18,7 @@ package support
 
 import java.time.LocalDate
 
-import model.vat.{CalendarData, CalendarPeriod}
+import model.vat.{CalendarData, CalendarPeriod, VatDesignatoryDetailsAddress}
 import play.api.libs.json.{JsValue, Json}
 
 object VatData {
@@ -61,6 +61,29 @@ object VatData {
       "normalEPaymentCollectionDate": "2016-02-09"
     }
     ]
+  }""".stripMargin)
+
+  val vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress = VatDesignatoryDetailsAddress("1 Johnson Close", Some("Stonesfield"), Some("Oxford"), None, None, "OX29 8PP")
+
+  //language=JSON
+  val vatDesignatoryDetailsAddressJson: JsValue = Json.parse(
+    s"""
+  {
+    "address":{
+      "addressLine1":"1 Johnson Close",
+      "postcode":"OX29 8PP",
+      "addressLine2":"Stonesfield",
+      "addressLine3":"Oxford"
+    },
+    "contact":{
+      "email":{
+      "primary":"email@email.com"},
+      "telephone":{
+      "daytime":"02017362727",
+      "mobile":"07836353421"
+    }
+    },
+    "name":{}
   }""".stripMargin)
 
 }

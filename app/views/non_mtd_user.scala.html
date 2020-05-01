@@ -41,7 +41,7 @@ bodyClasses = None
         <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message">@{LangMessages.`You cannot access this service`.show}</h1>
             <p>@{LangMessages.`non-mtd-line1`.show}</p>
-            <p>@Html({LangMessages.`non-mtd-line2`.show})</p>
+            <p>@Html({LangMessages.`non-mtd-line2`(viewConfig.signupUrl).show})</p>
             <p>@Html({LangMessages.`non-mtd-line3`(viewConfig.btaUrl).show})</p>
         </div>
     </div>

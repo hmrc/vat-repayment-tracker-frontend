@@ -37,5 +37,21 @@ object VatWireMockResponses {
         .withStatus(404)
       ))
   }
+
+  def designatoryDetailsOk(vrn: Vrn): StubMapping = {
+    stubFor(get(urlEqualTo(s"/vat/${vrn.value}/designatoryDetails"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          VatData.vatDesignatoryDetailsAddressJson.toString())))
+
+  }
+
+  def designatoryDetails404(vrn: Vrn): StubMapping = {
+    stubFor(get(urlEqualTo(s"/vat/${vrn.value}/designatoryDetails"))
+      .willReturn(aResponse()
+        .withStatus(404)
+      ))
+  }
 }
 

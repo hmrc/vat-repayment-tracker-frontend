@@ -27,7 +27,8 @@ repaymentDetails: views.html.classic.partials.repayment_details_classic
 )
 
 @(
-vrn : Vrn
+vrn : Vrn,
+address: String
 )(
 implicit
 request: Request[_]
@@ -50,7 +51,7 @@ bodyClasses = None
                 <li>@{ClassicMessages.no_returns_line3.show}</li>
             </ul>
 
-            @repaymentDetails(vrn)
+            @repaymentDetails(vrn,address)
         </div>
     </div>
 </main>

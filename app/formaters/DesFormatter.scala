@@ -127,7 +127,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter, requestSupport:
       ai <- cd.approvedInformation
       ppob <- ai.PPOB
       ad <- ppob.address
-    } yield addressFormater.getFormattedAddress(ad)
+    } yield addressFormater.getFormattedAddressMtd(ad)
 
   }
 

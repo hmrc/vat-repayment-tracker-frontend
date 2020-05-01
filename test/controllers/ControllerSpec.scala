@@ -83,6 +83,7 @@ class ControllerSpec extends ItSpec {
     DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     VatWireMockResponses.calendar404(vrn)
+    VatWireMockResponses.designatoryDetailsOk(vrn)
     val result = connector.showVrt.futureValue
     result.body should include("No VAT repayments in progress")
   }

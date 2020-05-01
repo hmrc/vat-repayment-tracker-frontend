@@ -71,23 +71,25 @@ class Controller @Inject() (
       Logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
       request.typedVrn match {
 
-        case TypedVrn.ClassicVrn(vrn) =>
+        case TypedVrn.ClassicVrn(vrnNonMtd) =>
           Logger.debug("Received a classic VRN")
-          val calendarDataF = vatConnector.calendar(vrn)
+          val calendarDataF = vatConnector.calendar(vrnNonMtd)
+          val designatoryDetailsF = vatConnector.designatoryDetails(vrnNonMtd)
           for {
             calendarData <- calendarDataF
-          } yield showResultsFormatter.computeViewClassic(vrn, calendarData)
+            designatoryDetails <- designatoryDetailsF
+          } yield showResultsFormatter.computeViewClassic(vrnNonMtd, calendarData, designatoryDetails)
 
-        case TypedVrn.MtdVrn(_) =>
+        case TypedVrn.MtdVrn(vrnMtd) =>
           Logger.debug("Received a  MTD VRN")
-          val customerDataF = desConnector.getCustomerData(request.typedVrn.vrn)
-          val repaymentDetailsF = desConnector.getRepaymentsDetails(request.typedVrn.vrn)
-          val financialDataF = desConnector.getFinancialData(request.typedVrn.vrn)
+          val customerDataF = desConnector.getCustomerData(vrnMtd)
+          val repaymentDetailsF = desConnector.getRepaymentsDetails(vrnMtd)
+          val financialDataF = desConnector.getFinancialData(vrnMtd)
           for {
             customerData <- customerDataF
             repaymentDetails <- repaymentDetailsF
             financialData <- financialDataF
-          } yield showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
+          } yield showResultsFormatter.computeView(paymentsOrchestratorService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData), customerData, vrnMtd)
       }
 
   }
