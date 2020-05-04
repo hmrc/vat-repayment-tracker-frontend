@@ -36,13 +36,13 @@ class VatConnector @Inject() (
 
   def calendar(vrn: Vrn)(implicit hc: HeaderCarrier): Future[Option[CalendarData]] = {
     val url: String = vatUrl + s"/vat/${vrn.value}/calendar"
-    Logger.debug(s"callimg vat service with url $url")
+    Logger.debug(s"calling vat service with url $url")
     httpClient.GET[Option[CalendarData]](url)
   }
 
   def designatoryDetails(vrn: Vrn)(implicit hc: HeaderCarrier): Future[Option[VatDesignatoryDetailsAddress]] = {
     val url: String = vatUrl + s"/vat/${vrn.value}/designatoryDetails"
-    Logger.debug(s"callimg vat service with url $url")
+    Logger.debug(s"calling vat service with url $url")
     httpClient.GET[Option[VatDesignatoryDetailsAddress]](url)
   }
 

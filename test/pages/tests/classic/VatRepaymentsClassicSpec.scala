@@ -56,5 +56,4 @@ class VatRepaymentsClassicSpec extends ItSpec {
 
   }
 
-
 }

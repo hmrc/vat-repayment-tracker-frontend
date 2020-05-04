@@ -16,7 +16,7 @@
 
 package connectors
 
-import model.vat.CalendarData
+import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
 import model.Vrn
 import support.{AuditWireMockResponses, ItSpec, VatData, VatWireMockResponses}
 
@@ -27,11 +27,11 @@ class VatConnectorSpec extends ItSpec {
   val vatConnector: VatConnector = injector.instanceOf[VatConnector]
 
   "Get Calendar ok" in {
-    VatWireMockResponses.calendarOk(vrn)
+    VatWireMockResponses.calendarOk(vrn,isCurrent = false)
     AuditWireMockResponses.auditIsAvailable
     val result: Option[CalendarData] = vatConnector.calendar(vrn).futureValue
     result match {
-      case Some(x) => x shouldBe VatData.calendarJson.as[CalendarData]
+      case Some(x) => x shouldBe VatData.calendarData
       case None    => "expected a calendar" shouldBe "got None "
     }
   }
@@ -40,6 +40,27 @@ class VatConnectorSpec extends ItSpec {
     VatWireMockResponses.calendar404(vrn)
     AuditWireMockResponses.auditIsAvailable
     val result: Option[CalendarData] = vatConnector.calendar(vrn).futureValue
+    result match {
+      case Some(x) => s"expected None got ${x.toString}"
+      case None    => "None" shouldBe "None"
+    }
+
+  }
+
+  "Get designatoryDetails ok" in {
+    VatWireMockResponses.designatoryDetailsOk(vrn)
+    AuditWireMockResponses.auditIsAvailable
+    val result: Option[VatDesignatoryDetailsAddress] = vatConnector.designatoryDetails(vrn).futureValue
+    result match {
+      case Some(x) => x shouldBe VatData.vatDesignatoryDetailsAddress
+      case None    => "expected a calendar" shouldBe "got None "
+    }
+  }
+
+  "Get designatoryDetails 404" in {
+    VatWireMockResponses.designatoryDetails404(vrn)
+    AuditWireMockResponses.auditIsAvailable
+    val result: Option[VatDesignatoryDetailsAddress] = vatConnector.designatoryDetails(vrn).futureValue
     result match {
       case Some(x) => s"expected None got ${x.toString}"
       case None    => "None" shouldBe "None"

@@ -63,7 +63,6 @@ object AuditWireMockResponses extends Matchers {
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains("initiateChangeVATRepaymentBankAccount"))
     mayPaymentAuditEvent shouldBe defined
     val jsBody = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
-    Logger.error(jsBody.toString())
     (jsBody \ "detail").asOpt[String] shouldBe None
     ()
 
