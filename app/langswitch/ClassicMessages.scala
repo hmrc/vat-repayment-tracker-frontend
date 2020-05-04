@@ -28,7 +28,7 @@ object ClassicMessages {
 
   val your_repayment_details: Message = Message(english = "Your repayment details")
   val bank_details: Message = Message(english = "If you have added your bank details we will send repayments to your bank account.")
-  def bank_account_link(url: String): Message = Message(s"""<a href="${url}">Add or change your bank account details</a>""")
+  def bank_account_link(url: String): Message = Message(s"""<a href="$url">Add or change your bank account details</a>""")
   val address_details: Message = Message(english = "If you have not added your bank details, we will send you a cheque to:")
-  def address_link(url: String): Message = Message(s"""<a href="${url}">Change your business address</a>""")
+  def address_link(url: String): Message = Message(s"""<a href="$url">Change your business address</a>""")
 }

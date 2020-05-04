@@ -22,12 +22,13 @@ import model.Vrn
 
 object VatWireMockResponses {
 
-  def calendarOk(vrn: Vrn): StubMapping = {
+  def calendarOk(vrn: Vrn, isCurrent : Boolean = true): StubMapping = {
     stubFor(get(urlEqualTo(s"/vat/${vrn.value}/calendar"))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          VatData.calendarJson.toString())))
+         if (isCurrent) VatData.calendarCurrentJson.toString() else VatData.calendarJson.toString()
+        )))
 
   }
 

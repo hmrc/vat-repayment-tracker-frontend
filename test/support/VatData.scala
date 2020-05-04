@@ -63,6 +63,41 @@ object VatData {
     ]
   }""".stripMargin)
 
+  //language=JSON
+  val calendarCurrentJson: JsValue = Json.parse(
+    s"""{
+    "staggerCode": "0002",
+    "directDebit": {
+      "ddiEligibilityInd": true,
+      "active": {
+      "periodEndDate": "2016-06-31",
+      "periodPaymentDate": "2016-08-09"
+    }
+    },
+    "currentPeriod": {
+      "periodStartDate": "2016-04-01",
+      "periodEndDate": "2016-06-30",
+      "returnReceivedDate": "2016-07-05",
+      "periodAnnAccInd": false,
+      "normalEPaymentCollectionDate": "2016-08-09"
+    },
+    "previousPeriods": [ {
+    "periodStartDate": "2016-01-01",
+    "periodEndDate": "2016-03-31",
+    "returnReceivedDate": "2016-04-05",
+    "periodAnnAccInd": false,
+    "normalEPaymentCollectionDate": "2016-05-09"
+  },
+    {
+      "periodStartDate": "2015-10-01",
+      "periodEndDate": "2015-12-31",
+      "returnReceivedDate": "2016-01-05",
+      "periodAnnAccInd": false,
+      "normalEPaymentCollectionDate": "2016-02-09"
+    }
+    ]
+  }""".stripMargin)
+
   val vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress = VatDesignatoryDetailsAddress("1 Johnson Close", Some("Stonesfield"), Some("Oxford"), None, None, "OX29 8PP")
 
   //language=JSON
