@@ -70,7 +70,7 @@ class VrtService @Inject() (
     for {
       rd <- repaymentDetails
       if !outDatedPredicate(rd, financialData)
-    } yield RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED.value) rd.originalPostingAmount else rd.vatToPay_BOX5_InPounds, rd.returnCreationDate, rd.riskingStatus, rd.periodKey)
+    } yield RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED.value) rd.originalPostingAmount else rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey)
 
   }
 

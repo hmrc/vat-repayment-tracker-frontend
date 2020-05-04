@@ -47,7 +47,7 @@ object DesData {
     Option(LocalDate.parse("2001-01-01")),
     "18AC",
     "INITIAL",
-    BigDecimal(1000),
+    BigDecimal(10),
     Option(1),
     100.02
   )
@@ -66,7 +66,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AC",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 10.00,
         "supplementDelayDays": 1,
         "originalPostingAmount": 100.02
     }
@@ -83,7 +83,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AC",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 1000,
+        "vatToPay_BOX5": 10.00,
         "supplementDelayDays": 1,
         "originalPostingAmount": 100.02
     }]
@@ -99,7 +99,7 @@ object DesData {
              "lastUpdateReceivedDate": "$date",
              "periodKey": "18AF",
              "riskingStatus": "$status1",
-             "vatToPay_BOX5": 1000,
+             "vatToPay_BOX5": 10.00,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          },
@@ -109,7 +109,7 @@ object DesData {
         "lastUpdateReceivedDate": "$date2",
         "periodKey": "18AG",
         "riskingStatus": "$status2",
-        "vatToPay_BOX5": 1001,
+        "vatToPay_BOX5": 10.01,
         "supplementDelayDays": 6,
         "originalPostingAmount": 5.56
     }]
@@ -124,7 +124,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AG",
         "riskingStatus": "ADJUSMENT_TO_TAX_DUE",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
     }]
@@ -139,7 +139,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AA",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
     },
@@ -149,7 +149,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AD",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
          },
@@ -159,7 +159,7 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AG",
              "riskingStatus": "SENT_FOR_RISKING",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount": 5.56
          },
@@ -169,7 +169,7 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AJ",
              "riskingStatus": "CLAIM_QUERIED",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount": 5.56
               }]
@@ -184,7 +184,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AA",
         "riskingStatus": "REPAYMENT_ADJUSTED",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
     },
@@ -194,7 +194,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AD",
         "riskingStatus": "REPAYMENT_ADJUSTED",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
          },
@@ -204,7 +204,7 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AG",
              "riskingStatus": "ADJUSMENT_TO_TAX_DUE",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount":5.56
          },
@@ -214,7 +214,7 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AJ",
              "riskingStatus": "REPAYMENT_APPROVED",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount": 5.56
               }]
@@ -229,7 +229,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AA",
         "riskingStatus": "INITIAL",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
     },
@@ -239,7 +239,7 @@ object DesData {
         "lastUpdateReceivedDate": "2001-01-01",
         "periodKey": "18AD",
         "riskingStatus": "SENT_FOR_RISKING",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
          },
@@ -249,7 +249,7 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AG",
              "riskingStatus": "CLAIM_QUERIED",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount": 5.56
          },
@@ -259,7 +259,7 @@ object DesData {
              "lastUpdateReceivedDate": "2001-01-01",
              "periodKey": "18AJ",
              "riskingStatus": "REPAYMENT_APPROVED",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount": 5.56
               }]
@@ -767,7 +767,7 @@ object DesData {
                "lastUpdateReceivedDate":"$date",
                "periodKey": "${periodKey.value}",
                "riskingStatus":"$status1",
-               "vatToPay_BOX5":656,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":0
              }
@@ -789,7 +789,7 @@ object DesData {
                "lastUpdateReceivedDate":"$date",
                "periodKey":"18AC",
                "riskingStatus":"$status1",
-               "vatToPay_BOX5":656,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -804,7 +804,7 @@ object DesData {
                "lastUpdateReceivedDate":"$date",
                "periodKey":"18AC",
                "riskingStatus":"$status2",
-               "vatToPay_BOX5":656,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -826,7 +826,7 @@ object DesData {
                "lastUpdateReceivedDate":"$date",
                "periodKey":"18AC",
                "riskingStatus":"$status1",
-               "vatToPay_BOX5":656,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -841,7 +841,7 @@ object DesData {
                "lastUpdateReceivedDate":"$date",
                "periodKey":"18AC",
                "riskingStatus":"$status2",
-               "vatToPay_BOX5":656,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -856,7 +856,7 @@ object DesData {
                "lastUpdateReceivedDate":"2019-10-24",
                "periodKey":"18AC",
                "riskingStatus":"$status3",
-               "vatToPay_BOX5":656,
+               "vatToPay_BOX5":6.56,
                "supplementDelayDays":6,
                "originalPostingAmount":5.56
              }
@@ -873,7 +873,7 @@ object DesData {
         "lastUpdateReceivedDate": "$date",
         "periodKey": "${periodKey.value}",
         "riskingStatus": "$status1",
-        "vatToPay_BOX5": "${if (negativeAmt) -656 else 656}",
+        "vatToPay_BOX5": "${if (negativeAmt) -6.56 else 6.56}",
         "supplementDelayDays": 6,
         "originalPostingAmount": 0
     }]
@@ -889,7 +889,7 @@ object DesData {
              "lastUpdateReceivedDate": "$date",
              "periodKey": "18AG",
              "riskingStatus": "$status1",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          },
@@ -899,7 +899,7 @@ object DesData {
         "lastUpdateReceivedDate": "$date",
         "periodKey": "18AG",
         "riskingStatus": "$status2",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,
         "originalPostingAmount": 5.56
     }]
@@ -915,7 +915,7 @@ object DesData {
              "lastUpdateReceivedDate": "$date",
              "periodKey": "18AG",
              "riskingStatus": "$status1",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          },
@@ -925,7 +925,7 @@ object DesData {
         "lastUpdateReceivedDate": "$date",
         "periodKey": "18AG",
         "riskingStatus": "$status2",
-        "vatToPay_BOX5": 656,
+        "vatToPay_BOX5": 6.56,
         "supplementDelayDays": 6,
         "originalPostingAmount": 5.56
     },
@@ -935,7 +935,7 @@ object DesData {
              "lastUpdateReceivedDate": "$date",
              "periodKey": "18AG",
              "riskingStatus": "$status3",
-             "vatToPay_BOX5": 656,
+             "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          }]
