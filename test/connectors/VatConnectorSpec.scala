@@ -27,7 +27,7 @@ class VatConnectorSpec extends ItSpec {
   val vatConnector: VatConnector = injector.instanceOf[VatConnector]
 
   "Get Calendar ok" in {
-    VatWireMockResponses.calendarOk(vrn,isCurrent = false)
+    VatWireMockResponses.calendarOk(vrn, isCurrent = false)
     AuditWireMockResponses.auditIsAvailable
     val result: Option[CalendarData] = vatConnector.calendar(vrn).futureValue
     result match {
