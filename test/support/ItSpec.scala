@@ -110,7 +110,8 @@ trait ItSpec
     "auditing.consumer.baseUri.port" -> WireMockSupport.port,
     "microservice.services.vat.port" -> WireMockSupport.port,
     "urls.login" -> "http://localhost:11111/auth-login-stub/gg-sign-in",
-    "urls.frontend-base" -> "http://localhost:19001"
+    "urls.frontend-base" -> "http://localhost:19001",
+    "auditing.enabled" -> true
   )
 
   def injector: Injector = fakeApplication().injector
