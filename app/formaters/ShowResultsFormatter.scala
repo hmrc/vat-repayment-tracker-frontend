@@ -19,6 +19,7 @@ package formaters
 import javax.inject.{Inject, Singleton}
 import model._
 import model.des.CustomerInformation
+import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
 import play.api.Logger
 import play.api.mvc.{Request, Result, Results}
 import views.Views
@@ -26,8 +27,23 @@ import views.Views
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ShowResultsFormatter @Inject() (views:        Views,
-                                      desFormatter: DesFormatter)(implicit ec: ExecutionContext) extends Results {
+class ShowResultsFormatter @Inject() (views:            Views,
+                                      desFormatter:     DesFormatter,
+                                      addressFormatter: AddressFormatter)(implicit ec: ExecutionContext) extends Results {
+
+  def computeViewClassic(
+      vrn:                          Vrn,
+      calendarData:                 Option[CalendarData],
+      vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress
+  )(implicit request: Request[_]): Result = {
+
+    val address = addressFormatter.getFormattedAddressNonMtd(vatDesignatoryDetailsAddress)
+
+    calendarData match {
+      case Some(data) => if (data.countReturns == 0) Ok(views.classic_none(vrn, address)) else Ok(views.classic_some(vrn, data.latestReceivedOnFormatted, address))
+      case None       => Ok(views.classic_none(vrn, address))
+    }
+  }
 
   def computeView(
       allRepaymentData: AllRepaymentData,

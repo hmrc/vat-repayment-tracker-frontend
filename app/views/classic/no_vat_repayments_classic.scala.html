@@ -15,15 +15,20 @@
  *@
 
 @import langswitch.LangMessages
+@import langswitch.ClassicMessages
 @import config.ViewConfig
+@import model.Vrn
 
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
+appConfig: ViewConfig,
+repaymentDetails: views.html.classic.partials.repayment_details_classic
 )
 
 @(
+vrn : Vrn,
+address: String
 )(
 implicit
 request: Request[_]
@@ -32,17 +37,21 @@ request: Request[_]
 @import viewsHelpers.requestSupport._
 
 @mainTemplate(
-title = s"${LangMessages.`You cannot access this service`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
+title = s"${LangMessages.`No VAT repayments in progress`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
 <main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:none_in_progress">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{LangMessages.`You cannot access this service`.show}</h1>
-            <p>@{LangMessages.`non-mtd-line1`.show}</p>
-            <p>@Html({LangMessages.`non-mtd-line2`(viewConfig.signupUrl).show})</p>
-            <p>@Html({LangMessages.`non-mtd-line3`(viewConfig.btaUrl).show})</p>
+            <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
+            <p>@{ClassicMessages.no_returns_line1.show}</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@{ClassicMessages.no_returns_line2.show}</li>
+                <li>@{ClassicMessages.no_returns_line3.show}</li>
+            </ul>
+
+            @repaymentDetails(vrn,address)
         </div>
     </div>
 </main>

@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.Inject
+import model.Vrn
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 case class ViewConfig(
@@ -32,7 +33,9 @@ case class ViewConfig(
     feedbackBaseUrl:             String,
     contactBaseUrl:              String,
     paymentHistoryUrl:           String,
-    btaUrl:                      String) {
+    btaUrl:                      String,
+    signupUrl:                   String,
+    variationsUrlPrefix:         String) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -42,6 +45,7 @@ case class ViewConfig(
   val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
+  def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -57,7 +61,9 @@ case class ViewConfig(
     feedbackBaseUrl             = servicesConfig.getString("urls.feedback-base"),
     contactBaseUrl              = servicesConfig.getString("urls.contact-frontend"),
     paymentHistoryUrl           = servicesConfig.getString("urls.payments-history"),
-    btaUrl                      = servicesConfig.getString("urls.bta")
+    btaUrl                      = servicesConfig.getString("urls.bta"),
+    signupUrl                   = servicesConfig.getString("urls.signup"),
+    variationsUrlPrefix         = servicesConfig.getString("urls.variationsUrlPrefix")
   )
 
 }

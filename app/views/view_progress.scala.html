@@ -18,13 +18,12 @@
 @import model.des._
 @import model._
 @import langswitch.LangMessages
-@import formaters.DesFormatter
+@import formaters.CommonFormatter
 
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig,
-formatter: DesFormatter
+appConfig: ViewConfig
 )
 
 @(
@@ -57,7 +56,7 @@ bodyClasses = None
             <div class="govuk-grid-row govuk-!-margin-bottom-9">
                 <div class="govuk-grid-column-one-half">
                     <h2 class="govuk-body govuk-!-margin-bottom-0">@{amountDescription}</h2>
-                    <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{formatter.formatAmount(viewProgress.amount)}</p>
+                    <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{CommonFormatter.formatAmount(viewProgress.amount)}</p>
                     @{
                     if (showHistoryUrl) {
                     <p id="history-url"><a href={appConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
@@ -75,7 +74,7 @@ bodyClasses = None
                 if (showEstimatedRepaymentDat) {
                 <div class="govuk-grid-column-one-half">
                     <h2 class="govuk-body govuk-!-margin-bottom-0">{LangMessages.`Estimated repayment date`.show}</h2>
-                    <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{formatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
+                    <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{CommonFormatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
                 </div>
                 }
                 }
@@ -96,7 +95,7 @@ bodyClasses = None
             @for(whsf <- viewProgress.whatsHappenedSoFar) {
                 <li class="hmrc-timeline-event" id="@{whsf.riskingStatus}@{whsf.complete}_timeline">
                     <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}@{whsf.complete}_event">@{whsf.title}</h3>
-                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}@{whsf.complete}_date">@{formatter.formatDate(whsf.date)}</p>
+                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}@{whsf.complete}_date">@{CommonFormatter.formatDate(whsf.date)}</p>
                     <p id="@{whsf.riskingStatus}@{whsf.complete}_description">@Html(whsf.description)</p>
                 </li>
             }

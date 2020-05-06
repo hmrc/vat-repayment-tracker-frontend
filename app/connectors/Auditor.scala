@@ -16,7 +16,7 @@
 
 package connectors
 
-import formaters.DesFormatter
+import formaters.{CommonFormatter, DesFormatter}
 import javax.inject.{Inject, Singleton}
 import model.RepaymentDataNoRiskingStatus
 import play.api.Logger
@@ -61,7 +61,7 @@ class Auditor @Inject() (
       .map{
         case (row, index) =>
           val k = s"inprogress_$index"
-          val v = s"returnCreationDate: ${desFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${desFormatter.formatAmount(row.amount)}"
+          val v = s"returnCreationDate: ${CommonFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${CommonFormatter.formatAmount(row.amount)}"
           k -> v
       }.toMap
   }
