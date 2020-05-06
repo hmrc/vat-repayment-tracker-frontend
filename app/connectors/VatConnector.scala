@@ -40,10 +40,10 @@ class VatConnector @Inject() (
     httpClient.GET[Option[CalendarData]](url)
   }
 
-  def designatoryDetails(vrn: Vrn)(implicit hc: HeaderCarrier): Future[Option[VatDesignatoryDetailsAddress]] = {
+  def designatoryDetails(vrn: Vrn)(implicit hc: HeaderCarrier): Future[VatDesignatoryDetailsAddress] = {
     val url: String = vatUrl + s"/vat/${vrn.value}/designatoryDetails"
     Logger.debug(s"calling vat service with url $url")
-    httpClient.GET[Option[VatDesignatoryDetailsAddress]](url)
+    httpClient.GET[VatDesignatoryDetailsAddress](url)
   }
 
 }

@@ -34,7 +34,8 @@ case class ViewConfig(
     contactBaseUrl:              String,
     paymentHistoryUrl:           String,
     btaUrl:                      String,
-    signupUrl:                   String) {
+    signupUrl:                   String,
+    variationsUrlPrefix:         String) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -44,7 +45,7 @@ case class ViewConfig(
   val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
-  def vatVariationsUrl(vrn: Vrn) = s"https://www.tax.service.gov.uk/vat-variations/org/${vrn.value}/introduction"
+  def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -61,7 +62,8 @@ case class ViewConfig(
     contactBaseUrl              = servicesConfig.getString("urls.contact-frontend"),
     paymentHistoryUrl           = servicesConfig.getString("urls.payments-history"),
     btaUrl                      = servicesConfig.getString("urls.bta"),
-    signupUrl                   = servicesConfig.getString("urls.signup")
+    signupUrl                   = servicesConfig.getString("urls.signup"),
+    variationsUrlPrefix         = servicesConfig.getString("urls.variationsUrlPrefix")
   )
 
 }

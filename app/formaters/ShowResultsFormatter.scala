@@ -34,13 +34,11 @@ class ShowResultsFormatter @Inject() (views:            Views,
   def computeViewClassic(
       vrn:                          Vrn,
       calendarData:                 Option[CalendarData],
-      VatDesignatoryDetailsAddress: Option[VatDesignatoryDetailsAddress]
+      vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress
   )(implicit request: Request[_]): Result = {
 
-    val address = VatDesignatoryDetailsAddress match {
-      case Some(x) => addressFormatter.getFormattedAddressNonMtd(x)
-      case None    => throw new RuntimeException(s"no address found in vat service for vrn : ${vrn.value}")
-    }
+    val address = addressFormatter.getFormattedAddressNonMtd(vatDesignatoryDetailsAddress)
+
     calendarData match {
       case Some(data) => if (data.countReturns == 0) Ok(views.classic_none(vrn, address)) else Ok(views.classic_some(vrn, data.latestReceivedOnFormatted, address))
       case None       => Ok(views.classic_none(vrn, address))

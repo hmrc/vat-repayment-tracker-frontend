@@ -22,13 +22,14 @@ import java.time.format.DateTimeFormatter
 
 object CommonFormatter {
 
+  private val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
   def formatDate(date: LocalDate): String = {
-    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
     date.format(pattern1)
   }
 
+  private val df = new DecimalFormat("#,##0.00")
   def formatAmount(amount: BigDecimal): String = {
-    val df = new DecimalFormat("#,##0.00")
+
     df.format(amount.abs)
   }
 

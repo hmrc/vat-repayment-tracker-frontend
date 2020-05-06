@@ -50,21 +50,15 @@ class VatConnectorSpec extends ItSpec {
   "Get designatoryDetails ok" in {
     VatWireMockResponses.designatoryDetailsOk(vrn)
     AuditWireMockResponses.auditIsAvailable
-    val result: Option[VatDesignatoryDetailsAddress] = vatConnector.designatoryDetails(vrn).futureValue
-    result match {
-      case Some(x) => x shouldBe VatData.vatDesignatoryDetailsAddress
-      case None    => "expected a calendar" shouldBe "got None "
-    }
+    val result: VatDesignatoryDetailsAddress = vatConnector.designatoryDetails(vrn).futureValue
+    result shouldBe VatData.vatDesignatoryDetailsAddress
   }
 
   "Get designatoryDetails 404" in {
     VatWireMockResponses.designatoryDetails404(vrn)
     AuditWireMockResponses.auditIsAvailable
-    val result: Option[VatDesignatoryDetailsAddress] = vatConnector.designatoryDetails(vrn).futureValue
-    result match {
-      case Some(x) => s"expected None got ${x.toString}"
-      case None    => "None" shouldBe "None"
-    }
+    val result: Throwable = vatConnector.designatoryDetails(vrn).failed.futureValue
+    result.getMessage should include("404 (Not Found)")
 
   }
 
