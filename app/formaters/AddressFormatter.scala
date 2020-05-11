@@ -18,14 +18,15 @@ package formaters
 
 import javax.inject.{Inject, Singleton}
 import model.des.Address
+import model.vat.VatDesignatoryDetailsAddress
 import service.CountriesService
 
 @Singleton
-class AddressFormater @Inject() (countriesService: CountriesService) {
+class AddressFormatter @Inject() (countriesService: CountriesService) {
 
   val lineReturn = "<br>"
 
-  def getFormattedAddress(address: Address): String = {
+  def getFormattedAddressMtd(address: Address): String = {
 
     val country: String = address.countryCode match {
       case Some(code) => if (code == "GB") "" else if (code == "GBR") "" else countriesService.getCountry(code)
@@ -36,6 +37,17 @@ class AddressFormater @Inject() (countriesService: CountriesService) {
       address.line3.fold("")(_ + lineReturn) +
       address.line4.fold("")(_ + lineReturn) +
       address.postCode.fold("")(_ + lineReturn) + country
+
+  }
+
+  def getFormattedAddressNonMtd(address: VatDesignatoryDetailsAddress): String = {
+
+    address.addressLine1 + lineReturn +
+      address.addressLine2.fold("")(_ + lineReturn) +
+      address.addressLine3.fold("")(_ + lineReturn) +
+      address.addressLine4.fold("")(_ + lineReturn) +
+      address.addressLine5.fold("")(_ + lineReturn) +
+      address.postcode
 
   }
 

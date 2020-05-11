@@ -16,10 +16,6 @@
 
 package formaters
 
-import java.text.DecimalFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model.{ChargeType, PeriodKey, VrtRepaymentDetailData}
@@ -27,7 +23,7 @@ import play.api.mvc.Request
 import req.RequestSupport
 
 @Singleton
-class DesFormatter @Inject() (addressFormater: AddressFormater, requestSupport: RequestSupport) {
+class DesFormatter @Inject() (addressFormater: AddressFormatter, requestSupport: RequestSupport) {
 
   import requestSupport._
 
@@ -127,18 +123,8 @@ class DesFormatter @Inject() (addressFormater: AddressFormater, requestSupport: 
       ai <- cd.approvedInformation
       ppob <- ai.PPOB
       ad <- ppob.address
-    } yield addressFormater.getFormattedAddress(ad)
+    } yield addressFormater.getFormattedAddressMtd(ad)
 
-  }
-
-  def formatAmount(amount: BigDecimal): String = {
-    val df = new DecimalFormat("#,##0.00")
-    df.format(amount.abs)
-  }
-
-  def formatDate(date: LocalDate): String = {
-    val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
-    date.format(pattern1)
   }
 
   def bankDetailsInFlight(customerData: Option[CustomerInformation]): Boolean = {
