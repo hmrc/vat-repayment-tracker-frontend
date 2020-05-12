@@ -9,17 +9,17 @@ GET        /vat-repayment-tracker/language/:language                            
 
 #V and C to use the following
 GET        /vat-repayment-tracker/show-vrt                                                controllers.Controller.showVrt
-GET        /vat-repayment-tracker/manage-or-track-vrt                                     controllers.Controller.manageOrTrackVrt
+GET        /vat-repayment-tracker/manage-or-track-vrt                                     controllers.ManageOrTrackController.manageOrTrackVrt
 
 GET        /vat-repayment-tracker/non-mtd-user                                            controllers.Controller.nonMtdUser
 GET        /vat-repayment-tracker/view-repayment-account                                  controllers.Controller.viewRepaymentAccount(audit : Boolean ?= false)
-POST       /vat-repayment-tracker/manage-or-track-submit                                  controllers.Controller.manageOrTrackSubmit
+POST       /vat-repayment-tracker/manage-or-track-submit                                  controllers.ManageOrTrackController.manageOrTrackSubmit
 GET        /vat-repayment-tracker/signout                                                 controllers.Controller.signout
-GET        /vat-repayment-tracker/bank-account-coc/start-journey/:returnPage              controllers.Controller.startBankAccountCocJourney(returnPage : ReturnPage, audit : Boolean ?= false)
+GET        /vat-repayment-tracker/bank-account-coc/start-journey/:returnPage              controllers.BankAccountCocController.startBankAccountCocJourney(returnPage : ReturnPage, audit : Boolean ?= false)
 GET        /vat-repayment-tracker/view-progress/:periodKey                                controllers.Controller.viewProgress(periodKey : PeriodKey)
-GET        /vat-repayment-tracker/spj/:amountInPence                                      controllers.Controller.startPaymentsJourney(amountInPence : Long)
-
+GET        /vat-repayment-tracker/spj/:amountInPence                                      controllers.PayApiController.startPaymentsJourney(amountInPence : Long)
+GET        /vat-repayment-tracker/shuttered                                               controllers.ShutteredController.shuttered
 
 #Deprecated routes
-GET        /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn                       controllers.Controller.manageOrTrack(vrn : Vrn)
+GET        /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn                       controllers.ManageOrTrackController.manageOrTrack(vrn : Vrn)
 GET        /vat-repayment-tracker-frontend/show-results/vrn/:vrn                          controllers.Controller.showResults(vrn : Vrn)

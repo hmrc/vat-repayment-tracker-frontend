@@ -24,7 +24,7 @@
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig,
+viewConfig: ViewConfig,
 bread_crumbs: views.html.partials.bread_crumbs
 )
 @(
@@ -41,7 +41,7 @@ request: Request[_]
 @import viewsHelpers.requestSupport._
 
 @mainTemplate(
-title = s"${LangMessages.`Manage or track`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
+title = if (viewConfig.isShuttered) s"${LangMessages.`Manage or track shuttered`.show} - ${LangMessages.heading_bta.show} - GOV.UK" else s"${LangMessages.`Manage or track`.show} - ${LangMessages.heading_bta.show} - GOV.UK" ,
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
@@ -55,7 +55,7 @@ bodyClasses = None
 
 
    @viewsHelpers.form(
-   action = controllers.routes.Controller.manageOrTrackSubmit(),
+   action = controllers.routes.ManageOrTrackController.manageOrTrackSubmit(),
    'id -> "manageform",
    'class -> "form js-form",
    'autocomplete -> "off",
@@ -65,7 +65,12 @@ bodyClasses = None
    <fieldset id="manage">
 
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
-    <h1 id="main-message">@{LangMessages.`Manage or track`.show}</h1>
+    <h1 id="main-message">@{
+     if (viewConfig.isShuttered)
+      LangMessages.`Manage or track shuttered`.show
+     else
+     LangMessages.`Manage or track`.show
+     }</h1>
      @views.html.partials.error_message_form_input("manage", form)
     @{
     ddDetailsOption.map(ddDetails =>
@@ -90,8 +95,12 @@ bodyClasses = None
      views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nobank.toString, ManageOrTrackOptions.nobank.toString, LangMessages.`Set up a repayment bank account`.show, Some(LangMessages.`Tell HMRC where to pay your money`.show), None)
     }
     }
-    @views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.`Track your VAT repayments`.show, Some(LangMessages.`View what HMRC owe you`.show), None)
-    </div>
+    @{
+     if (!(viewConfig.isShuttered)) {
+      views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, LangMessages.`Track your VAT repayments`.show, Some(LangMessages.`View what HMRC owe you`.show), None)
+    }
+  }
+  </div>
    </fieldset>
    <div class="form-field">
     <button id="next" type="submit" class="button" onclick="getPaymentMethod()">@{LangMessages.`Continue`.show}</button>

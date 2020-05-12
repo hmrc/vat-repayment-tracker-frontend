@@ -140,6 +140,10 @@ object LangMessages {
     english = "Manage Direct Debit and repayment bank account or track repayments"
   )
 
+  val `Manage or track shuttered`: Message = Message(
+    english = "Manage Direct Debit and repayment bank account"
+  )
+
   val heading_bta: Message = Message(
     english = "Business tax account"
   )
@@ -335,5 +339,7 @@ object LangMessages {
   def `non-mtd-line2`(url: String): Message = Message(s"""Find out how to <a href="$url" target="_blank">sign up for Making Tax Digital for VAT (opens in a new window or tab).</a>""")
 
   def `non-mtd-line3`(url: String): Message = Message(s"""View your <a href="$url">Business Tax Account.""")
+
+  val shuttered: Message = Message(english = "This service is shuttered")
 }
 

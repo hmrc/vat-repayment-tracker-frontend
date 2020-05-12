@@ -35,7 +35,8 @@ case class ViewConfig(
     paymentHistoryUrl:           String,
     btaUrl:                      String,
     signupUrl:                   String,
-    variationsUrlPrefix:         String) {
+    variationsUrlPrefix:         String,
+    isShuttered:                 Boolean) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -63,7 +64,8 @@ case class ViewConfig(
     paymentHistoryUrl           = servicesConfig.getString("urls.payments-history"),
     btaUrl                      = servicesConfig.getString("urls.bta"),
     signupUrl                   = servicesConfig.getString("urls.signup"),
-    variationsUrlPrefix         = servicesConfig.getString("urls.variationsUrlPrefix")
+    variationsUrlPrefix         = servicesConfig.getString("urls.variationsUrlPrefix"),
+    isShuttered                 = servicesConfig.getBoolean("is-shuttered")
   )
 
 }

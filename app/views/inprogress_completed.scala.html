@@ -24,7 +24,7 @@
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig,
+viewConfig: ViewConfig,
 repaymentDetails: views.html.partials.repayment_details,
 multiple_repayments: views.html.partials.multiple_repayment_details,
 bread_crumbs: views.html.partials.bread_crumbs
@@ -73,7 +73,7 @@ bodyClasses = None
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
-                    <p>@Html(LangMessages.`no-completed-desc`(appConfig.paymentHistoryUrl).show)</p>
+                    <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-exist"></div>
                 </section>
             </div>

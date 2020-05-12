@@ -19,7 +19,7 @@
 
 @this(
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+viewConfig: ViewConfig
 )
 
 @(
@@ -36,7 +36,7 @@ request: Request[_]
 <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" id="viewVatAccount" href="@{appConfig.viewVatAccount}">@{LangMessages.`Your VAT account`.show}</a>
+            <a class="govuk-breadcrumbs__link" id="viewVatAccount" href="@{viewConfig.viewVatAccount}">@{LangMessages.`Your VAT account`.show}</a>
         </li>
         <li class="govuk-breadcrumbs__list-item" aria-current="page">@{currentPage}</li>
     </ol>

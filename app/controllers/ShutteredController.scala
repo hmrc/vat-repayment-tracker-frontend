@@ -16,23 +16,28 @@
 
 package controllers
 
-import config.ViewConfig
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.MessagesApi
-import play.api.mvc.Request
-import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import play.api.Logger
+import play.api.mvc.{Action, _}
+import req.RequestSupport
+import views.Views
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ErrorHandler @Inject() (
-    val messagesApi:         MessagesApi,
-    implicit val viewConfig: ViewConfig,
-    error_template:          views.html.error.error_template) extends FrontendErrorHandler {
-  override def standardErrorTemplate(
-      pageTitle: String,
-      heading:   String,
-      message:   String)(
-      implicit
-      request: Request[_]
-  ): Html = error_template(pageTitle, heading, message)
+class ShutteredController @Inject() (
+    cc:             ControllerComponents,
+    views:          Views,
+    requestSupport: RequestSupport
+)(
+    implicit
+    ec: ExecutionContext)
+
+  extends FrontendBaseController(cc) {
+
+  def shuttered: Action[AnyContent] = Action.async { implicit request =>
+    Logger.debug("shutter")
+    Future.successful(Ok(views.shuttered()))
+  }
+
 }

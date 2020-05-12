@@ -40,12 +40,15 @@ class AuthenticatedAction @Inject() (
     orchestrator: PaymentsOrchestratorConnector)(implicit ec: ExecutionContext) extends ActionBuilder[AuthenticatedRequest, AnyContent] {
 
   private def isPartial(mtdVrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
-    for {
-      customer <- orchestrator.getCustomerData(mtdVrn.vrn)
-    } yield {
-      customer match {
-        case Some(x) => x.isPartiallyMigrated
-        case None    => false
+    if (viewConfig.isShuttered) Future.successful(false)
+    else {
+      for {
+        customer <- orchestrator.getCustomerData(mtdVrn.vrn)
+      } yield {
+        customer match {
+          case Some(x) => x.isPartiallyMigrated
+          case None    => false
+        }
       }
     }
   }
