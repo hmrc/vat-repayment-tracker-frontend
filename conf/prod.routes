@@ -7,10 +7,12 @@ GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController
 GET        /vat-repayment-tracker/assets/*file                                   @controllers.Assets.at(path="/public", file)
 GET        /vat-repayment-tracker/language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
 
-#V and C to use the following
+#govuk link
 GET        /vat-repayment-tracker/show-vrt                                                controllers.Controller.showVrt
+#V and C to use the following
 GET        /vat-repayment-tracker/manage-or-track-vrt                                     controllers.ManageOrTrackController.manageOrTrackVrt
 
+#Interenal route
 GET        /vat-repayment-tracker/non-mtd-user                                            controllers.Controller.nonMtdUser
 GET        /vat-repayment-tracker/view-repayment-account                                  controllers.Controller.viewRepaymentAccount(audit : Boolean ?= false)
 POST       /vat-repayment-tracker/manage-or-track-submit                                  controllers.ManageOrTrackController.manageOrTrackSubmit
