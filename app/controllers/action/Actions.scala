@@ -32,13 +32,16 @@ class Actions @Inject() (
     cc:                   ControllerComponents,
     viewConfig:           ViewConfig,
     unhappyPathResponses: UnhappyPathResponses,
-    loggedInAction:       LoggedInAction)(implicit ec: ExecutionContext) {
+    loggedInAction:       LoggedInAction,
+    shutteredAction:      ShutteredAction)(implicit ec: ExecutionContext) {
 
-  def loggedIn: ActionBuilder[Request, AnyContent] = loggedInAction
+  def loggedIn: ActionBuilder[Request, AnyContent] = shutteredAction andThen loggedInAction
 
-  def securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction
+  def securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction
 
-  def securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateMtdVrn
+  def securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction andThen validateMtdVrn
+
+  def securedActionMtdVrnCheckWithoutShutterCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateMtdVrn
 
   private def validateMtdVrn: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
     new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
