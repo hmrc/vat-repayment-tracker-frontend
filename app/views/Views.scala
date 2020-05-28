@@ -26,6 +26,8 @@ class Views @Inject() (
     val inprogress:             _root_.views.html.inprogress,
     val inprogress_completed:   _root_.views.html.inprogress_completed,
     val view_progress:          _root_.views.html.view_progress,
+    //shutter
+    val shuttered: _root_.views.html.shuttered,
     //error pages
     val errorTemplate: _root_.views.html.error.error_template,
     val non_mtd_user:  _root_.views.html.non_mtd_user,

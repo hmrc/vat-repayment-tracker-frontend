@@ -22,7 +22,7 @@
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+viewConfig: ViewConfig
 )
 
 @(
@@ -74,7 +74,7 @@ bodyClasses = None
      </dd>
     </div>
    </dl>
-   <a href='@routes.Controller.startBankAccountCocJourney(returnPage,audit)' id="call-bac">@{LangMessages.`Change account details`.show}</a>
+   <a href='@routes.BankAccountCocController.startBankAccountCocJourney(returnPage,audit)' id="call-bac">@{LangMessages.`Change account details`.show}</a>
 
   </div>
  </div>

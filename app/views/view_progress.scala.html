@@ -23,7 +23,7 @@
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
-appConfig: ViewConfig
+viewConfig: ViewConfig
 )
 
 @(
@@ -48,7 +48,7 @@ headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
 
-<a href="@{appConfig.showResultsUrl}" id="back" class="govuk-back-link">@{LangMessages.Back.show}</a>
+<a href="@{viewConfig.showResultsUrl}" id="back" class="govuk-back-link">@{LangMessages.Back.show}</a>
 <main class="govuk-main-wrapper" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -59,13 +59,13 @@ bodyClasses = None
                     <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{CommonFormatter.formatAmount(viewProgress.amount)}</p>
                     @{
                     if (showHistoryUrl) {
-                    <p id="history-url"><a href={appConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
+                    <p id="history-url"><a href={viewConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
                     }
                     }
                     @{
                     if (showPayUrl) {
 
-                    <p id="pay-url"><a href={routes.Controller.startPaymentsJourney(amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
+                    <p id="pay-url"><a href={routes.PayApiController.startPaymentsJourney(amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
                     }
                     }
                 </div>

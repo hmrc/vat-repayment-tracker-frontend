@@ -21,7 +21,7 @@
 @this(
   govUkTemplate: views.html.layouts.GovUkTemplate,
   viewsHelpers: views.ViewsHelpers,
-  appConfig: config.ViewConfig
+  viewConfig: config.ViewConfig
 )
 
 
@@ -61,10 +61,10 @@
 }
 
 @headerNavLinks = {
-  @if(appConfig.supportLanguages) {
+  @if(viewConfig.supportLanguages) {
     <li><span id="language-toggle">@viewsHelpers.languageSelection()</span></li>
   }
-  <li><a id="homeNavHref" href=@appConfig.signOut>Sign out</a></li>
+  <li><a id="homeNavHref" href=@viewConfig.signOut>Sign out</a></li>
 }
 
 
@@ -85,8 +85,8 @@
 
 @bodyEnd = {
   @viewsHelpers.footer(
-    analyticsToken = Some(appConfig.analyticsToken),
-    analyticsHost = appConfig.analyticsHost,
+    analyticsToken = Some(viewConfig.analyticsToken),
+    analyticsHost = viewConfig.analyticsHost,
     ssoUrl = None,
     scriptElem = Some(scriptElement),
     gaCalls = None
@@ -102,7 +102,7 @@
 
 @serviceInfo = {
   @viewsHelpers.serviceInfo(
-    betaBanner = viewsHelpers.betaBanner(true, appConfig.feedbackUrl, appConfig.feedbackUrl, true),
+    betaBanner = viewsHelpers.betaBanner(true, viewConfig.feedbackUrl, viewConfig.feedbackUrl, true),
     includeGridWrapper = false,
     serviceInfoContent = Some(serviceInfoContent)
   )
@@ -114,7 +114,7 @@
 }
 
 @getHelpForm = {
-  @viewsHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)
+  @viewsHelpers.reportAProblemLink(viewConfig.reportAProblemPartialUrl, viewConfig.reportAProblemNonJSUrl)
 }
 
 @content = {

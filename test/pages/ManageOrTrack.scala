@@ -29,22 +29,30 @@ object ManageOrTrack extends CommonPage {
       ddDisplayed:     Boolean = false,
       bankDisplayed:   Boolean = false,
       noddDisplayed:   Boolean = false,
-      nobankDisplayed: Boolean = false
+      nobankDisplayed: Boolean = false,
+      isShuttered:     Boolean = false
   )
     (implicit wd: WebDriver): Assertion =
     {
       currentPath shouldBe s"""$path"""
-      readTitle shouldBe "Manage Direct Debit and repayment bank account or track repayments - Business tax account - GOV.UK"
+
+      if (isShuttered) {
+        readTitle shouldBe "Manage Direct Debit and repayment bank account - Business tax account - GOV.UK"
+        readMainMessage shouldBe "Manage Direct Debit and repayment bank account"
+      } else {
+        readTitle shouldBe "Manage Direct Debit and repayment bank account or track repayments - Business tax account - GOV.UK"
+        readMainMessage shouldBe "Manage Direct Debit and repayment bank account or track repayments"
+      }
+
       if (ddDisplayed) dd shouldBe "Manage your Direct Debit"
       if (bankDisplayed) bank shouldBe "Manage your repayment bank account"
-      vrt shouldBe "Track your VAT repayments"
+      if (!(isShuttered)) vrt shouldBe "Track your VAT repayments"
 
       idPresent("dd-label") shouldBe ddDisplayed
       idPresent("bank-label") shouldBe bankDisplayed
       idPresent("nobank-label") shouldBe nobankDisplayed
       idPresent("nodd-label") shouldBe noddDisplayed
 
-      readMainMessage shouldBe "Manage Direct Debit and repayment bank account or track repayments"
     }
 
   def dd(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("dd-label")).getText)

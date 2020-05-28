@@ -23,7 +23,7 @@
   mainTemplate: views.html.main_template,
   viewsHelpers: views.ViewsHelpers,
   repaymentDetails: views.html.partials.repayment_details,
-  appConfig: ViewConfig
+  viewConfig: ViewConfig
 )
 
 @(
@@ -50,7 +50,7 @@
       <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
       <p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
       <p>@{LangMessages.`Check this page when you are next expecting a repayment.`.show}</p>
-      <p class="govuk-!-margin-bottom-9"><a href=@{appConfig.viewVatAccount}>@{LangMessages.`View your VAT account`.show}</a></p>
+      <p class="govuk-!-margin-bottom-9"><a href=@{viewConfig.viewVatAccount}>@{LangMessages.`View your VAT account`.show}</a></p>
       @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
     </div>
   </div>
