@@ -258,3 +258,7 @@
         margin-bottom: 0;
     }
 }
+
+.govuk-table__header p {
+    display: none;
+}
