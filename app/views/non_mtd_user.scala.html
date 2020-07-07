@@ -36,8 +36,7 @@ title = s"${LangMessages.`You cannot access this service`.show} - ${LangMessages
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
-<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:none_in_progress">
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">>
         <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message">@{LangMessages.`You cannot access this service`.show}</h1>
             <p>@{LangMessages.`non-mtd-line1`.show}</p>
@@ -45,6 +44,4 @@ bodyClasses = None
             <p>@Html({LangMessages.`non-mtd-line3`(viewConfig.btaUrl).show})</p>
         </div>
     </div>
-</main>
-
 }

@@ -44,8 +44,7 @@
   headerTitle = LangMessages.heading_bta.show,
   bodyClasses = None
 ) {
-<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:none_in_progress">
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
       <p>@{LangMessages.`Repayments usually take 24 hours`.show}</p>
@@ -54,6 +53,5 @@
       @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
     </div>
   </div>
-</main>
 
 }

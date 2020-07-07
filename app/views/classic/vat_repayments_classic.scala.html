@@ -43,8 +43,7 @@
   headerTitle = LangMessages.heading_bta.show,
   bodyClasses = None
 ) {
-<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:in_progress_classic">
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row" data-gtag="repayment-type:in_progress_classic">
     <div class="govuk-grid-column-two-thirds">
       <h1 id="main-message">@{ClassicMessages.your_vat_repayments.show}</h1>
         <p>@{ClassicMessages.returns_line1.show}
@@ -59,6 +58,5 @@
         @repaymentDetails(vrn,address)
     </div>
   </div>
-</main>
 
 }
