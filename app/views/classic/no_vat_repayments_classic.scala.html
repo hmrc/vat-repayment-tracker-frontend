@@ -41,8 +41,7 @@ title = s"${LangMessages.`No VAT repayments in progress`.show} - ${LangMessages.
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
-<main class="govuk-main-wrapper" role="main" data-gtag="repayment-type:none_in_progress">
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
         <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
             <p>@{ClassicMessages.no_returns_line1.show}</p>
@@ -55,6 +54,5 @@ bodyClasses = None
             @repaymentDetails(vrn,address)
         </div>
     </div>
-</main>
 
 }

@@ -46,7 +46,6 @@ headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None
 ) {
 @bread_crumbs({LangMessages.`Payment and repayments`.show})
-<main class="govuk-main-wrapper" role="main">
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
    @if(form.hasErrors) { @viewsHelpers.errorSummary(LangMessages.`There is a problem`.show, form) }
@@ -109,5 +108,4 @@ bodyClasses = None
 
   </div>
  </div>
-</main>
 }
