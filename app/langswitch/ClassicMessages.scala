@@ -26,6 +26,7 @@ object ClassicMessages {
   val returns_line1: Message = Message(english = "Return received on:")
   val returns_line2: Message = Message(english = "We will usually repay you within 30 days of receiving your return.")
   val returns_line3: Message = Message(english = " You do not need to contact us before this.")
+  val returns_line4: Message = Message(english = "Your repayment will not show on this page once it has been completed and approved.  It can take up to a week for you to receive the repayment after it has been approved.")
 
   val your_repayment_details: Message = Message(english = "Your repayment details")
   val bank_details: Message = Message(english = "If you have added your bank details we will send repayments to your bank account.")
