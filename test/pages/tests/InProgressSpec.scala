@@ -82,9 +82,9 @@ class InProgressSpec extends ItSpec {
   "7. check negative amount" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey, negativeAmt = true)
-    DesWireMockResponses.financialsOkCredit(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey, negativeAmt = true)
+    PaymentsOrchestratorStub.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
     InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
@@ -130,25 +130,25 @@ class InProgressSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = enrolmentIn)
     if (useBankDetails) {
       if (partialBankDetails)
-        DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
       else
-        DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     } else {
       if (inflight)
-        DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
       else
-        DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
     }
 
     if (singleRepayment)
-      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
+      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
     else
-      DesWireMockResponses.repaymentDetailsMultipleInProgress(vrn)
+      PaymentsOrchestratorStub.repaymentDetailsMultipleInProgress(vrn)
 
     ft match {
-      case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-      case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-      case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+      case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+      case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+      case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
     }
 
     goToViaPath(path)

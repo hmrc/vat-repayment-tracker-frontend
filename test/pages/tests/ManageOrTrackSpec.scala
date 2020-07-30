@@ -87,25 +87,25 @@ class ManageOrTrackSpec extends ItSpec {
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
 
       if (inflight)
-        DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
       else {
         if (useBankDetails)
-          DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
         else
-          DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
       }
       //Show dd radio button
       if (useDdDetails)
-        DesWireMockResponses.ddOk(vrn)
+        PaymentsOrchestratorStub.ddOk(vrn)
       else
-        DesWireMockResponses.ddNotFound(vrn)
+        PaymentsOrchestratorStub.ddNotFound(vrn)
 
-      DesWireMockResponses.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
 
       ft match {
-        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
 
       goToViaPath(path)
