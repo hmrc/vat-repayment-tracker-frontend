@@ -18,7 +18,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.NoVatRepaymentsFoundPage
-import support.{AuditWireMockResponses, AuthWireMockResponses, DesWireMockResponses, ItSpec}
+import support.{AuditWireMockResponses, AuthWireMockResponses, PaymentsOrchestratorStub, ItSpec}
 
 class NoVatRepaymentsFoundSpec extends ItSpec {
 
@@ -28,9 +28,9 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
   "1. user is authorised and no financial data found" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    DesWireMockResponses.financialsNotFound(vrn)
-    DesWireMockResponses.customerDataOkWithBankDetails(vrn)
-    DesWireMockResponses.repaymentDetailsNotFound(vrn)
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
 

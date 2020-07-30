@@ -96,25 +96,25 @@ class InProgressCompletedSpec extends ItSpec {
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       if (useBankDetails) {
         if (partialBankDetails)
-          DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
         else
-          DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       } else {
         if (inflight)
-          DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
         else
-          DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
       }
 
       if (inPast)
-        DesWireMockResponses.repaymentDetails2DifferentPeriods(LocalDate.now().toString, LocalDate.now().minusDays(70).toString, INITIAL.value, ADJUSMENT_TO_TAX_DUE.value, vrn)
+        PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(LocalDate.now().toString, LocalDate.now().minusDays(70).toString, INITIAL.value, ADJUSMENT_TO_TAX_DUE.value, vrn)
       else
-        DesWireMockResponses.repaymentDetails3Inprogree1Completed(vrn)
+        PaymentsOrchestratorStub.repaymentDetails3Inprogree1Completed(vrn)
 
       ft match {
-        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
 
       goToViaPath(path)

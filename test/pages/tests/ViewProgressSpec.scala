@@ -189,27 +189,27 @@ class ViewProgressSpec extends ItSpec {
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       if (useBankDetails) {
-        DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       } else {
-        DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
       }
       val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
       rdsp match {
         case 1 =>
-          DesWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKey)
+          PaymentsOrchestratorStub.repaymentDetailS1(vrn, date.toString, status1, periodKey)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
         case 2 =>
-          DesWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2)
+          PaymentsOrchestratorStub.repaymentDetailS2(vrn, date.toString, status1, status2)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2, periodKey)
         case 3 =>
-          DesWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
+          PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
       }
 
       ft match {
-        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
       goToViaPath(path)
     }

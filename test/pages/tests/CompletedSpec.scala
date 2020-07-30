@@ -103,25 +103,25 @@ class CompletedSpec extends ItSpec {
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       if (useBankDetails) {
         if (partialBankDetails)
-          DesWireMockResponses.customerDataOkWithPartialBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
         else
-          DesWireMockResponses.customerDataOkWithBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       } else {
         if (inflight)
-          DesWireMockResponses.customerDataOkWithoutBankDetailsInflight(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
         else
-          DesWireMockResponses.customerDataOkWithoutBankDetails(vrn)
+          PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
       }
 
       if (singleRepayment)
-        DesWireMockResponses.repaymentDetailSingleCompleted(vrn)
+        PaymentsOrchestratorStub.repaymentDetailSingleCompleted(vrn)
       else
-        DesWireMockResponses.repaymentDetailsMultipleCompleted(vrn)
+        PaymentsOrchestratorStub.repaymentDetailsMultipleCompleted(vrn)
 
       ft match {
-        case `ft_404`    => DesWireMockResponses.financialsNotFound(vrn)
-        case `ft_credit` => DesWireMockResponses.financialsOkCredit(vrn)
-        case `ft_debit`  => DesWireMockResponses.financialsOkDebit(vrn)
+        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
       goToViaPath(path)
     }
