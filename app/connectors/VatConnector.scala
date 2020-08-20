@@ -19,30 +19,32 @@ package connectors
 import javax.inject.Inject
 import model.Vrn
 import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
-import play.api.{Configuration, Logger}
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatConnector @Inject() (
     servicesConfig: ServicesConfig,
-    httpClient:     HttpClient,
-    configuration:  Configuration)
+    httpClient:     HttpClient)
   (implicit ec: ExecutionContext) {
 
   lazy private val vatUrl: String = servicesConfig.baseUrl("vat")
 
+  private val logger = Logger(this.getClass)
+
   def calendar(vrn: Vrn)(implicit hc: HeaderCarrier): Future[Option[CalendarData]] = {
     val url: String = vatUrl + s"/vat/${vrn.value}/calendar"
-    Logger.debug(s"calling vat service with url $url")
+    logger.debug(s"calling vat service with url $url")
     httpClient.GET[Option[CalendarData]](url)
   }
 
   def designatoryDetails(vrn: Vrn)(implicit hc: HeaderCarrier): Future[VatDesignatoryDetailsAddress] = {
     val url: String = vatUrl + s"/vat/${vrn.value}/designatoryDetails"
-    Logger.debug(s"calling vat service with url $url")
+    logger.debug(s"calling vat service with url $url")
     httpClient.GET[VatDesignatoryDetailsAddress](url)
   }
 

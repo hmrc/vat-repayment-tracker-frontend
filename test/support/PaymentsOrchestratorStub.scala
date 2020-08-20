@@ -19,9 +19,9 @@ package support
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.{PeriodKey, Vrn}
-import play.api.libs.json.JsNull
+import play.api.libs.json.Json
 
-object PaymentsOrchestratorStub {
+object PaymentsOrchestratorStub extends TestHelper {
 
   def ddOk(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
@@ -32,8 +32,8 @@ object PaymentsOrchestratorStub {
   def ddNotFound(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(JsNull.toString())))
+        .withStatus(404)
+        .withBody(errorResponse(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}""").toString())))
 
   def financialsOkCredit(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
@@ -73,13 +73,13 @@ object PaymentsOrchestratorStub {
 
   def financialsNotFound(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
-      .willReturn(aResponse().withStatus(200)
-        .withBody(JsNull.toString())))
+      .willReturn(aResponse().withStatus(404)
+        .withBody(errorResponse(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}""").toString())))
 
   def repaymentDetailsNotFound(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
-      .willReturn(aResponse().withStatus(200)
-        .withBody(JsNull.toString())))
+      .willReturn(aResponse().withStatus(404)
+        .withBody(errorResponse(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}""").toString())))
 
   def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean = false): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))

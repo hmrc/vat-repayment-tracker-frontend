@@ -22,18 +22,16 @@ import model.TypedVrn
 import play.api.Logger
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class Actions @Inject() (
-    authoriseAction:      AuthenticatedAction,
-    af:                   AuthorisedFunctions,
-    cc:                   ControllerComponents,
-    viewConfig:           ViewConfig,
-    unhappyPathResponses: UnhappyPathResponses,
-    loggedInAction:       LoggedInAction,
-    shutteredAction:      ShutteredAction)(implicit ec: ExecutionContext) {
+    authoriseAction: AuthenticatedAction,
+    viewConfig:      ViewConfig,
+    loggedInAction:  LoggedInAction,
+    shutteredAction: ShutteredAction)(implicit ec: ExecutionContext) {
+
+  private val logger = Logger(this.getClass)
 
   def loggedIn: ActionBuilder[Request, AnyContent] = shutteredAction andThen loggedInAction
 
@@ -49,10 +47,10 @@ class Actions @Inject() (
       override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
 
         request.typedVrn match {
-          case TypedVrn.MtdVrn(vrn) => Future.successful(Right(request))
+          case TypedVrn.MtdVrn(_) => Future.successful(Right(request))
           case _ =>
-            Logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
-            if (request.isPartialMigration) Logger.warn("Partially migrated user tried to access MTD authorised VRT")
+            logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
+            if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
             implicit val req: AuthenticatedRequest[_] = request
             Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
         }

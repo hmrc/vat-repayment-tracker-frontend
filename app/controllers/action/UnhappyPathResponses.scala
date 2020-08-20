@@ -16,7 +16,6 @@
 
 package controllers.action
 
-import config.ViewConfig
 import controllers.ErrorHandler
 import javax.inject.{Inject, Singleton}
 import langswitch.ErrorMessages
@@ -27,7 +26,6 @@ import req.RequestSupport
 
 @Singleton
 class UnhappyPathResponses @Inject() (
-    viewConfig:     ViewConfig,
     errorHandler:   ErrorHandler,
     requestSupport: RequestSupport) {
 

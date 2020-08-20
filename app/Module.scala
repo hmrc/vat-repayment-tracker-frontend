@@ -21,7 +21,7 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
 class Module extends AbstractModule {
 
-  def configure(): Unit = ()
+  override def configure(): Unit = ()
 
   @Provides
   @Singleton

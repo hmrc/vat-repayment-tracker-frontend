@@ -19,13 +19,9 @@ package formaters
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model.{ChargeType, PeriodKey, VrtRepaymentDetailData}
-import play.api.mvc.Request
-import req.RequestSupport
 
 @Singleton
-class DesFormatter @Inject() (addressFormater: AddressFormatter, requestSupport: RequestSupport) {
-
-  import requestSupport._
+class DesFormatter @Inject() (addressFormater: AddressFormatter) {
 
   def addMissingStatus(vrd: List[VrtRepaymentDetailData]): List[VrtRepaymentDetailData] = {
 

@@ -22,26 +22,25 @@ import controllers.routes
 import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ShutteredAction @Inject() (
-    af:           AuthorisedFunctions,
-    viewConfig:   ViewConfig,
-    badResponses: UnhappyPathResponses,
-    cc:           MessagesControllerComponents)(implicit ec: ExecutionContext) extends ActionBuilder[Request, AnyContent] {
+    viewConfig: ViewConfig,
+    cc:         MessagesControllerComponents)(implicit ec: ExecutionContext) extends ActionBuilder[Request, AnyContent] {
+
+  private val logger = Logger(this.getClass)
 
   def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
     implicit val r: Request[A] = request
     if (viewConfig.isShuttered) {
-      Logger.debug("Shuttered")
+      logger.debug("Shuttered")
       Future.successful(Redirect(routes.ShutteredController.shuttered().url))
     } else {
-      Logger.debug("Not shuttered")
+      logger.debug("Not shuttered")
       block(request)
     }
 

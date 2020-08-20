@@ -23,7 +23,7 @@ import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import req.RequestSupport
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,6 +36,8 @@ class DirectDebitBackendConnector @Inject() (
 
   import req.RequestSupport._
 
+  private val logger = Logger(this.getClass)
+
   private val serviceUrl: String = servicesConfig.baseUrl("direct-debit-backend")
   private val sjUrl: String = configuration.get[String]("microservice.services.direct-debit-backend.sj-url")
   private val rUrl: String = configuration.get[String]("microservice.services.direct-debit-backend.return-url")
@@ -43,13 +45,13 @@ class DirectDebitBackendConnector @Inject() (
 
   def startJourney(vrn: Vrn)(implicit request: Request[_]): Future[NextUrl] = {
     val bkUrl: String = s"$bUrl"
-    Logger.debug(s"Using return url : $rUrl")
-    Logger.debug(s"Using back url : $bkUrl")
+    logger.debug(s"Using return url : $rUrl")
+    logger.debug(s"Using back url : $bkUrl")
 
     val createVATJourneyRequest: CreateVATJourneyRequest = CreateVATJourneyRequest(userId    = vrn.value, returnUrl = rUrl, backUrl = bkUrl)
-    Logger.debug(s"Calling direct-debit-backend start journey for vrn $vrn")
+    logger.debug(s"Calling direct-debit-backend start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$sjUrl"
-    Logger.debug(s"Calling direct-debit-backend start journey for vrn with url $startJourneyURL)")
+    logger.debug(s"Calling direct-debit-backend start journey for vrn with url $startJourneyURL)")
     httpClient.POST[CreateVATJourneyRequest, NextUrl](startJourneyURL, createVATJourneyRequest)
   }
 

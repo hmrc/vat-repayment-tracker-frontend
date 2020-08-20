@@ -25,18 +25,18 @@ import model.des._
 import model._
 import play.api.Logger
 import play.api.mvc.Request
-import views.Views
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
 class VrtService @Inject() (
-    views:                               Views,
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
     periodFormatter:                     PeriodFormatter,
     desFormatter:                        DesFormatter
 )
   (implicit ec: ExecutionContext) {
+
+  private val logger = Logger(this.getClass)
 
   def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_]): AllRepaymentData = {
 
@@ -46,7 +46,7 @@ class VrtService @Inject() (
           r <- rd
           vrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, r)
           _ = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
-        } yield Logger.debug(s"cached vat repayment data for vrn : $vrn")
+        } yield logger.debug(s"cached vat repayment data for vrn : $vrn")
 
         val data = getRepaymentData(rd, vrn, financialData)
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.

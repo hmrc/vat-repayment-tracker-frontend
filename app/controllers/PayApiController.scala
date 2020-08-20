@@ -28,7 +28,6 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class PayApiController @Inject() (
     cc:              ControllerComponents,
-    requestSupport:  RequestSupport,
     actions:         Actions,
     payApiConnector: PayApiConnector)(
     implicit
@@ -36,12 +35,14 @@ class PayApiController @Inject() (
 
   extends FrontendBaseController(cc) {
 
+  private val logger = Logger(this.getClass)
+
   def startPaymentsJourney(amountInPence: Long): Action[AnyContent] =
     actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
       for {
         response <- payApiConnector.startJourney(amountInPence, request.typedVrn.vrn)
       } yield {
-        Logger.debug(s"received ${response.toString}")
+        logger.debug(s"received ${response.toString}")
         Redirect(response.nextUrl)
       }
     }

@@ -35,6 +35,8 @@ trait CommonPage
   // with PatienceConfiguration
   with RichMatchers {
 
+  private val logger = Logger(this.getClass)
+
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(1, Seconds)), scaled(Span(200, Millis)))
 
   def assertTechnicalErrorDisplayed(path: String)(implicit webDriver: WebDriver): Assertion = probing { _ =>
@@ -94,7 +96,7 @@ trait CommonPage
           )
         Some(outFile.toURI.toString)
       case _ =>
-        Logger.warn(s"Could not take screen shot: $fileName")
+        logger.warn(s"Could not take screen shot: $fileName")
         None
     }
   }

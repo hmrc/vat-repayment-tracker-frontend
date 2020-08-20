@@ -27,6 +27,8 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
 
   import requestSupport._
 
+  private val logger = Logger(this.getClass)
+
   def formatPeriodKey(periodKey: String)(implicit request: Request[_]): String = {
     if (periodKey.length != 4) throw new RuntimeException(s"Invalid length periodkey: $periodKey")
 
@@ -49,7 +51,7 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
 
   private def formatPeriodKeyMonthly(char4: Char, yearString: String)(implicit request: Request[_]) = {
 
-    Logger.debug(s"Called formatPeriodKeyMonthly with $char4, $yearString")
+    logger.debug(s"Called formatPeriodKeyMonthly with $char4, $yearString")
 
     val year = ("20" + yearString).toInt
     val monthString: String = char4 match {
@@ -66,18 +68,18 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
       case 'K' => LangMessages.November.show
       case 'L' => LangMessages.December.show
       case _ =>
-        Logger.warn(s"invalid periodKey for formatPeriodKeyMonthly, could not match month: $char4")
+        logger.warn(s"invalid periodKey for formatPeriodKeyMonthly, could not match month: $char4")
         ""
 
     }
     val returnStr = s"$monthString $year"
-    Logger.debug(s"Translated to $returnStr")
+    logger.debug(s"Translated to $returnStr")
     returnStr
   }
 
   private def formatPeriodKeyQuarterly(quarter: String, yearString: String)(implicit request: Request[_]) = {
 
-    Logger.debug(s"Called formatPeriodKeyQuarterly with $quarter, $yearString")
+    logger.debug(s"Called formatPeriodKeyQuarterly with $quarter, $yearString")
     val year = ("20" + yearString).toInt
 
     val monthString: String = quarter match {
@@ -95,14 +97,14 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
       case "C4" => LangMessages.DecemberQuarter.show
     }
     val returnStr = s"$monthString $year"
-    Logger.debug(s"Translated to $returnStr")
+    logger.debug(s"Translated to $returnStr")
     returnStr
 
   }
 
   private def formatPeriodKeyYearly(char4: Char, year: String)(implicit request: Request[_]) = {
 
-    Logger.debug(s"Called formatPeriodKeyYearly with $char4, $year")
+    logger.debug(s"Called formatPeriodKeyYearly with $char4, $year")
 
     val yearString = if (char4 == 'A') s"20$year" else {
       val nextyear = year.toInt + 1
@@ -122,11 +124,11 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
       case 'K' => LangMessages.NovToOct.show
       case 'L' => LangMessages.DecToNov.show
       case _ =>
-        Logger.warn(s"invalid periodKey for formatPeriodKeyYearly, could not match month: $char4")
+        logger.warn(s"invalid periodKey for formatPeriodKeyYearly, could not match month: $char4")
         ""
     }
     val returnStr = s"$monthString $yearString"
-    Logger.debug(s"Translated to $returnStr")
+    logger.debug(s"Translated to $returnStr")
     returnStr
   }
 

@@ -16,26 +16,20 @@
 
 package controllers
 
-import config.ViewConfig
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
 import javax.inject.{Inject, Singleton}
 import model._
 import play.api.Logger
 import play.api.mvc.{Action, _}
-import req.RequestSupport
 import service.VrtService
-import views.Views
-
 import scala.concurrent.ExecutionContext
+import uk.gov.hmrc.play.bootstrap.ApplicationLoader
 
 @Singleton
 class BankAccountCocController @Inject() (
     cc:                            ControllerComponents,
-    views:                         Views,
-    requestSupport:                RequestSupport,
     actions:                       Actions,
-    viewConfig:                    ViewConfig,
     bankAccountCocConnector:       BankAccountCocConnector,
     paymentsOrchestratorConnector: PaymentsOrchestratorConnector,
     auditor:                       Auditor,
@@ -46,11 +40,13 @@ class BankAccountCocController @Inject() (
 
   extends FrontendBaseController(cc) {
 
+  private val logger = Logger(this.getClass)
+
   def startBankAccountCocJourney(returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
     actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
 
       if (audit) {
-        Logger.debug("startBankAccountCocJourney... trying to audit")
+        logger.debug("startBankAccountCocJourney... trying to audit")
         val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
         val financialDataF = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
 
@@ -64,7 +60,7 @@ class BankAccountCocController @Inject() (
           Redirect(nextUrl.nextUrl)
         }
       } else {
-        Logger.debug("startBankAccountCocJourney... will not audit")
+        logger.debug("startBankAccountCocJourney... will not audit")
         for {
           nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
         } yield Redirect(nextUrl.nextUrl)

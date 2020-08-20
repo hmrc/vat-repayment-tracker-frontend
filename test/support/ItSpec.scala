@@ -56,7 +56,6 @@ import scala.concurrent.ExecutionContext
 /**
  * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
  */
-
 trait ItSpec
   extends FreeSpecLike
   with RichMatchers
@@ -75,6 +74,7 @@ trait ItSpec
   lazy val servicesConfig: ServicesConfig = fakeApplication().injector.instanceOf[ServicesConfig]
   lazy val config: Configuration = fakeApplication().injector.instanceOf[Configuration]
   lazy val env: Environment = fakeApplication().injector.instanceOf[Environment]
+  def frozenTimeString: String = "2027-11-02T16:33:51.880"
   lazy val overridingsModule: AbstractModule = new AbstractModule {
 
     override def configure(): Unit = ()
@@ -86,6 +86,7 @@ trait ItSpec
       Clock.fixed(fixedInstant, ZoneId.systemDefault)
     }
   }
+
   val baseUrl: String = s"http://localhost:$WireMockSupport.port"
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(
@@ -116,8 +117,6 @@ trait ItSpec
 
   def injector: Injector = fakeApplication().injector
 
-  def frozenTimeString: String = "2027-11-02T16:33:51.880"
-
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
 
   def status(of: Result): Int = of.header.status
@@ -129,4 +128,3 @@ trait ItSpec
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
 }
-
