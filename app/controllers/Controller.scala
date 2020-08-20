@@ -33,7 +33,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class Controller @Inject() (
     cc:                                  ControllerComponents,
-    errorHandler:                        ErrorHandler,
     views:                               Views,
     paymentsOrchestratorConnector:       PaymentsOrchestratorConnector,
     requestSupport:                      RequestSupport,
@@ -52,6 +51,8 @@ class Controller @Inject() (
 
   import requestSupport._
 
+  private val logger = Logger(this.getClass)
+
   def nonMtdUser(): Action[AnyContent] = actions.loggedIn.async { implicit request =>
     Future.successful(Ok(views.non_mtd_user()))
   }
@@ -64,11 +65,11 @@ class Controller @Inject() (
   def showVrt: Action[AnyContent] = actions.securedAction.async {
     implicit request: AuthenticatedRequest[_] =>
 
-      Logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
+      logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
       request.typedVrn match {
 
         case TypedVrn.ClassicVrn(vrnNonMtd) =>
-          Logger.debug("Received a classic VRN")
+          logger.debug("Received a classic VRN")
           val calendarDataF = vatConnector.calendar(vrnNonMtd)
           val designatoryDetailsF = vatConnector.designatoryDetails(vrnNonMtd)
           for {
@@ -77,7 +78,7 @@ class Controller @Inject() (
           } yield showResultsFormatter.computeViewClassic(vrnNonMtd, calendarData, designatoryDetails)
 
         case TypedVrn.MtdVrn(vrnMtd) =>
-          Logger.debug("Received a  MTD VRN")
+          logger.debug("Received a  MTD VRN")
           val customerDataF = paymentsOrchestratorConnector.getCustomerData(vrnMtd)
           val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(vrnMtd)
           val financialDataF = paymentsOrchestratorConnector.getFinancialData(vrnMtd)
@@ -95,7 +96,7 @@ class Controller @Inject() (
 
       val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
       val financialDataF = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
-      Logger.debug(s"""received vrn : ${request.typedVrn.vrn.value}, periodKey: ${periodKey.value}""")
+      logger.debug(s"""received vrn : ${request.typedVrn.vrn.value}, periodKey: ${periodKey.value}""")
       for {
         customerData <- customerDataF
         financialData <- financialDataF

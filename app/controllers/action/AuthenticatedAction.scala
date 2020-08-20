@@ -35,9 +35,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthenticatedAction @Inject() (
     af:           AuthorisedFunctions,
     viewConfig:   ViewConfig,
-    badResponses: UnhappyPathResponses,
     cc:           MessagesControllerComponents,
     orchestrator: PaymentsOrchestratorConnector)(implicit ec: ExecutionContext) extends ActionBuilder[AuthenticatedRequest, AnyContent] {
+
+  private val logger = Logger(this.getClass)
 
   private def isPartial(mtdVrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
     if (viewConfig.isShuttered) Future.successful(false)
@@ -90,7 +91,7 @@ class AuthenticatedAction @Inject() (
       case _: NoActiveSession =>
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
       case e: AuthorisationException =>
-        Logger.debug(s"Unauthorised because of ${e.reason}, $e")
+        logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(viewConfig.nonMtdUser)
     }
   }

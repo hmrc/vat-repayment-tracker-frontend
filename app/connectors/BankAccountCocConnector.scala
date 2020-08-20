@@ -23,6 +23,7 @@ import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,6 +36,8 @@ class BankAccountCocConnector @Inject() (
 
   import req.RequestSupport._
 
+  private val logger = Logger(this.getClass)
+
   private val serviceUrl: String = servicesConfig.baseUrl("bank-account-coc")
   private val viewUrl: String = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
   private val bUrl: String = configuration.get[String]("urls.bank-back-url")
@@ -42,11 +45,11 @@ class BankAccountCocConnector @Inject() (
   def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
 
     val bkUrl: String = s"$bUrl${returnPage.value}"
-    Logger.debug(s"Using back url : $bkUrl")
+    logger.debug(s"Using back url : $bkUrl")
     val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, isAgent = false, bkUrl, bkUrl, bkUrl)
-    Logger.debug(s"Calling bank-account-coc start journey for vrn $vrn")
+    logger.debug(s"Calling bank-account-coc start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
-    Logger.debug(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
+    logger.debug(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
     httpClient.POST[ViewRepaymentRequest, NextUrl](startJourneyURL, viewRepaymentRequest)
 
   }

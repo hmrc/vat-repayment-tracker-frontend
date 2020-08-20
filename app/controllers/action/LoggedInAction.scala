@@ -28,10 +28,11 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 class LoggedInAction @Inject() (
-    af:           AuthorisedFunctions,
-    viewConfig:   ViewConfig,
-    badResponses: UnhappyPathResponses,
-    cc:           MessagesControllerComponents)(implicit ec: ExecutionContext) extends ActionBuilder[Request, AnyContent] {
+    af:         AuthorisedFunctions,
+    viewConfig: ViewConfig,
+    cc:         MessagesControllerComponents)(implicit ec: ExecutionContext) extends ActionBuilder[Request, AnyContent] {
+
+  private val logger = Logger(this.getClass)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
@@ -43,7 +44,7 @@ class LoggedInAction @Inject() (
       case _: NoActiveSession =>
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
       case e: AuthorisationException =>
-        Logger.debug(s"Unauthorised because of ${e.reason}, $e")
+        logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(viewConfig.nonMtdUser)
     }
   }

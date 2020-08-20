@@ -35,15 +35,13 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ManageOrTrackController @Inject() (
     cc:                          ControllerComponents,
-    errorHandler:                ErrorHandler,
     views:                       Views,
     desConnector:                PaymentsOrchestratorConnector,
     requestSupport:              RequestSupport,
     desFormatter:                DesFormatter,
     actions:                     Actions,
     viewConfig:                  ViewConfig,
-    directDebitBackendConnector: DirectDebitBackendConnector,
-    vatConnector:                VatConnector)(
+    directDebitBackendConnector: DirectDebitBackendConnector)(
     implicit
     ec: ExecutionContext)
 

@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import model.Vrn
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -28,24 +29,24 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   val port = 19001
 
-  def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
+  def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
 
-  def viewRepaymentAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+  def viewRepaymentAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](
     s"http://localhost:$port/vat-repayment-tracker/view-repayment-account")
 
-  def viewDDAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+  def viewDDAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](
     s"http://localhost:$port/vat-repayment-tracker/view-dd-account")
 
-  def startBankAccountCocJourney(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+  def startBankAccountCocJourney(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](
     s"http://localhost:$port/vat-repayment-tracker/bank-account-coc/start-journey/manage-or-track")
 
-  def startPaymentsJourney(amountInPence: Long)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(
+  def startPaymentsJourney(amountInPence: Long)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](
     s"http://localhost:$port/vat-repayment-tracker/spj/$amountInPence)")
 
-  def showVrt(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker/show-vrt")
+  def showVrt(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](s"http://localhost:$port/vat-repayment-tracker/show-vrt")
 
-  def manageOrTrackVrt(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker/manage-or-track-vrt")
+  def manageOrTrackVrt(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](s"http://localhost:$port/vat-repayment-tracker/manage-or-track-vrt")
 
-  def manageOrTrack(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET(s"http://localhost:$port/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}")
+  def manageOrTrack(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](s"http://localhost:$port/vat-repayment-tracker-frontend/manage-or-track/vrn/${vrn.value}")
 
 }

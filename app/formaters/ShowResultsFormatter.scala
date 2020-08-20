@@ -31,6 +31,8 @@ class ShowResultsFormatter @Inject() (views:            Views,
                                       desFormatter:     DesFormatter,
                                       addressFormatter: AddressFormatter)(implicit ec: ExecutionContext) extends Results {
 
+  private val logger = Logger(this.getClass)
+
   def computeViewClassic(
       vrn:                          Vrn,
       calendarData:                 Option[CalendarData],
@@ -58,7 +60,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
     val inflightBankDetails = desFormatter.bankDetailsInFlight(customerData)
 
     bankDetails match {
-      case Some(bd) => if (bd.accountHolderName.isEmpty) Logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
+      case Some(bd) => if (bd.accountHolderName.isEmpty) logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
       case None     =>
     }
 

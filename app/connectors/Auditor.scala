@@ -16,7 +16,7 @@
 
 package connectors
 
-import formaters.{CommonFormatter, DesFormatter}
+import formaters.CommonFormatter
 import javax.inject.{Inject, Singleton}
 import model.RepaymentDataNoRiskingStatus
 import play.api.Logger
@@ -31,10 +31,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Auditor @Inject() (
-    auditConnector: AuditConnector,
-    desFormatter:   DesFormatter)(
+    auditConnector: AuditConnector)(
     implicit
     ec: ExecutionContext) {
+
+  private val logger = Logger(this.getClass)
 
   def audit(
       inProgress:      List[RepaymentDataNoRiskingStatus],
@@ -43,7 +44,7 @@ class Auditor @Inject() (
       implicit
       request: Request[_]): Future[AuditResult] = {
 
-    Logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, $auditTypeIn, $transactionName")
+    logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, $auditTypeIn, $transactionName")
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
       auditType   = auditTypeIn,

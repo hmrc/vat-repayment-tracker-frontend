@@ -14,31 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package support
 
-import javax.inject.{Inject, Singleton}
-import play.api.Logger
-import play.api.mvc.{Action, _}
-import req.RequestSupport
-import views.Views
+import play.api.libs.json.Json
+import uk.gov.hmrc.play.bootstrap.http.ErrorResponse
 
-import scala.concurrent.{ExecutionContext, Future}
+trait TestHelper {
 
-@Singleton
-class ShutteredController @Inject() (
-    cc:    ControllerComponents,
-    views: Views
-)(
-    implicit
-    ec: ExecutionContext)
-
-  extends FrontendBaseController(cc) {
-
-  private val logger = Logger(this.getClass)
-
-  def shuttered: Action[AnyContent] = Action.async { implicit request =>
-    logger.debug("shutter")
-    Future.successful(Ok(views.shuttered()))
+  def errorResponse(url: String) = {
+    Json.toJson(ErrorResponse(404, "URI not found", requested = Some(url)))
   }
 
 }
