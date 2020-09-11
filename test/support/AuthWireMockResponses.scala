@@ -44,7 +44,7 @@ object AuthWireMockResponses {
         .withHeaders(headers)))
   }
 
-  def authOkNoEnrolments(affinityGroup: String = "Individual", wireMockBaseUrlAsString: String): StubMapping = {
+  def authOkNoEnrolments(wireMockBaseUrlAsString: String): StubMapping = {
     stubFor(post(urlEqualTo("/auth/authorise"))
       .willReturn(aResponse()
         .withStatus(200)
@@ -68,14 +68,13 @@ object AuthWireMockResponses {
                "levelOfAssurance":"1",
                "previouslyLoggedInAt":"2016-06-20T09:48:37.112Z",
                "groupIdentifier": "groupId",
-               "affinityGroup": "$affinityGroup",
                "allEnrolments": []
              }
        """.stripMargin)))
 
   }
 
-  def authOkWithEnrolments(affinityGroup: String = "Individual", wireMockBaseUrlAsString: String, vrn: Vrn, enrolment: String): StubMapping = {
+  def authOkWithEnrolments(wireMockBaseUrlAsString: String, vrn: Vrn, enrolment: String): StubMapping = {
     stubFor(post(urlEqualTo("/auth/authorise"))
       .willReturn(aResponse()
         .withStatus(200)
@@ -99,7 +98,6 @@ object AuthWireMockResponses {
                "levelOfAssurance":"1",
                "previouslyLoggedInAt":"2016-06-20T09:48:37.112Z",
                "groupIdentifier": "groupId",
-               "affinityGroup": "$affinityGroup",
                "allEnrolments": [
                         {
                           "key": "$enrolment",
