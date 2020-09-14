@@ -16,7 +16,7 @@
 
 @import play.twirl.api.HtmlFormat
 @import langswitch.LangMessages
-
+@import langswitch.AccessibilityStatementMessages
 
 @this(
   govUkTemplate: views.html.layouts.GovUkTemplate,
@@ -97,7 +97,16 @@
 @footerTop = {}
 
 @footerLinks = {
-  @viewsHelpers.footerLinks(None)
+  @viewsHelpers.footerLinks(
+  Some(Html(
+            s"""<li><a href="/vat-repayment-accessibility-statement"
+                id="accessibility-statement-link"
+                target="_blank"
+                data-sso="false"
+                data-journey-click="footer:Click:Accessibility statement">
+    ${AccessibilityStatementMessages.label.show} </a></li>""")
+    )
+    )
 }
 
 @serviceInfo = {

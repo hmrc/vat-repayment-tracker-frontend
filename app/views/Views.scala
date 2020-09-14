@@ -33,6 +33,8 @@ class Views @Inject() (
     val non_mtd_user:  _root_.views.html.non_mtd_user,
     //classic
     val classic_none: _root_.views.html.classic.no_vat_repayments_classic,
-    val classic_some: _root_.views.html.classic.vat_repayments_classic
+    val classic_some: _root_.views.html.classic.vat_repayments_classic,
+    //accessibility statement
+    val accessibilityStatement: _root_.views.html.statement.accessibility_statement
 
 )
