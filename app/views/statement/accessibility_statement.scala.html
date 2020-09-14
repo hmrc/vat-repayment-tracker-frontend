@@ -1,0 +1,101 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import langswitch.AccessibilityStatementMessages
+@import config.ViewConfig
+
+
+@this(
+mainTemplate: views.html.main_template,
+viewsHelpers: views.ViewsHelpers,
+viewConfig: ViewConfig
+)
+
+@()(  implicit
+request: Request[_])
+
+@import viewsHelpers.requestSupport._
+
+@mainTemplate(title = AccessibilityStatementMessages.header.show,
+headerTitle = AccessibilityStatementMessages.header.show,
+bodyClasses = None){
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">@{AccessibilityStatementMessages.header.show}</h1>
+        <div>
+            <p>@{AccessibilityStatementMessages.intro_p1.show}</p>
+            <p>@{Html(AccessibilityStatementMessages.intro_p2.show)}</p>
+            <p>@{AccessibilityStatementMessages.intro_p3.show}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.using_this_service_header.show}</h1>
+        <div>
+            <p>@{AccessibilityStatementMessages.using_this_service_p1.show}</p>
+            <p>@{AccessibilityStatementMessages.using_this_service_p2.show}</p>
+            <ul class="list list-bullet">
+                <li>@{AccessibilityStatementMessages.using_this_service_li1.show}</li>
+                <li>@{AccessibilityStatementMessages.using_this_service_li2.show}</li>
+                <li>@{AccessibilityStatementMessages.using_this_service_li3.show}</li>
+                <li>@{AccessibilityStatementMessages.using_this_service_li4.show}</li>
+                <li>@{AccessibilityStatementMessages.using_this_service_li5.show}</li>
+            </ul>
+            <p>@{AccessibilityStatementMessages.using_this_service_p3.show}</p>
+            <p>@{Html(AccessibilityStatementMessages.using_this_service_p4.show)}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.how_accessible_header.show}</h1>
+        <div>
+            <p>@{Html(AccessibilityStatementMessages.how_accessible_p1.show)}</p>
+            <p>@{AccessibilityStatementMessages.how_accessible_p2.show}</p>
+            <ul class="list list-bullet">
+                <li>@{AccessibilityStatementMessages.how_accessible_li1.show}</li>
+            </ul>
+        </div>
+        <h1>@{AccessibilityStatementMessages.difficulty_usiing_service_header.show}</h1>
+        <div>
+            <p>@{AccessibilityStatementMessages.difficulty_usiing_service_p1.show}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.reporting_header.show}</h1>
+        <div>
+            <p>@{Html(AccessibilityStatementMessages.reporting_p1(viewConfig.reportAProblemPartialUrl).show)}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.not_happy_with_response_header.show}</h1>
+        <div>
+            <p>@{Html(AccessibilityStatementMessages.not_happy_with_response_p1.show)}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.contacting_us_header.show}</h1>
+        <div>
+            <p>@{AccessibilityStatementMessages.contacting_us_p1.show}</p>
+            <p>@{AccessibilityStatementMessages.contacting_us_p2.show}</p>
+            <p>@{Html(AccessibilityStatementMessages.contacting_us_p3.show)}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.technical_information_header.show}</h1>
+        <div>
+            <p>@{AccessibilityStatementMessages.technical_information_p1.show}</p>
+            <p>@{Html(AccessibilityStatementMessages.technical_information_p2.show)}</p>
+            <h2>@{AccessibilityStatementMessages.technical_information_header2.show}</h2>
+            <p>@{AccessibilityStatementMessages.technical_information_p3.show}</p>
+            <h2>@{AccessibilityStatementMessages.technical_information_header3.show}</h2>
+            <p>@{AccessibilityStatementMessages.technical_information_p4.show}</p>
+            <p>@{AccessibilityStatementMessages.technical_information_p5.show}</p>
+        </div>
+        <h1>@{AccessibilityStatementMessages.how_we_tested_header.show}</h1>
+        <div>
+            <p>@{AccessibilityStatementMessages.how_we_tested_p1.show}</p>
+            <p>@{AccessibilityStatementMessages.how_we_tested_p2.show}</p>
+            <p>@{AccessibilityStatementMessages.how_we_tested_p3.show}</p>
+        </div>
+
+    </div>
+    }
