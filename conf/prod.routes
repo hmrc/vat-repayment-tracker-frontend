@@ -26,4 +26,4 @@ GET        /vat-repayment-tracker/shuttered                                     
 GET        /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn                       controllers.ManageOrTrackController.manageOrTrack(vrn : Vrn)
 GET        /vat-repayment-tracker-frontend/show-results/vrn/:vrn                          controllers.Controller.showResults(vrn : Vrn)
 
-GET       /vat-repayment-accessibility-statement                                         controllers.AccessibilityController.getAccessibilityStatement()
+GET        /vat-repayment-tracker/vat-repayment-accessibility-statement                   controllers.AccessibilityController.getAccessibilityStatement()
