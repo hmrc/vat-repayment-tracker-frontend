@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import views.Views
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class AccessibilityController @Inject() (
@@ -32,7 +32,7 @@ class AccessibilityController @Inject() (
 
   extends FrontendBaseController(cc) {
 
-  def getAccessibilityStatement(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.accessibilityStatement()))
+  def getAccessibilityStatement(): Action[AnyContent] = Action { implicit request =>
+    Ok(views.accessibilityStatement())
   }
 }
