@@ -63,7 +63,7 @@ class ManageOrTrackSpec extends ItSpec {
     setup()
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
-    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(amount = "£6.56")
   }
 
   "7. click bankLabel" in {

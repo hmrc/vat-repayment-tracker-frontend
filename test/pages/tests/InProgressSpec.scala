@@ -41,7 +41,7 @@ class InProgressSpec extends ItSpec {
 
   "1. user is authorised and financial data found" in {
     setup()
-    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(amount = "£6.56")
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
@@ -49,7 +49,7 @@ class InProgressSpec extends ItSpec {
 
   "2. user is authorised and financial data found, CLAIM_QUERIED" in {
     setup(status1 = CLAIM_QUERIED.value)
-    InProgress.assertPageIsDisplayed(vrn, amount = "£0.00", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(amount = "£0.00")
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
@@ -57,7 +57,7 @@ class InProgressSpec extends ItSpec {
 
   "3. user is authorised and financial data found but partial" in {
     setup(partialBankDetails = true)
-    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", partialAccount = true, appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true)
     InProgress.uniqueToPage
   }
 
@@ -68,7 +68,7 @@ class InProgressSpec extends ItSpec {
 
   "5. user is authorised and address data found" in {
     setup(useBankDetails = false)
-    InProgress.assertPageIsDisplayed(vrn, checkBank = false, checkAddress = true, amount = "£6.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(checkBank    = false, checkAddress = true, amount = "£6.56")
     InProgress.uniqueToPage
   }
 
@@ -87,7 +87,7 @@ class InProgressSpec extends ItSpec {
     PaymentsOrchestratorStub.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
-    InProgress.assertPageIsDisplayed(vrn, amount = "£6.56", appender = "_inprogress")
+    InProgress.assertPageIsDisplayed(amount = "£6.56")
   }
 
   "8. multiple inprogress " in {
@@ -98,7 +98,7 @@ class InProgressSpec extends ItSpec {
 
   "9. click view progress " in {
     setup(partialBankDetails = true, singleRepayment = false)
-    InProgress.clickViewProgress("_inprogress")
+    InProgress.clickViewProgress()
   }
 
   "10. click clickManageAccount" in {

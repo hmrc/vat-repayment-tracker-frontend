@@ -55,7 +55,7 @@ trait CommonPage
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
-  def clickViewProgress(appender: String)(implicit driver: WebDriver): Unit = probing(_.findElement(By.id(s"link$appender")).click())
+  def clickViewProgress()(implicit driver: WebDriver): Unit = probing(_.findElement(By.xpath(s"/html/body/main/div[2]/div[2]/div/div/section[1]/table/tbody/tr[1]/td[4]/a")).click())
 
   /**
    * Probing tries to run `probingF` until until it succeeds. If it doesn't it:

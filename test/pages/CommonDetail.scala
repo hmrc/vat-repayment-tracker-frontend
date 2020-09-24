@@ -36,16 +36,14 @@ trait CommonDetail extends CommonPage {
   def clickCompleted()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
 
   def assertPageIsDisplayed(
-      vrn:            Vrn,
       checkBank:      Boolean = true,
       checkAddress:   Boolean = false,
       amount:         String,
-      partialAccount: Boolean = false,
-      appender:       String)
+      partialAccount: Boolean = false)
     (implicit wd: WebDriver): Assertion =
     {
       currentPath shouldBe s"""$path"""
-      readAmount(appender) shouldBe amount
+      readAmount() shouldBe amount
       if (checkBank) {
         if (partialAccount)
           readAccName shouldBe "Name on account:"
@@ -58,15 +56,15 @@ trait CommonDetail extends CommonPage {
       if (checkAddress) {
         readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
       }
-      readPeriod(appender) shouldBe "1 July to 31 July 2018"
+      readPeriod() shouldBe "1 July to 31 July 2018"
 
     }
 
   def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readAmount(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"amount$appender")).getText)
+  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/main/div[2]/div[2]/div/div/section[1]/table/tbody/tr[1]/td[3]")).getText)
 
   def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"received-date$appender")).getText)
 
-  def readPeriod(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"period$appender")).getText)
+  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/main/div[2]/div[2]/div/div/section[1]/table/tbody/tr[1]/td[2]")).getText)
 }

@@ -50,10 +50,10 @@ request: Request[_]
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td id="receivedOn@{appender}" class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
-      <td id="period@{appender}">@onePayment.period</td>
-      <td id="amount@{appender}">£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
-        <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' id="link@{appender}">
+        <td  class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
+      <td >@onePayment.period</td>
+      <td >£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
+        <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
             @if(appender == "_completed"){
                 @{LangMessages.`View history`.show}
             } else{
