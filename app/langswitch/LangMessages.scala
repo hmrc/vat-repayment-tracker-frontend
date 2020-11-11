@@ -222,7 +222,7 @@ object LangMessages {
 
   val `VAT payment due`: Message = Message("VAT payment due")
 
-  def `We calculated that the original amount you claimed of`(originalPostingAmount: String, vatToPay_Box5: String): Message = Message(s"""We calculated that the original amount of £$originalPostingAmount you claimed was incorrect. You now owe HMRC £$vatToPay_Box5.  <br>We have sent you a letter to explain that your repayment amount changed.""")
+  def `We calculated that the original amount you claimed of`(originalPostingAmount: String, vatToPay_Box5: String): Message = Message(s"""We calculated that the original amount of £$originalPostingAmount you claimed was incorrect. You now owe HMRC £$vatToPay_Box5. We sent you a letter with the reason for this change.""")
 
   val `Estimated repayment date has passed`: Message = Message("Estimated repayment date has passed")
 
