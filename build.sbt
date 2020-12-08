@@ -2,12 +2,13 @@ import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSetting
 import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
+val scalaV = "2.12.12"
+scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
-    scalaVersion := "2.12.11",
     resolvers ++= Seq(Resolver.bintrayRepo("hmrc", "releases"), Resolver.jcenterRepo),
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     retrieveManaged := false,
@@ -49,7 +50,8 @@ lazy val microservice = Project(appName, file("."))
       "-unchecked",
       "-language:implicitConversions",
       "-language:reflectiveCalls",
-      "-Ypartial-unification" //required by cats
+      "-Ypartial-unification", //required by cats
+      "-Ywarn-unused:-imports,-patvars,-privates,-locals,-explicits,-implicits,_"
     )
   )
 val appName = "vat-repayment-tracker-frontend"
