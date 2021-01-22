@@ -428,3 +428,11 @@ textarea:focus {
 .js-enabled #global-header .header-proposition #proposition-links {
     display: block;
 }
+
+.js-enabled .govuk-tabs__title{
+    display:block;
+}
+
+.govuk-tabs__title {
+    font-size: 36px;
+}
