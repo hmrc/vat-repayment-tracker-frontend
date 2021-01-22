@@ -61,7 +61,7 @@ bodyClasses = None
    'novalidate -> "novalidate"
    ) {
 
-   <fieldset id="manage">
+   <fieldset id="manage" @if(form.errors("manage")) {aria-describedby="Select whether to manage your accounts or track a VAT repayment-errorKey"}>
 
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
     <h1 id="main-message">@{
