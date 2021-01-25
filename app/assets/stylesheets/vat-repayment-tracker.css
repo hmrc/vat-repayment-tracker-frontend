@@ -285,6 +285,7 @@ input.form-control-error[type="password"],
 
 
 a:focus,
+a.govuk-tabs__tab--selected:focus,
 .error-summary .error-summary-list a:focus,
 details summary:focus,
 .app-step-nav__button:focus {
@@ -294,6 +295,10 @@ details summary:focus,
     -webkit-box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
     box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
     text-decoration: none;
+}
+
+.js-enabled .govuk-tabs__tab:link, .js-enabled .govuk-tabs__tab:visited, .js-enabled .govuk-tabs__tab:hover, .js-enabled .govuk-tabs__tab:active, .js-enabled .govuk-tabs__tab:focus {
+    color: #0b0c0c;
 }
 
 details summary:focus .summary {
@@ -436,3 +441,5 @@ textarea:focus {
 .govuk-tabs__title {
     font-size: 36px;
 }
+
+

@@ -52,12 +52,12 @@
     var listItem = d.querySelectorAll('.govuk-tabs__list-item')
 
     Array.prototype.forEach.call(tabs, function (tabsEl, i) {
-      
+
       var tabLinks = tabsEl.querySelectorAll('.govuk-tabs__tab')
       var tabPanels = tabsEl.querySelectorAll('.govuk-tabs__panel')
 
       Array.prototype.forEach.call(tabLinks, function (tabLink) {
-        
+
         //setup event listener for tabs
         tabLink.addEventListener('click', function(event) {
           event.preventDefault()
@@ -77,7 +77,7 @@
      })
 
       function tabClick(tab) {
-        
+
         //remove all tabSelectedClass from all tabs
         //change aria-selected to false for all tabs
         Array.prototype.forEach.call(tabLinks, function (tabLink) {
@@ -89,7 +89,7 @@
         Array.prototype.forEach.call(listItem, function (listItem) {
           removeClass(listItem, listItemSelectedClass)
         })
-        
+
         //add selected class to the selected tab
         //change aria-selected to true for the selected tab
         addClass(tab, tabSelectedClass)
@@ -104,11 +104,9 @@
         //show the target panel
         var targetPanel = tab.getAttribute('href')
         var panel = tabsEl.querySelector(targetPanel)
-        var targetListItem = tabsEl.listItem
         removeClass(panel, panelHiddenClass)
-        addClass(targetListItem, listItemSelectedClass)
+        addClass(tab.closest('li'), listItemSelectedClass)
       }
-      
 
     })
   }
