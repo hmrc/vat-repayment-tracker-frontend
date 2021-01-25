@@ -296,6 +296,10 @@ details summary:focus,
     text-decoration: none;
 }
 
+.js-enabled .govuk-tabs__tab:link, .js-enabled .govuk-tabs__tab:visited, .js-enabled .govuk-tabs__tab:hover, .js-enabled .govuk-tabs__tab:active, .js-enabled .govuk-tabs__tab:focus {
+    color: #0b0c0c;
+}
+
 details summary:focus .summary {
     text-decoration: none;
 }
@@ -425,6 +429,7 @@ textarea:focus {
 }
 
 .js-enabled #global-header .header-proposition #proposition-links {
+
    display: block;
 }
 
@@ -436,3 +441,4 @@ textarea:focus {
         float: right;
     }
 }
+
