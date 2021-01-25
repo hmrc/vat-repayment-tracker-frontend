@@ -285,7 +285,6 @@ input.form-control-error[type="password"],
 
 
 a:focus,
-a.govuk-tabs__tab--selected:focus,
 .error-summary .error-summary-list a:focus,
 details summary:focus,
 .app-step-nav__button:focus {
