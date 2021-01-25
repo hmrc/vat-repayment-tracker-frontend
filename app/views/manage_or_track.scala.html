@@ -42,7 +42,7 @@ request: Request[_]
 
 @errorLink() ={
    @if(form.errors("manage").nonEmpty) {
-     @for(error <- form.errors("manage")) {aria-describedby="@error.message-errorKey"}
+     @for(error <- form.errors("manage")) {aria-describedby="manage-errorKey"}
    }
 }
 

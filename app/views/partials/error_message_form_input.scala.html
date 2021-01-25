@@ -27,7 +27,7 @@ m: Messages
 
 @if(form.errors(errorKey).nonEmpty) {
   @for(error <- form.errors(errorKey)) {
-    <span id="@error.message-errorKey" class="error-message">
+    <span id="manage-errorKey" class="error-message">
      <span class="visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
   }
 }
