@@ -429,7 +429,10 @@ textarea:focus {
 }
 
 @media (max-width: 800px) {
-    .header__menu__proposition-links {
+    #global-header .header__menu__proposition-links {
         width: 29%;
+    }
+    #global-header .header-proposition #proposition-links li {
+        float: right;
     }
 }
