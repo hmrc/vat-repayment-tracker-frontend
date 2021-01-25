@@ -20,6 +20,7 @@
 @import model.des._
 @import langswitch.LangMessages
 @import model.ManageOrTrackOptions
+@import org.joda.time.DateTime
 
 @this(
 mainTemplate: views.html.main_template,
@@ -42,7 +43,7 @@ request: Request[_]
 
 @errorLink() ={
    @if(form.errors("manage").nonEmpty) {
-     @for(error <- form.errors("manage")) {aria-describedby="@error.message-errorKey"}
+     @for(error <- form.errors("manage")) {aria-describedby="manage-errorKey"}
    }
 }
 
@@ -78,7 +79,12 @@ bodyClasses = None
      else
      LangMessages.`Manage or track`.show
      }</h1>
-     @views.html.partials.error_message_form_input("manage", form)
+    @if(form.errors("manage").nonEmpty) {
+     @for(error <- form.errors("manage")) {
+      <span id="manage-errorKey" class="error-message">
+       <span class="visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
+     }
+    }
     @{
     ddDetailsOption.map(ddDetails =>
     views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.dd.toString, ManageOrTrackOptions.dd.toString, LangMessages.`Manage your Direct Debit`.show, Some(LangMessages.accountAndSortCode(ddDetails).show), None)

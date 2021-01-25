@@ -50,7 +50,6 @@
     var panelHiddenClass = 'govuk-tabs__panel--hidden'
     var listItemSelectedClass = 'govuk-tabs__list-item--selected'
 
-
     Array.prototype.forEach.call(tabs, function (tabsEl, i) {
 
       var tabLinks = tabsEl.querySelectorAll('.govuk-tabs__tab')
@@ -66,13 +65,14 @@
 
       })
 
+
       function tabClick(tab) {
 
         //remove all tabSelectedClass from all tabs
         //change aria-selected to false for all tabs
         Array.prototype.forEach.call(tabLinks, function (tabLink) {
           removeClass(tabLink, tabSelectedClass)
-          removeClass(tabLink.closest('li'), listItemSelectedClass)
+          removeClass(tabLink.closest('li') listItemSelectedClass)
           tabLink.setAttribute('aria-selected', 'false')
           tabLink.setAttribute('tabindex', '-1')
         })
