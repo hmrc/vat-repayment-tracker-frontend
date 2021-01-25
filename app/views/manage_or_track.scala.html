@@ -40,6 +40,12 @@ request: Request[_]
 
 @import viewsHelpers.requestSupport._
 
+@errorLink() ={
+   @if(form.errors("manage").nonEmpty) {
+     @for(error <- form.errors("manage")) {aria-describedby="@error.message-errorKey"}
+   }
+}
+
 @mainTemplate(
 title = if (viewConfig.isShuttered) s"${LangMessages.`Manage or track shuttered`.show} - ${LangMessages.heading_bta.show} - GOV.UK" else s"${LangMessages.`Manage or track`.show} - ${LangMessages.heading_bta.show} - GOV.UK" ,
 headerTitle = LangMessages.heading_bta.show,
@@ -61,7 +67,9 @@ bodyClasses = None
    'novalidate -> "novalidate"
    ) {
 
-   <fieldset id="manage">
+
+   <fieldset id="manage" @errorLink>
+
 
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
     <h1 id="main-message">@{
