@@ -77,8 +77,6 @@
           tabLink.setAttribute('tabindex', '-1')
         })
 
-
-
         //add selected class to the selected tab
         //change aria-selected to true for the selected tab
         addClass(tab, tabSelectedClass)
