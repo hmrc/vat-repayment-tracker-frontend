@@ -80,9 +80,10 @@ bodyClasses = None
      LangMessages.`Manage or track`.show
      }</h1>
     @if(form.errors("manage").nonEmpty) {
-    @for(error <- form.errors("manage")) {
-    <span id="manage-errorKey" class="error-message"><span class="visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
-    }
+     @for(error <- form.errors("manage")) {
+      <span id="manage-errorKey" class="error-message">
+       <span class="visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
+     }
     }
     @{
     ddDetailsOption.map(ddDetails =>
