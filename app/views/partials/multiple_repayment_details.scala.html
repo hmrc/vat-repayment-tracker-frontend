@@ -55,10 +55,11 @@ request: Request[_]
       <td >£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
         <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
             @if(appender == "_completed"){
-                @{LangMessages.`View history`.show}
+            <span aria-hidden="true">@{LangMessages.`View history`.show}</span>
             } else{
-                @{LangMessages.`View progress`.show}
+            <span aria-hidden="true">@{LangMessages.`View progress`.show}</span>
             }
+            <span class="visually-hidden">@{LangMessages.`Accounting period`.show} @onePayment.period</span>
         </a></td>
     </tr>
     }
