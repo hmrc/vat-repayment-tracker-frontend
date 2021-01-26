@@ -433,6 +433,6 @@ textarea:focus {
         width: 29%;
     }
     #global-header .header-proposition #proposition-links li {
-        float: right;
+        float: right
     }
 }
