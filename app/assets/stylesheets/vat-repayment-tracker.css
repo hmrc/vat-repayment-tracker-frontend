@@ -435,4 +435,7 @@ textarea:focus {
     #global-header .header-proposition #proposition-links li {
         float: right
     }
+   .header__menu__proposition-links a {
+        float: right;
+   }
 }
