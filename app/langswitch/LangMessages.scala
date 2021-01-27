@@ -41,6 +41,10 @@ object LangMessages {
     english = "Accounting period"
   )
 
+  val `Accounting period hidden`: Message = Message(
+    english = "View history for accounting period"
+  )
+
   val `When we will repay you`: Message = Message(
     english = "When we will repay you"
   )
