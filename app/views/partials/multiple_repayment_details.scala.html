@@ -56,10 +56,12 @@ request: Request[_]
         <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
             @if(appender == "_completed"){
             <span aria-hidden="true">@{LangMessages.`View history`.show}</span>
+            <span class="visually-hidden">@{LangMessages.`Accounting period history hidden`.show} @onePayment.period</span>
             } else{
             <span aria-hidden="true">@{LangMessages.`View progress`.show}</span>
+            <span class="visually-hidden">@{LangMessages.`Accounting period progress hidden`.show} @onePayment.period</span>
             }
-            <span class="visually-hidden">@{LangMessages.`Accounting period hidden`.show} @onePayment.period</span>
+
         </a></td>
     </tr>
     }
