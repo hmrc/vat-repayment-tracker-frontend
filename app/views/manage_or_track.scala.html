@@ -73,6 +73,7 @@ bodyClasses = None
 
 
     <div class="form-group @form.errors("manage").map { e => form-group-error }" >
+
     <legend>
     <h1 id="main-message">@{
      if (viewConfig.isShuttered)
@@ -81,6 +82,7 @@ bodyClasses = None
      LangMessages.`Manage or track`.show
      }</h1>
     </legend>
+
     @if(form.errors("manage").nonEmpty) {
      @for(error <- form.errors("manage")) {
       <span id="manage-errorKey" class="error-message">
