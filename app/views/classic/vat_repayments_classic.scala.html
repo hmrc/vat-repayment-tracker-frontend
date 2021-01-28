@@ -48,12 +48,12 @@
       <h1 id="main-message">@{ClassicMessages.your_vat_repayments.show}</h1>
         <p>@{ClassicMessages.returns_line1.show}
             <span>
-                <br>
                 <strong id="receivedOn">@{receivedOn}</strong>
             </span>
         </p>
 
-        <p>@{ClassicMessages.returns_line2.show}<span><br>@{ClassicMessages.returns_line3.show}</span></p>
+        <p>@{ClassicMessages.returns_line2.show}</p>
+        <p><span>@{ClassicMessages.returns_line3.show}</span></p>
         <p>@{ClassicMessages.returns_line4.show}</p>
         @repaymentDetails(vrn,address)
     </div>

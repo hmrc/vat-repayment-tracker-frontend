@@ -222,7 +222,7 @@ object LangMessages {
 
   val `Repayment amount changed`: Message = Message("Repayment amount changed")
 
-  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String, url: String): Message = Message(s"You claimed £$originalPostingAmount. We calculated this amount was incorrect so we will repay you £$vatToPay_Box5.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. <br><br>If you do not receive a letter in the next 7 days, check your <a href=$url>VAT payments history</a>.")
+  def `You claimed a VAT repayment of`(originalPostingAmount: String, vatToPay_Box5: String, url: String): Message = Message(s"You claimed £$originalPostingAmount. We calculated this amount was incorrect so we will repay you £$vatToPay_Box5.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a href=$url>VAT payments history</a>.")
 
   val `Sending for further checks`: Message = Message("Sending for further checks")
 
@@ -234,7 +234,7 @@ object LangMessages {
 
   val `Estimated repayment date has passed`: Message = Message("Estimated repayment date has passed")
 
-  val `You do not need to do anything right now`: Message = Message("""You do not need to do anything right now. We are working on repaying you as soon as possible. </br>We have sent you a letter to explain that your repayment is delayed.""")
+  val `You do not need to do anything right now`: Message = Message("""You do not need to do anything right now. We are working on repaying you as soon as possible. </p><p>We have sent you a letter to explain that your repayment is delayed.""")
 
   val `Repayment complete`: Message = Message("Repayment complete")
 
@@ -290,19 +290,19 @@ object LangMessages {
 
   val `We will send this to your repayment bank account`: Message = Message("This will reach your repayment bank account in 3 workings days.")
 
-  def `We will send a cheque to your business address`(url: String): Message = Message(s"We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  <br><br>If you do not receive a letter in the next few days, check your <a href=$url>VAT payments history</a>.")
+  def `We will send a cheque to your business address`(url: String): Message = Message(s"We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  </p><p>If you do not receive a letter in the next few days, check your <a href=$url>VAT payments history</a>.")
 
-  def `You claimed a VAT repayment of post`(originalPostingAmount: String, vatToPay_Box5: String, url: String): Message = Message(s"You claimed £$originalPostingAmount. We calculated this amount was incorrect so we will repay you £$vatToPay_Box5.  We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount. <br><br>If you do not receive a letter in the next 7 days, check your <a href=$url>VAT payments history</a>.")
+  def `You claimed a VAT repayment of post`(originalPostingAmount: String, vatToPay_Box5: String, url: String): Message = Message(s"You claimed £$originalPostingAmount. We calculated this amount was incorrect so we will repay you £$vatToPay_Box5.  We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a href=$url>VAT payments history</a>.")
 
   def `repayment-complete-bank-details`(name: String, number: String, sortCode: String, amount: String): Message =
-    Message(s"""We sent a payment of £$amount to your repayment bank account:</br>Name: $name</br>Account number: $number</br>Sort code: $sortCode.""")
+    Message(s"""We sent a payment of £$amount to your repayment bank account:</p><p>Name: $name</p><p>Account number: $number</p><p>Sort code: $sortCode.""")
 
-  def `repayment-complete-address`(address: String, amount: String): Message = Message(s"""We sent a payment of £$amount as a cheque to </br> $address.""")
+  def `repayment-complete-address`(address: String, amount: String): Message = Message(s"""We sent a payment of £$amount as a cheque to </p><p> $address.""")
 
   def `repayment-complete-bank-details-adjusted`(name: String, number: String, sortCode: String, amount: String): Message =
-    Message(s"""We sent an adjusted payment of £$amount to your repayment bank account:</br>Name: $name</br>Account number: $number</br>Sort code: $sortCode.""")
+    Message(s"""We sent an adjusted payment of £$amount to your repayment bank account:</p><p>Name: $name</p><p>Account number: $number</p><p>Sort code: $sortCode.""")
 
-  def `repayment-complete-address-adjusted`(address: String, amount: String): Message = Message(s"""We sent you an adjusted payment of £$amount as a cheque to </br> $address.""")
+  def `repayment-complete-address-adjusted`(address: String, amount: String): Message = Message(s"""We sent you an adjusted payment of £$amount as a cheque to </p><p> $address.""")
 
   val addressNotAvailable: Message = Message("Address not available")
 
@@ -326,7 +326,7 @@ object LangMessages {
 
   val `No repayments in progress`: Message = Message("No repayments in progress")
 
-  val `no-in-progress-desc`: Message = Message("""If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</br></br>If you submitted your return early check this page after your accounting period has ended.""")
+  val `no-in-progress-desc`: Message = Message("""If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</p><p>If you submitted your return early check this page after your accounting period has ended.""")
 
   def `no-completed-desc`(url: String): Message = Message(s"""Completed repayments will only show here for 60 days after your repayment date. View your <a href="$url">VAT payments history.</a>""")
 
