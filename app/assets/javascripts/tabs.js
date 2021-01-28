@@ -72,7 +72,7 @@
         //change aria-selected to false for all tabs
         Array.prototype.forEach.call(tabLinks, function (tabLink) {
           removeClass(tabLink, tabSelectedClass)
-          removeClass(tabLink.closest('li') listItemSelectedClass)
+          removeClass(tabLink.closest('li'), listItemSelectedClass)
           tabLink.setAttribute('aria-selected', 'false')
           tabLink.setAttribute('tabindex', '-1')
         })
