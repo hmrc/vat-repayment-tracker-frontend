@@ -436,3 +436,9 @@ textarea:focus {
         float: right;
    }
 }
+
+.js-enabled .govuk-tabs__title {
+    display: block;
+    font-weight: 700;
+    font-size: 36px;
+}
