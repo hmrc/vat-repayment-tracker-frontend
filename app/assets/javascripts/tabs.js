@@ -64,6 +64,51 @@
           tabClick(this)
         })
 
+        tabLink.addEventListener('keydown', function(event) {
+//          event.preventDefault()
+          switch (event.keyCode) {
+              case 37:
+                   Array.prototype.forEach.call(tabLinks, function (tabLink) {
+                            removeClass(tabLink, tabSelectedClass)
+                            removeClass(tabLink.closest('li'), listItemSelectedClass)
+                            tabLink.setAttribute('aria-selected', 'false')
+                            tabLink.setAttribute('tabindex', '-1')
+                          })
+
+                   addClass(d.getElementById('tab_inProgress'), tabSelectedClass)
+                   d.getElementById('tab_inProgress').setAttribute('aria-selected', 'true')
+                   d.getElementById('tab_inProgress').setAttribute('tabindex', '0')
+                   d.getElementById('tab_inProgress').focus();
+                   Array.prototype.forEach.call(tabPanels, function (tabPanel) {
+                        addClass(tabPanel, panelHiddenClass)
+                   })
+
+                   removeClass(d.getElementById('inProgress'), panelHiddenClass)
+                   addClass(d.getElementById('tab_inProgress').closest('li'), listItemSelectedClass)
+                  break;
+              case 39:
+                  Array.prototype.forEach.call(tabLinks, function (tabLink) {
+                     removeClass(tabLink, tabSelectedClass)
+                     removeClass(tabLink.closest('li'), listItemSelectedClass)
+                     tabLink.setAttribute('aria-selected', 'false')
+                     tabLink.setAttribute('tabindex', '-1')
+                  })
+
+                  addClass(d.getElementById('tab_completed'), tabSelectedClass)
+                  d.getElementById('tab_completed').setAttribute('aria-selected', 'true')
+                  d.getElementById('tab_completed').setAttribute('tabindex', '0')
+                  d.getElementById('tab_completed').focus();
+                  Array.prototype.forEach.call(tabPanels, function (tabPanel) {
+                   addClass(tabPanel, panelHiddenClass)
+                  })
+
+                  removeClass(d.getElementById('completed'), panelHiddenClass)
+                  addClass(d.getElementById('tab_completed').closest('li'), listItemSelectedClass)
+                  break;
+              }
+
+        })
+
       })
 
       function tabClick(tab) {
@@ -94,8 +139,27 @@
         removeClass(panel, panelHiddenClass)
         addClass(tab.closest('li'), listItemSelectedClass)
       }
-
     })
   }
-  
+
 })(document,window);
+
+
+/*
+document.onkeydown = function myFunction() {
+    switch (event.keyCode) {
+    case 38:
+        console.log("Up key is pressed");
+        break;
+    case 40:
+        console.log("Down key is pressed");
+        break;
+    case 37:
+        console.log("Right key is pressed");
+        break;
+    case 39:
+        console.log("left key is pressed");
+        break;
+    }
+
+}*/
