@@ -14,33 +14,27 @@
  * limitations under the License.
  *@
 
-@import langswitch.LangMessages
 @import config.ViewConfig
 
 @this(
-mainTemplate: views.html.main_template,
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
+    mainTemplate: views.html.main_template,
+    viewsHelpers: views.ViewsHelpers,
+    viewConfig: ViewConfig
 )
 
-@(
-)(
-implicit
-request: Request[_]
-)
+@()(implicit request: Request[_])
 
 @import viewsHelpers.requestSupport._
-
 @mainTemplate(
-title = s"${LangMessages.shuttered.show} - ${LangMessages.heading_bta.show} - GOV.UK",
-headerTitle = LangMessages.heading_bta.show,
-bodyClasses = None,
-timeoutDialog = false
+    title =s"${LangMessages.`For your security, we signed you out`.show} - GOV.UK",
+//    navTitle = Messages("delete-answers.heading"),
+    headerTitle = "header title",
+    timeoutDialog = false
 ) {
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{LangMessages.shuttered.show}</h1>
-        </div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">@{LangMessages.`For your security, we signed you out`.show}</h1>
+        <p>@{LangMessages.`We did not save your answers`.show}</p>
     </div>
-
-}
+</div>
+}@import langswitch.LangMessages

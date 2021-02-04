@@ -18,6 +18,8 @@ package config
 
 import com.google.inject.Inject
 import model.Vrn
+import play.api.mvc.Request
+import req.RequestSupport
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 case class ViewConfig(
@@ -36,7 +38,9 @@ case class ViewConfig(
     btaUrl:                      String,
     signupUrl:                   String,
     variationsUrlPrefix:         String,
-    isShuttered:                 Boolean) {
+    isShuttered:                 Boolean,
+    timeoutDialogTimeout:        Int,
+    timeoutDialogCountdown:      Int) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -48,6 +52,10 @@ case class ViewConfig(
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
   def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
+
+  def timeoutDialogSignOutUrl(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
+    controllers.routes.Controller.signout().url
+  else controllers.routes.TimeoutController.killSession().url
 
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
@@ -66,7 +74,9 @@ case class ViewConfig(
     btaUrl                      = servicesConfig.getString("urls.bta"),
     signupUrl                   = servicesConfig.getString("urls.signup"),
     variationsUrlPrefix         = servicesConfig.getString("urls.variationsUrlPrefix"),
-    isShuttered                 = servicesConfig.getBoolean("is-shuttered")
+    isShuttered                 = servicesConfig.getBoolean("is-shuttered"),
+    timeoutDialogTimeout        = servicesConfig.getInt("timeout-dialog.timeout"),
+    timeoutDialogCountdown      = servicesConfig.getInt("timeout-dialog.countdown")
   )
 
 }

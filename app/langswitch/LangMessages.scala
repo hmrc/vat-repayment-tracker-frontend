@@ -17,6 +17,8 @@
 package langswitch
 
 import model.des.BankDetails
+import play.api.mvc.Request
+import req.RequestSupport
 
 object LangMessages {
 
@@ -349,5 +351,25 @@ object LangMessages {
   def `non-mtd-line3`(url: String): Message = Message(s"""View your <a href="$url">Business Tax Account.""")
 
   val shuttered: Message = Message(english = "This service is shuttered")
+
+  object timeoutDialog {
+    def message(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
+      Message(english = "For your security, we will sign you out in")
+    else
+      Message(english = "For your security, we will time you out in")
+
+    def keepAlive(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
+      Message(english = "Stay signed in")
+    else
+      Message(english = "Continue")
+
+    def signOut(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
+      Message(english = "Sign out")
+    else
+      Message(english = "Delete your answers")
+  }
+
+  val `For your security, we signed you out` = Message(english = "For your security, we signed you out")
+  val `We did not save your answers` = Message(english = "We did not save your answers.")
 }
 

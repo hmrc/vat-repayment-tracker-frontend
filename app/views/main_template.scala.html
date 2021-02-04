@@ -27,7 +27,8 @@
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
-  scriptElem: Option[Html] = None)(
+  scriptElem: Option[Html] = None,
+  timeoutDialog: Boolean)(
   mainContent: Html)(
   implicit
   request : Request[_]
@@ -49,5 +50,6 @@
   contentHeader = contentHeader,
   mainContent = mainContent,
   serviceInfoContent = serviceInfoContent,
-  scriptElem = scriptElem
+  scriptElem = scriptElem,
+  timeoutDialog = timeoutDialog
 )

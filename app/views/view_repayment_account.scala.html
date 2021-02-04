@@ -40,7 +40,8 @@ request: Request[_]
 @mainTemplate(
 title = s"${LangMessages.`Sent to this account`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
-bodyClasses = None
+bodyClasses = None,
+timeoutDialog = false
 ) {
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
