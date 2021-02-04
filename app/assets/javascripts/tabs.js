@@ -63,6 +63,50 @@
           tabClick(this)
         })
 
+        tabLink.addEventListener('keydown', function(event) {
+          switch (event.keyCode) {
+              case 37:
+                   Array.prototype.forEach.call(tabLinks, function (tabLink) {
+                      removeClass(tabLink, tabSelectedClass)
+                      removeClass(tabLink.closest('li'), listItemSelectedClass)
+                      tabLink.setAttribute('aria-selected', 'false')
+                      tabLink.setAttribute('tabindex', '-1')
+                   })
+
+                   addClass(d.getElementById('tab_inProgress'), tabSelectedClass)
+                   d.getElementById('tab_inProgress').setAttribute('aria-selected', 'true')
+                   d.getElementById('tab_inProgress').setAttribute('tabindex', '0')
+                   d.getElementById('tab_inProgress').focus();
+                   Array.prototype.forEach.call(tabPanels, function (tabPanel) {
+                     addClass(tabPanel, panelHiddenClass)
+                   })
+
+                   removeClass(d.getElementById('inProgress'), panelHiddenClass)
+                   addClass(d.getElementById('tab_inProgress').closest('li'), listItemSelectedClass)
+                   break;
+              case 39:
+                  Array.prototype.forEach.call(tabLinks, function (tabLink) {
+                     removeClass(tabLink, tabSelectedClass)
+                     removeClass(tabLink.closest('li'), listItemSelectedClass)
+                     tabLink.setAttribute('aria-selected', 'false')
+                     tabLink.setAttribute('tabindex', '-1')
+                  })
+
+                  addClass(d.getElementById('tab_completed'), tabSelectedClass)
+                  d.getElementById('tab_completed').setAttribute('aria-selected', 'true')
+                  d.getElementById('tab_completed').setAttribute('tabindex', '0')
+                  d.getElementById('tab_completed').focus();
+                  Array.prototype.forEach.call(tabPanels, function (tabPanel) {
+                   addClass(tabPanel, panelHiddenClass)
+                  })
+
+                  removeClass(d.getElementById('completed'), panelHiddenClass)
+                  addClass(d.getElementById('tab_completed').closest('li'), listItemSelectedClass)
+                  break;
+              }
+
+        })
+
       })
 
 
@@ -94,8 +138,8 @@
         removeClass(panel, panelHiddenClass)
         addClass(tab.closest('li'), listItemSelectedClass)
       }
-
     })
   }
-  
+
 })(document,window);
+

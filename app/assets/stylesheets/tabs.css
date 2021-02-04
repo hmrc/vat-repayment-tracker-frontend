@@ -129,11 +129,6 @@
     }
 }
 
-.govuk-tabs__tab:focus {
-    outline: 3px solid #ffbf47;
-    outline-offset: 0;
-    background-color: #ffbf47;
-}
 
 .govuk-tabs__tab:link {
     color: #005ea5;
@@ -231,7 +226,7 @@
         background-color: #ffffff;
     }
     .js-enabled .govuk-tabs__tab--selected:focus {
-        background-color: transparent;
+        background-color: #fd0;
     }
     .js-enabled .govuk-tabs__panel {
         margin-bottom: 0;
