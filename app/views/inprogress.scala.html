@@ -63,17 +63,17 @@ bodyClasses = None
                         <a class="govuk-tabs__tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false" id="tab_completed" tabindex="-1">@{LangMessages.`Completed`.show}</a>
                     </li>
                 </ul>
-                <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
+                <div class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
-                </section>
-                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
+                </div>
+                <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
                     <h3 class="govuk-heading-m" id="no-repayments">@{LangMessages.`You have no completed repayments`.show}</h3>
                     <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-none"></div>
-                </section>
+                </div>
             </div>
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
         </div>

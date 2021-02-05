@@ -144,22 +144,3 @@
 
 })(document,window);
 
-
-/*
-document.onkeydown = function myFunction() {
-    switch (event.keyCode) {
-    case 38:
-        console.log("Up key is pressed");
-        break;
-    case 40:
-        console.log("Down key is pressed");
-        break;
-    case 37:
-        console.log("Right key is pressed");
-        break;
-    case 39:
-        console.log("left key is pressed");
-        break;
-    }
-
-}*/
