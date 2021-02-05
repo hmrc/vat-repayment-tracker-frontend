@@ -104,4 +104,3 @@ window.addEventListener("load", function(event) {
     var errorSummary = document.getElementById("error-summary-display");
     if(errorSummary) errorSummary.focus();
 });
-//window.GOVUKFrontend.initAll();
