@@ -432,9 +432,7 @@ textarea:focus {
     display: block;
 }
 
-.js-enabled .govuk-tabs__title{
-    display:block;
-}
+
 
 .govuk-tabs__title {
     font-size: 36px;
@@ -442,8 +440,19 @@ textarea:focus {
 
 
 @media (max-width: 800px) {
-    .header__menu__proposition-links {
+    #global-header .header__menu__proposition-links {
         width: 29%;
     }
+   .header__menu__proposition-links a {
+        float: right;
+   }
 }
+
+
+.js-enabled .govuk-tabs__title {
+    display: block;
+    font-weight: 700;
+    font-size: 36px;
+}
+
 

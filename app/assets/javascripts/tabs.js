@@ -65,22 +65,21 @@
         })
 
         tabLink.addEventListener('keydown', function(event) {
-//          event.preventDefault()
           switch (event.keyCode) {
               case 37:
                    Array.prototype.forEach.call(tabLinks, function (tabLink) {
-                            removeClass(tabLink, tabSelectedClass)
-                            removeClass(tabLink.closest('li'), listItemSelectedClass)
-                            tabLink.setAttribute('aria-selected', 'false')
-                            tabLink.setAttribute('tabindex', '-1')
-                          })
+                      removeClass(tabLink, tabSelectedClass)
+                      removeClass(tabLink.closest('li'), listItemSelectedClass)
+                      tabLink.setAttribute('aria-selected', 'false')
+                      tabLink.setAttribute('tabindex', '-1')
+                   })
 
                    addClass(d.getElementById('tab_inProgress'), tabSelectedClass)
                    d.getElementById('tab_inProgress').setAttribute('aria-selected', 'true')
                    d.getElementById('tab_inProgress').setAttribute('tabindex', '0')
                    d.getElementById('tab_inProgress').focus();
                    Array.prototype.forEach.call(tabPanels, function (tabPanel) {
-                        addClass(tabPanel, panelHiddenClass)
+                    addClass(tabPanel, panelHiddenClass)
                    })
 
                    removeClass(d.getElementById('inProgress'), panelHiddenClass)
@@ -110,6 +109,7 @@
         })
 
       })
+
 
       function tabClick(tab) {
 
@@ -143,4 +143,10 @@
   }
 
 })(document,window);
+
+window.addEventListener("load", function(event) {
+    var errorSummary = document.getElementById("error-summary-display");
+    if(errorSummary) errorSummary.focus();
+});
+
 
