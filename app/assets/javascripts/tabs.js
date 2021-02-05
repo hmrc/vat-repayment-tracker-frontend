@@ -143,3 +143,8 @@
 
 })(document,window);
 
+window.addEventListener("load", function(event) {
+    var errorSummary = document.getElementById("error-summary-display");
+    if(errorSummary) errorSummary.focus();
+});
+
