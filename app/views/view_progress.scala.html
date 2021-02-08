@@ -46,7 +46,7 @@ request: Request[_]
 title = s"$pageTitle - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
 bodyClasses = None,
-timeoutDialog = false
+timeoutDialog = true
 ) {
 
 <a href="@{viewConfig.showResultsUrl}" id="back" class="govuk-back-link">@{LangMessages.Back.show}</a>
