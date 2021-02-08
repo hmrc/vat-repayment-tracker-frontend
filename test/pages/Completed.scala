@@ -35,11 +35,10 @@ object Completed extends CommonDetail {
 
   def checktabs(implicit wd: WebDriver): Assertion = {
 
-    idPresent("inprogress-exist") shouldBe false
     idPresent("completed-exist") shouldBe true
-    idPresent("inprogress-none") shouldBe true
+    idPresent("inprogress-exist") shouldBe false
     idPresent("completed-none") shouldBe false
-
+    idPresent("inprogress-none") shouldBe true
 
   }
 
