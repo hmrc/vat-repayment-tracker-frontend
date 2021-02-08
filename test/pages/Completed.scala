@@ -37,8 +37,9 @@ object Completed extends CommonDetail {
 
     idPresent("inprogress-exist") shouldBe false
     idPresent("completed-exist") shouldBe true
-    idPresent("completed-none") shouldBe false
     idPresent("inprogress-none") shouldBe true
+    idPresent("completed-none") shouldBe false
+
 
   }
 
