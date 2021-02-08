@@ -145,6 +145,8 @@
 
 window.addEventListener("load", function(event) {
     var errorSummary = document.getElementById("error-summary-display");
+    var errorSummarylinkHref = document.querySelector("[href='#manage']");
     if(errorSummary) errorSummary.focus();
+    if(errorSummarylinkHref) errorSummarylinkHref.setAttribute('href', '#dd');
 });
 
