@@ -65,6 +65,8 @@
         })
 
         tabLink.addEventListener('keydown', function(event) {
+          var tabKeyDownInProgress = d.getElementById('tab_inProgress')
+          var tabKeyDownCompleted  = d.getElementById('tab_completed')
           switch (event.keyCode) {
               case 37:
                    Array.prototype.forEach.call(tabLinks, function (tabLink) {
@@ -74,10 +76,10 @@
                       tabLink.setAttribute('tabindex', '-1')
                    })
 
-                   addClass(d.getElementById('tab_inProgress'), tabSelectedClass)
-                   d.getElementById('tab_inProgress').setAttribute('aria-selected', 'true')
-                   d.getElementById('tab_inProgress').setAttribute('tabindex', '0')
-                   d.getElementById('tab_inProgress').focus();
+                   addClass(tabKeyDownInProgress, tabSelectedClass)
+                   tabKeyDownInProgress.setAttribute('aria-selected', 'true')
+                   tabKeyDownInProgress.setAttribute('tabindex', '0')
+                   tabKeyDownInProgress.focus();
                    Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                     addClass(tabPanel, panelHiddenClass)
                    })
@@ -93,16 +95,16 @@
                      tabLink.setAttribute('tabindex', '-1')
                   })
 
-                  addClass(d.getElementById('tab_completed'), tabSelectedClass)
-                  d.getElementById('tab_completed').setAttribute('aria-selected', 'true')
-                  d.getElementById('tab_completed').setAttribute('tabindex', '0')
-                  d.getElementById('tab_completed').focus();
+                  addClass(tabKeyDownCompleted, tabSelectedClass)
+                  tabKeyDownCompleted.setAttribute('aria-selected', 'true')
+                  tabKeyDownCompleted.setAttribute('tabindex', '0')
+                  tabKeyDownCompleted.focus();
                   Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                    addClass(tabPanel, panelHiddenClass)
                   })
 
                   removeClass(d.getElementById('completed'), panelHiddenClass)
-                  addClass(d.getElementById('tab_completed').closest('li'), listItemSelectedClass)
+                  addClass(tabKeyDownCompleted.closest('li'), listItemSelectedClass)
                   break;
               }
 
