@@ -29,5 +29,5 @@ GET        /vat-repayment-tracker-frontend/show-results/vrn/:vrn                
 GET        /vat-repayment-tracker/vat-repayment-accessibility-statement                   controllers.AccessibilityController.getAccessibilityStatement()
 
 #Session
-GET         /session/keep-alive                                                           controllers.TimeoutController.keepAliveSession()
-GET         /delete-answers                                                               controllers.TimeoutController.killSession()
+GET         /vat-repayment-tracker/session/keep-alive                                     controllers.TimeoutController.keepAliveSession()
+GET         /vat-repayment-tracker/delete-answers                                         controllers.TimeoutController.killSession()
