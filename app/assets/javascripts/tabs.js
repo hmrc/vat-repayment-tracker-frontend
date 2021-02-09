@@ -50,6 +50,7 @@
     var panelHiddenClass = 'govuk-tabs__panel--hidden'
     var listItemSelectedClass = 'govuk-tabs__list-item--selected'
 
+
     Array.prototype.forEach.call(tabs, function (tabsEl, i) {
 
       var tabLinks = tabsEl.querySelectorAll('.govuk-tabs__tab')
@@ -64,6 +65,8 @@
         })
 
         tabLink.addEventListener('keydown', function(event) {
+          var tabKeyDownInProgress = d.getElementById('tab_inProgress')
+          var tabKeyDownCompleted  = d.getElementById('tab_completed')
           switch (event.keyCode) {
               case 37:
                    Array.prototype.forEach.call(tabLinks, function (tabLink) {
@@ -73,17 +76,17 @@
                       tabLink.setAttribute('tabindex', '-1')
                    })
 
-                   addClass(d.getElementById('tab_inProgress'), tabSelectedClass)
-                   d.getElementById('tab_inProgress').setAttribute('aria-selected', 'true')
-                   d.getElementById('tab_inProgress').setAttribute('tabindex', '0')
-                   d.getElementById('tab_inProgress').focus();
+                   addClass(tabKeyDownInProgress, tabSelectedClass)
+                   tabKeyDownInProgress.setAttribute('aria-selected', 'true')
+                   tabKeyDownInProgress.setAttribute('tabindex', '0')
+                   tabKeyDownInProgress.focus();
                    Array.prototype.forEach.call(tabPanels, function (tabPanel) {
-                     addClass(tabPanel, panelHiddenClass)
+                    addClass(tabPanel, panelHiddenClass)
                    })
 
                    removeClass(d.getElementById('inProgress'), panelHiddenClass)
                    addClass(d.getElementById('tab_inProgress').closest('li'), listItemSelectedClass)
-                   break;
+                  break;
               case 39:
                   Array.prototype.forEach.call(tabLinks, function (tabLink) {
                      removeClass(tabLink, tabSelectedClass)
@@ -92,16 +95,16 @@
                      tabLink.setAttribute('tabindex', '-1')
                   })
 
-                  addClass(d.getElementById('tab_completed'), tabSelectedClass)
-                  d.getElementById('tab_completed').setAttribute('aria-selected', 'true')
-                  d.getElementById('tab_completed').setAttribute('tabindex', '0')
-                  d.getElementById('tab_completed').focus();
+                  addClass(tabKeyDownCompleted, tabSelectedClass)
+                  tabKeyDownCompleted.setAttribute('aria-selected', 'true')
+                  tabKeyDownCompleted.setAttribute('tabindex', '0')
+                  tabKeyDownCompleted.focus();
                   Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                    addClass(tabPanel, panelHiddenClass)
                   })
 
                   removeClass(d.getElementById('completed'), panelHiddenClass)
-                  addClass(d.getElementById('tab_completed').closest('li'), listItemSelectedClass)
+                  addClass(tabKeyDownCompleted.closest('li'), listItemSelectedClass)
                   break;
               }
 
@@ -151,4 +154,5 @@ window.addEventListener("load", function(event) {
     // This was done to focus the error summary link on the first radio button on the manage_or_track.scala.html page
     if(errorSummarylinkHref) errorSummarylinkHref.setAttribute('href', '#dd');
 });
+
 
