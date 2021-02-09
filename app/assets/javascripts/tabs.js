@@ -104,7 +104,7 @@
                   })
 
                   removeClass(d.getElementById('completed'), panelHiddenClass)
-                  addClass(tabKeyDownCompleted.closest('li'), listItemSelectedClass)
+                  addClass(d.getElementById('tab_completed').closest('li'), listItemSelectedClass)
                   break;
               }
 
