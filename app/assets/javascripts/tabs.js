@@ -145,6 +145,10 @@
 
 window.addEventListener("load", function(event) {
     var errorSummary = document.getElementById("error-summary-display");
+    var errorSummarylinkHref = document.querySelector("[href='#manage']");
     if(errorSummary) errorSummary.focus();
+    // This changes the error summary link's href from #maage to #dd
+    // This was done to focus the error summary link on the first radio button on the manage_or_track.scala.html page
+    if(errorSummarylinkHref) errorSummarylinkHref.setAttribute('href', '#dd');
 });
 
