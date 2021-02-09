@@ -48,7 +48,8 @@ request: Request[_]
 @mainTemplate(
 title = s"${LangMessages.`We are processing your VAT repayments`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
-bodyClasses = None
+bodyClasses = None,
+timeoutDialog = true
 ) {
 
 @bread_crumbs({LangMessages.`Track your VAT repayments`.show})
