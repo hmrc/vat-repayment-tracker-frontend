@@ -16,28 +16,31 @@
 
 @import langswitch.LangMessages
 
-@this(viewConf: config.ViewConfig)
+@this(viewConf: config.ViewConfig,
+        viewsHelpers: views.ViewsHelpers)
 
-@(implicit r: Request[_])
+@()(implicit r: Request[_])
+
+@import viewsHelpers.requestSupport._
 
 @timeoutKeepAliveUrl = @{
     routes.TimeoutController.keepAliveSession().url
 }
 
 <script type="text/javascript">
-        window.addEventListener("load", function(event) {
+            window.addEventListener("load", function(event) {
 
             if(!window.GOVUK) return;
-            
+
             window.GOVUK.timeoutDialog({
-                message:             '@LangMessages.timeoutDialog.message',
+                message:             '@LangMessages.timeoutDialog.message.show',
                 timeout:              @viewConf.timeoutDialogTimeout,
                 countdown:            @viewConf.timeoutDialogCountdown,
 
-                keepAliveButtonText: '@LangMessages.timeoutDialog.keepAlive',
+                keepAliveButtonText: '@LangMessages.timeoutDialog.keepAlive.show',
                 keepAliveUrl:        '@timeoutKeepAliveUrl',
 
-                signOutButtonText:   '@LangMessages.timeoutDialog.signOut',
+                signOutButtonText:   '@LangMessages.timeoutDialog.signOut.show',
                 signOutUrl:          '@viewConf.timeoutDialogSignOutUrl'
             });
         });
