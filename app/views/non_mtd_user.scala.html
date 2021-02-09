@@ -34,7 +34,8 @@ request: Request[_]
 @mainTemplate(
 title = s"${LangMessages.`You cannot access this service`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
 headerTitle = LangMessages.heading_bta.show,
-bodyClasses = None
+bodyClasses = None,
+timeoutDialog = false
 ) {
     <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">>
         <div class="govuk-grid-column-two-thirds">

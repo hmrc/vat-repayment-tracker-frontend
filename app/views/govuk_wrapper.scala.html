@@ -21,9 +21,9 @@
 @this(
   govUkTemplate: views.html.layouts.GovUkTemplate,
   viewsHelpers: views.ViewsHelpers,
-  viewConfig: config.ViewConfig
+  viewConfig: config.ViewConfig,
+  timeout_dialog: partials.timeout_dialog_script
 )
-
 
 
 @(
@@ -36,10 +36,12 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None)(
+  scriptElem: Option[Html] = None,
+  timeoutDialog: Boolean = true)(
   implicit request: Request[_]
 )
 
+@import req.RequestSupport
 @import viewsHelpers.requestSupport._
 
 @headScripts = {
@@ -60,6 +62,9 @@
 }
 
 @scriptElement = {
+    @if(timeoutDialog) {
+        @timeout_dialog()
+    }
 }
 
 @headerNavLinks = {
