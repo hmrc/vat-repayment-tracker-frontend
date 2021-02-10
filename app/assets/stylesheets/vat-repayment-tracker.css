@@ -436,6 +436,7 @@ textarea:focus {
 
 .govuk-tabs__title {
     font-size: 36px;
+    font-weight: 700;
 }
 
 
@@ -453,6 +454,10 @@ textarea:focus {
     display: block;
     font-weight: 700;
     font-size: 36px;
+}
+
+.govuk-tabs__list-item::before {
+    content: "\2014 ";
 }
 
 
