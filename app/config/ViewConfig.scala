@@ -53,10 +53,6 @@ case class ViewConfig(
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
   def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
 
-  def timeoutDialogSignOutUrl(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
-    controllers.routes.Controller.signout().url
-  else controllers.routes.TimeoutController.killSession().url
-
   @Inject
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
     appName                     = servicesConfig.getString("appName"),
