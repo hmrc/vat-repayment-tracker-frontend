@@ -167,8 +167,8 @@ object AccessibilityStatementMessages {
     welsh   = "Mae’r gwasanaeth yn defnyddio rhai priodoleddau ac ID anghymeradwy sydd ddim yn unigryw sy’n golygu nad yw’r gwasanaeth yn ddibynadwy i dechnolegau cynorthwyol. Nid yw hyn yn bodloni maen prawf llwyddiant 4.1.1 (Parsing) Canllawiau Hygyrchedd Cynnwys y We."
   )
   val technical_information_p5: Message = Message(
-    english = "A DAC assessment has been requested and we plan to correct the issues in the service by September 2020.",
-    welsh   = "Gofynnwyd am asesiad DAC ac rydym yn bwriadu cywiro’r materion yn y gwasanaeth erbyn mis Medi 2020."
+    english = "A DAC assessment has been requested and we plan to correct the issues in the service by 15 December 2021.",
+    welsh   = "Gofynnwyd am asesiad DAC ac rydym yn bwriadu cywiro’r materion yn y gwasanaeth erbyn mis 15 Rhagfyr 2021."
   )
 
   val how_we_tested_header: Message = Message(
@@ -184,8 +184,8 @@ object AccessibilityStatementMessages {
     welsh   = "Profwyd y gwasanaeth llawn gan CThEM, ac roedd y gwaith o brofi’r gwasanaeth yn cynnwys defnyddwyr anabl."
   )
   val how_we_tested_p3: Message = Message(
-    english = "This page was prepared on 24 August 2020. It was last updated on 25 August 2020.",
-    welsh   = "Paratowyd y dudalen hon ar 24 Awst 2020. Cafodd ei diweddaru diwethaf ar 25 Awst 2020."
+    english = "This page was prepared on 24 August 2020. It was last updated on 12 February 2021.",
+    welsh   = "Paratowyd y dudalen hon ar 24 Awst 2020. Cafodd ei diweddaru diwethaf ar 12 Chwefror 2021."
   )
 
 }
