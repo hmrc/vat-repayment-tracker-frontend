@@ -407,8 +407,13 @@ textarea:focus {
 .multiple-choice [type=radio]:focus + label::before {
     border-width: 4px;
     box-sizing: border-box;
-    top: 2px;
-    left: 2px;
+    top: -0.09em;
+    left: -0.07em;
+}
+
+.multiple-choice [type="radio"] + label::before {
+    top: -0.09em;
+    left: -0.07em;
 }
 .multiple-choice [type=radio]+label::after {
     content: "";
@@ -423,6 +428,7 @@ textarea:focus {
     filter: alpha(opacity=0);
     opacity: 0;
 }
+
 
 #global-header .header-proposition .content a.menu {
     display: none;
