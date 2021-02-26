@@ -24,6 +24,7 @@ import langswitch.LangMessages
 import model._
 import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, REPAYMENT_ADJUSTED, REPAYMENT_APPROVED, REPAYMENT_SUSPENDED, SENT_FOR_RISKING}
 import model.des._
+import play.api.libs.json.JsResult.Exception
 import play.api.mvc.{Request, Result, Results}
 import views.Views
 import req.RequestSupport
@@ -239,14 +240,8 @@ class ViewProgressFormatter @Inject() (views:           Views,
           } else {
             LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
           }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show, isComplete = true)
-      case REPAYMENT_SUSPENDED =>
-        WhatsHappendSoFar(REPAYMENT_SUSPENDED,
-          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-          LangMessages.`You must submit your latest VAT return`.show,
-          LangMessages.`We cannot process your repayment`.show,
-          LangMessages.`Amount to pay`.show,
-          LangMessages.`Repayment suspended`.show,
-        )
+      case status =>
+        throw new RuntimeException(s"Illegal state reached: building completed repayment view for $status")
     }
 
   }
@@ -263,14 +258,8 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           LangMessages.`We received your VAT payment`.show,
                           LangMessages.`Amount you paid`.show,
                           LangMessages.`Your repayment is complete`.show, isComplete = true)
-      case REPAYMENT_SUSPENDED =>
-        WhatsHappendSoFar(REPAYMENT_SUSPENDED,
-          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-          LangMessages.`You must submit your latest VAT return`.show,
-          LangMessages.`We cannot process your repayment`.show,
-          LangMessages.`Amount to pay`.show,
-          LangMessages.`Repayment suspended`.show,
-        )
+      case status =>
+        throw new RuntimeException(s"Illegal state reached: building completed repayment view for $status")
     }
 
   }
