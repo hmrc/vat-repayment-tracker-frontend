@@ -196,7 +196,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`You must submit your latest VAT return`.show,
                           LangMessages.`We cannot process your repayment`.show,
-          "?????? amountDescription",
+                          LangMessages.`Amount to pay`.show,
                           LangMessages.`Repayment suspended`.show,
         )
     }
@@ -239,9 +239,14 @@ class ViewProgressFormatter @Inject() (views:           Views,
           } else {
             LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
           }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show, isComplete = true)
-      case _ =>
-        // TODO
-        ???
+      case REPAYMENT_SUSPENDED =>
+        WhatsHappendSoFar(REPAYMENT_SUSPENDED,
+          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+          LangMessages.`You must submit your latest VAT return`.show,
+          LangMessages.`We cannot process your repayment`.show,
+          LangMessages.`Amount to pay`.show,
+          LangMessages.`Repayment suspended`.show,
+        )
     }
 
   }
@@ -258,8 +263,14 @@ class ViewProgressFormatter @Inject() (views:           Views,
                           LangMessages.`We received your VAT payment`.show,
                           LangMessages.`Amount you paid`.show,
                           LangMessages.`Your repayment is complete`.show, isComplete = true)
-      case _ =>
-        ???
+      case REPAYMENT_SUSPENDED =>
+        WhatsHappendSoFar(REPAYMENT_SUSPENDED,
+          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+          LangMessages.`You must submit your latest VAT return`.show,
+          LangMessages.`We cannot process your repayment`.show,
+          LangMessages.`Amount to pay`.show,
+          LangMessages.`Repayment suspended`.show,
+        )
     }
 
   }
