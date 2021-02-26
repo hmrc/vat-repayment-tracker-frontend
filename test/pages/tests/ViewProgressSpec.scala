@@ -194,7 +194,7 @@ class ViewProgressSpec extends ItSpec {
   }
 
   "don't display action required messaging if payment is not suspended" in {
-    setup(rdsp             = 1, periodKey = PeriodKey("#001"), ft = ft_404, status1 = REPAYMENT_ADJUSTED, periodKeyBackend = PeriodKey("%23001"))
+    setup(rdsp             = 1, periodKey = PeriodKey("#001"), ft = ft_404, status1 = CLAIM_QUERIED, periodKeyBackend = PeriodKey("%23001"))
     InProgress.clickViewProgress()
 
     ViewProgress.checkActionRequired(result = false)
