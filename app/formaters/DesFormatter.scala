@@ -16,6 +16,8 @@
 
 package formaters
 
+import model.des.RiskingStatus.INITIAL
+
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model.{ChargeType, PeriodKey, VrtRepaymentDetailData}
@@ -25,11 +27,11 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
 
   def addMissingStatus(vrd: List[VrtRepaymentDetailData]): List[VrtRepaymentDetailData] = {
 
-    if (vrd.exists(f => f.repaymentDetailsData.riskingStatus == INITIAL.value)) {
+    if (vrd.exists(f => f.repaymentDetailsData.riskingStatus == INITIAL)) {
       vrd
     } else {
 
-      val rdd: RepaymentDetailData = vrd(0).repaymentDetailsData.copy(riskingStatus          = INITIAL.value, lastUpdateReceivedDate = Some(vrd(0).repaymentDetailsData.returnCreationDate))
+      val rdd: RepaymentDetailData = vrd(0).repaymentDetailsData.copy(riskingStatus          = INITIAL, lastUpdateReceivedDate = Some(vrd(0).repaymentDetailsData.returnCreationDate))
       val vrtRepaymentDetailData: VrtRepaymentDetailData = vrd(0).copy(repaymentDetailsData = rdd)
       vrtRepaymentDetailData :: vrd
     }

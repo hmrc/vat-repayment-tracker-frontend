@@ -16,8 +16,9 @@
 
 package support
 
-import java.time.LocalDate
+import model.des.RiskingStatus.INITIAL
 
+import java.time.LocalDate
 import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
 import model.des._
 import play.api.libs.json.{JsValue, Json}
@@ -38,7 +39,7 @@ object DesData {
     Option(LocalDate.parse("2001-01-01")),
     Option(LocalDate.parse("2001-01-01")),
     "18AC",
-    "INITIAL",
+    INITIAL,
     BigDecimal(10),
     Option(1),
     100.02
@@ -89,7 +90,7 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: String, status2: String): JsValue = Json.parse(
+  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: RiskingStatus, status2: RiskingStatus): JsValue = Json.parse(
     s"""[
           {
              "returnCreationDate": "$date",
@@ -263,6 +264,31 @@ object DesData {
            "supplementDelayDays": 1,
            "originalPostingAmount": 5.56
           }
+        ]""".stripMargin
+  )
+
+  def repaymentDetailsWithSuspended(): JsValue = Json.parse(
+    s"""[
+        {
+            "returnCreationDate": "2001-01-01",
+            "sentForRiskingDate": "2001-01-01",
+            "lastUpdateReceivedDate": "2001-01-01",
+            "periodKey": "18AA",
+            "riskingStatus": "INITIAL",
+            "vatToPay_BOX5": 6.56,
+            "supplementDelayDays": 1,
+            "originalPostingAmount": 5.56
+        },
+        {
+          "returnCreationDate": "2001-01-01",
+          "sentForRiskingDate": "2001-01-01",
+          "lastUpdateReceivedDate": "2001-01-01",
+          "periodKey": "18AD",
+          "riskingStatus": "REPAYMENT_SUSPENDED",
+          "vatToPay_BOX5": 6.56,
+          "supplementDelayDays": 1,
+          "originalPostingAmount": 5.56
+        }
         ]""".stripMargin
   )
 
@@ -716,7 +742,7 @@ object DesData {
         }""".stripMargin)
 
   //language=JSON
-  def storedRepaymentDetails1(date: String, status1: String, periodKey: PeriodKey): JsValue = Json.parse(
+  def storedRepaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey): JsValue = Json.parse(
     s"""[
              {
                "_id":"5db1c9826b00005f47616c61",
@@ -737,7 +763,7 @@ object DesData {
   )
 
   //language=JSON
-  def storedRepaymentDetails2(date: String, status1: String, status2: String): JsValue = Json.parse(
+  def storedRepaymentDetails2(date: String, status1: RiskingStatus, status2: RiskingStatus): JsValue = Json.parse(
     s"""[
              {
                "_id":"5db1c9826b00005f47616c61",
@@ -773,7 +799,7 @@ object DesData {
   )
 
   //language=JSON
-  def storedRepaymentDetails3(date: String, status1: String, status2: String, status3: String): JsValue = Json.parse(
+  def storedRepaymentDetails3(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
     s"""[
              {
                "_id":"5db1c9826b00005f47616c61",
@@ -824,7 +850,7 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails1(date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
+  def repaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
     s"""[
           {
             "returnCreationDate": "$date",
@@ -840,7 +866,7 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails2(date: String, status1: String, status2: String): JsValue = Json.parse(
+  def repaymentDetails2(date: String, status1: RiskingStatus, status2: RiskingStatus): JsValue = Json.parse(
     s"""[
          {
              "returnCreationDate": "$date",
@@ -866,7 +892,7 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails3(date: String, status1: String, status2: String, status3: String): JsValue = Json.parse(
+  def repaymentDetails3(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
     s"""[
           {
              "returnCreationDate": "$date",

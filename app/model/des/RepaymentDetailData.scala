@@ -16,8 +16,9 @@
 
 package model.des
 
-import java.time.LocalDate
+import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL, SENT_FOR_RISKING}
 
+import java.time.LocalDate
 import play.api.libs.json.{Json, OFormat}
 
 final case class RepaymentDetailData(
@@ -25,7 +26,7 @@ final case class RepaymentDetailData(
     sentForRiskingDate:     Option[LocalDate],
     lastUpdateReceivedDate: Option[LocalDate],
     periodKey:              String,
-    riskingStatus:          String,
+    riskingStatus:          RiskingStatus,
     vatToPay_BOX5:          BigDecimal,
     supplementDelayDays:    Option[Int],
     originalPostingAmount:  BigDecimal
@@ -33,10 +34,10 @@ final case class RepaymentDetailData(
   //For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
   val sorted: Int = {
     riskingStatus match {
-      case INITIAL.value          => 3
-      case SENT_FOR_RISKING.value => 2
-      case CLAIM_QUERIED.value    => 2
-      case _                      => 1
+      case INITIAL          => 3
+      case SENT_FOR_RISKING => 2
+      case CLAIM_QUERIED    => 2
+      case _                => 1
     }
   }
 }

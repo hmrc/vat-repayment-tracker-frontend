@@ -18,6 +18,7 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import model.des.RiskingStatus
 import model.{PeriodKey, Vrn}
 import play.api.libs.json.Json
 
@@ -81,19 +82,19 @@ object PaymentsOrchestratorStub extends TestHelper {
       .willReturn(aResponse().withStatus(404)
         .withBody(errorResponse(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}""").toString())))
 
-  def repaymentDetailS1(vrn: Vrn, date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean = false): StubMapping =
+  def repaymentDetailS1(vrn: Vrn, date: String, status1: RiskingStatus, periodKey: PeriodKey, negativeAmt: Boolean = false): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(DesData.repaymentDetails1(date, status1, periodKey, negativeAmt).toString())))
 
-  def repaymentDetailS2(vrn: Vrn, date: String, status1: String, status2: String): StubMapping =
+  def repaymentDetailS2(vrn: Vrn, date: String, status1: RiskingStatus, status2: RiskingStatus): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(DesData.repaymentDetails2(date, status1, status2).toString())))
 
-  def repaymentDetailS3(vrn: Vrn, date: String, status1: String, status2: String, status3: String): StubMapping =
+  def repaymentDetailS3(vrn: Vrn, date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
@@ -123,7 +124,7 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.repaymentDetails3Inprogree1Completed().toString())))
 
-  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: String, status2: String, vrn: Vrn): StubMapping =
+  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: RiskingStatus, status2: RiskingStatus, vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)

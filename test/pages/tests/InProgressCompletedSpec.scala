@@ -32,9 +32,9 @@ package pages.tests
  * limitations under the License.
  */
 
-import java.time.LocalDate
+import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, INITIAL}
 
-import model.des.{ADJUSMENT_TO_TAX_DUE, INITIAL}
+import java.time.LocalDate
 import model.{EnrolmentKeys, Vrn}
 import pages._
 import support._
@@ -107,7 +107,7 @@ class InProgressCompletedSpec extends ItSpec {
       }
 
       if (inPast)
-        PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(LocalDate.now().toString, LocalDate.now().minusDays(70).toString, INITIAL.value, ADJUSMENT_TO_TAX_DUE.value, vrn)
+        PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(LocalDate.now().toString, LocalDate.now().minusDays(70).toString, INITIAL, ADJUSMENT_TO_TAX_DUE, vrn)
       else
         PaymentsOrchestratorStub.repaymentDetails3Inprogree1Completed(vrn)
 

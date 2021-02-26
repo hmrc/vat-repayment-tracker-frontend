@@ -16,14 +16,44 @@
 
 package model.des
 
-sealed trait RiskingStatus { def value: String }
+import enumeratum.PlayEnum
 
-case object INITIAL extends RiskingStatus { val value = "INITIAL" } //S001
-case object SENT_FOR_RISKING extends RiskingStatus { val value = "SENT_FOR_RISKING" } //S002
+import scala.collection.immutable
 
-case object CLAIM_QUERIED extends RiskingStatus { val value = "CLAIM_QUERIED" } //S003
-case object REPAYMENT_ADJUSTED extends RiskingStatus { val value = "REPAYMENT_ADJUSTED" } //S004
+object RiskingStatus extends PlayEnum[RiskingStatus] {
+  case object INITIAL extends RiskingStatus {
+    val complete = false
+  } //S001
 
-//This is spelt wrong in the DES schema !!!
-case object ADJUSMENT_TO_TAX_DUE extends RiskingStatus { val value = "ADJUSMENT_TO_TAX_DUE" } //S005
-case object REPAYMENT_APPROVED extends RiskingStatus { val value = "REPAYMENT_APPROVED" } //S006
+  case object SENT_FOR_RISKING extends RiskingStatus {
+    val complete = false
+  } //S002
+
+  case object CLAIM_QUERIED extends RiskingStatus {
+    val complete = false
+  } //S003
+
+  case object REPAYMENT_ADJUSTED extends RiskingStatus {
+    val complete = true
+  } //S004
+
+  //This is spelt wrong in the DES schema !!!
+  case object ADJUSMENT_TO_TAX_DUE extends RiskingStatus {
+    val complete = true
+  } //S005
+
+  case object REPAYMENT_APPROVED extends RiskingStatus {
+    val complete = true
+  } //S006
+
+  case object REPAYMENT_SUSPENDED extends RiskingStatus {
+    val complete = false
+  }
+
+  override def values: immutable.IndexedSeq[RiskingStatus] = findValues
+}
+
+sealed trait RiskingStatus extends enumeratum.EnumEntry {
+  val complete: Boolean
+  def inProgress: Boolean = !complete
+}

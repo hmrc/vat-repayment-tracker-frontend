@@ -17,12 +17,13 @@
 package service
 
 import java.time.LocalDate
-
 import connectors.VatRepaymentTrackerBackendConnector
 import formaters.{DesFormatter, PeriodFormatter}
+
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model._
+import model.des.RiskingStatus.CLAIM_QUERIED
 import play.api.Logger
 import play.api.mvc.Request
 
@@ -50,13 +51,16 @@ class VrtService @Inject() (
 
         val data = getRepaymentData(rd, vrn, financialData)
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
-        val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == INITIAL.value || f.riskingStatus == SENT_FOR_RISKING.value || f.riskingStatus == CLAIM_QUERIED.value).map(m =>
+        val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(_.riskingStatus.inProgress).map(m =>
           RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
-        val completed: List[RepaymentDataNoRiskingStatus] = data.filter(f => f.riskingStatus == REPAYMENT_ADJUSTED.value || f.riskingStatus == ADJUSMENT_TO_TAX_DUE.value || f.riskingStatus == REPAYMENT_APPROVED.value).map(m =>
+        val completed: List[RepaymentDataNoRiskingStatus] = data.filter(_.riskingStatus.complete).map(m =>
           RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
+
+        val hasSuspendedPayment = data.exists(_.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED)
 
         //if something is completed, remove from the current list
         AllRepaymentData(
+          hasSuspendedPayment,
           currentData.filterNot(completed.contains(_)),
           completed
         )
@@ -70,7 +74,7 @@ class VrtService @Inject() (
     for {
       rd <- repaymentDetails
       if !outDatedPredicate(rd, financialData)
-    } yield RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED.value) rd.originalPostingAmount else rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey)
+    } yield RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED) rd.originalPostingAmount else rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey)
 
   }
 
@@ -81,7 +85,7 @@ class VrtService @Inject() (
   }
 
   private def dealWithNodata: AllRepaymentData = {
-    AllRepaymentData(List[RepaymentDataNoRiskingStatus](), List[RepaymentDataNoRiskingStatus]())
+    AllRepaymentData(hasSuspendedPayment = false, List[RepaymentDataNoRiskingStatus](), List[RepaymentDataNoRiskingStatus]())
   }
 
 }

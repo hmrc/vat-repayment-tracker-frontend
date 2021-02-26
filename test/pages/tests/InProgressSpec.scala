@@ -16,9 +16,10 @@
 
 package pages.tests
 
-import java.time.LocalDate
+import model.des.RiskingStatus
+import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL}
 
-import model.des.{CLAIM_QUERIED, INITIAL}
+import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, NonMtdUser}
 import support._
@@ -48,7 +49,7 @@ class InProgressSpec extends ItSpec {
   }
 
   "2. user is authorised and financial data found, CLAIM_QUERIED" in {
-    setup(status1 = CLAIM_QUERIED.value)
+    setup(status1 = CLAIM_QUERIED)
     InProgress.assertPageIsDisplayed(amount = "£0.00")
     InProgress.uniqueToPage
     InProgress.checktabs
@@ -83,7 +84,7 @@ class InProgressSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey, negativeAmt = true)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey, negativeAmt = true)
     PaymentsOrchestratorStub.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
@@ -116,14 +117,26 @@ class InProgressSpec extends ItSpec {
     AuditWireMockResponses.bacWasAudited(details)
   }
 
+  "12. display Submit VAT Return CTA if repayments are suspended" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(ft              = ft_debit, singleRepayment = true, status1 = RiskingStatus.REPAYMENT_SUSPENDED)
+    InProgress.containsSuspendedWarning(true)
+  }
+
+  "13. don't display Submit VAT Return CTA if no repayments suspended" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(ft              = ft_debit, singleRepayment = false)
+    InProgress.containsSuspendedWarning(false)
+  }
+
   private def setup(
-      useBankDetails:     Boolean = true,
-      partialBankDetails: Boolean = false,
-      singleRepayment:    Boolean = true,
-      ft:                 Int     = ft_404,
-      status1:            String  = INITIAL.value,
-      enrolmentIn:        String  = EnrolmentKeys.mtdVatEnrolmentKey,
-      inflight:           Boolean = false
+      useBankDetails:     Boolean       = true,
+      partialBankDetails: Boolean       = false,
+      singleRepayment:    Boolean       = true,
+      ft:                 Int           = ft_404,
+      status1:            RiskingStatus = INITIAL,
+      enrolmentIn:        String        = EnrolmentKeys.mtdVatEnrolmentKey,
+      inflight:           Boolean       = false
   ): Unit = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable

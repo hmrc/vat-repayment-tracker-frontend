@@ -130,6 +130,38 @@ object LangMessages {
     english = "In progress"
   )
 
+  val `Repayment suspended` = Message(
+    english = "Repayment suspended"
+  )
+
+  val `Your repayment is suspended` = Message(
+    english = "Your repayment is suspended."
+  )
+
+  val `Action required` = Message(
+    english = "Action required"
+  )
+
+  val `You must submit your latest VAT return` = Message(
+    english = "You must submit your latest VAT return"
+  )
+
+  val `submit your latest VAT return` = Message(
+    english = "You must <a href=\"https://www.gov.uk/vat-returns/send-your-return\">submit your latest VAT return</a>"
+  )
+
+  val `Submit VAT return` = Message(
+    english = "Submit VAT return"
+  )
+
+  val `Submit your return` = Message(
+    english = "<a href=\"https://www.gov.uk/vat-returns/send-your-return\">Submit your return</a>"
+  )
+
+  val `We cannot process your repayment` = Message(
+    english = "We cannot process your repayment until you submit your VAT return for the last accounting period.<br /><br /><a href=\"https://www.gov.uk/vat-returns/send-your-return\">Submit your return</a>"
+  )
+
   val `Currently sent to`: Message = Message(
     english = "We'll send your cheque to:"
   )

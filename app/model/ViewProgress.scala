@@ -16,6 +16,8 @@
 
 package model
 
+import model.des.RiskingStatus
+
 import java.time.LocalDate
 
 final case class ViewProgress(
@@ -26,4 +28,5 @@ final case class ViewProgress(
     whatsHappenedSoFar:     List[WhatsHappendSoFar]) {
 
   val isComplete: Boolean = whatsHappenedSoFar.exists(_.isComplete)
+  val repaymentSuspended: Boolean = whatsHappenedSoFar.exists(_.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED)
 }
