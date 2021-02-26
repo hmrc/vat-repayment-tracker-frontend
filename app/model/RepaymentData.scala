@@ -15,11 +15,13 @@
  */
 
 package model
+import model.des.RiskingStatus
+
 import java.time.LocalDate
 
 final case class RepaymentData(
     period:             String,
     amount:             BigDecimal,
     returnCreationDate: LocalDate,
-    riskingStatus:      String,
+    riskingStatus:      RiskingStatus,
     periodKey:          String)

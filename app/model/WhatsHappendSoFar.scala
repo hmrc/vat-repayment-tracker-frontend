@@ -16,16 +16,18 @@
 
 package model
 
+import model.des.RiskingStatus
+
 import java.time.LocalDate
 
 final case class WhatsHappendSoFar(
-    riskingStatus:     String,
+    riskingStatus:     RiskingStatus,
     date:              LocalDate,
     title:             String,
     description:       String,
     amountDescription: String,
     pageTitle:         String,
-    complete:          String    = ""
+    isComplete:        Boolean       = false
 ) {
-  val isComplete: Boolean = complete.equals("_Y")
+  val complete: String = if (isComplete) "_Y" else ""
 }

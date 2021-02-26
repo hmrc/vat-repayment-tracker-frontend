@@ -31,6 +31,7 @@ bread_crumbs: views.html.partials.bread_crumbs
 )
 
 @(
+hasSuspendedRepayments: Boolean,
 inProgress: List[RepaymentDataNoRiskingStatus],
 completed: List[RepaymentDataNoRiskingStatus],
 showBankDetails: Boolean,
@@ -66,7 +67,18 @@ timeoutDialog = true
                     </li>
                 </ul>
                 <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
-                    <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
+                    @if(hasSuspendedRepayments) {
+                        <div class="notice subsection near-deadline-view-warning ">
+                            <i class="icon icon-important"><span class="visually-hidden">!</span></i>
+                            <div id="duplicate-payment-warning">
+                                <strong class="bold-small">@{LangMessages.`Your repayment is suspended`.show}</strong>
+                                <strong class="bold-small">@Html(LangMessages.`submit your latest VAT return`.show)</strong>
+                            </div>
+                        </div>
+                    } else {
+                        <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
+                    }
+
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>

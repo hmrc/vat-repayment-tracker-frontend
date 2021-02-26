@@ -17,11 +17,12 @@
 package formaters
 
 import java.time.LocalDate
-
 import config.ViewConfig
+
 import javax.inject.{Inject, Singleton}
 import langswitch.LangMessages
 import model._
+import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, REPAYMENT_ADJUSTED, REPAYMENT_APPROVED, REPAYMENT_SUSPENDED, SENT_FOR_RISKING}
 import model.des._
 import play.api.mvc.{Request, Result, Results}
 import views.Views
@@ -54,7 +55,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
     val estRepaymentDate = getEstimatedRepaymentDate(vrd(0).repaymentDetailsData.returnCreationDate, vrd(0).repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
-      if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED.value) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5,
+      if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5,
       vrd(0).repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
       periodFormatter.formatPeriodKey(periodKey.value),
@@ -66,7 +67,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
   private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {
     if (whatsHappendSoFar.isComplete) false
-    else if (whatsHappendSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE.value) true
+    else if (whatsHappendSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE) true
     else false
   }
 
@@ -84,11 +85,11 @@ class ViewProgressFormatter @Inject() (views:           Views,
     val nonCompleteRows: List[WhatsHappendSoFar] = desFormatter.addMissingStatus(vrd).sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate)).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
 
     val completedCreditRows: List[WhatsHappendSoFar] = if (returnCreditChargeExists)
-      vrd.filter(f => f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED.value || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED.value)
+      vrd.filter(f => f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
         .map (m => computeWhatsHappenedSoFarCompleteCreditCharge(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
     else List()
 
-    val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE.value)
+    val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE)
       .map (m => computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate, m))
     else List()
 
@@ -105,21 +106,21 @@ class ViewProgressFormatter @Inject() (views:           Views,
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
 
       //id:1
-      case INITIAL.value => WhatsHappendSoFar(INITIAL.value,
-                                              vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                                              LangMessages.`Checking amount`.show,
-                                              LangMessages.`We received your return`.show,
-                                              LangMessages.`Amount you claimed`.show,
-                                              LangMessages.`Your repayment is being processed`.show
+      case INITIAL => WhatsHappendSoFar(INITIAL,
+                                        vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                                        LangMessages.`Checking amount`.show,
+                                        LangMessages.`We received your return`.show,
+                                        LangMessages.`Amount you claimed`.show,
+                                        LangMessages.`Your repayment is being processed`.show
       )
 
-      case CLAIM_QUERIED.value =>
+      case CLAIM_QUERIED =>
 
         val date = vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate)
 
         if (estRepaymentDate isBefore LocalDate.now())
           //id:4
-          WhatsHappendSoFar(CLAIM_QUERIED.value,
+          WhatsHappendSoFar(CLAIM_QUERIED,
                             date,
                             LangMessages.`Estimated repayment date has passed`.show,
                             LangMessages.`You do not need to do anything right now`.show,
@@ -128,7 +129,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
           )
         else
           //id:2
-          WhatsHappendSoFar(CLAIM_QUERIED.value,
+          WhatsHappendSoFar(CLAIM_QUERIED,
                             date,
                             LangMessages.`Sending for further checks`.show,
                             LangMessages.`We are making sure we pay you the right amount`.show,
@@ -136,13 +137,13 @@ class ViewProgressFormatter @Inject() (views:           Views,
                             LangMessages.`Your repayment is being processed`.show
           )
 
-      case SENT_FOR_RISKING.value =>
+      case SENT_FOR_RISKING =>
 
         val date = vrtRepaymentDetailData.repaymentDetailsData.sentForRiskingDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate))
 
         if (estRepaymentDate isBefore LocalDate.now())
           //id:4
-          WhatsHappendSoFar(SENT_FOR_RISKING.value,
+          WhatsHappendSoFar(SENT_FOR_RISKING,
                             date,
                             LangMessages.`Estimated repayment date has passed`.show,
                             LangMessages.`You do not need to do anything right now`.show,
@@ -151,7 +152,7 @@ class ViewProgressFormatter @Inject() (views:           Views,
           )
         else
           //id:2
-          WhatsHappendSoFar(SENT_FOR_RISKING.value,
+          WhatsHappendSoFar(SENT_FOR_RISKING,
                             date,
                             LangMessages.`Sending for further checks`.show,
                             LangMessages.`We are making sure we pay you the right amount`.show,
@@ -159,9 +160,9 @@ class ViewProgressFormatter @Inject() (views:           Views,
                             LangMessages.`Your repayment is being processed`.show
           )
 
-      case REPAYMENT_ADJUSTED.value =>
+      case REPAYMENT_ADJUSTED =>
         //id: 3
-        WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
+        WhatsHappendSoFar(REPAYMENT_ADJUSTED,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment amount changed`.show,
           if (bankDetailsExist) {
@@ -174,22 +175,30 @@ class ViewProgressFormatter @Inject() (views:           Views,
           }, LangMessages.`Amount we'll pay you`.show,
                           LangMessages.`Your repayment has been approved`.show)
 
-      case ADJUSMENT_TO_TAX_DUE.value =>
+      case ADJUSMENT_TO_TAX_DUE =>
         //id:5
-        WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE.value,
+        WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`You now owe HMRC`.show,
                           LangMessages.`We calculated that the original amount you claimed of`(CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount),
                                                                                                CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show,
                           LangMessages.`Amount to pay`.show, LangMessages.`You need to make a VAT payment`.show)
 
-      case REPAYMENT_APPROVED.value =>
+      case REPAYMENT_APPROVED =>
         //id:6
-        WhatsHappendSoFar(REPAYMENT_APPROVED.value,
+        WhatsHappendSoFar(REPAYMENT_APPROVED,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment approved`.show,
           if (bankDetailsExist) LangMessages.`We will send this to your repayment bank account`.show else LangMessages.`We will send a cheque to your business address`(viewConfig.viewVatAccount).show,
                           LangMessages.`Amount we'll pay you`.show, LangMessages.`Your repayment has been approved`.show)
+      case REPAYMENT_SUSPENDED =>
+        WhatsHappendSoFar(REPAYMENT_SUSPENDED,
+                          vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          LangMessages.`You must submit your latest VAT return`.show,
+                          LangMessages.`We cannot process your repayment`.show,
+          "?????? amountDescription",
+                          LangMessages.`Repayment suspended`.show,
+        )
     }
   }
 
@@ -201,9 +210,9 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
 
-      case REPAYMENT_ADJUSTED.value =>
+      case REPAYMENT_ADJUSTED =>
         //id:7
-        WhatsHappendSoFar(REPAYMENT_ADJUSTED.value,
+        WhatsHappendSoFar(REPAYMENT_ADJUSTED,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment complete`.show,
           if (bankDetailsExist) {
@@ -215,10 +224,10 @@ class ViewProgressFormatter @Inject() (views:           Views,
           } else {
             LangMessages.`repayment-complete-address-adjusted`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
           }, LangMessages.`Amount we paid you`.show,
-                          LangMessages.`Your repayment is complete`.show, "_Y")
-      case REPAYMENT_APPROVED.value =>
+                          LangMessages.`Your repayment is complete`.show, isComplete = true)
+      case REPAYMENT_APPROVED =>
         //id: 9
-        WhatsHappendSoFar(REPAYMENT_APPROVED.value,
+        WhatsHappendSoFar(REPAYMENT_APPROVED,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment complete`.show,
           if (bankDetailsExist) {
@@ -229,7 +238,10 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
           } else {
             LangMessages.`repayment-complete-address`(addressDetails.getOrElse(LangMessages.addressNotAvailable.show), CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)).show
-          }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show, "_Y")
+          }, LangMessages.`Amount we paid you`.show, LangMessages.`Your repayment is complete`.show, isComplete = true)
+      case _ =>
+        // TODO
+        ???
     }
 
   }
@@ -238,14 +250,16 @@ class ViewProgressFormatter @Inject() (views:           Views,
                                                            vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_]): WhatsHappendSoFar = {
 
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
-      case ADJUSMENT_TO_TAX_DUE.value =>
+      case ADJUSMENT_TO_TAX_DUE =>
         //id:8 -- to complete
-        WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE.value,
+        WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE,
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           LangMessages.`Repayment complete`.show,
                           LangMessages.`We received your VAT payment`.show,
                           LangMessages.`Amount you paid`.show,
-                          LangMessages.`Your repayment is complete`.show, "_Y")
+                          LangMessages.`Your repayment is complete`.show, isComplete = true)
+      case _ =>
+        ???
     }
 
   }
@@ -257,8 +271,8 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
   private def showEstimatedRepaymentDate(vrd: List[VrtRepaymentDetailData]): Boolean = {
 
-    !vrd.exists(f => (f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED.value ||
-      f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE.value) || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED.value)
+    !vrd.exists(f => (f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED ||
+      f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE) || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
 
   }
 

@@ -66,6 +66,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
 
     if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
       Ok(views.inprogress_completed(
+        allRepaymentData.hasSuspendedPayment,
         allRepaymentData.inProgressRepaymentData,
         allRepaymentData.completedRepaymentData,
         bankDetailsExist,
@@ -87,6 +88,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
       ))
     } else if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty) {
       Ok(views.inprogress(
+        allRepaymentData.hasSuspendedPayment,
         allRepaymentData.inProgressRepaymentData,
         bankDetailsExist,
         bankDetails,

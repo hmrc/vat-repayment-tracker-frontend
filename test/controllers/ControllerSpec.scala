@@ -17,8 +17,7 @@
 package controllers
 
 import java.time.LocalDate
-
-import model.des.INITIAL
+import model.des.RiskingStatus.INITIAL
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import play.api.http.Status
 import support._
@@ -31,7 +30,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     PaymentsOrchestratorStub.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.showResults(vrn).futureValue
@@ -68,7 +67,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     PaymentsOrchestratorStub.financialsOkCredit(vrn)
     val result = connector.showVrt.futureValue
@@ -80,7 +79,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     VatWireMockResponses.calendar404(vrn)
     VatWireMockResponses.designatoryDetailsOk(vrn)
@@ -92,7 +91,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     PaymentsOrchestratorStub.ddOk(vrn)
     val result = connector.manageOrTrackVrt.futureValue
@@ -103,7 +102,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.manageOrTrackVrt.futureValue
     result.body should include ("You cannot access this service")
@@ -114,7 +113,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     val result = connector.manageOrTrack(vrn).futureValue
     result.status shouldBe Status.OK
@@ -124,7 +123,7 @@ class ControllerSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     PaymentsOrchestratorStub.ddOk(vrn)
     val result = connector.manageOrTrack(vrn).futureValue

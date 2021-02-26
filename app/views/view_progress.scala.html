@@ -53,32 +53,47 @@ timeoutDialog = true
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message">@{pageTitle}</h1>
-            <div class="govuk-grid-row govuk-!-margin-bottom-9">
-                <div class="govuk-grid-column-one-half">
-                    <h2 class="govuk-body govuk-!-margin-bottom-0">@{amountDescription}</h2>
-                    <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{CommonFormatter.formatAmount(viewProgress.amount)}</p>
-                    @{
-                    if (showHistoryUrl) {
-                    <p id="history-url"><a href={viewConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
-                    }
-                    }
-                    @{
-                    if (showPayUrl) {
 
-                    <p id="pay-url"><a href={routes.PayApiController.startPaymentsJourney(amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
-                    }
+            @if(viewProgress.repaymentSuspended) {
+                <div id="repayment-suspended-action-required" class="govuk-!-margin-bottom-9">
+                    <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Action required`.show}</h2>
+                    <h2 class="govuk-!-margin-bottom-2">@{LangMessages.`Submit VAT return`.show}</h2>
+                    <div class="govuk-!-margin-bottom-3">
+                        @Html(LangMessages.`Submit your return`.show)
+                    </div>
+                </div>
+            } else {
+                <div class="govuk-grid-row govuk-!-margin-bottom-9">
+                    <div class="govuk-grid-column-one-half">
+                        <h2 class="govuk-body govuk-!-margin-bottom-0">@{
+                            amountDescription
+                        }</h2>
+                        <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{
+                            CommonFormatter.formatAmount(viewProgress.amount)
+                        }</p>
+                        @{
+                            if(showHistoryUrl) {
+                                    <p id="history-url"><a href={viewConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
+                            }
+                        }
+                        @{
+                            if(showPayUrl) {
+
+                                    <p id="pay-url"><a href={routes.PayApiController.startPaymentsJourney(amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
+                            }
+                        }
+                    </div>
+
+                    @{
+                        if(showEstimatedRepaymentDat) {
+                                <div class="govuk-grid-column-one-half">
+                                <h2 class="govuk-body govuk-!-margin-bottom-0">{LangMessages.`Estimated repayment date`.show}</h2>
+                                <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{CommonFormatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
+                                </div>
+                        }
                     }
                 </div>
-
-                @{
-                if (showEstimatedRepaymentDat) {
-                <div class="govuk-grid-column-one-half">
-                    <h2 class="govuk-body govuk-!-margin-bottom-0">{LangMessages.`Estimated repayment date`.show}</h2>
-                    <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{CommonFormatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
-                </div>
-                }
-                }
-            </div>
+            }
 
             @{
                 if (viewProgress.isComplete) {

@@ -19,6 +19,8 @@ package pages
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 
+import scala.util.Try
+
 object InProgress extends CommonDetail {
 
   def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
@@ -33,6 +35,24 @@ object InProgress extends CommonDetail {
   def noRepayments(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
   def whenpay(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay")).getText)
   def whenpay_desc(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay-desc")).getText)
+
+  def suspendedWarning(implicit webDriver: WebDriver): String = Try {
+    probing(_.findElement(By.id("suspended-repayment-warning")).getText)
+  }.getOrElse("")
+
+  def containsSuspendedWarning(result: Boolean)(implicit webDriver: WebDriver): Unit = {
+    val actual = suspendedWarning
+
+    actual.contains {
+      "Your repayment is suspended"
+    } shouldBe result
+
+    actual.contains {
+      "You must submit your latest VAT return"
+    } shouldBe result
+
+    ()
+  }
 
   def completedLink(implicit wd: WebDriver): Assertion = {
     clickCompleted

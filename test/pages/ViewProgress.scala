@@ -16,12 +16,46 @@
 
 package pages
 
-import java.time.LocalDate
+import model.des.RiskingStatus
 
+import java.time.LocalDate
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
+import pages.InProgress.probing
+
+import scala.util.Try
 
 object ViewProgress extends CommonPage {
+
+  def amount(implicit webDriver: WebDriver): Option[String] = Try {
+    probing(_.findElement(By.id(s"amount")).getText)
+  }.toOption
+
+  def estimatedDate(implicit webDriver: WebDriver): Option[String] = Try {
+    probing(_.findElement(By.id(s"repay-date")).getText)
+  }.toOption
+
+  def actionRequired()(implicit webDriver: WebDriver): String = Try {
+    probing(_.findElement(By.id(s"repayment-suspended-action-required")).getText)
+  }.getOrElse("")
+
+  def checkActionRequired(result: Boolean)(implicit webDriver: WebDriver): Unit = {
+    val div = actionRequired()
+
+    div.contains {
+      "Action required"
+    } shouldBe result
+
+    div.contains {
+      "Submit VAT return"
+    } shouldBe result
+
+    div.contains {
+      "Submit your return"
+    } shouldBe result
+
+    ()
+  }
 
   def checkAmount(amount: String)(implicit webDriver: WebDriver): Assertion = probing(_.findElement(By.id(s"amount")).getText) shouldBe amount
 
@@ -30,18 +64,20 @@ object ViewProgress extends CommonPage {
 
   def checkEstimatedRepeaymentDateNotPresent(implicit webDriver: WebDriver): Assertion = idPresent("repay-date") shouldBe false
 
-  def checkStatusExists(statusList: List[String])(implicit webDriver: WebDriver): Unit = {
+  def checkStatusExists(statusList: List[RiskingStatus], completed: Boolean = false)(implicit webDriver: WebDriver): Unit = {
+    val completedFrag = if (completed) "_Y" else ""
 
     statusList foreach (e =>
-      idPresent(s"${e}_timeline") shouldBe true
+      idPresent(s"${e}${completedFrag}_timeline") shouldBe true
     )
 
   }
 
-  def checkStatusNotPresent(statusList: List[String])(implicit webDriver: WebDriver): Unit = {
+  def checkStatusNotPresent(statusList: List[RiskingStatus], completed: Boolean = false)(implicit webDriver: WebDriver): Unit = {
+    val completedFrag = if (completed) "_Y" else ""
 
     statusList foreach (e =>
-      idPresent(s"${e}_timeline") shouldBe false
+      idPresent(s"${e}${completedFrag}_timeline") shouldBe false
     )
 
   }

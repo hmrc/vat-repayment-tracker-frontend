@@ -16,9 +16,9 @@
 
 package pages.tests
 
-import java.time.LocalDate
+import model.des.RiskingStatus.INITIAL
 
-import model.des.INITIAL
+import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
 import support._
@@ -100,7 +100,7 @@ class ManageOrTrackSpec extends ItSpec {
       else
         PaymentsOrchestratorStub.ddNotFound(vrn)
 
-      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL.value, periodKey)
+      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
 
       ft match {
         case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
