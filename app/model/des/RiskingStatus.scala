@@ -20,14 +20,7 @@ import enumeratum.PlayEnum
 
 import scala.collection.immutable
 
-sealed trait RiskingStatus extends enumeratum.EnumEntry {
-  def inProgress: Boolean
-}
-
 object RiskingStatus extends PlayEnum[RiskingStatus] {
-
-  override def values: immutable.IndexedSeq[RiskingStatus] = findValues
-
   case object INITIAL extends RiskingStatus {
     val inProgress = true
   } //S001
@@ -56,4 +49,10 @@ object RiskingStatus extends PlayEnum[RiskingStatus] {
   case object REPAYMENT_SUSPENDED extends RiskingStatus {
     val inProgress = true
   }
+
+  override def values: immutable.IndexedSeq[RiskingStatus] = findValues
+}
+
+sealed trait RiskingStatus extends enumeratum.EnumEntry {
+  def inProgress: Boolean
 }
