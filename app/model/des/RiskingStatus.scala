@@ -21,49 +21,39 @@ import enumeratum.PlayEnum
 import scala.collection.immutable
 
 sealed trait RiskingStatus extends enumeratum.EnumEntry {
-  def value: String
-
   def inProgress: Boolean
 }
 
 object RiskingStatus extends PlayEnum[RiskingStatus] {
-  def withValue(value: String): Option[RiskingStatus] = {
-    values.find(_.value == value)
-  }
 
   override def values: immutable.IndexedSeq[RiskingStatus] = findValues
 
   case object INITIAL extends RiskingStatus {
-    val value = "INITIAL"
     val inProgress = true
   } //S001
+
   case object SENT_FOR_RISKING extends RiskingStatus {
-    val value = "SENT_FOR_RISKING"
     val inProgress = true
   } //S002
 
   case object CLAIM_QUERIED extends RiskingStatus {
-    val value = "CLAIM_QUERIED"
     val inProgress = true
   } //S003
+
   case object REPAYMENT_ADJUSTED extends RiskingStatus {
-    val value = "REPAYMENT_ADJUSTED"
     val inProgress = false
   } //S004
 
   //This is spelt wrong in the DES schema !!!
   case object ADJUSMENT_TO_TAX_DUE extends RiskingStatus {
-    val value = "ADJUSMENT_TO_TAX_DUE"
     val inProgress = false
   } //S005
 
   case object REPAYMENT_APPROVED extends RiskingStatus {
-    val value = "REPAYMENT_APPROVED"
     val inProgress = false
   } //S006
 
   case object REPAYMENT_SUSPENDED extends RiskingStatus {
-    val value = "REPAYMENT_SUSPENDED"
     val inProgress = true
   }
 }

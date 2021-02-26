@@ -850,7 +850,7 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails1(date: String, status1: String, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
+  def repaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
     s"""[
           {
             "returnCreationDate": "$date",
