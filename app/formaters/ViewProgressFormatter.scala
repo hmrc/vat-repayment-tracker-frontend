@@ -107,11 +107,11 @@ class ViewProgressFormatter @Inject() (views:           Views,
 
       //id:1
       case INITIAL => WhatsHappendSoFar(INITIAL,
-        vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-        LangMessages.`Checking amount`.show,
-        LangMessages.`We received your return`.show,
-        LangMessages.`Amount you claimed`.show,
-        LangMessages.`Your repayment is being processed`.show
+                                              vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                                              LangMessages.`Checking amount`.show,
+                                              LangMessages.`We received your return`.show,
+                                              LangMessages.`Amount you claimed`.show,
+                                              LangMessages.`Your repayment is being processed`.show
       )
 
       case CLAIM_QUERIED =>
