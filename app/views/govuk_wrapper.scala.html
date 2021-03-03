@@ -69,9 +69,9 @@
 
 @headerNavLinks = {
   @if(viewConfig.supportLanguages) {
-    <span id="language-toggle">@viewsHelpers.languageSelection()</span>
+    <li><span id="language-toggle">@viewsHelpers.languageSelection()</span></li>
   }
-  <a id="homeNavHref" href=@viewConfig.signOut>Sign out</a>
+<li><a id="homeNavHref" href=@viewConfig.signOut>Sign out</a></li>
 }
 
 

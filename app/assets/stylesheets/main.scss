@@ -148,7 +148,7 @@ a,
     background-color: $govuk-focus-colour;
     box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
     text-decoration: none;
-    outline: none;
+    outline: 3px solid transparent;
   }
 }
 
