@@ -39,18 +39,21 @@ request: Request[_]
 
 
 <table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">@{LangMessages.`Received on`.show}</th>
-      <th scope="col" class="govuk-table__header">@{LangMessages.`Accounting period`.show}</th>
-      <th scope="col" class="govuk-table__header" >@{LangMessages.`Amount claimed`.show}</th>
-        <th scope="col" class="govuk-table__header" ><p class="visually-hidden">Status</p></th>
-    </tr>
-  </thead>
+    <caption class="govuk-table__caption govuk-table__caption--m">
+        @if(appender == "_completed") {@{LangMessages.`Completed`.show} } else {@{LangMessages.`In progress`.show}}
+    </caption>
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">@{LangMessages.`Received on`.show}</th>
+            <th scope="col" class="govuk-table__header">@{LangMessages.`Accounting period`.show}</th>
+            <th scope="col" class="govuk-table__header" >@{LangMessages.`Amount claimed`.show}</th>
+            <th scope="col" class="govuk-table__header" ><p class="visually-hidden">Status</p></th>
+        </tr>
+    </thead>
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td  class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
+        <th scope="row" class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</th>
       <td >@onePayment.period</td>
       <td >£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
         <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >

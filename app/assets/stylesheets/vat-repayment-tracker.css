@@ -457,7 +457,7 @@ textarea:focus {
 
 
 .js-enabled .govuk-tabs__title {
-    display: block;
+    display: none;
     font-weight: 700;
     font-size: 36px;
 }
@@ -466,4 +466,22 @@ textarea:focus {
     content: "\2014 ";
 }
 
+
+.govuk-table__caption--m {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 18px;
+    font-size: 3.3rem;
+    line-height: 1.11111;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 40.0625em)
+.govuk-table__caption--m {
+    font-size: 24px;
+    font-size: 1.5rem;
+    line-height: 1.25;
+}
 
