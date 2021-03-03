@@ -190,6 +190,10 @@ object LangMessages {
     english = "Business tax account"
   )
 
+  val generic_prefixError: Message = Message(
+    english = "Error"
+  )
+
   val Continue: Message = Message(
     english = "Continue"
   )
