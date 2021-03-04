@@ -83,7 +83,7 @@ timeoutDialog = true
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
-                    <h3 class="govuk-heading-m" id="no-repayments">@{LangMessages.`You have no completed repayments`.show}</h3>
+                    <div class="govuk-inset-text" id="no-repayments">@{LangMessages.`You have no completed repayments`.show}</div>
                     <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-none"></div>
                 </section>
