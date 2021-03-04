@@ -457,7 +457,7 @@ textarea:focus {
 
 
 .js-enabled .govuk-tabs__title {
-    display: block;
+    display: none;
     font-weight: 700;
     font-size: 36px;
 }
