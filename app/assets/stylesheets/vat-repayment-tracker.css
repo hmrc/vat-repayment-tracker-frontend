@@ -466,6 +466,7 @@ textarea:focus {
     content: "\2014 ";
 }
 
+
 .govuk-back-link:link, .govuk-back-link:visited, .govuk-back-link:hover, .govuk-back-link:active, .govuk-back-link:focus {
     color: #0b0c0c;
 }
@@ -533,4 +534,42 @@ textarea:focus {
     box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
     text-decoration: none;
 }
+
+.govuk-inset-text {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 2.1875rem;
+    line-height: 1.25;
+    color: #0b0c0c;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    clear: both;
+    border-left: 10px solid #b1b4b6;
+}
+
+@media (min-width: 40.0625em)
+.govuk-inset-text {
+    font-size: 19px;
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+}
+
+@media (min-width: 40.0625em)
+ .govuk-inset-text {
+     margin-top: 30px;
+}
+
+@media (min-width: 40.0625em)
+.govuk-inset-text {
+    margin-bottom: 30px;
+}
+
+
+
+
+
 
