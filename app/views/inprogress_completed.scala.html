@@ -76,13 +76,13 @@ timeoutDialog = true
                             </div>
                         </div>
                     } else {
-                        <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
+                        <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`In progress`.show}</h2>
                     }
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
-                    <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
+                    <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
                     <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-exist"></div>

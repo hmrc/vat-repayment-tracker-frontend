@@ -28,10 +28,8 @@ viewConfig: ViewConfig
 )
 
 @(
-viewProgress: ViewProgress,
 repayments: List[RepaymentDataNoRiskingStatus],
 vrn : Vrn,
-
 appender: String)(
 implicit
 request: Request[_]
@@ -42,7 +40,7 @@ request: Request[_]
 
 <table class="govuk-table">
     <caption class="govuk-table__caption govuk-table__caption--m">
-        @if(appender == "_completed") {@{LangMessages.`Completed`.show} } else {@{LangMessages.`In progress`.show}}
+        @if(appender == "_inprogress") {@{LangMessages.`In progress`.show}} else {@{LangMessages.`Completed`.show}}
     </caption>
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
