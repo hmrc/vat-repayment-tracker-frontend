@@ -162,6 +162,7 @@ window.addEventListener("load", function(event) {
     // This changes the error summary link's href from #maage to #dd
     // This was done to focus the error summary link on the first radio button on the manage_or_track.scala.html page
     if(errorSummarylinkHref) errorSummarylinkHref.setAttribute('href', '#dd');
+    // Adding the aria-controls to the tab links on page load
     inProgess_tab.setAttribute("aria-controls", "inProgress");
     completed_tab.setAttribute("aria-controls", "completed");
 });
