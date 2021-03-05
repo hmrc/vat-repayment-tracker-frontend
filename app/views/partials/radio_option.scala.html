@@ -30,6 +30,7 @@ m: Messages
 <input id="@id" type="radio" name="@name" value="@value" @{if(field.value.contains(value)) "checked"}>
 <label for="@id" id="@id-label">
     @text
-    @hint.fold(Html("")){ hint => <span class="form-hint">@hint</span> }
+
 </label>
+@hint.fold(Html("")){ hint => <span id="@id-hint" class="form-hint">@hint</span> }
 </div>

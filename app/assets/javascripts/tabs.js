@@ -41,7 +41,10 @@
   ready(function() {
     var mobileMediaQuery = '(max-width: 641px)'
     var mq = w.matchMedia(mobileMediaQuery)
-    if(!mq.matches) { jsTabs() }
+    if(!mq.matches) {
+        jsTabs()
+
+      }
   })
 
   function jsTabs() {
@@ -74,6 +77,7 @@
                       removeClass(tabLink.closest('li'), listItemSelectedClass)
                       tabLink.setAttribute('aria-selected', 'false')
                       tabLink.setAttribute('tabindex', '-1')
+                      tabLink.setAttribute('role', 'tab')
                    })
 
                    addClass(tabKeyDownInProgress, tabSelectedClass)
@@ -93,6 +97,7 @@
                      removeClass(tabLink.closest('li'), listItemSelectedClass)
                      tabLink.setAttribute('aria-selected', 'false')
                      tabLink.setAttribute('tabindex', '-1')
+                     tabLink.setAttribute('role', 'tab')
                   })
 
                   addClass(tabKeyDownCompleted, tabSelectedClass)
@@ -122,6 +127,7 @@
           removeClass(tabLink.closest('li'), listItemSelectedClass)
           tabLink.setAttribute('aria-selected', 'false')
           tabLink.setAttribute('tabindex', '-1')
+          tabLink.setAttribute('role', 'tab')
         })
 
         //add selected class to the selected tab
@@ -129,6 +135,7 @@
         addClass(tab, tabSelectedClass)
         tab.setAttribute('aria-selected', 'true')
         tab.setAttribute('tabindex', '0')
+
 
         //hide all the panels
         Array.prototype.forEach.call(tabPanels, function (tabPanel) {
@@ -149,10 +156,17 @@
 window.addEventListener("load", function(event) {
     var errorSummary = document.getElementById("error-summary-display");
     var errorSummarylinkHref = document.querySelector("[href='#manage']");
+    var inProgess_tab = document.getElementById("tab_inProgress");
+    var completed_tab = document.getElementById("tab_completed");
     if(errorSummary) errorSummary.focus();
     // This changes the error summary link's href from #maage to #dd
     // This was done to focus the error summary link on the first radio button on the manage_or_track.scala.html page
     if(errorSummarylinkHref) errorSummarylinkHref.setAttribute('href', '#dd');
+    // Adding the aria-controls to the tab links on page load
+    inProgess_tab.setAttribute("aria-controls", "inProgress");
+    completed_tab.setAttribute("aria-controls", "completed");
 });
+
+
 
 
