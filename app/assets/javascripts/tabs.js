@@ -158,13 +158,16 @@ window.addEventListener("load", function(event) {
     var errorSummarylinkHref = document.querySelector("[href='#manage']");
     var inProgess_tab = document.getElementById("tab_inProgress");
     var completed_tab = document.getElementById("tab_completed");
+    var skiplinkTag = document.querySelector("[href='#content']");
     if(errorSummary) errorSummary.focus();
     // This changes the error summary link's href from #maage to #dd
     // This was done to focus the error summary link on the first radio button on the manage_or_track.scala.html page
     if(errorSummarylinkHref) errorSummarylinkHref.setAttribute('href', '#dd');
     // Adding the aria-controls to the tab links on page load
-    inProgess_tab.setAttribute("aria-controls", "inProgress");
-    completed_tab.setAttribute("aria-controls", "completed");
+    if(inProgess_tab) inProgess_tab.setAttribute("aria-controls", "inProgress");
+    if(completed_tab ) completed_tab.setAttribute("aria-controls", "completed");
+    // Changing the skiplink href to bypass the breadcrumbs main-message
+    if(skiplinkTag) skiplinkTag.setAttribute('href', '#main-message');
 });
 
 
