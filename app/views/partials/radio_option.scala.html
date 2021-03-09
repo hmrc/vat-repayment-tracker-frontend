@@ -27,7 +27,7 @@ m: Messages
 )
 
 <div class="multiple-choice" @attributes.fold(Html("")){ attributes => @attributes }>
-<input id="@id" type="radio" name="@name" value="@value" @{if(field.value.contains(value)) "checked"}>
+<input id="@id" type="radio" name="@name" value="@value" aria-describedby="@id-hint" @{if(field.value.contains(value)) "checked"}>
 <label for="@id" id="@id-label">
     @text
 
