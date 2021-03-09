@@ -25,8 +25,6 @@ import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 case class ViewConfig(
     appName:                     String,
     assetsPrefix:                String,
-    analyticsToken:              String,
-    analyticsHost:               String,
     authUrl:                     String,
     frontendBaseUrl:             String,
     loginUrl:                    String,
@@ -57,8 +55,6 @@ case class ViewConfig(
   def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
     appName                     = servicesConfig.getString("appName"),
     assetsPrefix                = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
-    analyticsToken              = servicesConfig.getString(s"google-analytics.token"),
-    analyticsHost               = servicesConfig.getString(s"google-analytics.host"),
     authUrl                     = servicesConfig.baseUrl("auth"),
     frontendBaseUrl             = servicesConfig.getString("urls.frontend-base"),
     loginUrl                    = servicesConfig.getString("urls.login"),
