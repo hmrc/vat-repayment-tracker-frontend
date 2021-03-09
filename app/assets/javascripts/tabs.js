@@ -74,7 +74,7 @@
               case 37:
                    Array.prototype.forEach.call(tabLinks, function (tabLink) {
                       removeClass(tabLink, tabSelectedClass)
-                      removeClass(tabLink.closest('li'), listItemSelectedClass)
+                      removeClass(tabLink.parentNode, listItemSelectedClass)
                       tabLink.setAttribute('aria-selected', 'false')
                       tabLink.setAttribute('tabindex', '-1')
                       tabLink.setAttribute('role', 'tab')
@@ -89,12 +89,12 @@
                    })
 
                    removeClass(d.getElementById('inProgress'), panelHiddenClass)
-                   addClass(d.getElementById('tab_inProgress').closest('li'), listItemSelectedClass)
+                   addClass(d.getElementById('tab_inProgress').parentNode, listItemSelectedClass)
                   break;
               case 39:
                   Array.prototype.forEach.call(tabLinks, function (tabLink) {
                      removeClass(tabLink, tabSelectedClass)
-                     removeClass(tabLink.closest('li'), listItemSelectedClass)
+                     removeClass(tabLink.parentNode, listItemSelectedClass)
                      tabLink.setAttribute('aria-selected', 'false')
                      tabLink.setAttribute('tabindex', '-1')
                      tabLink.setAttribute('role', 'tab')
@@ -109,7 +109,7 @@
                   })
 
                   removeClass(d.getElementById('completed'), panelHiddenClass)
-                  addClass(d.getElementById('tab_completed').closest('li'), listItemSelectedClass)
+                  addClass(d.getElementById('tab_completed').parentNode, listItemSelectedClass)
                   break;
               }
 
@@ -124,7 +124,7 @@
         //change aria-selected to false for all tabs
         Array.prototype.forEach.call(tabLinks, function (tabLink) {
           removeClass(tabLink, tabSelectedClass)
-          removeClass(tabLink.closest('li'), listItemSelectedClass)
+          removeClass(tabLink.parentNode, listItemSelectedClass)
           tabLink.setAttribute('aria-selected', 'false')
           tabLink.setAttribute('tabindex', '-1')
           tabLink.setAttribute('role', 'tab')
@@ -146,7 +146,7 @@
         var targetPanel = tab.getAttribute('href')
         var panel = tabsEl.querySelector(targetPanel)
         removeClass(panel, panelHiddenClass)
-        addClass(tab.closest('li'), listItemSelectedClass)
+        addClass(tab.parentNode, listItemSelectedClass)
       }
     })
   }
