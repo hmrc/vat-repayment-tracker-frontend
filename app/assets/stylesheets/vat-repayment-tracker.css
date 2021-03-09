@@ -644,4 +644,20 @@ textarea:focus {
 }
 
 
+.govuk-table__caption--m {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 18px;
+    font-size: 1.125rem;
+    line-height: 1.11111;
+    margin-bottom: 15px;
+}
+
+.govuk-table__caption--m {
+    font-size: 24px;
+    font-size: 2.4rem;
+    line-height: 1.25;
+}
 
