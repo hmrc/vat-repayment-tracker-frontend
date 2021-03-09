@@ -79,7 +79,6 @@
                       tabLink.setAttribute('tabindex', '-1')
                       tabLink.setAttribute('role', 'tab')
                    })
-
                    addClass(tabKeyDownInProgress, tabSelectedClass)
                    tabKeyDownInProgress.setAttribute('aria-selected', 'true')
                    tabKeyDownInProgress.setAttribute('tabindex', '0')
@@ -87,7 +86,6 @@
                    Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                     addClass(tabPanel, panelHiddenClass)
                    })
-
                    removeClass(d.getElementById('inProgress'), panelHiddenClass)
                    addClass(d.getElementById('tab_inProgress').parentNode, listItemSelectedClass)
                   break;
