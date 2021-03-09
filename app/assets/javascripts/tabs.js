@@ -99,7 +99,6 @@
                      tabLink.setAttribute('tabindex', '-1')
                      tabLink.setAttribute('role', 'tab')
                   })
-
                   addClass(tabKeyDownCompleted, tabSelectedClass)
                   tabKeyDownCompleted.setAttribute('aria-selected', 'true')
                   tabKeyDownCompleted.setAttribute('tabindex', '0')
@@ -107,7 +106,6 @@
                   Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                    addClass(tabPanel, panelHiddenClass)
                   })
-
                   removeClass(d.getElementById('completed'), panelHiddenClass)
                   addClass(d.getElementById('tab_completed').parentNode, listItemSelectedClass)
                   break;
