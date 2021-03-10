@@ -39,7 +39,10 @@ request: Request[_]
 
 
 <table class="govuk-table">
-  <thead class="govuk-table__head">
+    <caption class="govuk-table__caption govuk-table__caption--m">
+        @if(appender == "_inprogress") @{LangMessages.`In progress`.show} else @{LangMessages.`Completed`.show}
+    </caption>
+    <thead class="govuk-table__head">
     <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header">@{LangMessages.`Received on`.show}</th>
       <th scope="col" class="govuk-table__header">@{LangMessages.`Accounting period`.show}</th>
