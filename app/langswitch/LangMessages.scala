@@ -130,6 +130,10 @@ object LangMessages {
     english = "In progress"
   )
 
+  val `In progress repayment caption`: Message = Message(
+    english = "In progress VAT repayments"
+  )
+
   val `Repayment suspended` = Message(
     english = "Repayment suspended"
   )
@@ -229,6 +233,8 @@ object LangMessages {
   val `View history`: Message = Message("View history")
 
   val `Completed`: Message = Message("Completed")
+
+  val `Completed repayment caption`: Message = Message("Completed VAT repayments")
 
   val `No completed repayments content here`: Message = Message("No completed repayments content here")
 
