@@ -68,46 +68,48 @@
         })
 
         tabLink.addEventListener('keydown', function(event) {
-          var tabKeyDownInProgress = d.getElementById('tab_inProgress')
-          var tabKeyDownCompleted  = d.getElementById('tab_completed')
-          switch (event.keyCode) {
-              case 37:
-                   Array.prototype.forEach.call(tabLinks, function (tabLink) {
-                      removeClass(tabLink, tabSelectedClass)
-                      removeClass(tabLink.parentNode, listItemSelectedClass)
-                      tabLink.setAttribute('aria-selected', 'false')
-                      tabLink.setAttribute('tabindex', '-1')
-                      tabLink.setAttribute('role', 'tab')
-                   })
-                   addClass(tabKeyDownInProgress, tabSelectedClass)
-                   tabKeyDownInProgress.setAttribute('aria-selected', 'true')
-                   tabKeyDownInProgress.setAttribute('tabindex', '0')
-                   tabKeyDownInProgress.focus();
-                   Array.prototype.forEach.call(tabPanels, function (tabPanel) {
-                    addClass(tabPanel, panelHiddenClass)
-                   })
-                   removeClass(d.getElementById('inProgress'), panelHiddenClass)
-                   addClass(d.getElementById('tab_inProgress').parentNode, listItemSelectedClass)
-                  break;
-              case 39:
-                  Array.prototype.forEach.call(tabLinks, function (tabLink) {
-                     removeClass(tabLink, tabSelectedClass)
-                     removeClass(tabLink.parentNode, listItemSelectedClass)
-                     tabLink.setAttribute('aria-selected', 'false')
-                     tabLink.setAttribute('tabindex', '-1')
-                     tabLink.setAttribute('role', 'tab')
-                  })
-                  addClass(tabKeyDownCompleted, tabSelectedClass)
-                  tabKeyDownCompleted.setAttribute('aria-selected', 'true')
-                  tabKeyDownCompleted.setAttribute('tabindex', '0')
-                  tabKeyDownCompleted.focus();
-                  Array.prototype.forEach.call(tabPanels, function (tabPanel) {
-                   addClass(tabPanel, panelHiddenClass)
-                  })
-                  removeClass(d.getElementById('completed'), panelHiddenClass)
-                  addClass(d.getElementById('tab_completed').parentNode, listItemSelectedClass)
-                  break;
-              }
+            var tabKeyDownFirst = d.getElementsByClassName('govuk-tabs__tab').item(0);
+            var tabKeyDownSecond = d.getElementsByClassName('govuk-tabs__tab').item(1);
+            var paneKeyDownFirst  = d.getElementsByClassName('govuk-tabs__panel').item(0);
+            var paneKeyDownSecond  = d.getElementsByClassName('govuk-tabs__panel').item(1);
+            switch (event.keyCode) {
+                case 37:
+                    Array.prototype.forEach.call(tabLinks, function (tabLink) {
+                        removeClass(tabLink, tabSelectedClass)
+                        removeClass(tabLink.parentNode, listItemSelectedClass)
+                        tabLink.setAttribute('aria-selected', 'false')
+                        tabLink.setAttribute('tabindex', '-1')
+                        tabLink.setAttribute('role', 'tab')
+                    })
+                    addClass(tabKeyDownFirst, tabSelectedClass)
+                    tabKeyDownFirst.setAttribute('aria-selected', 'true')
+                    tabKeyDownFirst.setAttribute('tabindex', '0')
+                    tabKeyDownFirst.focus();
+                    Array.prototype.forEach.call(tabPanels, function (tabPanel) {
+                        addClass(tabPanel, panelHiddenClass)
+                    })
+                    removeClass(paneKeyDownFirst, panelHiddenClass)
+                    addClass(tabKeyDownFirst.parentNode, listItemSelectedClass)
+                    break;
+                case 39:
+                    Array.prototype.forEach.call(tabLinks, function (tabLink) {
+                        removeClass(tabLink, tabSelectedClass)
+                        removeClass(tabLink.parentNode, listItemSelectedClass)
+                        tabLink.setAttribute('aria-selected', 'false')
+                        tabLink.setAttribute('tabindex', '-1')
+                        tabLink.setAttribute('role', 'tab')
+                    })
+                    addClass(tabKeyDownSecond, tabSelectedClass)
+                    tabKeyDownSecond.setAttribute('aria-selected', 'true')
+                    tabKeyDownSecond.setAttribute('tabindex', '0')
+                    tabKeyDownSecond.focus();
+                    Array.prototype.forEach.call(tabPanels, function (tabPanel) {
+                       addClass(tabPanel, panelHiddenClass)
+                    })
+                    removeClass(paneKeyDownSecond, panelHiddenClass)
+                    addClass(tabKeyDownSecond.parentNode, listItemSelectedClass)
+                    break;
+            }
 
         })
 
@@ -144,6 +146,7 @@
         removeClass(panel, panelHiddenClass)
         addClass(tab.parentNode, listItemSelectedClass)
       }
+
     })
   }
 
