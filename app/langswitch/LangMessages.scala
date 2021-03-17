@@ -131,7 +131,7 @@ object LangMessages {
   )
 
   val `In progress repayment caption`: Message = Message(
-    english = "In progress VAT repayments"
+    english = "VAT repayments in progress"
   )
 
   val `Repayment suspended` = Message(
