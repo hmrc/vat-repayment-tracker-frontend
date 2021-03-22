@@ -66,7 +66,7 @@ timeoutDialog = true
                         <a class="govuk-tabs__tab" href="#completed" id="tab_completed" >@{LangMessages.`Completed`.show}</a>
                     </li>
                 </ul>
-                <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
+                <div class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
                     @if(hasSuspendedRepayments) {
                         <div class="notice subsection near-deadline-view-warning ">
                             <i class="icon icon-important"><span class="visually-hidden">!</span></i>
@@ -80,13 +80,13 @@ timeoutDialog = true
                     }
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
-                </section>
-                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
+                </div>
+                <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
                     <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
                     <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-exist"></div>
-                </section>
+                </div>
             </div>
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
         </div>
