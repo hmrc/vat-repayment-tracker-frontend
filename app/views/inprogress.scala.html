@@ -75,7 +75,7 @@ timeoutDialog = true
                             </div>
                         </div>
                     } else {
-                        <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`In progress`.show}</h2>
+                        <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
                     }
 
                     @multiple_repayments(inProgress,vrn,"_inprogress")
