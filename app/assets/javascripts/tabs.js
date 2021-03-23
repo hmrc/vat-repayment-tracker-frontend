@@ -64,8 +64,6 @@
         tabLink.addEventListener('click', function(event) {
               event.preventDefault()
               tabClick(this)
-
-
         })
 
         tabLink.addEventListener('keydown', function(event) {
@@ -102,12 +100,13 @@
         completed_tab.setAttribute("aria-controls", "completed");
         sectionInProcess.setAttribute("aria-labelledby", "tab_inProgress");
         sectionCompleted.setAttribute("aria-labelledby", "tab_completed");
+        sectionInProcess.setAttribute("role", "tabpanel");
+        sectionCompleted.setAttribute("role", "tabpanel");
 
 
         //hide all the panels
         Array.prototype.forEach.call(tabPanels, function (tabPanel) {
           addClass(tabPanel, panelHiddenClass)
-          tabPanel.setAttribute("role", "tabpanel");
         })
 
         //show the target panel
@@ -231,9 +230,6 @@ window.addEventListener("load", function(event) {
     var errorSummary = document.getElementById("error-summary-display");
     var errorSummarylinkHref = document.querySelector("[href='#manage']");
     var skiplinkTag = document.querySelector("[href='#content']");
-    var inProgess_tab = document.getElementById("tab_inProgress");
-    var completed_tab = document.getElementById("tab_completed");
-    var deleteCLass =  document.querySelectorAll('.govuk-tabs__tab');
     if(errorSummary) errorSummary.focus();
     // This changes the error summary link's href from #maage to #dd
     // This was done to focus the error summary link on the first radio button on the manage_or_track.scala.html page
@@ -246,10 +242,6 @@ window.addEventListener("load", function(event) {
 function myFunction(x) {
   var inProgess_tab = document.getElementById("tab_inProgress");
   var completed_tab = document.getElementById("tab_completed");
-  var sectionInProcess = document.getElementById("inProgress")
-  var sectionCompleted = document.getElementById("completed")
-  var tabSelectedClass = document.getElementsByClassName("govuk-tabs__list-item--selected");
-  var tabHiddenClass = document.getElementsByClassName("govuk-tabs__list-item--selected");
   if (x.matches) { // If media query matches
     if(completed_tab) {
         completed_tab.removeAttribute("aria-controls");
