@@ -59,14 +59,14 @@ timeoutDialog = true
             <h1 id="main-message">@{LangMessages.`We are processing your VAT repayments`.show}</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
-                    <li class="govuk-tabs__list-item" role="presentation">
+                    <li class="govuk-tabs__list-item">
                         <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#inProgress" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
                     </li>
-                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
                         <a class="govuk-tabs__tab" href="#completed" id="tab_completed" >@{LangMessages.`Completed`.show}</a>
                     </li>
                 </ul>
-                <section class="govuk-tabs__panel" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
+                <section class="govuk-tabs__panel" id="inProgress">
                     @if(hasSuspendedRepayments) {
                         <div class="notice subsection near-deadline-view-warning ">
                             <i class="icon icon-important"><span class="visually-hidden">!</span></i>
@@ -81,7 +81,7 @@ timeoutDialog = true
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>
-                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed" role="tabpanel" aria-labelledby="tab_completed">
+                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed">
                     <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
                     <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>

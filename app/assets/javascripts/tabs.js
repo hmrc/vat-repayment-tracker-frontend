@@ -62,17 +62,14 @@
 
         //setup event listener for tabs
         tabLink.addEventListener('click', function(event) {
-          console.log(window.devicePixelRatio)
-          if(window.devicePixelRatio < 2) {
-          event.preventDefault()
-          tabClick(this)
-          }
+              event.preventDefault()
+              tabClick(this)
+
+
         })
 
         tabLink.addEventListener('keydown', function(event) {
-           if(window.devicePixelRatio < 2) {
             tabKeyPress(this)
-        }
         })
 
       })
@@ -81,6 +78,8 @@
       function tabClick(tab) {
         var inProgess_tab = document.getElementById("tab_inProgress");
         var completed_tab = document.getElementById("tab_completed");
+        var sectionInProcess = document.getElementById("inProgress")
+        var sectionCompleted = document.getElementById("completed")
         //remove all tabSelectedClass from all tabs
         //change aria-selected to false for all tabs
         Array.prototype.forEach.call(tabLinks, function (tabLink) {
@@ -89,6 +88,7 @@
           tabLink.setAttribute('aria-selected', 'false')
           tabLink.setAttribute('tabindex', '-1')
           tabLink.setAttribute('role', 'tab')
+          tabLink.parentNode.setAttribute('role', 'presentation')
 
         })
 
@@ -100,11 +100,14 @@
         // Adding the aria-controls to the tab links on page load
         inProgess_tab.setAttribute("aria-controls", "inProgress");
         completed_tab.setAttribute("aria-controls", "completed");
+        sectionInProcess.setAttribute("aria-labelledby", "tab_inProgress");
+        sectionCompleted.setAttribute("aria-labelledby", "tab_completed");
 
 
         //hide all the panels
         Array.prototype.forEach.call(tabPanels, function (tabPanel) {
           addClass(tabPanel, panelHiddenClass)
+          tabPanel.setAttribute("role", "tabpanel");
         })
 
         //show the target panel
@@ -121,6 +124,8 @@
           var paneKeyDownSecond  = d.getElementsByClassName('govuk-tabs__panel').item(1);
           var inProgess_tab = document.getElementById("tab_inProgress");
           var completed_tab = document.getElementById("tab_completed");
+          var sectionInProcess = document.getElementById("inProgress")
+          var sectionCompleted = document.getElementById("completed")
           switch (event.keyCode) {
                 case 37:
                     Array.prototype.forEach.call(tabLinks, function (tabLink) {
@@ -129,6 +134,8 @@
                         tabLink.setAttribute('aria-selected', 'false')
                         tabLink.setAttribute('tabindex', '-1')
                         tabLink.setAttribute('role', 'tab')
+                        sectionInProcess.setAttribute("aria-labelledby", "tab_inProgress");
+                        sectionCompleted.setAttribute("aria-labelledby", "tab_completed");
                     })
                     addClass(tabKeyDownFirst, tabSelectedClass)
                     tabKeyDownFirst.setAttribute('aria-selected', 'true')
@@ -138,6 +145,7 @@
                     completed_tab.setAttribute("aria-controls", "completed");
                     Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                         addClass(tabPanel, panelHiddenClass)
+                        tabPanel.setAttribute("role", "tabpanel");
                     })
                     removeClass(paneKeyDownFirst, panelHiddenClass)
                     addClass(tabKeyDownFirst.parentNode, listItemSelectedClass)
@@ -149,6 +157,8 @@
                          tabLink.setAttribute('aria-selected', 'false')
                          tabLink.setAttribute('tabindex', '-1')
                          tabLink.setAttribute('role', 'tab')
+                         sectionInProcess.setAttribute("aria-labelledby", "tab_inProgress");
+                         sectionCompleted.setAttribute("aria-labelledby", "tab_completed");
                     })
                     addClass(tabKeyDownSecond, tabSelectedClass)
                     tabKeyDownSecond.setAttribute('aria-selected', 'true')
@@ -158,6 +168,7 @@
                     completed_tab.setAttribute("aria-controls", "completed");
                     Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                          addClass(tabPanel, panelHiddenClass)
+                         tabPanel.setAttribute("role", "tabpanel");
                     })
                     removeClass(paneKeyDownSecond, panelHiddenClass)
                     addClass(tabKeyDownSecond.parentNode, listItemSelectedClass)
@@ -169,6 +180,8 @@
                          tabLink.setAttribute('aria-selected', 'false')
                          tabLink.setAttribute('tabindex', '-1')
                          tabLink.setAttribute('role', 'tab')
+                         sectionInProcess.setAttribute("aria-labelledby", "tab_inProgress");
+                         sectionCompleted.setAttribute("aria-labelledby", "tab_completed");
                     })
                     addClass(tabKeyDownSecond, tabSelectedClass)
                     tabKeyDownSecond.setAttribute('aria-selected', 'true')
@@ -178,6 +191,7 @@
                     completed_tab.setAttribute("aria-controls", "completed");
                     Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                          addClass(tabPanel, panelHiddenClass)
+                         tabPanel.setAttribute("role", "tabpanel");
                     })
                     removeClass(paneKeyDownSecond, panelHiddenClass)
                     addClass(tabKeyDownSecond.parentNode, listItemSelectedClass)
@@ -189,6 +203,8 @@
                          tabLink.setAttribute('aria-selected', 'false')
                          tabLink.setAttribute('tabindex', '-1')
                          tabLink.setAttribute('role', 'tab')
+                         sectionInProcess.setAttribute("aria-labelledby", "tab_inProgress");
+                         sectionCompleted.setAttribute("aria-labelledby", "tab_completed");
                     })
                     addClass(tabKeyDownFirst, tabSelectedClass)
                     tabKeyDownFirst.setAttribute('aria-selected', 'true')
@@ -198,6 +214,7 @@
                     tabKeyDownFirst.focus();
                     Array.prototype.forEach.call(tabPanels, function (tabPanel) {
                          addClass(tabPanel, panelHiddenClass)
+                         tabPanel.setAttribute("role", "tabpanel");
                     })
                     removeClass(paneKeyDownFirst, panelHiddenClass)
                     addClass(tabKeyDownFirst.parentNode, listItemSelectedClass)
@@ -262,8 +279,10 @@ window.addEventListener('resize', function(){
     var sectionCompleted = document.getElementById("completed")
     var tabSelectedClass = document.getElementsByClassName("govuk-tabs__list-item--selected");
     var tabHiddenClass = document.getElementsByClassName("govuk-tabs__list-item--selected");
-    if(window.devicePixelRatio >= 2 ) {
-           console.log(window.devicePixelRatio)
+    var h3 = inProgess_tab.parentNode
+    var result = window.getComputedStyle(h3, ':before');
+    if(result) {
+           console.log('Removed')
            if(tabSelectedClass) {
                inProgess_tab.parentNode.classList.remove("govuk-tabs__tab--selected");
            }
@@ -283,5 +302,7 @@ window.addEventListener('resize', function(){
            if(tabHiddenClass) {
                completed_tab.parentNode.classList.remove("govuk-tabs__panel--hidden")
            }
+            location = window.location
+            location = window.location.href
         }
 })
