@@ -282,7 +282,6 @@ window.addEventListener('resize', function(){
     var h3 = inProgess_tab.parentNode
     var result = window.getComputedStyle(h3, ':before');
     if(result) {
-           console.log('Removed')
            if(tabSelectedClass) {
                inProgess_tab.parentNode.classList.remove("govuk-tabs__tab--selected");
            }
