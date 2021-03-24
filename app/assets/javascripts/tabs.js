@@ -41,7 +41,10 @@
   ready(function() {
     var mobileMediaQuery = '(max-width: 641px)'
     var mq = w.matchMedia(mobileMediaQuery)
-    if(!mq.matches) {
+    var inProgess_tab = document.getElementById("tab_inProgress");
+    var h3 = inProgess_tab.parentNode
+    var result = window.getComputedStyle(h3, ':before');
+    if(!mq.matches || !result) {
         jsTabs()
     }
   })
@@ -62,8 +65,13 @@
 
         //setup event listener for tabs
         tabLink.addEventListener('click', function(event) {
-              event.preventDefault()
-              tabClick(this)
+              var inProgess_tab = document.getElementById("tab_inProgress");
+              var h3 = inProgess_tab.parentNode
+              var result = window.getComputedStyle(h3, ':before').content;
+              if(result == "none") {
+                event.preventDefault()
+                tabClick(this)
+              }
         })
 
         tabLink.addEventListener('keydown', function(event) {
@@ -293,7 +301,8 @@ window.addEventListener('resize', function(){
            if(tabHiddenClass) {
                completed_tab.parentNode.classList.remove("govuk-tabs__panel--hidden")
            }
-            location = window.location
-            location = window.location.href
         }
 })
+
+
+
