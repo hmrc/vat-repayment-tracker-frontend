@@ -75,7 +75,12 @@
         })
 
         tabLink.addEventListener('keydown', function(event) {
-            tabKeyPress(this)
+            var inProgess_tab = document.getElementById("tab_inProgress");
+            var h3 = inProgess_tab.parentNode
+            var result = window.getComputedStyle(h3, ':before').content;
+            if(result == "none") {
+                tabKeyPress(this)
+            }
         })
 
       })
