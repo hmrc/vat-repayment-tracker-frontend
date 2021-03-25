@@ -57,21 +57,21 @@ timeoutDialog = true
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
 
-                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
                         <a class="govuk-tabs__tab  govuk-tabs__tab--selected" href="#completed" id="tab_completed">@{LangMessages.`Completed`.show}</a>
                     </li>
-                    <li class="govuk-tabs__list-item" role="presentation">
+                    <li class="govuk-tabs__list-item">
                         <a class="govuk-tabs__tab" href="#inProgress" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
                     </li>
                 </ul>
 
-                <section class="govuk-tabs__panel" id="completed" role="tabpanel" aria-labelledby="tab_completed">
+                <section class="govuk-tabs__panel" id="completed">
                     <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
                     @multiple_repayments(completed,vrn,"_completed")
                     <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
                     <div id="completed-exist"></div>
                 </section>
-                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress" role="tabpanel" aria-labelledby="tab_inProgress">
+                <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress">
                     <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
                     <div class="govuk-inset-text" id="no-repayments">@{LangMessages.`No repayments in progress`.show}</div>
                     <p>@Html(LangMessages.`no-in-progress-desc`.show)</p>
