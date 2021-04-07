@@ -17,7 +17,6 @@
 package langswitch
 
 object ClassicMessages {
-  val view_bta: Message = Message(english = "View your Business Tax Account")
   val no_returns_line1: Message = Message(english = "If you are expecting a repayment and it is not showing here, this may be because:")
   val no_returns_line2: Message = Message(english = "repayments can take up to 24 hours to show on this page after you submit your return")
   val no_returns_line3: Message = Message(english = "you submitted your return before the end of the VAT accounting period")
@@ -28,7 +27,6 @@ object ClassicMessages {
   val returns_line3: Message = Message(english = " You do not need to contact us before this.")
   val returns_line4: Message = Message(english = "Your repayment will not show on this page once it has been completed and approved.  It can take up to a week for you to receive the repayment after it has been approved.")
 
-  val your_repayment_details: Message = Message(english = "Your repayment details")
   val bank_details: Message = Message(english = "If you have added your bank details we will send repayments to your bank account.")
   def bank_account_link(url: String): Message = Message(s"""<a href="$url">Add or change your bank account details</a>""")
   val address_details: Message = Message(english = "If you have not added your bank details, we will send you a cheque to:")
