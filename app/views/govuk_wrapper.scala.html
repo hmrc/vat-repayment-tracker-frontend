@@ -100,16 +100,7 @@
 @footerTop = {}
 
 @footerLinks = {
-  @viewsHelpers.footerLinks(
-  Some(Html(
-            s"""<li><a href="/vat-repayment-tracker/vat-repayment-accessibility-statement"
-                id="accessibility-statement-link"
-                target="_blank"
-                data-sso="false"
-                data-journey-click="footer:Click:Accessibility statement">
-    ${AccessibilityStatementMessages.label.show} </a></li>""")
-    )
-  )
+  @viewsHelpers.footerLinks()
 }
 
 @serviceInfo = {
