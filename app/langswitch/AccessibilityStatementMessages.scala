@@ -18,7 +18,10 @@ package langswitch
 
 object AccessibilityStatementMessages {
 
-  val label: Message = Message(english = "Accessibility statement")
+  val label: Message = Message(
+    english = "Accessibility statement",
+    welsh   = "Datganiad hygyrchedd"
+  )
 
   val header: Message = Message(
     english = "Accessibility statement for the VAT repayments service",

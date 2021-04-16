@@ -65,7 +65,7 @@ object LangMessages {
 
   val `When we will repay you description`: Message = Message(
     english = "We will usually repay you within 30 days of HMRC receiving your VAT Return. If you need to speak to someone about your repayment, you can only do this after 30 days have passed.",
-    welsh = "Fel arfer, caiff ad-daliadau eu gwneud cyn pen 30 diwrnod ar ôl i CThEM gael eich Ffurflen TAW. Os bydd angen i chi siarad â rhywun am eich ad-daliad, gallwch ond wneud hynny ar ôl 30 diwrnod."
+    welsh   = "Fel arfer, caiff ad-daliadau eu gwneud cyn pen 30 diwrnod ar ôl i CThEM gael eich Ffurflen TAW. Os bydd angen i chi siarad â rhywun am eich ad-daliad, gallwch ond wneud hynny ar ôl 30 diwrnod."
   )
   val `after 30 days have passed.`: Message = Message(
     english = " after 30 days have passed."
@@ -157,7 +157,8 @@ object LangMessages {
   )
 
   val `In progress repayment caption`: Message = Message(
-    english = "VAT repayments in progress"
+    english = "VAT repayments in progress",
+    welsh   = "Ad-daliadau TAW ar y gweill"
   )
 
   val `Repayment suspended` = Message(
@@ -297,7 +298,8 @@ object LangMessages {
   )
 
   val `Completed repayment caption`: Message = Message(
-    english = "Completed VAT repayments"
+    english = "Completed VAT repayments",
+    welsh   = "Ad-daliadau TAW wedi’u cwblhau"
   )
 
   val `No completed repayments content here`: Message = Message(
