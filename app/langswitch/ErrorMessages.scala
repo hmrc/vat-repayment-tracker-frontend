@@ -20,65 +20,28 @@ import model.Vrn
 
 object ErrorMessages {
 
-  val badRequest400Title: Message = Message(
-    "Bad request - 400"
-  )
-  val badRequest400Heading: Message = Message(
-    "Bad request"
-  )
-  val badRequest400Message: Message = Message(
-    "Please check that you have entered the correct web address."
-  )
-
-  val pageNotFound404Title: Message = Message(
-    "Page not found - 404"
-  )
-  val pageNotFound404Heading: Message = Message(
-    "This page can’t be found"
-  )
-  val pageNotFound404Message: Message = Message(
-    "Please check that you have entered the correct web address."
-  )
-
-  val authProblemTitle: Message = Message(
-    "More than one session is open"
-  )
-  val authProblemHeading: Message = Message(
-    "More than one session is open"
-  )
-  val authProblemMessage: Message = Message(
-    "To continue, please close one session or start again."
-  )
-
-  val internalServerError500Title: Message = Message(
-    "Sorry, we are experiencing technical difficulties - 500"
-  )
-  val internalServerError500Heading: Message = Message(
-    "Sorry, we’re experiencing technical difficulties"
-  )
-  val internalServerError500Message: Message = Message(
-    "Please try again in a few minutes."
-  )
   val `You do not have access to this service`: Message = Message(
-    english = "You do not have access to this service"
+    english = "You do not have access to this service",
+    welsh   = "Nid oes gennych fynediad at y gwasanaeth hwn"
   )
   val `choose an option`: Message = Message(
-    "Select whether to manage your accounts or track a VAT repayment"
-  )
-  val `VRN missing`: Message = Message(
-    "VRN missing"
+    english = "Select whether to manage your accounts or track a VAT repayment",
+    welsh   = "Dewiswch a ydych am reoli’ch cyfrifon neu olrhain ad-daliad TAW"
   )
 
   val `general error title`: Message = Message(
-    "Sorry, there is a problem with the service"
+    english = "Sorry, there is a problem with the service",
+    welsh   = "Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth"
   )
 
   val `try again later`: Message = Message(
-    "Try again later."
+    english = "Try again later.",
+    welsh   = "Rhowch gynnig arall arni yn nes ymlaen."
   )
 
   def `You do not have access to this service`(vrn: Vrn): Message = Message(
-    english = s"""You do not have access to this service for VRN : ${vrn.value}"""
+    english = s"""You do not have access to this service for VRN : ${vrn.value}""",
+    welsh   = s"Nid oes gennych fynediad at y gwasanaeth hwn ar gyfer Rhif Cofrestru TAW: ${vrn.value}"
   )
 
 }
