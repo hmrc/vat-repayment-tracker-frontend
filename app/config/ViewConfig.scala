@@ -45,7 +45,7 @@ case class ViewConfig(
   val reportAccessibilityProblemUrl = s"$frontendBaseUrl/contact/accessibility?service=$appName"
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
   val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
-  val supportLanguages: Boolean = false
+  val supportLanguages: Boolean = true
   val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
   val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
