@@ -11,6 +11,7 @@ GET        /vat-repayment-tracker/language/:language                            
 GET        /vat-repayment-tracker/show-vrt                                                controllers.Controller.showVrt
 #V and C to use the following
 GET        /vat-repayment-tracker/manage-or-track-vrt                                     controllers.ManageOrTrackController.manageOrTrackVrt
+POST       /vat-repayment-tracker/manage-or-track-vrt                                     controllers.ManageOrTrackController.manageOrTrackSubmit
 
 #Interenal route
 GET        /vat-repayment-tracker/non-mtd-user                                            controllers.Controller.nonMtdUser
