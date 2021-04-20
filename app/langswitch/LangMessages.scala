@@ -693,6 +693,11 @@ object LangMessages {
     welsh   = "Nid yw’r gwasnaeth hwn ar gael ar hyn o bryd"
   )
 
+  val signOut = Message(
+    english = "Sign out",
+    welsh   = "Allgofnodi"
+  )
+
   object timeoutDialog {
     def message(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
       Message(
@@ -712,11 +717,9 @@ object LangMessages {
         english = "Continue",
         welsh   = "Yn eich blaen")
 
-    def signOut(implicit request: Request[_]) = if (RequestSupport.isLoggedIn)
-      Message(
-        english = "Sign out",
-        welsh   = "Allgofnodi")
-    else
+    def signOutOrDeleteYourAnswers(implicit request: Request[_]) = if (RequestSupport.isLoggedIn) {
+      signOut
+    } else
       Message(english = "Delete your answers",
               welsh   = "Dileu’ch atebion")
   }
