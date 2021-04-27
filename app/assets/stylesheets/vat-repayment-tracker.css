@@ -662,3 +662,14 @@ textarea:focus {
     line-height: 1.25;
 }
 
+.lang-toggle {
+    float: right;
+    margin-top: 0px;
+}
+
+@media print {
+    .print-hide {
+        display: none !important;
+    }
+}
+
