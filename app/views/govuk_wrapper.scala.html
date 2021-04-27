@@ -68,10 +68,7 @@
 }
 
 @headerNavLinks = {
-  @if(viewConfig.supportLanguages) {
-    <li><span id="language-toggle">@viewsHelpers.languageSelection()</span></li>
-  }
-<li><a id="homeNavHref" href=@viewConfig.signOut>@LangMessages.signOut.show</a></li>
+    <li><a id="homeNavHref" href=@viewConfig.signOut>@LangMessages.signOut.show</a></li>
 }
 
 
@@ -113,7 +110,10 @@
 }
 
 @mainContentHeader = {
-  @{contentHeader.map(contentHeader => viewsHelpers.mainContentHeader(contentHeader = contentHeader))}
+    @if(viewConfig.supportLanguages) {
+    @viewsHelpers.languageSelection()
+    }
+    @{contentHeader.map(contentHeader => viewsHelpers.mainContentHeader(contentHeader = contentHeader))}
 }
 
 @getHelpForm = {
