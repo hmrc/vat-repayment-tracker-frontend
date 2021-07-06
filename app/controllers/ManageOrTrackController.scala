@@ -70,7 +70,7 @@ class ManageOrTrackController @Inject() (
               valueInForm.choice match {
                 case Some(choice) =>
                   choice match {
-                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showVrt())
+                    case ManageOrTrackOptions.vrt.value    => Redirect(routes.Controller.showVrt)
                     case ManageOrTrackOptions.bank.value   => Redirect(routes.Controller.viewRepaymentAccount())
                     case ManageOrTrackOptions.nobank.value => Redirect(routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("manage-or-track-vrt")))
                     case ManageOrTrackOptions.nodd.value =>

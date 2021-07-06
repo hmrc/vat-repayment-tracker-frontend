@@ -38,7 +38,7 @@ class ShutteredAction @Inject() (
     implicit val r: Request[A] = request
     if (viewConfig.isShuttered) {
       logger.debug("Shuttered")
-      Future.successful(Redirect(routes.ShutteredController.shuttered().url))
+      Future.successful(Redirect(routes.ShutteredController.shuttered.url))
     } else {
       logger.debug("Not shuttered")
       block(request)
