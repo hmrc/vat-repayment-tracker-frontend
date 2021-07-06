@@ -2,6 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSetting
 import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
+val appName = "vat-repayment-tracker-frontend"
 val scalaV = "2.12.12"
 scalaVersion := scalaV
 
@@ -23,7 +24,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(wartremoverErrors in(Test, compile) --= Seq(Wart.Any, Wart.Equals, Wart.Null, Wart.NonUnitStatements, Wart.PublicInference))
   .settings(wartremoverExcluded ++=
     routes.in(Compile).value ++
-      (baseDirectory.value / "it").get ++
       (baseDirectory.value / "test").get ++
       Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala"))
   .settings(publishingSettings: _*)
@@ -54,4 +54,3 @@ lazy val microservice = Project(appName, file("."))
       "-Ywarn-unused:-imports,-patvars,-privates,-locals,-explicits,-implicits,_"
     )
   )
-val appName = "vat-repayment-tracker-frontend"

@@ -25,7 +25,7 @@ import play.api.Logger
 import play.utils.UriEncoding
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 

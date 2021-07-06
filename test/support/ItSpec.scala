@@ -49,7 +49,7 @@ import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.ExecutionContext
 
