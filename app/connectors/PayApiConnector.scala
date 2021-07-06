@@ -23,7 +23,7 @@ import model.payapi.{SpjRequestBtaVat, SpjResponse}
 import play.api.{Configuration, Logger}
 import play.api.mvc.Request
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -16,12 +16,13 @@
 
 package req
 
-import javax.inject.Inject
 import langswitch.Language
 import play.api.i18n._
 import play.api.mvc.Request
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
+
+import javax.inject.Inject
 
 /**
  * I'm repeating a pattern which was brought originally by play-framework

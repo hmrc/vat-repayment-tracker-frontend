@@ -18,9 +18,7 @@ package config
 
 import com.google.inject.Inject
 import model.Vrn
-import play.api.mvc.Request
-import req.RequestSupport
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 case class ViewConfig(
     appName:                     String,
@@ -52,7 +50,7 @@ case class ViewConfig(
   def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
 
   @Inject
-  def this(servicesConfig: ServicesConfig, runMode: RunMode) = this(
+  def this(servicesConfig: ServicesConfig) = this(
     appName                     = servicesConfig.getString("appName"),
     assetsPrefix                = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
     authUrl                     = servicesConfig.baseUrl("auth"),

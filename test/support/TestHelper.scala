@@ -16,8 +16,8 @@
 
 package support
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.play.bootstrap.http.ErrorResponse
+import play.api.libs.json.{Json, OFormat}
+import support.TestHelper.ErrorResponse
 
 trait TestHelper {
 
@@ -25,4 +25,17 @@ trait TestHelper {
     Json.toJson(ErrorResponse(404, "URI not found", requested = Some(url)))
   }
 
+}
+
+object TestHelper {
+  case class ErrorResponse(
+      statusCode:  Int,
+      message:     String,
+      xStatusCode: Option[String] = None,
+      requested:   Option[String] = None
+  )
+
+  object ErrorResponse {
+    implicit val format: OFormat[ErrorResponse] = Json.format[ErrorResponse]
+  }
 }
