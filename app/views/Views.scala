@@ -34,8 +34,6 @@ class Views @Inject() (
     //classic
     val classic_none: _root_.views.html.classic.no_vat_repayments_classic,
     val classic_some: _root_.views.html.classic.vat_repayments_classic,
-    //accessibility statement
-    val accessibilityStatement: _root_.views.html.statement.accessibility_statement,
 
     // session timed out page
     val delete_answers: _root_.views.html.session.delete_answers
