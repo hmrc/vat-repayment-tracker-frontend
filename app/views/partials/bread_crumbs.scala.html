@@ -15,7 +15,6 @@
  *@
 
 @import config.ViewConfig
-@import langswitch.LangMessages
 
 @this(
 viewsHelpers: views.ViewsHelpers,
@@ -26,17 +25,15 @@ viewConfig: ViewConfig
 currentPage : String
 )(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages,
 )
-
-@import viewsHelpers.requestSupport._
-
 
 
 <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" id="viewVatAccount" href="@{viewConfig.viewVatAccount}">@{LangMessages.`Your VAT account`.show}</a>
+            <a class="govuk-breadcrumbs__link" id="viewVatAccount" href="@{viewConfig.viewVatAccount}">@Messages("bread_crumbs.vat_account")</a>
         </li>
         <li class="govuk-breadcrumbs__list-item" aria-current="page">@{currentPage}</li>
     </ol>

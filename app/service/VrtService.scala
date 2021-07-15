@@ -19,12 +19,12 @@ package service
 import java.time.LocalDate
 import connectors.VatRepaymentTrackerBackendConnector
 import formaters.{DesFormatter, PeriodFormatter}
-
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model._
 import model.des.RiskingStatus.CLAIM_QUERIED
 import play.api.Logger
+import play.api.i18n.Messages
 import play.api.mvc.Request
 
 import scala.concurrent.ExecutionContext
@@ -39,7 +39,7 @@ class VrtService @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_]): AllRepaymentData = {
+  def getAllRepaymentData(repaymentDetails: Option[Seq[RepaymentDetailData]], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_], messages: Messages): AllRepaymentData = {
 
     repaymentDetails match {
       case Some(rd) =>
@@ -69,7 +69,7 @@ class VrtService @Inject() (
 
   }
 
-  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_]): Seq[RepaymentData] = {
+  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_], messages: Messages): Seq[RepaymentData] = {
 
     for {
       rd <- repaymentDetails

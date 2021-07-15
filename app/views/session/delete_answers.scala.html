@@ -22,18 +22,18 @@
     viewConfig: ViewConfig
 )
 
-@()(implicit request: Request[_])
+@()(implicit request: Request[_], message: Messages)
 
-@import viewsHelpers.requestSupport._
+
 @mainTemplate(
-    title =s"${LangMessages.`For your security, we signed you out`.show} - GOV.UK",
-    headerTitle = s"${LangMessages.`For your security, we signed you out`.show}",
+    title =s"""${Messages("delete_answers.signed_you_out")} - GOV.UK""",
+    headerTitle = s"""${Messages("delete_answers.signed_you_out")}""",
     timeoutDialog = false
 ) {
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@{LangMessages.`For your security, we signed you out`.show}</h1>
-        <p>@{LangMessages.`We did not save your answers`.show}</p>
+        <h1 class="heading-xlarge">@Messages("delete_answers.signed_you_out")</h1>
+        <p>@Messages("delete_answers.did_not_save_answers")</p>
     </div>
 </div>
-}@import langswitch.LangMessages
+}

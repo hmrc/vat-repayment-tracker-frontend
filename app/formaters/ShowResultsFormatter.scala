@@ -21,15 +21,21 @@ import model._
 import model.des.CustomerInformation
 import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
 import play.api.Logger
+import play.api.i18n.Messages
 import play.api.mvc.{Request, Result, Results}
-import views.Views
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ShowResultsFormatter @Inject() (views:            Views,
-                                      desFormatter:     DesFormatter,
-                                      addressFormatter: AddressFormatter)(implicit ec: ExecutionContext) extends Results {
+class ShowResultsFormatter @Inject() (
+    no_vat_repayments:    views.html.no_vat_repayments,
+    classic_none:         views.html.classic.no_vat_repayments_classic,
+    classic_some:         views.html.classic.vat_repayments_classic,
+    inprogress_completed: views.html.inprogress_completed,
+    completed:            views.html.completed,
+    inprogress:           views.html.inprogress,
+    desFormatter:         DesFormatter,
+    addressFormatter:     AddressFormatter)(implicit ec: ExecutionContext) extends Results {
 
   private val logger = Logger(this.getClass)
 
@@ -37,13 +43,13 @@ class ShowResultsFormatter @Inject() (views:            Views,
       vrn:                          Vrn,
       calendarData:                 Option[CalendarData],
       vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress
-  )(implicit request: Request[_]): Result = {
+  )(implicit request: Request[_], message: Messages): Result = {
 
     val address = addressFormatter.getFormattedAddressNonMtd(vatDesignatoryDetailsAddress)
 
     calendarData match {
-      case Some(data) => if (data.countReturns == 0) Ok(views.classic_none(vrn, address)) else Ok(views.classic_some(vrn, data.latestReceivedOnFormatted, address))
-      case None       => Ok(views.classic_none(vrn, address))
+      case Some(data) => if (data.countReturns == 0) Ok(classic_none(vrn, address)) else Ok(classic_some(vrn, data.latestReceivedOnFormatted, address))
+      case None       => Ok(classic_none(vrn, address))
     }
   }
 
@@ -51,7 +57,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
       allRepaymentData: AllRepaymentData,
       customerData:     Option[CustomerInformation],
       vrn:              Vrn
-  )(implicit request: Request[_]): Result = {
+  )(implicit request: Request[_], message: Messages): Result = {
 
     val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
     val bankDetails = desFormatter.getBankDetails(customerData)
@@ -65,7 +71,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
     }
 
     if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
-      Ok(views.inprogress_completed(
+      Ok(inprogress_completed(
         allRepaymentData.hasSuspendedPayment,
         allRepaymentData.inProgressRepaymentData,
         allRepaymentData.completedRepaymentData,
@@ -77,7 +83,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
         inflightBankDetails
       ))
     } else if (allRepaymentData.inProgressRepaymentData.isEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
-      Ok(views.completed(
+      Ok(completed(
         allRepaymentData.completedRepaymentData,
         bankDetailsExist,
         bankDetails,
@@ -87,7 +93,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
         inflightBankDetails
       ))
     } else if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty) {
-      Ok(views.inprogress(
+      Ok(inprogress(
         allRepaymentData.hasSuspendedPayment,
         allRepaymentData.inProgressRepaymentData,
         bankDetailsExist,
@@ -99,7 +105,7 @@ class ShowResultsFormatter @Inject() (views:            Views,
       ))
     } else {
       Ok(
-        views.no_vat_repayments(
+        no_vat_repayments(
           bankDetailsExist,
           bankDetails,
           addressDetails,

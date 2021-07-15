@@ -17,46 +17,25 @@
 package views
 
 import javax.inject.{Inject, Singleton}
-import req.RequestSupport
 import uk.gov.hmrc.play.views.html.helpers._
 import uk.gov.hmrc.play.views.html.layouts._
 
 @Singleton
 class ViewsHelpers @Inject() (
 
-    val requestSupport:    RequestSupport,
     val languageSelection: _root_.views.html.partials.language_selection,
 
     //copied from uk.gov.hmrc.play.views.html.helpers
-    val address:                    Address,
-    val dateFields:                 DateFields,
-    val dateFieldsFreeInline:       DateFieldsFreeInline,
-    val dateFieldsFreeInlineLegend: DateFieldsFreeInlineLegend,
-    val dateFieldsFreeYearInline:   DateFieldsFreeYearInline,
-    val dateFieldsFreeYear:         DateFieldsFreeYear,
-    val dateFieldsInline:           DateFieldsInline,
-    val dropdown:                   Dropdown,
-    val errorInline:                ErrorInline,
-    val errorNotifications:         ErrorNotifications,
-    val errorSummary:               ErrorSummary,
-    val fieldGroup:                 FieldGroup,
-    val form:                       FormWithCSRF,
-    val input:                      Input,
-    val inputRadioGroup:            InputRadioGroup,
-    val reportAProblemLink:         ReportAProblemLink,
-    val singleCheckbox:             SingleCheckbox,
-    val textArea:                   TextArea,
+    val errorSummary:       ErrorSummary,
+    val form:               FormWithCSRF,
+    val reportAProblemLink: ReportAProblemLink,
 
     //copied from uk.gov.hmrc.play.views.html.layouts
-    val article:                 Article,
-    val attorneyBanner:          AttorneyBanner,
     val betaBanner:              BetaBanner,
     val footer:                  Footer,
-    val euExitLinks:             EuExitLinks,
     val footerLinks:             FooterLinks,
     val headWithTrackingConsent: HeadWithTrackingConsent,
     val headerNav:               HeaderNav,
-    val loginStatus:             LoginStatus,
     val mainContent:             MainContent,
     val mainContentHeader:       MainContentHeader,
     val serviceInfo:             ServiceInfo,

@@ -16,27 +16,19 @@
 
 package langswitch
 
+import play.api.i18n.I18nSupport
 import javax.inject.Inject
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
-import req.RequestSupport
-import views.Views
 
 import scala.concurrent.ExecutionContext
 
 class LanguageSwitchController @Inject() (
-    requestSupport: RequestSupport,
-    views:          Views,
-    cc:             ControllerComponents)(
+    errorTemplate: views.html.error.error_template,
+    cc:            ControllerComponents)(
     implicit
     ec: ExecutionContext)
-  extends AbstractController(cc) {
-
-  import requestSupport._
-
-  private val `This url has to have parent page` = Message(
-    english = "This url has to have parent page."
-  )
+  extends AbstractController(cc) with I18nSupport {
 
   def switchToLanguage(language: Language): Action[AnyContent] = cc.actionBuilder { implicit request =>
     val maybeReferrer: Option[String] =
@@ -49,16 +41,15 @@ class LanguageSwitchController @Inject() (
   }
 
   def noReferrerContent(l: Language)(implicit request: Request[_]): Result = Ok(
-    views.errorTemplate(
-      pageTitle = missingRefererHeader(l).show,
-      heading   = missingRefererHeader(l).show,
-      message   = `This url has to have parent page`.show
+    errorTemplate(
+      pageTitle = missingRefererHeader(l),
+      heading   = missingRefererHeader(l),
+      message   = "This url has to have parent page."
     )
   )
 
-  private def missingRefererHeader(language: Language) = Message(
-    english = s"Missing referer header - language changed to ${language.label}"
-  )
+  private def missingRefererHeader(language: Language): String =
+    s"Missing referer header - language changed to ${language.label}"
 
 }
 

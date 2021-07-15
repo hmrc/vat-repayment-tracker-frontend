@@ -1,0 +1,231 @@
+service.name = Any tax service
+
+site.service_name = Business tax account
+
+heading_bta = Business tax account
+
+in_progress = In progress
+completed = Completed
+generic_prefixerror = Error
+continue = Continue
+stay_signed_in = Stay signed in
+back = Back
+
+timeout_dialog.message.isloggedin = For your security, we will sign you out in
+timeout_dialog.message.timeout = For your security, we will time you out in
+
+
+repayment_details_classic.h2 = Your repayment details
+repayment_details_classic.bank_details = If you have added your bank details we will send repayments to your bank account.
+repayment_details_classic.bank_account_link = <a href="{0}">Add or change your bank account details
+repayment_details_classic.address_details = If you have not added your bank details, we will send you a cheque to:
+repayment_details_classic.address_link = <a href="{0}">Change your business address</a>
+
+no_vat_repayments_classic.title = No VAT repayments in progress
+no_vat_repayments_classic.h1 = No VAT repayments in progress
+no_vat_repayments_classic.no_returns_line1 = If you are expecting a repayment and it is not showing here, this may be because:
+no_vat_repayments_classic.no_returns_line2 = repayments can take up to 24 hours to show on this page after you submit your return
+no_vat_repayments_classic.no_returns_line3 = you submitted your return before the end of the VAT accounting period
+no_vat_repayments_classic.no_returns_line4 = if we recently paid you, it can take up to a week for you to receive it
+
+vat_repayments_classic.scala.title = Your VAT repayments
+vat_repayments_classic.scala.title.returns_line1 = Return received on:
+vat_repayments_classic.scala.title.returns_line2 = We will usually repay you within 30 days of receiving your return.
+vat_repayments_classic.scala.title.returns_line3 = " You do not need to contact us before this."
+vat_repayments_classic.scala.title.returns_line4 = Your repayment will not show on this page once it has been completed and approved. It can take up to a week for you to receive the repayment after it has been approved.
+
+
+error_template.title = Sorry, there is a problem with the service
+error_template.title.try_again = Try again later.
+
+bread_crumbs.vat_account = Your VAT account
+
+multiple_repayment_details.repayments_in_progress = VAT repayments in progress
+multiple_repayment_details.completed_repayment_caption = Completed VAT repayments
+multiple_repayment_details.received_on = Received on
+multiple_repayment_details.accounting_period = Accounting period
+multiple_repayment_details.amount_claimed = Amount claimed
+multiple_repayment_details.view_history = View history
+multiple_repayment_details.history_accounting_period = View history for accounting period
+multiple_repayment_details.view_progress = View progress
+multiple_repayment_details.view_progress_accounting_period = View progress for accounting period
+
+repayment_details.repayment_bank_details = Your repayment bank details
+repayment_details.currently_paid_bank_transfer = You are currently paid by bank transfer to the following account:
+repayment_details.name_on_account = Name on account:
+repayment_details.sort_code = Sort code:
+repayment_details.account_number = Account number:
+repayment_details.manage_repayment = Manage your repayment bank account
+repayment_details.repayment_details = Your repayment details
+repayment_details.send_cheque = We'll send your cheque to:
+repayment_details.faster_payment = For faster payment next time
+repayment_details.repayment_bank_account = add a repayment bank account
+repayment_details.update_business_address = Update your business address
+
+timeout_dialog_script = "XXXX"
+
+delete_answers.signed_you_out = For your security, we signed you out
+delete_answers.did_not_save_answers = We did not save your answers.
+
+
+completed.title = We are processing your VAT repayments
+completed.track_repayments = Track your VAT repayments
+completed.no-completed-desc = Completed repayments will only show here for 60 days after your repayment date. View your <a href="{0}">VAT payments history.</a>
+completed.no-in-progress-desc = If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</p><p>If you submitted your return early check this page after your accounting period has ended.
+completed.no_repayments_in_progress = No repayments in progress
+
+govuk_wrapper.sign_out = Sign out
+govuk_wrapper.delete_your_answers = Delete your answers
+
+inprogress.title = We are processing your VAT repayments
+inprogress.track_repayments = Track your VAT repayments
+inprogress.repayment_suspended = Your repayment is suspended.
+inprogress.submit_latest_return = You must <a href="https://www.gov.uk/vat-returns/send-your-return">submit your latest VAT return</a>
+inprogress.no_completed_desc = Completed repayments will only show here for 60 days after your repayment date. View your <a href="{0}">VAT payments history.</a>
+inprogress.no_completed_repayments = You have no completed repayments
+
+
+inprogress_completed.title = We are processing your VAT repayments
+inprogress_completed.track_repayments = Track your VAT repayments
+inprogress_completed.repayment_suspended = Your repayment is suspended.
+inprogress_completed.submit_latest_return = You must <a href="https://www.gov.uk/vat-returns/send-your-return">submit your latest VAT return</a>
+inprogress_completed.no_completed_desc = Completed repayments will only show here for 60 days after your repayment date. View your <a href="{0}">VAT payments history.</a>
+
+
+manage_or_track.shuttered = Manage Direct Debit and repayment bank account
+manage_or_track.manage_or_track = Manage Direct Debit and repayment bank account or track repayments
+manage_or_track.payment_and_repayments = Payment and repayments
+manage_or_track.there_is_a_problem = There is a problem
+manage_or_track.manage_direct_debit = Manage your Direct Debit
+manage_or_track.set_up_direct_debit = Set up a Direct Debit
+manage_or_track.hmrc_automatically = HMRC will automatically collect your VAT Return payments when due
+manage_or_track.manage_repayment_bank_account = Manage your repayment bank account
+manage_or_track.set_up_repayment_bank_account = Set up a repayment bank account
+manage_or_track.tell_pay_money = Tell HMRC where to pay your money
+manage_or_track.track_vat_repayments = Track your VAT repayments
+manage_or_track.view_hmrc_owe_you = View what HMRC owe you
+manage_or_track.account_sortcode = Account: {0}, Sort code: {1}
+
+
+no_vat_repayments.title = No VAT repayments in progress
+no_vat_repayments.repayments_hours = Repayments usually take around 24 hours to show on this page after submitting your VAT Return.
+no_vat_repayments.expecting_repayment = Check this page when you are next expecting a repayment.
+no_vat_repayments.view_account = View your VAT account
+
+non_mtd_user.title = You cannot access this service
+non_mtd_user.line1 = You have not signed up to Making Tax Digital for VAT. You need to this before you can track your VAT repayments.
+non_mtd_user.line2 = Find out how to <a href="{0}" target="_blank">sign up for Making Tax Digital for VAT (opens in a new window or tab).</a>
+non_mtd_user.line3 = View your <a href="{0}">Business Tax Account.
+
+
+shuttered.title = This service is shuttered
+
+view_progress.action_required = Action required
+view_progress.submit_vat_return = Submit VAT return
+view_progress.submit_your_return = <a href="https://www.gov.uk/vat-returns/send-your-return">Submit your return</a>
+view_progress.view_payments_history = View payments history
+view_progress.pay_now = Pay now
+view_progress.estimated_repayment_date = Estimated repayment date
+view_progress.repayment_history = Your repayment history
+view_progress.repayment_progress = Your repayment progress
+
+
+view_repayment_account.title = Your VAT repayments will be sent to this account
+view_repayment_account.name_on_account = Name on account:
+view_repayment_account.sort_code = Sort code:
+view_repayment_account.account_number = Account number:
+view_repayment_account.change_account_details = Change account details
+
+
+repayment_details.h2 = Your repayment details
+
+
+unhappy_path_responses.no_access = You do not have access to this service
+unhappy_path_responses.no_access_vrn = You do not have access to this service for VRN : {0}
+
+manage_or_track_controller.choose_an_option = Select whether to manage your accounts or track a VAT repayment
+
+
+month.january = 1 January to 31 January
+month.february = 1 February to 28 February
+month.february_leap = 1 February to 29 February
+month.march = 1 March to 31 March
+month.april = 1 April to 30 April
+month.may = 1 May to 31 May
+month.june = 1 June to 30 June
+month.july = 1 July to 31 July
+month.august = 1 August to 31 August
+month.september = 1 September to 30 September
+month.october = 1 October to 31 October
+month.november = 1 November to 30 November
+month.december = 1 December to 31 December
+
+
+date.JanToDec = January to December
+date.FebToJan = February to January
+date.MarToFeb = March to February
+date.AprToMar = April to March
+date.MayToApr = May to April
+date.JunToMay = June to May
+date.JulToJun = July to June
+date.AugToJul = August to July
+date.SepToAug = September to August
+date.OctToSep = October to September
+date.NovToOct = November to October
+date.DecToNov = December to November
+
+
+quarter.JanuaryQuarter = 1 November to 31 January
+quarter.FebruaryQuarter = 1 December to 28 February
+quarter.FebruaryQuarter_leap = 1 December to 29 February
+quarter.MarchQuarter = 1 January to 31 March
+quarter.AprilQuarter = 1 February to 30 April
+quarter.MayQuarter = 1 March to 31 May
+quarter.JuneQuarter = 1 April to 30 June
+quarter.JulyQuarter = 1 May to 31 July
+quarter.AugustQuarter = 1 June to 31 August
+quarter.SeptemberQuarter = 1 July to 30 September
+quarter.OctoberQuarter = 1 August to 31 October
+quarter.NovemberQuarter = 1 September to 30 November
+quarter.DecemberQuarter = 1 October to 31 December
+
+view_progress_formatter.checking_amount = Checking amount
+view_progress_formatter.we_received_your_return = We received your return and are now checking the repayment amount we owe you.
+view_progress_formatter.amount_you_claimed = Amount you claimed
+view_progress_formatter.repayment_being_processed = Your repayment is being processed
+view_progress_formatter.estimated_repayment_date_passed = Estimated repayment date has passed
+view_progress_formatter.do_not_need_anything = You do not need to do anything right now. We are working on repaying you as soon as possible. </p><p>We have sent you a letter to explain that your repayment is delayed.
+view_progress_formatter.repayment_delayed = Your repayment is delayed
+view_progress_formatter.sending_for_further_checks = Sending for further checks
+view_progress_formatter.making_sure_right_amount = We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.
+view_progress_formatter.repayment_amount_changed = Repayment amount changed
+view_progress_formatter.amount_we_pay_you = Amount we''ll pay you
+view_progress_formatter.repayment_has_been_approved = Your repayment has been approved
+view_progress_formatter.now_owe_hmrc = You now owe HMRC
+view_progress_formatter.amount_to_pay = Amount to pay
+view_progress_formatter.need_to_make_vat_payment = You need to make a VAT payment
+view_progress_formatter.repayment_approved = Repayment approved
+view_progress_formatter.send_repayment_bank_account = This will reach your repayment bank account in 3 workings days.
+view_progress_formatter.your_repayment_approved = Your repayment has been approved
+view_progress_formatter.cannot_process_your_repayment = We cannot process your repayment until you submit your VAT return for the last accounting period.<br /><br /><a href="https://www.gov.uk/vat-returns/send-your-return">Submit your return</a>
+view_progress_formatter.must_submit_latest_vat_return = You must submit your latest VAT return
+view_progress_formatter.repayment_suspended = Repayment suspended
+view_progress_formatter.repayment_complete = Repayment complete
+view_progress_formatter.amount_we_paid_you = Amount we paid you
+view_progress_formatter.repayment_is_complete = Your repayment is complete
+view_progress_formatter.address_not_available = Address not available
+view_progress_formatter.repayment_complete_address_adjusted = We sent you an adjusted payment of £{1} as a cheque to </p><p> {0}.
+view_progress_formatter.repayment_complete_address = We sent a payment of £{1} as a cheque to </p><p> {0}.
+view_progress_formatter.received_your_vat_payment = We received your VAT payment.
+view_progress_formatter.amount_you_paid = Amount you paid
+view_progress_formatter.repayment_complete_bank_details = We sent a payment of £{3} to your repayment bank account:</p><p>Name: {0}</p><p>Account number: {1}</p><p>Sort code: {2}.
+view_progress_formatter.repayment_complete_bank_details_adjusted = We sent an adjusted payment of £{3} to your repayment bank account:</p><p>Name: {0}</p><p>Account number: {1}</p><p>Sort code: {2}.
+view_progress_formatter.send_cheque_to_business_address = We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  </p><p>If you do not receive a letter in the next few days, check your <a href={0}>VAT payments history</a>.
+view_progress_formatter.claimed_vat_repayment_post = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}. We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a href={2}>VAT payments history</a>.
+view_progress_formatter.claimed_vat_repayment_of = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a href={2}>VAT payments history</a>.
+view_progress_formatter.calculated_original_amount_claimed = We calculated that the original amount of £{0} you claimed was incorrect. You now owe HMRC £{1}. We sent you a letter with the reason for this change.
+
+
+
+
+

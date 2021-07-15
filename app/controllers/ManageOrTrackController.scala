@@ -20,22 +20,22 @@ import config.ViewConfig
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
 import formaters.DesFormatter
+
 import javax.inject.{Inject, Singleton}
-import langswitch.ErrorMessages
 import model._
 import model.des._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
+import play.api.i18n.{Lang, Langs, Messages, MessagesApi, MessagesImpl, MessagesProvider}
 import play.api.mvc.{Action, _}
 import req.RequestSupport
-import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ManageOrTrackController @Inject() (
     cc:                          ControllerComponents,
-    views:                       Views,
+    manage_or_track:             views.html.manage_or_track,
     desConnector:                PaymentsOrchestratorConnector,
     requestSupport:              RequestSupport,
     desFormatter:                DesFormatter,
@@ -44,13 +44,11 @@ class ManageOrTrackController @Inject() (
     directDebitBackendConnector: DirectDebitBackendConnector)(
     implicit
     ec: ExecutionContext)
-
   extends FrontendBaseController(cc) {
-
-  import requestSupport._
 
   def manageOrTrackVrt: Action[AnyContent] =
     actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
+      import requestSupport._
       if (viewConfig.isShuttered)
         manageOrTrackViewShuttered(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
       else
@@ -59,7 +57,7 @@ class ManageOrTrackController @Inject() (
 
   def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
-
+      import requestSupport._
       manageOrTrackForm.bindFromRequest().fold(
         formWithErrors => {
           manageOrTrackView(request.typedVrn.vrn, formWithErrors)
@@ -83,7 +81,7 @@ class ManageOrTrackController @Inject() (
                       } yield Redirect(nextUrl.nextUrl)
                   }
                 case None =>
-                  manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", ErrorMessages.`choose an option`.show))
+                  manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", Messages("manage_or_track_controller.choose_an_option")))
               }
             }
         }
@@ -93,15 +91,16 @@ class ManageOrTrackController @Inject() (
 
   private def manageOrTrackViewShuttered(vrn: Vrn, form: Form[ManageOrTrack])(
       implicit
-      request: Request[_]): Future[Result] = {
+      messages: Messages,
+      request:  Request[_]): Future[Result] = {
 
-    Ok(views.manage_or_track(vrn, None, None, form, inflightBankDetails = false))
+    Ok(manage_or_track(vrn, None, None, form, inflightBankDetails = false))
 
   }
 
   private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(
       implicit
-      request: Request[_]): Future[Result] = {
+      request: Request[_], messages: Messages): Future[Result] = {
 
     val customerDataF = desConnector.getCustomerData(vrn)
     val ddDataF = desConnector.getDDData(vrn)
@@ -112,15 +111,15 @@ class ManageOrTrackController @Inject() (
 
       val bankDetails: Option[BankDetails] = desFormatter.getBankDetails(customerData)
       val ddDetails: Option[BankDetails] = desFormatter.getDDData(ddData)
-      Ok(views.manage_or_track(vrn, bankDetails, ddDetails, form, desFormatter.bankDetailsInFlight(customerData)))
+      Ok(manage_or_track(vrn, bankDetails, ddDetails, form, desFormatter.bankDetailsInFlight(customerData)))
     }
     chosenUrl
 
   }
 
-  private def manageOrTrackForm(implicit request: Request[_]): Form[ManageOrTrack] = {
+  private def manageOrTrackForm(implicit request: Request[_], messages: Messages): Form[ManageOrTrack] = {
     Form(mapping(
-      "manage" -> optional(text).verifying(ErrorMessages.`choose an option`.show, _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
+      "manage" -> optional(text).verifying(Messages("manage_or_track_controller.choose_an_option"), _.nonEmpty))(ManageOrTrack.apply)(ManageOrTrack.unapply))
   }
 
   //------------------------------------------------------------------------------------------------------------------------------
@@ -128,6 +127,8 @@ class ManageOrTrackController @Inject() (
   //deprecate this when the URL changes to vat-repayment-tracker
   def manageOrTrack(vrn: Vrn): Action[AnyContent] =
     actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
+      import requestSupport._
+
       if (viewConfig.isShuttered)
         manageOrTrackViewShuttered(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
       else

@@ -21,7 +21,6 @@ import play.api.i18n._
 import play.api.mvc.Request
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
-
 import javax.inject.Inject
 
 /**
@@ -55,6 +54,20 @@ object RequestSupport {
    */
   private object HcProvider extends FrontendHeaderCarrierProvider {
     def headerCarrier(implicit request: Request[_]): HeaderCarrier = hc(request)
+  }
+
+  object timeoutDialog {
+    def message(implicit messages: Messages, request: Request[_]): String =
+      if (RequestSupport.isLoggedIn) "For your security, we will sign you out in" //Messages("timeout_dialog.message.isloggedin")
+      else Messages("timeout_dialog.message.timeout")
+
+    def keepAlive(implicit messages: Messages, request: Request[_]): String =
+      if (RequestSupport.isLoggedIn) Messages("stay_signed_in")
+      else Messages("continue")
+
+    def signOutOrDeleteYourAnswers(implicit messages: Messages, request: Request[_]): String =
+      if (RequestSupport.isLoggedIn) Messages("govuk_wrapper.sign_out")
+      else Messages("govuk_wrapper.delete_your_answers")
   }
 
 }

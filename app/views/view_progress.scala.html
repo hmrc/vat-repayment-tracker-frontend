@@ -17,7 +17,6 @@
 @import config.ViewConfig
 @import model.des._
 @import model._
-@import langswitch.LangMessages
 @import formaters.CommonFormatter
 
 @this(
@@ -37,29 +36,30 @@ showPayUrl: Boolean,
 amountInPence: Long
 )(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
+
 
 @mainTemplate(
-title = s"$pageTitle - ${LangMessages.heading_bta.show} - GOV.UK",
-headerTitle = LangMessages.heading_bta.show,
+title = s"""$pageTitle - ${Messages("heading_bta")} - GOV.UK""",
+headerTitle = Messages("heading_bta"),
 bodyClasses = None,
 timeoutDialog = true
 ) {
 
-<a href="@{viewConfig.showResultsUrl}" id="back" class="govuk-back-link">@{LangMessages.Back.show}</a>
+<a href="@{viewConfig.showResultsUrl}" id="back" class="govuk-back-link">@Messages("back")</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message">@{pageTitle}</h1>
 
             @if(viewProgress.repaymentSuspended) {
                 <div id="repayment-suspended-action-required" class="govuk-!-margin-bottom-9">
-                    <h2 class="govuk-body govuk-!-margin-bottom-0">@{LangMessages.`Action required`.show}</h2>
-                    <h2 class="govuk-!-margin-bottom-2">@{LangMessages.`Submit VAT return`.show}</h2>
+                    <h2 class="govuk-body govuk-!-margin-bottom-0">@Messages("view_progress.action_required")</h2>
+                    <h2 class="govuk-!-margin-bottom-2">@Messages("view_progress.submit_vat_return")</h2>
                     <div class="govuk-!-margin-bottom-3">
-                        @Html(LangMessages.`Submit your return`.show)
+                        @Html(Messages("view_progress.submit_your_return"))
                     </div>
                 </div>
             } else {
@@ -73,13 +73,13 @@ timeoutDialog = true
                         }</p>
                         @{
                             if(showHistoryUrl) {
-                                    <p id="history-url"><a href={viewConfig.viewVatAccount}>{LangMessages.`View payments history`.show}</a></p>
+                                    <p id="history-url"><a href={viewConfig.viewVatAccount}>{Messages("view_progress.view_payments_history")}</a></p>
                             }
                         }
                         @{
                             if(showPayUrl) {
 
-                                    <p id="pay-url"><a href={routes.PayApiController.startPaymentsJourney(amountInPence).url}>{LangMessages.`Pay now`.show}</a></p>
+                                    <p id="pay-url"><a href={routes.PayApiController.startPaymentsJourney(amountInPence).url}>{Messages("view_progress.pay_now")}</a></p>
                             }
                         }
                     </div>
@@ -87,7 +87,7 @@ timeoutDialog = true
                     @{
                         if(showEstimatedRepaymentDat) {
                                 <div class="govuk-grid-column-one-half">
-                                <h2 class="govuk-body govuk-!-margin-bottom-0">{LangMessages.`Estimated repayment date`.show}</h2>
+                                <h2 class="govuk-body govuk-!-margin-bottom-0">{Messages("view_progress.estimated_repayment_date")}</h2>
                                 <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{CommonFormatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
                                 </div>
                         }
@@ -97,10 +97,10 @@ timeoutDialog = true
 
             @{
                 if (viewProgress.isComplete) {
-                <h2>{LangMessages.`Your repayment history`.show}</h2>
+                <h2>{Messages("view_progress.repayment_history")}</h2>
                 }
                 else {
-                <h2>{LangMessages.`Your repayment progress`.show}</h2>
+                <h2>{Messages("view_progress.repayment_progress")}</h2>
                 }
             }
 

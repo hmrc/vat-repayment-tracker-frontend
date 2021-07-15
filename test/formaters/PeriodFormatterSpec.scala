@@ -16,9 +16,14 @@
 
 package formaters
 
+import play.api.i18n.{Lang, MessagesApi, MessagesImpl, MessagesProvider}
 import support.ItSpec
 
 class PeriodFormatterSpec extends ItSpec {
+
+  implicit val messagesProvider: MessagesProvider = {
+    MessagesImpl(Lang.defaultLang, injector.instanceOf[MessagesApi])
+  }
 
   val periodFormatter: PeriodFormatter = injector.instanceOf[PeriodFormatter]
 

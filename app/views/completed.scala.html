@@ -17,7 +17,6 @@
 @import config.ViewConfig
 @import model.des._
 @import model.RepaymentDataNoRiskingStatus
-@import langswitch.LangMessages
 @import model.Vrn
 
 
@@ -39,42 +38,42 @@ addressExists: Boolean,
 vrn: Vrn,
 inflightBankDetails : Boolean)(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
 @mainTemplate(
-title =s"${LangMessages.`We are processing your VAT repayments`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
-headerTitle = LangMessages.heading_bta.show,
+title =s"""${Messages("completed.title")} - ${Messages("heading_bta")} - GOV.UK""",
+headerTitle = Messages("heading_bta"),
 bodyClasses = None,
 timeoutDialog = true
 ) {
 
-@bread_crumbs({LangMessages.`Track your VAT repayments`.show})
+@bread_crumbs(Messages("completed.track_repayments"))
     <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{LangMessages.`We are processing your VAT repayments`.show}</h1>
+            <h1 id="main-message">@Messages("completed.title")</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
 
                     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                        <a class="govuk-tabs__tab  govuk-tabs__tab--selected" href="#completed" id="tab_completed">@{LangMessages.`Completed`.show}</a>
+                        <a class="govuk-tabs__tab  govuk-tabs__tab--selected" href="#completed" id="tab_completed">@Messages("completed")</a>
                     </li>
                     <li class="govuk-tabs__list-item">
-                        <a class="govuk-tabs__tab" href="#inProgress" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
+                        <a class="govuk-tabs__tab" href="#inProgress" id="tab_inProgress">@Messages("in_progress")</a>
                     </li>
                 </ul>
 
                 <section class="govuk-tabs__panel" id="completed">
-                    <h2 class="govuk-tabs__title">@{LangMessages.`Completed`.show}</h2>
+                    <h2 class="govuk-tabs__title">Messages("completed")</h2>
                     @multiple_repayments(completed,vrn,"_completed")
-                    <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
+                    <p>@Html(Messages("completed.no-completed-desc", viewConfig.paymentHistoryUrl))</p>
                     <div id="completed-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress">
-                    <h2 class="govuk-tabs__title">@{LangMessages.`In progress`.show}</h2>
-                    <div class="govuk-inset-text" id="no-repayments">@{LangMessages.`No repayments in progress`.show}</div>
-                    <p>@Html(LangMessages.`no-in-progress-desc`.show)</p>
+                    <h2 class="govuk-tabs__title">@Messages("in_progress")</h2>
+                    <div class="govuk-inset-text" id="no-repayments">@Messages("completed.no_repayments_in_progress")</div>
+                    <p>@Html(Messages("completed.no-in-progress-desc"))</p>
                     <div id="inprogress-none"></div>
                 </section>
             </div>

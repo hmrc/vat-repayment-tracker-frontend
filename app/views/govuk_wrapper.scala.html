@@ -15,7 +15,6 @@
  *@
 
 @import play.twirl.api.HtmlFormat
-@import langswitch.LangMessages
 
 @this(
   govUkTemplate: views.html.layouts.GovUkTemplate,
@@ -23,7 +22,6 @@
   viewConfig: config.ViewConfig,
   timeout_dialog: partials.timeout_dialog_script
 )
-
 
 @(
   title: String,
@@ -37,11 +35,10 @@
   serviceInfoContent: Html = HtmlFormat.empty,
   scriptElem: Option[Html] = None,
   timeoutDialog: Boolean = true)(
-  implicit request: Request[_]
+  implicit  request: Request[_], message:Messages
 )
 
 @import req.RequestSupport
-@import viewsHelpers.requestSupport._
 
 @headScripts = {
 
@@ -67,7 +64,7 @@
 }
 
 @headerNavLinks = {
-    <li><a id="homeNavHref" href=@viewConfig.signOut>@LangMessages.signOut.show</a></li>
+    <li><a id="homeNavHref" href=@viewConfig.signOut>@Messages("govuk_wrapper.sign_out")</a></li>
 }
 
 

@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import langswitch.LangMessages
-@import langswitch.ClassicMessages
 @import config.ViewConfig
 @import model.Vrn
 
@@ -31,25 +29,24 @@ vrn : Vrn,
 address: String
 )(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
-
 @mainTemplate(
-title = s"${LangMessages.`No VAT repayments in progress`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
-headerTitle = LangMessages.heading_bta.show,
+title = s"""${Messages("no_vat_repayments_classic.title")} - ${Messages("heading_bta")} - GOV.UK""",
+headerTitle = Messages("heading_bta"),
 bodyClasses = None,
 timeoutDialog = true
 ) {
     <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{LangMessages.`No VAT repayments in progress`.show}</h1>
-            <p>@{ClassicMessages.no_returns_line1.show}</p>
+            <h1 id="main-message">@Messages("no_vat_repayments_classic.h1")</h1>
+            <p>@Messages("no_vat_repayments_classic.no_returns_line1")</p>
             <ul class="govuk-list govuk-list--bullet">
-                <li>@{ClassicMessages.no_returns_line2.show}</li>
-                <li>@{ClassicMessages.no_returns_line3.show}</li>
-                <li>@{ClassicMessages.no_returns_line4.show}</li>
+                <li>@Messages("no_vat_repayments_classic.no_returns_line2")</li>
+                <li>@Messages("no_vat_repayments_classic.no_returns_line3")</li>
+                <li>@Messages("no_vat_repayments_classic.no_returns_line4")</li>
             </ul>
 
             @repaymentDetails(vrn,address)

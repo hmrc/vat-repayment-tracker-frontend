@@ -14,14 +14,16 @@
  * limitations under the License.
  *@
 
-@import langswitch.LangMessages
+
+@import req.RequestSupport
+
 
 @this(viewConf: config.ViewConfig,
         viewsHelpers: views.ViewsHelpers)
 
-@()(implicit r: Request[_])
 
-@import viewsHelpers.requestSupport._
+@()(implicit messages:Messages, r: Request[_])
+
 
 @timeoutKeepAliveUrl = @{
     routes.TimeoutController.keepAliveSession().url
@@ -37,14 +39,14 @@
             if(!window.GOVUK) return;
 
             window.GOVUK.timeoutDialog({
-                message:             '@LangMessages.timeoutDialog.message.show',
+                message:             '@RequestSupport.timeoutDialog.message',
                 timeout:              @viewConf.timeoutDialogTimeout,
                 countdown:            @viewConf.timeoutDialogCountdown,
 
-                keepAliveButtonText: '@LangMessages.timeoutDialog.keepAlive.show',
+                keepAliveButtonText: '@RequestSupport.timeoutDialog.keepAlive',
                 keepAliveUrl:        '@timeoutKeepAliveUrl',
 
-                signOutButtonText:   '@LangMessages.timeoutDialog.signOutOrDeleteYourAnswers.show',
+                signOutButtonText:   '@RequestSupport.timeoutDialog.signOutOrDeleteYourAnswers',
                 signOutUrl:          '@killUrl'
             });
         });

@@ -19,7 +19,6 @@
 @import model.RepaymentDataNoRiskingStatus
 @import model.PeriodKey
 @import model.Vrn
-@import langswitch.LangMessages
 @import formaters.CommonFormatter
 
 @this(
@@ -32,21 +31,20 @@ repayments: List[RepaymentDataNoRiskingStatus],
 vrn : Vrn,
 appender: String)(
 implicit
-request: Request[_]
+request: Request[_],
+message: Messages,
 )
-
-@import viewsHelpers.requestSupport._
 
 
 <table class="govuk-table">
     <caption class="visually-hidden">
-        @if(appender == "_inprogress") @{LangMessages.`In progress repayment caption`.show} else @{LangMessages.`Completed repayment caption`.show}
+        @if(appender == "_inprogress") { @Messages("multiple_repayment_details.repayments_in_progress") } else { @Messages("multiple_repayment_details.completed_repayment_caption") }
     </caption>
     <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">@{LangMessages.`Received on`.show}</th>
-      <th scope="col" class="govuk-table__header">@{LangMessages.`Accounting period`.show}</th>
-      <th scope="col" class="govuk-table__header" >@{LangMessages.`Amount claimed`.show}</th>
+        <th scope="col" class="govuk-table__header">@Messages("multiple_repayment_details.received_on")</th>
+      <th scope="col" class="govuk-table__header">@Messages("multiple_repayment_details.accounting_period")</th>
+      <th scope="col" class="govuk-table__header" >@Messages("multiple_repayment_details.amount_claimed")</th>
         <th scope="col" class="govuk-table__header" ><p class="visually-hidden">Status</p></th>
     </tr>
   </thead>
@@ -58,11 +56,11 @@ request: Request[_]
       <td >£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
         <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
             @if(appender == "_completed"){
-            <span aria-hidden="true">@{LangMessages.`View history`.show}</span>
-            <span class="visually-hidden">@{LangMessages.`Accounting period history hidden`.show} @onePayment.period</span>
+            <span aria-hidden="true">@Messages("multiple_repayment_details.view_history")</span>
+            <span class="visually-hidden">@Messages("multiple_repayment_details.history_accounting_period") @onePayment.period</span>
             } else{
-            <span aria-hidden="true">@{LangMessages.`View progress`.show}</span>
-            <span class="visually-hidden">@{LangMessages.`Accounting period progress hidden`.show} @onePayment.period</span>
+            <span aria-hidden="true">@Messages("multiple_repayment_details.view_progress")</span>
+            <span class="visually-hidden">Messages("multiple_repayment_details.view_progress_accounting_period") @onePayment.period</span>
             }
 
         </a></td>

@@ -17,7 +17,6 @@
 @import config.ViewConfig
 @import model.des._
 @import model._
-@import langswitch.LangMessages
 
 @this(
 viewsHelpers: views.ViewsHelpers,
@@ -32,27 +31,27 @@ addressExists: Boolean,
 vrn: Vrn,
 inflightBankDetails : Boolean)(
 implicit
-request: Request[_]
+request: Request[_],
+message: Messages
 )
 
-@import viewsHelpers.requestSupport._
 
 @if(showBankDetails) {
  @bankDetailsOption.map{bankDetails =>
- <h2>@{LangMessages.`Your repayment bank details`.show}</h2>
- <p>@{LangMessages.`You are currently paid by bank transfer`.show}</p>
- <p id="acc-name" class="govuk-!-margin-bottom-1">@{LangMessages.`Name on account`.show} <strong>@{bankDetails.formatAccountHolderName}</strong></p>
- <p id="acc-sort-code" class="govuk-!-margin-bottom-1">@{LangMessages.`Sort code`.show} <strong>@{bankDetails.formatSortCode}</strong></p>
- <p id="acc-number">@{LangMessages.`Account number`.show} <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
- <p><a href='@routes.Controller.viewRepaymentAccount(true)' id="manage-account">@{LangMessages.`Manage your repayment bank account`.show}</a></p>
+ <h2>@Messages("repayment_details.repayment_bank_details")</h2>
+ <p>@Messages("repayment_details.currently_paid_bank_transfer")</p>
+ <p id="acc-name" class="govuk-!-margin-bottom-1">@Messages("repayment_details.name_on_account") <strong>@{bankDetails.formatAccountHolderName}</strong></p>
+ <p id="acc-sort-code" class="govuk-!-margin-bottom-1">@Messages("repayment_details.sort_code") <strong>@{bankDetails.formatSortCode}</strong></p>
+ <p id="acc-number">@Messages("repayment_details.account_number") <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
+ <p><a href='@routes.Controller.viewRepaymentAccount(true)' id="manage-account">@Messages("repayment_details.manage_repayment")</a></p>
  }
 }
 
 @if((addressExists && (!(showBankDetails))) && (!(inflightBankDetails))) {
-<h2>@{LangMessages.`Your repayment details`.show}</h2>
-<p>@{LangMessages.`Currently sent to`.show}</p>
+<h2>@Messages("repayment_details.repayment_details")</h2>
+<p>@Messages("repayment_details.send_cheque")</p>
 <p id="address">@Html(address.getOrElse(""))</p>
-<p>@{LangMessages.`For faster payment next time`.show} <a href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"),true)' id="call-bac">@{LangMessages.`add a repayment bank account`.show}</a></p>
-<p><a href=@{viewConfig.updateCorrespondenceAddress}>@{LangMessages.`Update your business address`.show}</a></p>
+<p>@Messages("repayment_details.faster_payment") <a href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"),true)' id="call-bac">@Messages("repayment_details.repayment_bank_account")</a></p>
+<p><a href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
 }
 
