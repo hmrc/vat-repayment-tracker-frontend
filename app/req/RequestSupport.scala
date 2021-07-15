@@ -57,15 +57,15 @@ object RequestSupport {
   }
 
   object timeoutDialog {
-    def message(implicit messages: Messages, request: Request[_]): String =
-      if (RequestSupport.isLoggedIn) "For your security, we will sign you out in" //Messages("timeout_dialog.message.isloggedin")
+    def message(implicit request: Request[_], messages: Messages): String =
+      if (RequestSupport.isLoggedIn) Messages("timeout_dialog.message.isloggedin")
       else Messages("timeout_dialog.message.timeout")
 
-    def keepAlive(implicit messages: Messages, request: Request[_]): String =
+    def keepAlive(implicit request: Request[_], messages: Messages): String =
       if (RequestSupport.isLoggedIn) Messages("stay_signed_in")
       else Messages("continue")
 
-    def signOutOrDeleteYourAnswers(implicit messages: Messages, request: Request[_]): String =
+    def signOutOrDeleteYourAnswers(implicit request: Request[_], messages: Messages): String =
       if (RequestSupport.isLoggedIn) Messages("govuk_wrapper.sign_out")
       else Messages("govuk_wrapper.delete_your_answers")
   }
