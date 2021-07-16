@@ -26,14 +26,14 @@ import play.api.Logger
 import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
-import views.Views
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Controller @Inject() (
     cc:                                  ControllerComponents,
-    views:                               Views,
+    views_non_mtd_user:                  views.html.non_mtd_user,
+    view_repayment_account:              views.html.view_repayment_account,
     paymentsOrchestratorConnector:       PaymentsOrchestratorConnector,
     requestSupport:                      RequestSupport,
     desFormatter:                        DesFormatter,
@@ -54,7 +54,7 @@ class Controller @Inject() (
   private val logger = Logger(this.getClass)
 
   def nonMtdUser(): Action[AnyContent] = actions.loggedIn.async { implicit request =>
-    Future.successful(Ok(views.non_mtd_user()))
+    Future.successful(Ok(views_non_mtd_user()))
   }
 
   def signout: Action[AnyContent] =
@@ -114,7 +114,7 @@ class Controller @Inject() (
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(views.view_repayment_account(bankDetails, request.typedVrn.vrn, ReturnPage("view-repayment-account"), audit))
+        Ok(view_repayment_account(bankDetails, request.typedVrn.vrn, ReturnPage("view-repayment-account"), audit))
       }
 
       url

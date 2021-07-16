@@ -15,8 +15,6 @@
  *@
 
 @import config.ViewConfig
-@import langswitch.LangMessages
-@import langswitch.ClassicMessages
 @import model.Vrn
 
 @this(
@@ -29,14 +27,14 @@ viewConfig: ViewConfig
  address : String
 )(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
 </br>
-<h2 class="govuk-heading-m">@{LangMessages.`Your repayment details`.show}</h2>
-<p>@{ClassicMessages.bank_details.show}</p>
-<p>@Html(ClassicMessages.bank_account_link(viewConfig.vatVariationsUrl(vrn)).show)</p>
-<p>@{ClassicMessages.address_details.show}</p>
+<h2 class="govuk-heading-m">@Messages("repayment_details_classic.h2")</h2>
+<p>@Messages("repayment_details_classic.bank_details")</p>
+<p>@Html(Messages("repayment_details_classic.bank_account_link",viewConfig.vatVariationsUrl(vrn) ))</p>
+<p>@Messages("repayment_details_classic.address_details")</p>
 <p id="address">@Html(address)</p>
-<p>@Html(ClassicMessages.address_link(viewConfig.vatVariationsUrl(vrn)).show)</p>
+<p>@Html(Messages("repayment_details_classic.address_link",viewConfig.vatVariationsUrl(vrn)))</p>

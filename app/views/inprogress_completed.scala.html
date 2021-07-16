@@ -17,7 +17,6 @@
 @import config.ViewConfig
 @import model.des._
 @import model.RepaymentDataNoRiskingStatus
-@import langswitch.LangMessages
 @import model.Vrn
 
 
@@ -41,29 +40,29 @@ addressExists: Boolean,
 vrn: Vrn,
 inflightBankDetails : Boolean)(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
 
 @mainTemplate(
-title = s"${LangMessages.`We are processing your VAT repayments`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
-headerTitle = LangMessages.heading_bta.show,
+title = s"""${Messages("inprogress_completed.title")} - ${Messages("heading_bta")} - GOV.UK""",
+headerTitle = Messages("heading_bta"),
 bodyClasses = None,
 timeoutDialog = true
 ) {
 
-@bread_crumbs({LangMessages.`Track your VAT repayments`.show})
+@bread_crumbs(Messages("inprogress_completed.track_repayments"))
     <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{LangMessages.`We are processing your VAT repayments`.show}</h1>
+            <h1 id="main-message">@Messages("inprogress_completed.title")</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
                     <li class="govuk-tabs__list-item">
-                        <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#inProgress" id="tab_inProgress">@{LangMessages.`In progress`.show}</a>
+                        <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#inProgress" id="tab_inProgress">@Messages("in_progress")</a>
                     </li>
                     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                        <a class="govuk-tabs__tab" href="#completed" id="tab_completed" >@{LangMessages.`Completed`.show}</a>
+                        <a class="govuk-tabs__tab" href="#completed" id="tab_completed" >@Messages("completed")</a>
                     </li>
                 </ul>
                 <section class="govuk-tabs__panel" id="inProgress">
@@ -71,20 +70,20 @@ timeoutDialog = true
                         <div class="notice subsection near-deadline-view-warning ">
                             <i class="icon icon-important"><span class="visually-hidden">!</span></i>
                             <div id="duplicate-payment-warning">
-                                <strong class="bold-small">@{LangMessages.`Your repayment is suspended`.show}</strong>
-                                <strong class="bold-small">@Html(LangMessages.`submit your latest VAT return`.show)</strong>
+                                <strong class="bold-small">@Messages("inprogress_completed.repayment_suspended")</strong>
+                                <strong class="bold-small">@Html(Messages("inprogress_completed.submit_latest_return"))</strong>
                             </div>
                         </div>
                     } else {
-                        <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`In progress`.show}</h2>
+                        <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@Messages("in_progress")</h2>
                     }
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed">
-                    <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@{LangMessages.`Completed`.show}</h2>
+                    <h2 class="govuk-tabs__title" @if(!(hasSuspendedRepayments)){style="display:none"}>@Messages("completed")</h2>
                     @multiple_repayments(completed,vrn,"_completed")
-                    <p>@Html(LangMessages.`no-completed-desc`(viewConfig.paymentHistoryUrl).show)</p>
+                    <p>@Html(Messages("inprogress_completed.no_completed_desc", viewConfig.paymentHistoryUrl))</p>
                     <div id="completed-exist"></div>
                 </section>
             </div>

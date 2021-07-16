@@ -18,13 +18,15 @@ package controllers
 
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
+
 import javax.inject.{Inject, Singleton}
 import model._
 import play.api.Logger
 import play.api.mvc.{Action, _}
 import service.VrtService
+import req.RequestSupport
+
 import scala.concurrent.ExecutionContext
-import uk.gov.hmrc.play.bootstrap.ApplicationLoader
 
 @Singleton
 class BankAccountCocController @Inject() (
@@ -33,7 +35,8 @@ class BankAccountCocController @Inject() (
     bankAccountCocConnector:       BankAccountCocConnector,
     paymentsOrchestratorConnector: PaymentsOrchestratorConnector,
     auditor:                       Auditor,
-    vrtService:                    VrtService
+    vrtService:                    VrtService,
+    requestSupport:                RequestSupport,
 )(
     implicit
     ec: ExecutionContext)
@@ -43,7 +46,8 @@ class BankAccountCocController @Inject() (
   private val logger = Logger(this.getClass)
 
   def startBankAccountCocJourney(returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
-    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
+    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit  request: AuthenticatedRequest[_] =>
+      import requestSupport._
 
       if (audit) {
         logger.debug("startBankAccountCocJourney... trying to audit")

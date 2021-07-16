@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import langswitch.LangMessages
-@import langswitch.ClassicMessages
 @import config.ViewConfig
 @import model.Vrn
 
@@ -33,29 +31,28 @@
   address : String
  )(
   implicit
-  request: Request[_]
+  request: Request[_],
+  messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
-
 @mainTemplate(
-  title = s"${ClassicMessages.your_vat_repayments.show} - ${LangMessages.heading_bta.show} - GOV.UK",
-  headerTitle = LangMessages.heading_bta.show,
+  title = s"""${Messages("vat_repayments_classic.scala.title")} - ${Messages("heading_bta")} - GOV.UK""",
+  headerTitle = Messages("heading_bta"),
   bodyClasses = None,
   timeoutDialog = true
 ) {
   <div class="govuk-grid-row" data-gtag="repayment-type:in_progress_classic">
     <div class="govuk-grid-column-two-thirds">
-      <h1 id="main-message">@{ClassicMessages.your_vat_repayments.show}</h1>
-        <p>@{ClassicMessages.returns_line1.show}
+      <h1 id="main-message">@Messages("vat_repayments_classic.scala.title")</h1>
+        <p>@Messages("vat_repayments_classic.scala.title.returns_line1")
             <span>
                 <strong id="receivedOn">@{receivedOn}</strong>
             </span>
         </p>
 
-        <p>@{ClassicMessages.returns_line2.show}</p>
-        <p><span>@{ClassicMessages.returns_line3.show}</span></p>
-        <p>@{ClassicMessages.returns_line4.show}</p>
+        <p>@Messages("vat_repayments_classic.scala.title.returns_line2")</p>
+        <p><span>@Messages("vat_repayments_classic.scala.title.returns_line3")</span></p>
+        <p>@Messages("vat_repayments_classic.scala.title.returns_line1")</p>
         @repaymentDetails(vrn,address)
     </div>
   </div>

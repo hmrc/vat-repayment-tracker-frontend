@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import langswitch.LangMessages
 @import config.ViewConfig
 
 @this(
@@ -26,23 +25,23 @@ viewConfig: ViewConfig
 @(
 )(
 implicit
-request: Request[_]
+request: Request[_],
+messages: Messages
 )
 
-@import viewsHelpers.requestSupport._
 
 @mainTemplate(
-title = s"${LangMessages.`You cannot access this service`.show} - ${LangMessages.heading_bta.show} - GOV.UK",
-headerTitle = LangMessages.heading_bta.show,
+title = s"""${Messages("non_mtd_user.title")} - ${Messages("heading_bta")} - GOV.UK""",
+headerTitle = Messages("heading_bta"),
 bodyClasses = None,
 timeoutDialog = false
 ) {
     <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@{LangMessages.`You cannot access this service`.show}</h1>
-            <p>@{LangMessages.`non-mtd-line1`.show}</p>
-            <p>@Html({LangMessages.`non-mtd-line2`(viewConfig.signupUrl).show})</p>
-            <p>@Html({LangMessages.`non-mtd-line3`(viewConfig.btaUrl).show})</p>
+            <h1 id="main-message">@Messages("non_mtd_user.title")</h1>
+            <p>@Messages("non_mtd_user.line1")</p>
+            <p>@Html(Messages("non_mtd_user.line2", viewConfig.signupUrl))</p>
+            <p>@Html(Messages("non_mtd_user.line3", viewConfig.btaUrl))</p>
         </div>
     </div>
 }

@@ -18,8 +18,8 @@ package controllers.action
 
 import controllers.ErrorHandler
 import javax.inject.{Inject, Singleton}
-import langswitch.ErrorMessages
 import model.Vrn
+import play.api.i18n.Messages
 import play.api.mvc.{Request, Result}
 import play.api.mvc.Results.Unauthorized
 import req.RequestSupport
@@ -29,18 +29,16 @@ class UnhappyPathResponses @Inject() (
     errorHandler:   ErrorHandler,
     requestSupport: RequestSupport) {
 
-  import requestSupport._
-
-  def unauthorised(implicit request: Request[_]): Result = Unauthorized(
+  def unauthorised(implicit request: Request[_], message: Messages): Result = Unauthorized(
     errorHandler.standardErrorTemplate(
-      ErrorMessages.`You do not have access to this service`.show,
-      ErrorMessages.`You do not have access to this service`.show,
+      Messages("unhappy_path_responses.no_access"),
+      Messages("unhappy_path_responses.no_access"),
       ""))
 
-  def unauthorised(vrn: Vrn)(implicit request: Request[_]): Result = Unauthorized(
+  def unauthorised(vrn: Vrn)(implicit request: Request[_], message: Messages): Result = Unauthorized(
     errorHandler.standardErrorTemplate(
-      ErrorMessages.`You do not have access to this service`.show,
-      ErrorMessages.`You do not have access to this service`(vrn).show,
+      Messages("unhappy_path_responses.no_access"),
+      Messages("unhappy_path_responses.no_access_vrn", vrn),
       ""))
 
 }
