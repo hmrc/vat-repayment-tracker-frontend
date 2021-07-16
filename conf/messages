@@ -17,7 +17,7 @@ timeout_dialog.message.timeout = For your security, we will time you out in
 
 repayment_details_classic.h2 = Your repayment details
 repayment_details_classic.bank_details = If you have added your bank details we will send repayments to your bank account.
-repayment_details_classic.bank_account_link = <a href="{0}">Add or change your bank account details
+repayment_details_classic.bank_account_link = <a href="{0}">Add or change your bank account details</a>
 repayment_details_classic.address_details = If you have not added your bank details, we will send you a cheque to:
 repayment_details_classic.address_link = <a href="{0}">Change your business address</a>
 
