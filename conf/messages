@@ -1,4 +1,4 @@
-service.name = Any tax service
+service.name = Business tax account
 
 site.service_name = Business tax account
 
@@ -225,6 +225,8 @@ view_progress_formatter.claimed_vat_repayment_post = You claimed £{0}. We calcu
 view_progress_formatter.claimed_vat_repayment_of = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a href={2}>VAT payments history</a>.
 view_progress_formatter.calculated_original_amount_claimed = We calculated that the original amount of £{0} you claimed was incorrect. You now owe HMRC £{1}. We sent you a letter with the reason for this change.
 
+
+accessibility-statement.title = Accessibility Statement
 
 
 

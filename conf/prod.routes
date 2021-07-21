@@ -1,6 +1,6 @@
 # Add all the application routes to the app.routes file
 ->         /                          health.Routes
-->         /template                  template.Routes
+->         /hmrc-frontend                      hmrcfrontend.Routes
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
 

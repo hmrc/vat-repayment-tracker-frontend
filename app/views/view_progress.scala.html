@@ -43,10 +43,10 @@ messages: Messages
 
 
 @mainTemplate(
-title = s"""$pageTitle - ${Messages("heading_bta")} - GOV.UK""",
-headerTitle = Messages("heading_bta"),
-bodyClasses = None,
-timeoutDialog = true
+title = pageTitle //s"""$pageTitle - ${Messages("heading_bta")} - GOV.UK""",
+//headerTitle = Messages("heading_bta"),
+//bodyClasses = None,
+//timeoutDialog = true
 ) {
 
 <a href="@{viewConfig.showResultsUrl}" id="back" class="govuk-back-link">@Messages("back")</a>

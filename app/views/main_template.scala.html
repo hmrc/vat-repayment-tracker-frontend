@@ -1,56 +1,96 @@
-@*
- * Copyright 2021 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{BackLink, FooterItem, HtmlContent, Text}
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.phasebanner.PhaseBanner
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Header, ReportTechnicalIssue}
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En, LanguageSelect}
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import langswitch.Languages
+@import config.ViewConfig
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter
+@import req.RequestSupport.isLoggedIn
 
 @this(
-  govUkWrapper: govuk_wrapper,
-  viewsHelpers: views.ViewsHelpers,
-  viewConfig: config.ViewConfig
+        govukLayout: GovukLayout,
+//        twoThirdsMainContent: uk.gov.hmrc.govukfrontend.views.html.layouts.twoThirdsMainContent,
+        govukBackLink: GovukBackLink,
+        hmrcHeader: HmrcHeader,
+        languageSelect: HmrcLanguageSelect,
+
+        reportTechnicalIssues: HmrcReportTechnicalIssue,
+        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+        standardBetaBanner: StandardBetaBanner,
+
+        hmrcStandardFooter: HmrcStandardFooter,
+        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+        mainScripts: views.html.scripts,
+
+        viewsHelpers: views.ViewsHelpers,
+        viewConfig: config.ViewConfig
 )
 
-@(
-  title: String,
-  headerTitle: String,
-  sidebarLinks: Option[Html] = None,
-  contentHeader: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  mainClass: Option[String] = None,
-  scriptElem: Option[Html] = None,
-  timeoutDialog: Boolean)(
-  mainContent: Html)(
-  implicit
-  request : Request[_],
-  message: Messages
-)
+@(title: String,
+        timeoutDialog: Boolean = true,
+        maybeSidebarLinks: Option[Html] = None,
+        contentHeader: Option[Html] = None,
+        bodyClasses: Option[String] = None,
+        mainClass: Option[String] = None,
+        scriptElem: Option[Html] = None,
+        linksElem:  Option[Html] = None,
+        googleAnalyticsCalls: Seq[String] = Seq.empty,
+        noGetHelp:Boolean = false,
+        allowTimeoutDialog: Boolean = true,
+        welshToggleEnabled:Boolean = true,
+        hasUserPanel: Boolean = false,
+        navTitle: String = "heading_bta",
+        backButtonUrl: Option[play.api.mvc.Call] = None
+)(
+        mainContent: Html)(implicit messages: play.api.i18n.Messages, request: Request[_])
 
-
-@serviceInfoContent = {}
-
-@sidebar = {
-  @{sidebarLinks.map(sidebarLinks => viewsHelpers.sidebar(sidebarLinks, Some("sidebar")) )}
+@head = {
+    <link href='@routes.Assets.at("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
+    <link rel='stylesheet' href='@routes.Assets.at("stylesheets/vat-repayment-tracker.css")' />
 }
 
-@govUkWrapper(
-  title = title,
-  headerTitle = headerTitle,
-  mainClass = mainClass,
-  bodyClasses = bodyClasses,
-  sidebar = sidebar,
-  contentHeader = contentHeader,
-  mainContent = mainContent,
-  serviceInfoContent = serviceInfoContent,
-  scriptElem = scriptElem,
-  timeoutDialog = timeoutDialog
-)
+
+
+@scripts = {
+@mainScripts()
+@if(scriptElem.isDefined){@scriptElem}
+}
+
+@beforeContentBlock = {
+@backButtonUrl.map{ call =>
+    @partials.back_button(call)
+}
+}
+
+@contentBlock = {
+@contentHeader
+
+    <div id="content">
+        <article>
+        @mainContent
+        </article>
+    </div>
+
+    <div class="govuk-!-display-none-print">
+    @reportTechnicalIssues(ReportTechnicalIssue(serviceCode = "direct-debit-frontend", language = if(messages.lang.code == "cy") Cy else En))
+    </div>
+}
+
+@govukLayout(
+    pageTitle = Some(s"$title - ${Messages("heading_bta")} - GOV.UK"),
+    headBlock = Some(head),
+    headerBlock = Some(hmrcHeader(
+        Header(
+        homepageUrl = "https://www.gov.uk",
+        serviceName = Some(Messages(navTitle)),
+        serviceUrl = "",
+        signOutHref = if (isLoggedIn) Some(routes.Controller.signout.url) else None,
+        language = if (messages.lang.code == "cy") Cy else En,
+        phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl)),
+    ))),
+    beforeContentBlock = Some(hmrcLanguageSelectHelper()),
+    scriptsBlock = Some(scripts),
+    footerBlock = Some(hmrcStandardFooter())
+)(contentBlock)

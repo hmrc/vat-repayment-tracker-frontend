@@ -21,22 +21,24 @@ import model.Vrn
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 case class ViewConfig(
-    appName:                     String,
-    assetsPrefix:                String,
-    authUrl:                     String,
-    frontendBaseUrl:             String,
-    loginUrl:                    String,
-    viewVatAccount:              String,
-    updateCorrespondenceAddress: String,
-    feedbackBaseUrl:             String,
-    contactBaseUrl:              String,
-    paymentHistoryUrl:           String,
-    btaUrl:                      String,
-    signupUrl:                   String,
-    variationsUrlPrefix:         String,
-    isShuttered:                 Boolean,
-    timeoutDialogTimeout:        Int,
-    timeoutDialogCountdown:      Int) {
+    appName:                       String,
+    assetsPrefix:                  String,
+    authUrl:                       String,
+    frontendBaseUrl:               String,
+    loginUrl:                      String,
+    viewVatAccount:                String,
+    updateCorrespondenceAddress:   String,
+    feedbackBaseUrl:               String,
+    contactBaseUrl:                String,
+    paymentHistoryUrl:             String,
+    btaUrl:                        String,
+    signupUrl:                     String,
+    variationsUrlPrefix:           String,
+    accessibilityStatementBaseUrl: String,
+    accessibilityStatementPath:    String,
+    isShuttered:                   Boolean,
+    timeoutDialogTimeout:          Int,
+    timeoutDialogCountdown:        Int) {
 
   val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
   val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
@@ -51,22 +53,33 @@ case class ViewConfig(
 
   @Inject
   def this(servicesConfig: ServicesConfig) = this(
-    appName                     = servicesConfig.getString("appName"),
-    assetsPrefix                = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
-    authUrl                     = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl             = servicesConfig.getString("urls.frontend-base"),
-    loginUrl                    = servicesConfig.getString("urls.login"),
-    viewVatAccount              = servicesConfig.getString("urls.view-vat-account"),
-    updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
-    feedbackBaseUrl             = servicesConfig.getString("urls.feedback-base"),
-    contactBaseUrl              = servicesConfig.getString("urls.contact-frontend"),
-    paymentHistoryUrl           = servicesConfig.getString("urls.payments-history"),
-    btaUrl                      = servicesConfig.getString("urls.bta"),
-    signupUrl                   = servicesConfig.getString("urls.signup"),
-    variationsUrlPrefix         = servicesConfig.getString("urls.variationsUrlPrefix"),
-    isShuttered                 = servicesConfig.getBoolean("is-shuttered"),
-    timeoutDialogTimeout        = servicesConfig.getInt("timeout-dialog.timeout"),
-    timeoutDialogCountdown      = servicesConfig.getInt("timeout-dialog.countdown")
+    appName                       = servicesConfig.getString("appName"),
+    assetsPrefix                  = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
+    authUrl                       = servicesConfig.baseUrl("auth"),
+    frontendBaseUrl               = servicesConfig.getString("urls.frontend-base"),
+    loginUrl                      = servicesConfig.getString("urls.login"),
+    viewVatAccount                = servicesConfig.getString("urls.view-vat-account"),
+    updateCorrespondenceAddress   = servicesConfig.getString("urls.update-correspondence-address"),
+    feedbackBaseUrl               = servicesConfig.getString("urls.feedback-base"),
+    contactBaseUrl                = servicesConfig.getString("urls.contact-frontend"),
+    paymentHistoryUrl             = servicesConfig.getString("urls.payments-history"),
+    btaUrl                        = servicesConfig.getString("urls.bta"),
+    signupUrl                     = servicesConfig.getString("urls.signup"),
+    variationsUrlPrefix           = servicesConfig.getString("urls.variationsUrlPrefix"),
+    isShuttered                   = servicesConfig.getBoolean("is-shuttered"),
+    timeoutDialogTimeout          = servicesConfig.getInt("timeout-dialog.timeout"),
+    timeoutDialogCountdown        = servicesConfig.getInt("timeout-dialog.countdown"),
+    accessibilityStatementBaseUrl = servicesConfig.getString("accessibility-statement-frontend.url"),
+    accessibilityStatementPath    = servicesConfig.getString("accessibility-statement-frontend.path")
+
   )
+
+  // footer links
+  val cookiesUrl: String = "https://www.tax.service.gov.uk/help/cookies"
+  val privacyNoticeUrl: String = "https://www.tax.service.gov.uk/help/privacy"
+  val termsAndConditionsUrl: String = "https://www.tax.service.gov.uk/help/terms-and-conditions"
+  val helpUsingGovUkUrl: String = "https://www.gov.uk/help"
+
+  def accessibilityStatementUrl(relativeUrl: String): String = s"$accessibilityStatementBaseUrl/accessibility-statement${accessibilityStatementPath}?referrerUrl=$frontendBaseUrl$relativeUrl"
 
 }

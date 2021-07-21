@@ -49,16 +49,17 @@ messages:Messages
 
 
 @mainTemplate(
-title = if (viewConfig.isShuttered) s"""${Messages("manage_or_track.shuttered")} - ${Messages("heading_bta")} - GOV.UK""" else if (form.errors.nonEmpty) s"""${Messages("generic_prefixerror")}: ${Messages("manage_or_track.manage_or_track")} - ${Messages("heading_bta")} - GOV.UK""" else s"""${Messages("manage_or_track.manage_or_track")} - ${Messages("heading_bta")} - GOV.UK""" ,
-headerTitle = Messages("heading_bta"),
-bodyClasses = None,
-timeoutDialog = true
+title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else if (form.errors.nonEmpty) s"""${Messages("generic_prefixerror")}: ${Messages("manage_or_track.manage_or_track")}""" else Messages("manage_or_track.manage_or_track")
+//headerTitle = Messages("heading_bta"),
+//bodyClasses = None,
+//timeoutDialog = true
 ) {
 @bread_crumbs(Messages("manage_or_track.payment_and_repayments"))
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+@*
    @if(form.hasErrors) { @viewsHelpers.errorSummary(Messages("manage_or_track.there_is_a_problem"), form) }
-
+*@
 
 
 

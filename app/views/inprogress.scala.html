@@ -45,10 +45,10 @@ messages: Messages
 
 
 @mainTemplate(
-title =s"""${Messages("inprogress.title")} - ${Messages("heading_bta")} - GOV.UK""",
-headerTitle = Messages("heading_bta"),
-bodyClasses = None,
-timeoutDialog = true
+title = Messages("inprogress.title") // s"""${Messages("inprogress.title")} - ${Messages("heading_bta")} - GOV.UK""",
+//headerTitle = Messages("heading_bta"),
+//bodyClasses = None,
+//timeoutDialog = true
 ) {
 
 @bread_crumbs(Messages("inprogress.track_repayments"))

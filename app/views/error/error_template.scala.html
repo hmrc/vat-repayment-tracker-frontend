@@ -18,7 +18,7 @@
 
 @this(
   viewConfig: ViewConfig,
-  govUkWrapper: views.html.govuk_wrapper,
+  mainTemplate: views.html.main_template,
   viewsHelpers: views.ViewsHelpers
 )
 
@@ -49,8 +49,8 @@
 
 }
 
-@govUkWrapper(
-    title = s"""${Messages("error_template.title")} - ${Messages("heading_bta")} - GOV.UK""",
-    headerTitle = Messages("heading_bta"),
-    mainContent = mainContent
-)
+@mainTemplate(
+    title = Messages("error_template.title") //s"""${Messages("error_template.title")} - ${Messages("heading_bta")} - GOV.UK""",
+//    headerTitle = Messages("heading_bta"),
+//    mainContent = mainContent
+) { @mainContent }

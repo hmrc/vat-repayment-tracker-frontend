@@ -40,10 +40,10 @@
 
 
 @mainTemplate(
-  title = s"""${Messages("no_vat_repayments.title")} - ${Messages("heading_bta")} - GOV.UK""",
-  headerTitle = Messages("heading_bta"),
-  bodyClasses = None,
-  timeoutDialog = true
+  title = Messages("no_vat_repayments.title") // s"""${Messages("no_vat_repayments.title")} - ${Messages("heading_bta")} - GOV.UK""",
+//  headerTitle = Messages("heading_bta"),
+//  bodyClasses = None,
+//  timeoutDialog = true
 ) {
   <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
     <div class="govuk-grid-column-two-thirds">

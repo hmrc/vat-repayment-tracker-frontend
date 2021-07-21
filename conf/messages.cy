@@ -1,4 +1,4 @@
-service.name = Any tax service
+service.name = Cyfrif treth busnes
 
 site.service_name = Cyfrif treth busnes
 
@@ -220,4 +220,6 @@ view_progress_formatter.send_cheque_to_business_address = Byddwn yn anfon siec i
 view_progress_formatter.claimed_vat_repayment_post = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a href={2}>hanes eich taliadau TAW</a>.
 view_progress_formatter.claimed_vat_repayment_of = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Bydd hwn yn cyrraedd eich cyfrif banc ar gyfer ad-daliadau cyn pen 3 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a href={1}>hanes eich taliadau TAW</a>.
 view_progress_formatter.calculated_original_amount_claimed = Gwnaethom gyfrifo bod y swm gwreiddiol o £{0} y gwnaethoch ei hawlio’n anghywir. Erbyn hyn, mae arnoch £{1} i CThEM. Gwnaethom anfon llythyr atoch gyda’r rheswm dros y newid hwn.
+
+accessibility-statement.title = Datganiad Hygyrchedd
 
