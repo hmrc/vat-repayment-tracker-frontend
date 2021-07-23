@@ -39,17 +39,12 @@
 
 
 
-@mainTemplate(
-  title = Messages("no_vat_repayments.title") // s"""${Messages("no_vat_repayments.title")} - ${Messages("heading_bta")} - GOV.UK""",
-//  headerTitle = Messages("heading_bta"),
-//  bodyClasses = None,
-//  timeoutDialog = true
-) {
+@mainTemplate(title = Messages("no_vat_repayments.title")) {
   <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
     <div class="govuk-grid-column-two-thirds">
-      <h1 id="main-message">@Messages("no_vat_repayments.title")</h1>
-      <p>@Messages("no_vat_repayments.repayments_hours")</p>
-      <p>@Messages("no_vat_repayments.expecting_repayment")</p>
+      <h1 id="main-message" class="govuk-heading-xl">@Messages("no_vat_repayments.title")</h1>
+      <p class="govuk-body">@Messages("no_vat_repayments.repayments_hours")</p>
+      <p class="govuk-body">@Messages("no_vat_repayments.expecting_repayment")</p>
       <p class="govuk-!-margin-bottom-9"><a href=@{viewConfig.viewVatAccount}>@Messages("no_vat_repayments.view_account")</a></p>
       @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
     </div>

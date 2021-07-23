@@ -40,9 +40,9 @@
 <main class="govuk-main-wrapper" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1>@Messages("error_template.title")</h1>
-            <p>@Messages("error_template.title.try_again")</p>
-            <p>@message</p>
+            <h1 class="govuk-heading-xl">@Messages("error_template.title")</h1>
+            <p class="govuk-body">@Messages("error_template.title.try_again")</p>
+            <p class="govuk-body">@message</p>
         </div>
     </div>
 </main>
@@ -50,7 +50,6 @@
 }
 
 @mainTemplate(
-    title = Messages("error_template.title") //s"""${Messages("error_template.title")} - ${Messages("heading_bta")} - GOV.UK""",
-//    headerTitle = Messages("heading_bta"),
-//    mainContent = mainContent
-) { @mainContent }
+    title = Messages("error_template.title")) {
+    @mainContent
+}

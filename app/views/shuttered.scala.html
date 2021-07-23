@@ -31,15 +31,10 @@ message: Messages
 
 
 
-@mainTemplate(
-title = Messages("shuttered.title"), //s"""${Messages("shuttered.title")} - ${Messages("heading_bta")} - GOV.UK""",
-//headerTitle = Messages("heading_bta"),
-//bodyClasses = None,
-timeoutDialog = false
-) {
+@mainTemplate(title = Messages("shuttered.title"), timeoutDialog = false) {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@Messages("shuttered.title")</h1>
+            <h1 id="main-message"  class="govuk-heading-xl">@Messages("shuttered.title")</h1>
         </div>
     </div>
 

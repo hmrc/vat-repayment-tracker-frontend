@@ -4,7 +4,9 @@
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
 
-GET        /vat-repayment-tracker/assets/*file                                   @controllers.Assets.at(path="/public", file)
+GET        /assets/*file                        controllers.Assets.versioned(path = "/public", file: Asset)
+
+GET        /vat-repayment-tracker/assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
 GET        /vat-repayment-tracker/language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
 
 #govuk link

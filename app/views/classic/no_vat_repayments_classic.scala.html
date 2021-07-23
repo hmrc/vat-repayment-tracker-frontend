@@ -33,16 +33,11 @@ request: Request[_],
 messages: Messages
 )
 
-@mainTemplate(
-title = Messages("no_vat_repayments_classic.title"),
-//headerTitle = Messages("heading_bta"),
-//bodyClasses = None,
-//timeoutDialog = true
-) {
+@mainTemplate(title = Messages("no_vat_repayments_classic.title")) {
     <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@Messages("no_vat_repayments_classic.h1")</h1>
-            <p>@Messages("no_vat_repayments_classic.no_returns_line1")</p>
+            <h1 id="main-message" class="govuk-heading-xl">@Messages("no_vat_repayments_classic.h1")</h1>
+            <p class="govuk-body">@Messages("no_vat_repayments_classic.no_returns_line1")</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>@Messages("no_vat_repayments_classic.no_returns_line2")</li>
                 <li>@Messages("no_vat_repayments_classic.no_returns_line3")</li>

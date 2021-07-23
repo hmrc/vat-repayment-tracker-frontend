@@ -42,17 +42,12 @@ request: Request[_],
 messages: Messages
 )
 
-@mainTemplate(
-title = Messages("completed.title") //s"""${Messages("completed.title")} - ${Messages("heading_bta")} - GOV.UK""",
-//headerTitle = Messages("heading_bta"),
-//bodyClasses = None,
-//timeoutDialog = true
-) {
+@mainTemplate(title = Messages("completed.title")) {
 
-@bread_crumbs(Messages("completed.track_repayments"))
+    @bread_crumbs(Messages("completed.track_repayments"))
     <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@Messages("completed.title")</h1>
+            <h1 id="main-message" class="govuk-heading-xl">@Messages("completed.title")</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
 
@@ -65,15 +60,15 @@ title = Messages("completed.title") //s"""${Messages("completed.title")} - ${Mes
                 </ul>
 
                 <section class="govuk-tabs__panel" id="completed">
-                    <h2 class="govuk-tabs__title">Messages("completed")</h2>
+                    <h2 class="govuk-tabs__title">@Messages("completed")</h2>
                     @multiple_repayments(completed,vrn,"_completed")
-                    <p>@Html(Messages("completed.no-completed-desc", viewConfig.paymentHistoryUrl))</p>
+                    <p class="govuk-body">@Html(Messages("completed.no-completed-desc", viewConfig.paymentHistoryUrl))</p>
                     <div id="completed-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress">
                     <h2 class="govuk-tabs__title">@Messages("in_progress")</h2>
                     <div class="govuk-inset-text" id="no-repayments">@Messages("completed.no_repayments_in_progress")</div>
-                    <p>@Html(Messages("completed.no-in-progress-desc"))</p>
+                    <p class="govuk-body">@Html(Messages("completed.no-in-progress-desc"))</p>
                     <div id="inprogress-none"></div>
                 </section>
             </div>

@@ -20,11 +20,14 @@
 @import model.des._
 @import model.ManageOrTrackOptions
 @import org.joda.time.DateTime
+@import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichErrorSummary
 
 @this(
 mainTemplate: views.html.main_template,
 viewsHelpers: views.ViewsHelpers,
+        govukErrorSummary: GovukErrorSummary,
 viewConfig: ViewConfig,
+        govukButton: GovukButton,
 bread_crumbs: views.html.partials.bread_crumbs
 )
 @(
@@ -48,18 +51,15 @@ messages:Messages
 
 
 
-@mainTemplate(
-title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else if (form.errors.nonEmpty) s"""${Messages("generic_prefixerror")}: ${Messages("manage_or_track.manage_or_track")}""" else Messages("manage_or_track.manage_or_track")
-//headerTitle = Messages("heading_bta"),
-//bodyClasses = None,
-//timeoutDialog = true
-) {
-@bread_crumbs(Messages("manage_or_track.payment_and_repayments"))
+@mainTemplate(  title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else if (form.errors.nonEmpty) s"""${Messages("generic_prefixerror")}: ${Messages("manage_or_track.manage_or_track")}""" else Messages("manage_or_track.manage_or_track")) {
+ @bread_crumbs(Messages("manage_or_track.payment_and_repayments"))
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-@*
-   @if(form.hasErrors) { @viewsHelpers.errorSummary(Messages("manage_or_track.there_is_a_problem"), form) }
-*@
+
+   @if(form.hasErrors) {
+    @govukErrorSummary(ErrorSummary( title = Text(Messages("manage_or_track.there_is_a_problem"))).withFormErrorsAsText(form))
+   }
+
 
 
 
@@ -75,10 +75,10 @@ title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else i
 
 
 
-    <div class="form-group @form.errors("manage").map { e => form-group-error }" >
-     <fieldset id="manage" @errorLink>
+    <div class="govuk-form-group @form.errors("manage").map { e => form-group-error }" >
+     <fieldset id="manage" class="govuk-fieldset" @errorLink>
       <legend>
-      <h1 id="main-message">@{
+      <h1 id="main-message" class="govuk-heading-xl">@{
        if (viewConfig.isShuttered)
         Messages("manage_or_track.shuttered")
        else
@@ -88,10 +88,12 @@ title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else i
 
        @if(form.errors("manage").nonEmpty) {
         @for(error <- form.errors("manage")) {
-         <span id="manage-errorKey" class="error-message">
-          <span class="visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
+         <span id="manage-errorKey" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
         }
        }
+
+      <div class="govuk-form-group">
        @{
        ddDetailsOption.map(ddDetails =>
        views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.dd.toString, ManageOrTrackOptions.dd.toString, Messages("manage_or_track.manage_direct_debit"), Some(Messages("manage_or_track.account_sortcode",ddDetails.obscureBankAccountNumber, ddDetails.formatSortCode )), None)
@@ -115,6 +117,7 @@ title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else i
         views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nobank.toString, ManageOrTrackOptions.nobank.toString, Messages("manage_or_track.set_up_repayment_bank_account"), Some(Messages("manage_or_track.tell_pay_money")), None)
        }
        }
+      </div>
        @{
         if (!(viewConfig.isShuttered)) {
          views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, Messages("manage_or_track.track_vat_repayments"), Some(Messages("manage_or_track.view_hmrc_owe_you")), None)
@@ -124,7 +127,7 @@ title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else i
   </div>
 
    <div class="form-field">
-    <button id="next" type="submit" class="button" onclick="getPaymentMethod()">@Messages("continue")</button>
+    <button id="next" type="submit" class="govuk-button" onclick="getPaymentMethod()">@Messages("continue")</button>
    </div>
    }
 

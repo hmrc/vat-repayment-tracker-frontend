@@ -28,12 +28,13 @@
 @mainTemplate(
     title = Messages("delete_answers.signed_you_out"), // s"""${Messages("delete_answers.signed_you_out")} - GOV.UK""",
 //    headerTitle = s"""${Messages("delete_answers.signed_you_out")}""",
+    navTitle =  "delete_answers.signed_you_out",
     timeoutDialog = false
 ) {
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Messages("delete_answers.signed_you_out")</h1>
-        <p>@Messages("delete_answers.did_not_save_answers")</p>
+        <h1 class="govuk-heading-xl">@Messages("delete_answers.signed_you_out")</h1>
+        <p class="govuk-body" >@Messages("delete_answers.did_not_save_answers")</p>
     </div>
 </div>
 }

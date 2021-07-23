@@ -10,7 +10,7 @@
 
 @this(
         govukLayout: GovukLayout,
-//        twoThirdsMainContent: uk.gov.hmrc.govukfrontend.views.html.layouts.twoThirdsMainContent,
+        twoThirdsMainContent: uk.gov.hmrc.govukfrontend.views.html.layouts.twoThirdsMainContent,
         govukBackLink: GovukBackLink,
         hmrcHeader: HmrcHeader,
         languageSelect: HmrcLanguageSelect,
@@ -28,7 +28,8 @@
         viewConfig: config.ViewConfig
 )
 
-@(title: String,
+@(      title: String,
+        pageTitle1: Option[String] = None,
         timeoutDialog: Boolean = true,
         maybeSidebarLinks: Option[Html] = None,
         contentHeader: Option[Html] = None,
@@ -38,17 +39,23 @@
         linksElem:  Option[Html] = None,
         googleAnalyticsCalls: Seq[String] = Seq.empty,
         noGetHelp:Boolean = false,
-        allowTimeoutDialog: Boolean = true,
         welshToggleEnabled:Boolean = true,
         hasUserPanel: Boolean = false,
         navTitle: String = "heading_bta",
+        fullWidth: Boolean = true,
         backButtonUrl: Option[play.api.mvc.Call] = None
 )(
         mainContent: Html)(implicit messages: play.api.i18n.Messages, request: Request[_])
 
 @head = {
-    <link href='@routes.Assets.at("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
-    <link rel='stylesheet' href='@routes.Assets.at("stylesheets/vat-repayment-tracker.css")' />
+
+    @if(timeoutDialog) {
+        @hmrcTimeoutDialogHelper(signOutUrl = routes.TimeoutController.killSession().url)
+    }
+
+    <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
+
+    <link href='@routes.Assets.versioned("stylesheets/main.css")' media="all" rel="stylesheet" type="text/css" />
 }
 
 
@@ -74,7 +81,7 @@
     </div>
 
     <div class="govuk-!-display-none-print">
-    @reportTechnicalIssues(ReportTechnicalIssue(serviceCode = "direct-debit-frontend", language = if(messages.lang.code == "cy") Cy else En))
+    @reportTechnicalIssues(ReportTechnicalIssue(serviceCode = "vat-repayment-tracker-frontend", language = if(messages.lang.code == "cy") Cy else En))
     </div>
 }
 
@@ -87,10 +94,10 @@
         serviceName = Some(Messages(navTitle)),
         serviceUrl = "",
         signOutHref = if (isLoggedIn) Some(routes.Controller.signout.url) else None,
-        language = if (messages.lang.code == "cy") Cy else En,
         phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl)),
     ))),
     beforeContentBlock = Some(hmrcLanguageSelectHelper()),
     scriptsBlock = Some(scripts),
-    footerBlock = Some(hmrcStandardFooter())
+    footerBlock = Some(hmrcStandardFooter()),
+    mainContentLayout = (if (!fullWidth) Some(twoThirdsMainContent.apply _) else None)
 )(contentBlock)

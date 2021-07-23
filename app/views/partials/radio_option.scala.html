@@ -26,11 +26,11 @@ implicit
 m: Messages
 )
 
-<div class="multiple-choice" @attributes.fold(Html("")){ attributes => @attributes }>
-<input id="@id" type="radio" name="@name" value="@value" aria-describedby="@id-hint" @{if(field.value.contains(value)) "checked"}>
-<label for="@id" id="@id-label">
+<div class="govuk-radios__item" @attributes.fold(Html("")){ attributes => @attributes }>
+<input id="@id" class="govuk-radios__input" type="radio" name="@name" value="@value" aria-describedby="@id-hint" @{if(field.value.contains(value)) "checked"}>
+<label class="govuk-label govuk-radios__label" for="@id" id="@id-label">
     @text
 
 </label>
-@hint.fold(Html("")){ hint => <span id="@id-hint" class="form-hint">@hint</span> }
+@hint.fold(Html("")){ hint => <span id="@id-hint" class="govuk-hint govuk-radios__hint">@hint</span> }
 </div>

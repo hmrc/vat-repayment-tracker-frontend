@@ -62,9 +62,9 @@ trait CommonDetail extends CommonPage {
 
   def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/main/div[2]/div[2]/div/div/section[1]/table/tbody/tr[1]/td[3]")).getText)
+  def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[2]/div/div/section/table/tbody/tr[1]/td[3]")).getText)
 
   def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"received-date$appender")).getText)
 
-  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/main/div[2]/div[2]/div/div/section[1]/table/tbody/tr[1]/td[2]")).getText)
+  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[2]/div/div/section[1]/table/tbody/tr[1]/td[2]")).getText)
 }
