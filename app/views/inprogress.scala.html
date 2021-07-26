@@ -44,17 +44,12 @@ messages: Messages
 )
 
 
-@mainTemplate(
-title =s"""${Messages("inprogress.title")} - ${Messages("heading_bta")} - GOV.UK""",
-headerTitle = Messages("heading_bta"),
-bodyClasses = None,
-timeoutDialog = true
-) {
+@mainTemplate(title = Messages("inprogress.title")) {
 
-@bread_crumbs(Messages("inprogress.track_repayments"))
+    @bread_crumbs(Messages("inprogress.track_repayments"))
     <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
         <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message">@Messages("inprogress.title")</h1>
+            <h1 id="main-message" class="govuk-heading-xl">@Messages("inprogress.title")</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
                     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
@@ -67,23 +62,23 @@ timeoutDialog = true
                 <section class="govuk-tabs__panel" id="inProgress">
                     @if(hasSuspendedRepayments) {
                         <div class="notice subsection near-deadline-view-warning ">
-                            <i class="icon icon-important"><span class="visually-hidden">ASD</span></i>
+                            <i class="icon icon-important"><span class="govuk-visually-hidden">ASD</span></i>
                             <div id="suspended-repayment-warning">
                                 <strong class="bold-small">@Messages("inprogress.repayment_suspended")</strong>
                                 <strong class="bold-small">@Html(Messages("inprogress.submit_latest_return"))</strong>
                             </div>
                         </div>
                     } else {
-                        <h2 class="govuk-tabs__title">@Messages("in_progress")</h2>
+                        <h2 class="govuk-tabs__title" class="govuk-heading-m">@Messages("in_progress")</h2>
                     }
 
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed">
-                    <h2 class="govuk-tabs__title">@Messages("completed")</h2>
+                    <h2 class="govuk-tabs__title"  class="govuk-heading-m">@Messages("completed")</h2>
                     <div class="govuk-inset-text" id="no-repayments">@Messages("inprogress.no_completed_repayments")</div>
-                    <p>@Html(Messages("inprogress.no_completed_desc", viewConfig.paymentHistoryUrl))</p>
+                    <p class="govuk-body" >@Html(Messages("inprogress.no_completed_desc", viewConfig.paymentHistoryUrl))</p>
                     <div id="completed-none"></div>
                 </section>
             </div>

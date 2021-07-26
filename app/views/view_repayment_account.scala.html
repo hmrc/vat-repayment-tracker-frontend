@@ -36,39 +36,34 @@ messages: Messages
 )
 
 
-@mainTemplate(
-title = s"""${Messages("view_repayment_account.title")} - ${Messages("heading_bta")} - GOV.UK""",
-headerTitle = Messages("heading_bta"),
-bodyClasses = None,
-timeoutDialog = true
-) {
+@mainTemplate(title = Messages("view_repayment_account.title")) {
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-   <h1 id="main-message">@Messages("view_repayment_account.title")</h1>
+   <h1 id="main-message" class="govuk-heading-xl">@Messages("view_repayment_account.title")</h1>
    @bankDetailsOption.map{bankDetails =>
 
    <dl class="summary-list summary-list--undivided">
     <div class="summary-list__row" id="acc-name">
-     <dt class="summary-list__key">
+     <dt class="govuk-body summary-list__key">
       @Messages("view_repayment_account.name_on_account")
      </dt>
-     <dd class="summary-list__value">
+     <dd class="govuk-body summary-list__value">
       @{bankDetails.accountHolderName}
      </dd>
     </div>
     <div class="summary-list__row" id="acc-sort-code">
-     <dt class="summary-list__key">
+     <dt class="govuk-body summary-list__key">
       @Messages("view_repayment_account.sort_code")
      </dt>
-     <dd class="summary-list__value">
+     <dd class="govuk-body summary-list__value">
       @{bankDetails.formatSortCode}
      </dd>
     </div>
     <div class="summary-list__row" id="acc-number">
-     <dt class="summary-list__key">
+     <dt class="govuk-body summary-list__key">
       @Messages("view_repayment_account.account_number")
      </dt>
-     <dd class="summary-list__value">
+     <dd class="govuk-body summary-list__value">
       @{bankDetails.obscureBankAccountNumber}
      </dd>
     </div>

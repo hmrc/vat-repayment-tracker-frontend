@@ -33,8 +33,8 @@ messages: Messages
 
 </br>
 <h2 class="govuk-heading-m">@Messages("repayment_details_classic.h2")</h2>
-<p>@Messages("repayment_details_classic.bank_details")</p>
-<p>@Html(Messages("repayment_details_classic.bank_account_link",viewConfig.vatVariationsUrl(vrn) ))</p>
-<p>@Messages("repayment_details_classic.address_details")</p>
-<p id="address">@Html(address)</p>
-<p>@Html(Messages("repayment_details_classic.address_link",viewConfig.vatVariationsUrl(vrn)))</p>
+<p class="govuk-body">@Messages("repayment_details_classic.bank_details")</p>
+<p class="govuk-body">@Html(Messages("repayment_details_classic.bank_account_link",viewConfig.vatVariationsUrl(vrn) ))</p>
+<p class="govuk-body">@Messages("repayment_details_classic.address_details")</p>
+<p id="address" class="govuk-body">@Html(address)</p>
+<p class="govuk-body">@Html(Messages("repayment_details_classic.address_link",viewConfig.vatVariationsUrl(vrn)))</p>

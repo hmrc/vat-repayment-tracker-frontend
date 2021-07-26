@@ -35,24 +35,19 @@
   messages: Messages
 )
 
-@mainTemplate(
-  title = s"""${Messages("vat_repayments_classic.scala.title")} - ${Messages("heading_bta")} - GOV.UK""",
-  headerTitle = Messages("heading_bta"),
-  bodyClasses = None,
-  timeoutDialog = true
-) {
+@mainTemplate(title = Messages("vat_repayments_classic.scala.title")) {
   <div class="govuk-grid-row" data-gtag="repayment-type:in_progress_classic">
     <div class="govuk-grid-column-two-thirds">
-      <h1 id="main-message">@Messages("vat_repayments_classic.scala.title")</h1>
-        <p>@Messages("vat_repayments_classic.scala.title.returns_line1")
+      <h1 id="main-message" class="govuk-heading-xl">@Messages("vat_repayments_classic.scala.title")</h1>
+        <p class="govuk-body">@Messages("vat_repayments_classic.scala.title.returns_line1")
             <span>
                 <strong id="receivedOn">@{receivedOn}</strong>
             </span>
         </p>
 
-        <p>@Messages("vat_repayments_classic.scala.title.returns_line2")</p>
-        <p><span>@Messages("vat_repayments_classic.scala.title.returns_line3")</span></p>
-        <p>@Messages("vat_repayments_classic.scala.title.returns_line4")</p>
+        <p class="govuk-body">@Messages("vat_repayments_classic.scala.title.returns_line2")</p>
+        <p class="govuk-body"><span>@Messages("vat_repayments_classic.scala.title.returns_line3")</span></p>
+        <p class="govuk-body">@Messages("vat_repayments_classic.scala.title.returns_line4")</p>
         @repaymentDetails(vrn,address)
     </div>
   </div>

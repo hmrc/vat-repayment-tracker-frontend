@@ -1,8 +1,10 @@
-// focus updates
+/* focus updates*/
 
 #global-header #logo:focus {
     color: #0b0c0c;
 }
+
+
 
 
 .button--secondary,
@@ -488,11 +490,12 @@ textarea:focus {
     border-bottom: 0px;
 }
 
-@media (min-width: 40.0625em)
-.govuk-back-link {
-    font-size: 16px;
-    font-size: 1rem;
-    line-height: 1.25;
+@media (min-width: 40.0625em) {
+    .govuk-back-link {
+        font-size: 16px;
+        font-size: 1rem;
+        line-height: 1.25;
+    }
 }
 
 .govuk-back-link:link, .govuk-back-link:visited, .govuk-back-link:hover, .govuk-back-link:active, .govuk-back-link:focus {
@@ -557,11 +560,12 @@ textarea:focus {
 }
 
 
-@media (min-width: 40.0625em)
-.govuk-back-link {
-    font-size: 16px;
-    font-size: 1rem;
-    line-height: 1.25;
+@media (min-width: 40.0625em) {
+    .govuk-back-link {
+        font-size: 16px;
+        font-size: 1rem;
+        line-height: 1.25;
+    }
 }
 
 .govuk-back-link:link, .govuk-back-link:visited, .govuk-back-link:hover, .govuk-back-link:active, .govuk-back-link:focus {
@@ -619,21 +623,24 @@ textarea:focus {
     border-left: 10px solid #b1b4b6;
 }
 
-@media (min-width: 40.0625em)
-.govuk-inset-text {
-    font-size: 19px;
-    font-size: 1.1875rem;
-    line-height: 1.31579;
+@media (min-width: 40.0625em) {
+    .govuk-inset-text {
+        font-size: 19px;
+        font-size: 1.1875rem;
+        line-height: 1.31579;
+    }
 }
 
-@media (min-width: 40.0625em)
- .govuk-inset-text {
-     margin-top: 30px;
+@media (min-width: 40.0625em) {
+    .govuk-inset-text {
+        margin-top: 30px;
+    }
 }
 
-@media (min-width: 40.0625em)
-.govuk-inset-text {
-    margin-bottom: 30px;
+@media (min-width: 40.0625em) {
+    .govuk-inset-text {
+        margin-bottom: 30px;
+    }
 }
 
 #dd-hint,

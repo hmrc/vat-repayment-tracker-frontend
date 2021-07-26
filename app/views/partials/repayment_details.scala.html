@@ -38,20 +38,20 @@ message: Messages
 
 @if(showBankDetails) {
  @bankDetailsOption.map{bankDetails =>
- <h2>@Messages("repayment_details.repayment_bank_details")</h2>
- <p>@Messages("repayment_details.currently_paid_bank_transfer")</p>
+ <h2 class="govuk-heading-m">@Messages("repayment_details.repayment_bank_details")</h2>
+ <p class="govuk-body"  >@Messages("repayment_details.currently_paid_bank_transfer")</p>
  <p id="acc-name" class="govuk-!-margin-bottom-1">@Messages("repayment_details.name_on_account") <strong>@{bankDetails.formatAccountHolderName}</strong></p>
  <p id="acc-sort-code" class="govuk-!-margin-bottom-1">@Messages("repayment_details.sort_code") <strong>@{bankDetails.formatSortCode}</strong></p>
- <p id="acc-number">@Messages("repayment_details.account_number") <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
- <p><a href='@routes.Controller.viewRepaymentAccount(true)' id="manage-account">@Messages("repayment_details.manage_repayment")</a></p>
+ <p id="acc-number" class="govuk-body">@Messages("repayment_details.account_number") <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
+ <p class="govuk-body" ><a href='@routes.Controller.viewRepaymentAccount(true)' id="manage-account">@Messages("repayment_details.manage_repayment")</a></p>
  }
 }
 
 @if((addressExists && (!(showBankDetails))) && (!(inflightBankDetails))) {
-<h2>@Messages("repayment_details.repayment_details")</h2>
-<p>@Messages("repayment_details.send_cheque")</p>
-<p id="address">@Html(address.getOrElse(""))</p>
-<p>@Messages("repayment_details.faster_payment") <a href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"),true)' id="call-bac">@Messages("repayment_details.repayment_bank_account")</a></p>
-<p><a href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
+<h2 class="govuk-heading-m" >@Messages("repayment_details.repayment_details")</h2>
+<p class="govuk-body" >@Messages("repayment_details.send_cheque")</p>
+<p id="address" class="govuk-body" >@Html(address.getOrElse(""))</p>
+<p class="govuk-body">@Messages("repayment_details.faster_payment") <a href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"),true)' id="call-bac">@Messages("repayment_details.repayment_bank_account")</a></p>
+<p class="govuk-body"><a href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
 }
 

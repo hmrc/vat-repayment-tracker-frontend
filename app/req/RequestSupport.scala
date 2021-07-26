@@ -16,44 +16,39 @@
 
 package req
 
+import javax.inject.Inject
 import langswitch.Language
 import play.api.i18n._
 import play.api.mvc.Request
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
-import javax.inject.Inject
 
 /**
- * I'm repeating a pattern which was brought originally by play-framework
+ * Repeating the pattern which was brought originally by play-framework
  * and putting some more data which can be derived from a request
  *
  * Use it to provide HeaderCarrier, Lang, or Messages
  */
 class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I18nSupport {
 
+  implicit def hc[A](implicit request: Request[A]): HeaderCarrier = RequestSupport.hc
   def lang(implicit messages: Messages): Lang = messages.lang
-
-  implicit def language(implicit messages: Messages): Language = Language(messages.lang)
-
-  implicit def hc(implicit request: Request[_]): HeaderCarrier = RequestSupport.hc
 }
 
 object RequestSupport {
 
-  implicit def hc(implicit request: Request[_]): HeaderCarrier = HcProvider.headerCarrier
+  implicit def language(implicit messages: Messages): Language = Language()(messages)
 
-  /**
-   * Naive way of checking if user is logged in. Use it in views only.
-   * For more real check see auth.AuthService
-   */
+  implicit def hc[A](implicit request: Request[A]): HeaderCarrier = HcProvider.headerCarrier
+
   def isLoggedIn(implicit request: Request[_]): Boolean = request.session.get(SessionKeys.authToken).isDefined
 
   /**
-   * This is because we want to give responsibility of creation of HeaderCarrier to the platform code.
+   * This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code.
    * If they refactor how hc is created our code will pick it up automatically.
    */
   private object HcProvider extends FrontendHeaderCarrierProvider {
-    def headerCarrier(implicit request: Request[_]): HeaderCarrier = hc(request)
+    def headerCarrier[A](implicit request: Request[A]): HeaderCarrier = hc(request)
   }
 
   object timeoutDialog {

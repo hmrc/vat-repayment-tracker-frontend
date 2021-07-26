@@ -21,7 +21,7 @@
     }
 
     &-event-title {
-        @include _space(1, 'margin', 'bottom')
+        @include _space(1, 'margin', 'bottom');
 
         &:before {
           background-color: $govuk-blue;

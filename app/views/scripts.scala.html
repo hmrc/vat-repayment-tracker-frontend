@@ -1,0 +1,17 @@
+@*
+* Copyright 2021 HM Revenue & Customs
+*
+*@
+
+@this(
+        hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts,
+)
+
+@()(implicit request: play.api.mvc.Request[_], messages: Messages)
+
+@hmrcScripts()
+
+<script src='@routes.Assets.versioned("javascripts/application.js")'></script>
+
+<script src='@routes.Assets.versioned("javascripts/jquery-1.11.3.js")' type="text/javascript" media="all" rel="stylesheet"></script>
+<script src="@routes.Assets.versioned("javascripts/tabs.js")" type="text/javascript"></script>

@@ -9,8 +9,7 @@ object  WartRemoverSettings {
       Wart.JavaSerializable,
       Wart.StringPlusAny,
       Wart.AsInstanceOf,
-      Wart.IsInstanceOf,
-      Wart.Any
+      Wart.IsInstanceOf
     )
     wartremoverWarnings in(Compile, compile) ++= warningWarts
   }
