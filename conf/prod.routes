@@ -1,34 +1,8 @@
 # Add all the application routes to the app.routes file
+->         /vat-repayment-tracker     app.Routes
+->         /vat-repayment-tracker-frontend   deprecated.Routes
+
 ->         /                          health.Routes
-->         /hmrc-frontend                      hmrcfrontend.Routes
+
 
 GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
-
-GET        /assets/*file                        controllers.Assets.versioned(path = "/public", file: Asset)
-
-GET        /vat-repayment-tracker/assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
-GET        /vat-repayment-tracker/language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
-
-#govuk link
-GET        /vat-repayment-tracker/show-vrt                                                controllers.Controller.showVrt
-#V and C to use the following
-GET        /vat-repayment-tracker/manage-or-track-vrt                                     controllers.ManageOrTrackController.manageOrTrackVrt
-POST       /vat-repayment-tracker/manage-or-track-vrt                                     controllers.ManageOrTrackController.manageOrTrackSubmit
-
-#Interenal route
-GET        /vat-repayment-tracker/non-mtd-user                                            controllers.Controller.nonMtdUser
-GET        /vat-repayment-tracker/view-repayment-account                                  controllers.Controller.viewRepaymentAccount(audit : Boolean ?= false)
-POST       /vat-repayment-tracker/manage-or-track-submit                                  controllers.ManageOrTrackController.manageOrTrackSubmit
-GET        /vat-repayment-tracker/signout                                                 controllers.Controller.signout
-GET        /vat-repayment-tracker/bank-account-coc/start-journey/:returnPage              controllers.BankAccountCocController.startBankAccountCocJourney(returnPage : ReturnPage, audit : Boolean ?= false)
-GET        /vat-repayment-tracker/view-progress/:periodKey                                controllers.Controller.viewProgress(periodKey : PeriodKey)
-GET        /vat-repayment-tracker/spj/:amountInPence                                      controllers.PayApiController.startPaymentsJourney(amountInPence : Long)
-GET        /vat-repayment-tracker/shuttered                                               controllers.ShutteredController.shuttered
-
-#Deprecated routes
-GET        /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn                       controllers.ManageOrTrackController.manageOrTrack(vrn : Vrn)
-GET        /vat-repayment-tracker-frontend/show-results/vrn/:vrn                          controllers.Controller.showResults(vrn : Vrn)
-
-#Session
-GET         /vat-repayment-tracker/session/keep-alive                                     controllers.TimeoutController.keepAliveSession()
-GET         /vat-repayment-tracker/delete-answers                                         controllers.TimeoutController.killSession()
