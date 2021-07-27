@@ -63,7 +63,7 @@ messages: Messages
                         <h2 class="govuk-body govuk-!-margin-bottom-0">@{
                             amountDescription
                         }</h2>
-                        <p class="heading-h2 govuk-!-padding-top-1 govuk-!-margin-bottom-0" id="amount">£@{
+                        <p class="govuk-heading-l govuk-!-padding-top-1" id="amount">£@{
                             CommonFormatter.formatAmount(viewProgress.amount)
                         }</p>
                         @{
@@ -83,7 +83,7 @@ messages: Messages
                         if(showEstimatedRepaymentDat) {
                                 <div class="govuk-grid-column-one-half">
                                 <h2 class="govuk-body govuk-!-margin-bottom-0">{Messages("view_progress.estimated_repayment_date")}</h2>
-                                <p class="heading-h2 govuk-!-padding-top-1" id="repay-date">{CommonFormatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
+                                <p class="govuk-heading-l govuk-!-padding-top-1" id="repay-date">{CommonFormatter.formatDate(viewProgress.estimatedRepaymentDate)}</p>
                                 </div>
                         }
                     }
@@ -104,9 +104,9 @@ messages: Messages
             <ol class="hmrc-timeline">
             @for(whsf <- viewProgress.whatsHappenedSoFar) {
                 <li class="hmrc-timeline-event" id="@{whsf.riskingStatus}@{whsf.complete}_timeline">
-                    <h3 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}@{whsf.complete}_event">@{whsf.title}</h3>
-                    <p class="hmrc-timeline-event-meta" id="@{whsf.riskingStatus}@{whsf.complete}_date">@{CommonFormatter.formatDate(whsf.date)}</p>
-                    <p id="@{whsf.riskingStatus}@{whsf.complete}_description">@Html(whsf.description)</p>
+                    <h2 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}@{whsf.complete}_event">@{whsf.title}</h2>
+                    <p class="govuk-body hmrc-timeline-event-meta" id="@{whsf.riskingStatus}@{whsf.complete}_date">@{CommonFormatter.formatDate(whsf.date)}</p>
+                    <p class="govuk-body" id="@{whsf.riskingStatus}@{whsf.complete}_description">@Html(whsf.description)</p>
                 </li>
             }
             </ol>
