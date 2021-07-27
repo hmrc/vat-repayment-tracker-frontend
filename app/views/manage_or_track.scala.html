@@ -117,20 +117,21 @@ messages:Messages
         views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nobank.toString, ManageOrTrackOptions.nobank.toString, Messages("manage_or_track.set_up_repayment_bank_account"), Some(Messages("manage_or_track.tell_pay_money")), None)
        }
        }
-      </div>
        @{
         if (!(viewConfig.isShuttered)) {
          views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, Messages("manage_or_track.track_vat_repayments"), Some(Messages("manage_or_track.view_hmrc_owe_you")), None)
        }
      }
-    </fieldset>
   </div>
+
+  </fieldset>
 
    <div class="form-field">
     <button id="next" type="submit" class="govuk-button" onclick="getPaymentMethod()">@Messages("continue")</button>
    </div>
-   }
+     </div>
+    }
 
+   </div>
   </div>
- </div>
-}
+ }
