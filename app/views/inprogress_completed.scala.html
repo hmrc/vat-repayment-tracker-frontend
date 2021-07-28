@@ -53,10 +53,10 @@ messages: Messages
             <h1 id="main-message" class="govuk-heading-xl">@Messages("inprogress_completed.title")</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
-                    <li class="govuk-tabs__list-item">
-                        <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#inProgress" id="tab_inProgress">@Messages("in_progress")</a>
-                    </li>
                     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                        <a class="govuk-tabs__tab" href="#inProgress" id="tab_inProgress">@Messages("in_progress")</a>
+                    </li>
+                    <li class="govuk-tabs__list-item">
                         <a class="govuk-tabs__tab" href="#completed" id="tab_completed" >@Messages("completed")</a>
                     </li>
                 </ul>
