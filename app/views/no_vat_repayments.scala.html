@@ -45,7 +45,7 @@
       <h1 id="main-message" class="govuk-heading-xl">@Messages("no_vat_repayments.title")</h1>
       <p class="govuk-body">@Messages("no_vat_repayments.repayments_hours")</p>
       <p class="govuk-body">@Messages("no_vat_repayments.expecting_repayment")</p>
-      <p class="govuk-!-margin-bottom-9"><a href=@{viewConfig.viewVatAccount}>@Messages("no_vat_repayments.view_account")</a></p>
+      <p class="govuk-body govuk-!-margin-bottom-9"><a href=@{viewConfig.viewVatAccount}>@Messages("no_vat_repayments.view_account")</a></p>
       @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
     </div>
   </div>
