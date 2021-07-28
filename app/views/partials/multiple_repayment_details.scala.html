@@ -56,10 +56,10 @@ message: Messages,
       <td >£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
         <td><a href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
             @if(appender == "_completed"){
-            <span aria-hidden="true">@Messages("multiple_repayment_details.view_history")</span>
+            <span class="govuk-body" aria-hidden="true">@Messages("multiple_repayment_details.view_history")</span>
             <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.history_accounting_period") @onePayment.period</span>
             } else{
-            <span aria-hidden="true">@Messages("multiple_repayment_details.view_progress")</span>
+            <span class="govuk-body" aria-hidden="true">@Messages("multiple_repayment_details.view_progress")</span>
             <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.view_progress_accounting_period") @onePayment.period</span>
             }
 
