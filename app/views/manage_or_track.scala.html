@@ -76,7 +76,7 @@ messages:Messages
 
 
     <div class="govuk-form-group @form.errors("manage").map { e => form-group-error }" >
-     <fieldset id="manage" class="govuk-fieldset" @errorLink>
+     <fieldset id="manage" class="govuk-fieldset govuk-!-padding-bottom-1" @errorLink>
       <legend>
       <h1 id="main-message" class="govuk-heading-xl">@{
        if (viewConfig.isShuttered)
