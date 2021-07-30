@@ -37,16 +37,13 @@
 }
 
 @mainContent = {
-<main class="govuk-main-wrapper" role="main">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-xl">@Messages("error_template.title")</h1>
-            <p class="govuk-body">@Messages("error_template.title.try_again")</p>
-            <p class="govuk-body">@message</p>
-        </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@Messages("error_template.title")</h1>
+        <p class="govuk-body">@Messages("error_template.title.try_again")</p>
+        <p class="govuk-body">@message</p>
     </div>
-</main>
-
+  </div>
 }
 
 @mainTemplate(
