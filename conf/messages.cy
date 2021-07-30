@@ -16,9 +16,9 @@ timeout_dialog.message.timeout = Er eich diogelwch, byddwn yn dod â’ch sesiwn
 
 repayment_details_classic.h2 = Eich manylion ar gyfer ad-daliadau
 repayment_details_classic.bank_details = Os ydych wedi ychwanegu’ch manylion banc, byddwn yn anfon ad-daliadau i’ch cyfrif banc.
-repayment_details_classic.bank_account_link = <a href="{0}">Ychwanegu neu newid manylion eich cyfrif banc</a>
+repayment_details_classic.bank_account_link = <a class="govuk-link" href="{0}">Ychwanegu neu newid manylion eich cyfrif banc</a>
 repayment_details_classic.address_details = Os nad ydych wedi ychwanegu’ch manylion banc, byddwn yn anfon siec atoch, a hynny i:
-repayment_details_classic.address_link = <a href="{0}">Newid eich cyfeiriad busnes</a>
+repayment_details_classic.address_link = <a class="govuk-link" href="{0}">Newid eich cyfeiriad busnes</a>
 
 no_vat_repayments_classic.title = Nid oes ad-daliadau TAW ar y gweill
 no_vat_repayments_classic.h1 = Nid oes ad-daliadau TAW ar y gweill
@@ -69,7 +69,7 @@ delete_answers.did_not_save_answers = Ni wnaethom gadw’ch atebion.
 
 completed.title = Rydym yn prosesu’ch ad-daliadau TAW
 completed.track_repayments = Dilyn hynt eich ad-daliadau TAW
-completed.no-completed-desc = Bydd ad-daliadau sydd wedi’i gwneud ond yn dangos yma am 60 diwrnod ar ôl eich dyddiad ad-dalu. Bwrw golwg dros <a href="{0}">hanes eich taliadau TAW.</a>
+completed.no-completed-desc = Bydd ad-daliadau sydd wedi’i gwneud ond yn dangos yma am 60 diwrnod ar ôl eich dyddiad ad-dalu. Bwrw golwg dros <a class="govuk-link" href="{0}">hanes eich taliadau TAW.</a>
 completed.no-in-progress-desc = Os ydych yn disgwyl ad-daliad ac nad yw’n ymddangos yma, gwiriwch y dudalen hon eto mewn 24 awr.</p><p>Os gwnaethoch gyflwyno’ch Ffurflen TAW yn gynnar, gwiriwch y dudalen hon ar ôl i’ch cyfnod cyfrifyddu wedi dod i ben.
 completed.no_repayments_in_progress = Nid oes ad-daliadau ar y gweill
 
@@ -80,16 +80,16 @@ govuk_wrapper.delete_your_answers = Dileu’ch atebion
 inprogress.title = Rydym yn prosesu’ch ad-daliadau TAW
 inprogress.track_repayments = Dilyn hynt eich ad-daliadau TAW
 inprogress.repayment_suspended = Mae’ch ad-daliad wedi’i ohirio.
-inprogress.submit_latest_return = Mae’n rhaid i chi <a href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">gyflwyno’ch Ffurflen TAW ddiweddaraf</a>
-inprogress.no_completed_desc = Bydd ad-daliadau sydd wedi’i gwneud ond yn dangos yma am 60 diwrnod ar ôl eich dyddiad ad-dalu. Bwrw golwg dros <a href="{0}">hanes eich taliadau TAW.</a>
+inprogress.submit_latest_return = Mae’n rhaid i chi <a class="govuk-link" href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">gyflwyno’ch Ffurflen TAW ddiweddaraf</a>
+inprogress.no_completed_desc = Bydd ad-daliadau sydd wedi’i gwneud ond yn dangos yma am 60 diwrnod ar ôl eich dyddiad ad-dalu. Bwrw golwg dros <a class="govuk-link" href="{0}">hanes eich taliadau TAW.</a>
 inprogress.no_completed_repayments = Nid oes gennych ad-daliadau wedi’u gwneud
 
 
 inprogress_completed.title = Rydym yn prosesu’ch ad-daliadau TAW
 inprogress_completed.track_repayments = Dilyn hynt eich ad-daliadau TAW
 inprogress_completed.repayment_suspended = Mae’ch ad-daliad wedi’i ohirio.
-inprogress_completed.submit_latest_return = Mae’n rhaid i chi <a href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">gyflwyno’ch Ffurflen TAW ddiweddaraf</a>
-inprogress_completed.no_completed_desc = Bydd ad-daliadau sydd wedi’i gwneud ond yn dangos yma am 60 diwrnod ar ôl eich dyddiad ad-dalu. Bwrw golwg dros <a href="{0}">hanes eich taliadau TAW.</a>
+inprogress_completed.submit_latest_return = Mae’n rhaid i chi <a class="govuk-link" href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">gyflwyno’ch Ffurflen TAW ddiweddaraf</a>
+inprogress_completed.no_completed_desc = Bydd ad-daliadau sydd wedi’i gwneud ond yn dangos yma am 60 diwrnod ar ôl eich dyddiad ad-dalu. Bwrw golwg dros <a class="govuk-link" href="{0}">hanes eich taliadau TAW.</a>
 
 
 manage_or_track.shuttered = Rheoli Debyd Uniongyrchol a’r cyfrif banc ar gyfer ad-daliadau
@@ -114,15 +114,15 @@ no_vat_repayments.view_account = Bwrw golwg dros eich cyfrif TAW
 
 non_mtd_user.title = Ni allwch gael mynediad at y gwasanaeth hwn
 non_mtd_user.line1 = Nid ydych wedi’ch cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW. Mae angen i chi wneud hyn cyn y gallwch ddilyn hynt eich ad-daliadau TAW.
-non_mtd_user.line2 = Ewch ati i ddysgu sut i <a href="{0}" target="_blank">gofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer TAW (yn agor ffenestr neu dab newydd).</a>
-non_mtd_user.line3 = Bwrw golwg dros eich <a href="{0}">Cyfrif Treth Busnes.
+non_mtd_user.line2 = Ewch ati i ddysgu sut i <a class="govuk-link" href="{0}" target="_blank">gofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer TAW (yn agor ffenestr neu dab newydd).</a>
+non_mtd_user.line3 = Bwrw golwg dros eich <a class="govuk-link" href="{0}">Cyfrif Treth Busnes.
 
 shuttered.title = Nid yw’r gwasnaeth hwn ar gael ar hyn o bryd
 
 
 view_progress.action_required = Angen cymryd camau
 view_progress.submit_vat_return = Cyflwyno Ffurflen TAW
-view_progress.submit_your_return = <a href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">Cyflwyno’ch Ffurflen TAW</a>
+view_progress.submit_your_return = <a class="govuk-link" href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">Cyflwyno’ch Ffurflen TAW</a>
 view_progress.view_payments_history = Bwrw golwg dros hanes y taliadau
 view_progress.pay_now = Talu nawr
 view_progress.estimated_repayment_date = Amcangyfrif o’r dyddiad ad-dalu
@@ -203,7 +203,7 @@ view_progress_formatter.need_to_make_vat_payment = Mae’n rhaid i chi wneud tal
 view_progress_formatter.repayment_approved = Ad-daliad wedi’i gymeradwyo
 view_progress_formatter.send_repayment_bank_account = Bydd hwn yn cyrraedd eich cyfrif banc ar gyfer ad-daliadau cyn pen 3 diwrnod gwaith.
 view_progress_formatter.your_repayment_approved = Mae’ch ad-daliad wedi cael ei gymeradwyo
-view_progress_formatter.cannot_process_your_repayment = Ni allwn brosesu’ch ad-daliad hyd nes eich bod yn cyflwyno’ch Ffurflen TAW ar gyfer y cyfnod cyfrifyddu diweddaf.<br /><br /><a href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">Cyflwyno’ch Ffurflen TAW
+view_progress_formatter.cannot_process_your_repayment = Ni allwn brosesu’ch ad-daliad hyd nes eich bod yn cyflwyno’ch Ffurflen TAW ar gyfer y cyfnod cyfrifyddu diweddaf.<br /><br /><a class="govuk-link" href="https://www.gov.uk/ffurflenni-taw/sut-i-gyflwynoch-ffurflen-taw">Cyflwyno’ch Ffurflen TAW
 view_progress_formatter.must_submit_latest_vat_return = Mae’n rhaid i chi gyflwyno’ch Ffurflen TAW ddiweddaraf
 view_progress_formatter.repayment_suspended = Ad-daliad wedi’i ohirio
 view_progress_formatter.repayment_complete = Ad-daliad wedi’i wneud
@@ -216,9 +216,9 @@ view_progress_formatter.received_your_vat_payment = Mae’ch taliad TAW wedi dod
 view_progress_formatter.amount_you_paid = Y swm a dalwyd gennych
 view_progress_formatter.repayment_complete_bank_details = Gwnaethom anfon taliad o £{3} i’ch cyfrif banc ar gyfer ad-daliadau:</p><p>Enw: {0}</p><p>Rhif y cyfrif: {1}</p><p>Cod didoli: {2}.
 view_progress_formatter.repayment_complete_bank_details_adjusted = Gwnaethom anfon taliad wedi’i addasu o £{3} i’ch cyfrif banc ar gyfer ad-daliadau:</p><p>Enw: {0}</p><p>Rhif y cyfrif: {1}</p><p>Cod didoli: {2}.
-view_progress_formatter.send_cheque_to_business_address = Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr yn ystod y dyddiau nesaf, gwiriwch <a href={0}>hanes eich taliadau TAW</a>.
-view_progress_formatter.claimed_vat_repayment_post = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a href={2}>hanes eich taliadau TAW</a>.
-view_progress_formatter.claimed_vat_repayment_of = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Bydd hwn yn cyrraedd eich cyfrif banc ar gyfer ad-daliadau cyn pen 3 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a href={1}>hanes eich taliadau TAW</a>.
+view_progress_formatter.send_cheque_to_business_address = Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr yn ystod y dyddiau nesaf, gwiriwch <a class="govuk-link" href={0}>hanes eich taliadau TAW</a>.
+view_progress_formatter.claimed_vat_repayment_post = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a class="govuk-link" href={2}>hanes eich taliadau TAW</a>.
+view_progress_formatter.claimed_vat_repayment_of = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Bydd hwn yn cyrraedd eich cyfrif banc ar gyfer ad-daliadau cyn pen 3 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p>Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a class="govuk-link" href={1}>hanes eich taliadau TAW</a>.
 view_progress_formatter.calculated_original_amount_claimed = Gwnaethom gyfrifo bod y swm gwreiddiol o £{0} y gwnaethoch ei hawlio’n anghywir. Erbyn hyn, mae arnoch £{1} i CThEM. Gwnaethom anfon llythyr atoch gyda’r rheswm dros y newid hwn.
 
 accessibility-statement.title = Datganiad Hygyrchedd
