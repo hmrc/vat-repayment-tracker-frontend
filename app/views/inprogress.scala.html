@@ -48,7 +48,7 @@ messages: Messages
 
     @bread_crumbs(Messages("inprogress.track_repayments"))
     <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
-        <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-2">
+        <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-3">
             <h1 id="main-message" class="govuk-heading-xl">@Messages("inprogress.title")</h1>
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
@@ -69,14 +69,14 @@ messages: Messages
                             </div>
                         </div>
                     } else {
-                        <h2 class="govuk-tabs__title" class="govuk-heading-m">@Messages("in_progress")</h2>
+                        <h2 class="govuk-heading-l" >@Messages("in_progress")</h2>
                     }
 
                     @multiple_repayments(inProgress,vrn,"_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed">
-                    <h2 class="govuk-tabs__title"  class="govuk-heading-m">@Messages("completed")</h2>
+                    <h2 class="govuk-heading-l"  >@Messages("completed")</h2>
                     <div class="govuk-inset-text" id="no-repayments">@Messages("inprogress.no_completed_repayments")</div>
                     <p class="govuk-body" >@Html(Messages("inprogress.no_completed_desc", viewConfig.paymentHistoryUrl))</p>
                     <div id="completed-none"></div>

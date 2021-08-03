@@ -60,13 +60,13 @@ messages: Messages
                 </ul>
 
                 <section class="govuk-tabs__panel" id="completed">
-                    <h2 class="govuk-tabs__title">@Messages("completed")</h2>
+                    <h2 class="govuk-heading-l">@Messages("completed")</h2>
                     @multiple_repayments(completed,vrn,"_completed")
                     <p class="govuk-body">@Html(Messages("completed.no-completed-desc", viewConfig.paymentHistoryUrl))</p>
                     <div id="completed-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="inProgress">
-                    <h2 class="govuk-tabs__title">@Messages("in_progress")</h2>
+                    <h2 class="govuk-heading-l">@Messages("in_progress")</h2>
                     <div class="govuk-inset-text" id="no-repayments">@Messages("completed.no_repayments_in_progress")</div>
                     <p class="govuk-body">@Html(Messages("completed.no-in-progress-desc"))</p>
                     <div id="inprogress-none"></div>
