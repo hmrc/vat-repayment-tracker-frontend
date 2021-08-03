@@ -4,22 +4,9 @@ $hmrc-assets-path: "/vat-repayment-tracker/assets/lib/hmrc-frontend/hmrc/";
 @import "lib/govuk-frontend/govuk/all";
 @import "lib/hmrc-frontend/hmrc/all";
 
-.language-toggle-position {
-  float: right;
-}
+@import "timeline";
 
-.input-error {
-  border: 4px solid #d4351c;
-}
-
-.button-get-started {
-
-}
-
-.panel-tabular-data {
-  padding-left: 1.4em;
-}
-
-.panel-border-narrow {
-  border-left-width: 5px;
+.govuk-back-link:before {
+  clip-path: none;
+  text-decoration: none;
 }
