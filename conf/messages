@@ -71,7 +71,7 @@ delete_answers.did_not_save_answers = We did not save your answers.
 completed.title = We are processing your VAT repayments
 completed.track_repayments = Track your VAT repayments
 completed.no-completed-desc = Completed repayments will only show here for 60 days after your repayment date. View your <a class="govuk-link" href="{0}">VAT payments history.</a>
-completed.no-in-progress-desc = If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</p><p>If you submitted your return early check this page after your accounting period has ended.
+completed.no-in-progress-desc = If you are expecting a repayment and it is not showing here, check this page again in 24 hours.</p><p class="govuk-body">If you submitted your return early check this page after your accounting period has ended.
 completed.no_repayments_in_progress = No repayments in progress
 
 govuk_wrapper.sign_out = Sign out
@@ -194,7 +194,7 @@ view_progress_formatter.we_received_your_return = We received your return and ar
 view_progress_formatter.amount_you_claimed = Amount you claimed
 view_progress_formatter.repayment_being_processed = Your repayment is being processed
 view_progress_formatter.estimated_repayment_date_passed = Estimated repayment date has passed
-view_progress_formatter.do_not_need_anything = You do not need to do anything right now. We are working on repaying you as soon as possible. </p><p>We have sent you a letter to explain that your repayment is delayed.
+view_progress_formatter.do_not_need_anything = You do not need to do anything right now. We are working on repaying you as soon as possible. </p><p class="govuk-body">We have sent you a letter to explain that your repayment is delayed.
 view_progress_formatter.repayment_delayed = Your repayment is delayed
 view_progress_formatter.sending_for_further_checks = Sending for further checks
 view_progress_formatter.making_sure_right_amount = We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.
@@ -214,15 +214,15 @@ view_progress_formatter.repayment_complete = Repayment complete
 view_progress_formatter.amount_we_paid_you = Amount we paid you
 view_progress_formatter.repayment_is_complete = Your repayment is complete
 view_progress_formatter.address_not_available = Address not available
-view_progress_formatter.repayment_complete_address_adjusted = We sent you an adjusted payment of £{1} as a cheque to </p><p> {0}.
-view_progress_formatter.repayment_complete_address = We sent a payment of £{1} as a cheque to </p><p> {0}.
+view_progress_formatter.repayment_complete_address_adjusted = We sent you an adjusted payment of £{1} as a cheque to </p><p class="govuk-body"> {0}.
+view_progress_formatter.repayment_complete_address = We sent a payment of £{1} as a cheque to </p><p class="govuk-body"> {0}.
 view_progress_formatter.received_your_vat_payment = We received your VAT payment.
 view_progress_formatter.amount_you_paid = Amount you paid
-view_progress_formatter.repayment_complete_bank_details = We sent a payment of £{3} to your repayment bank account:</p><p>Name: {0}</p><p>Account number: {1}</p><p>Sort code: {2}.
-view_progress_formatter.repayment_complete_bank_details_adjusted = We sent an adjusted payment of £{3} to your repayment bank account:</p><p>Name: {0}</p><p>Account number: {1}</p><p>Sort code: {2}.
-view_progress_formatter.send_cheque_to_business_address = We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  </p><p>If you do not receive a letter in the next few days, check your <a class="govuk-link" href={0}>VAT payments history</a>.
-view_progress_formatter.claimed_vat_repayment_post = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}. We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a href={2}>VAT payments history</a>.
-view_progress_formatter.claimed_vat_repayment_of = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. </p><p>If you do not receive a letter in the next 7 days, check your <a class="govuk-link" href={2}>VAT payments history</a>.
+view_progress_formatter.repayment_complete_bank_details = We sent a payment of £{3} to your repayment bank account:</p><p class="govuk-body">Name: {0}</p><p class="govuk-body">Account number: {1}</p><p class="govuk-body">Sort code: {2}.
+view_progress_formatter.repayment_complete_bank_details_adjusted = We sent an adjusted payment of £{3} to your repayment bank account:</p><p class="govuk-body">Name: {0}</p><p class="govuk-body">Account number: {1}</p><p class="govuk-body">Sort code: {2}.
+view_progress_formatter.send_cheque_to_business_address = We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount.  </p><p class="govuk-body">If you do not receive a letter in the next few days, check your <a class="govuk-link" href={0}>VAT payments history</a>.
+view_progress_formatter.claimed_vat_repayment_post = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}. We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter explaining why we changed your amount. </p><p class="govuk-body">If you do not receive a letter in the next 7 days, check your <a href={2}>VAT payments history</a>.
+view_progress_formatter.claimed_vat_repayment_of = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. </p><p class="govuk-body">If you do not receive a letter in the next 7 days, check your <a class="govuk-link" href={2}>VAT payments history</a>.
 view_progress_formatter.calculated_original_amount_claimed = We calculated that the original amount of £{0} you claimed was incorrect. You now owe HMRC £{1}. We sent you a letter with the reason for this change.
 
 
