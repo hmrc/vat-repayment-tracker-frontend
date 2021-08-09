@@ -51,10 +51,10 @@ message: Messages,
   <tbody class="govuk-table__body">
     @for(onePayment <- repayments) {
     <tr class="govuk-table__row">
-        <td  class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
-      <td >@onePayment.period</td>
-      <td >£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
-        <td><a class="govuk-link" href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
+        <td  class="add-bold govuk-!-padding-top-2">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
+      <td class="govuk-body govuk-!-padding-top-2">@onePayment.period</td>
+      <td class="govuk-body govuk-!-padding-top-2">£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
+        <td><a class="govuk-link govuk-!-padding-top-2" href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
             @if(appender == "_completed"){
             <span  aria-hidden="true">@Messages("multiple_repayment_details.view_history")</span>
             <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.history_accounting_period") @onePayment.period</span>
