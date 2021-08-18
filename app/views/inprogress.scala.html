@@ -47,9 +47,13 @@ messages: Messages
 @mainTemplate(title = Messages("inprogress.title")) {
 
     @bread_crumbs(Messages("inprogress.track_repayments"))
-    <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
-        <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-3">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
             <h1 id="main-message" class="govuk-heading-xl">@Messages("inprogress.title")</h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row" data-gtag="repayment-type:one_in_progress_multiple_delayed">
+        <div class="govuk-grid-column-three-quarters govuk-!-padding-bottom-3">
             <div class="govuk-tabs govuk-!-padding-bottom-6" data-module="govuk-tabs">
                 <ul class="govuk-tabs__list" role="tablist">
                     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
@@ -82,6 +86,10 @@ messages: Messages
                     <div id="completed-none"></div>
                 </section>
             </div>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
             @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
         </div>
     </div>
