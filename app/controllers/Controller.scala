@@ -17,9 +17,11 @@
 package controllers
 
 import config.ViewConfig
+import connectors.Auditor.`repayment-type`
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
 import formaters.{DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
+
 import javax.inject.{Inject, Singleton}
 import model._
 import play.api.Logger
@@ -38,6 +40,7 @@ class Controller @Inject() (
     requestSupport:                      RequestSupport,
     desFormatter:                        DesFormatter,
     actions:                             Actions,
+    auditor:                             Auditor,
     viewConfig:                          ViewConfig,
     vrtService:                          VrtService,
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
@@ -54,7 +57,9 @@ class Controller @Inject() (
   private val logger = Logger(this.getClass)
 
   def nonMtdUser(): Action[AnyContent] = actions.loggedIn.async { implicit request =>
-    Future.successful(Ok(views_non_mtd_user()))
+    for {
+      _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress)
+    } yield Ok(views_non_mtd_user())
   }
 
   def signout: Action[AnyContent] =
@@ -75,6 +80,8 @@ class Controller @Inject() (
           for {
             calendarData <- calendarDataF
             designatoryDetails <- designatoryDetailsF
+            engmtType = showResultsFormatter.computeEngmtClassic(calendarData)
+            _ <- auditor.auditEngagement("showVrt", engmtType)
           } yield showResultsFormatter.computeViewClassic(vrnNonMtd, calendarData, designatoryDetails)
 
         case TypedVrn.MtdVrn(vrnMtd) =>
@@ -86,7 +93,11 @@ class Controller @Inject() (
             customerData <- customerDataF
             repaymentDetails <- repaymentDetailsF
             financialData <- financialDataF
-          } yield showResultsFormatter.computeView(vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData), customerData, vrnMtd)
+
+            allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData)
+            engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
+            _ <- auditor.auditEngagement("showVrt", engmtType)
+          } yield showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd)
       }
 
   }
@@ -134,7 +145,11 @@ class Controller @Inject() (
         customerData <- customerDataF
         repaymentDetails <- repaymentDetailsF
         financialData <- financialDataF
-      } yield showResultsFormatter.computeView(vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData), customerData, request.typedVrn.vrn)
+
+        allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
+        engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
+        _ <- auditor.auditEngagement("showResults", engmtType)
+      } yield showResultsFormatter.computeView(allRepaymentData, customerData, request.typedVrn.vrn)
 
       result
 

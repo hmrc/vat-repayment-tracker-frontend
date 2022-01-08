@@ -16,6 +16,8 @@
 
 package formaters
 
+import connectors.Auditor.`repayment-type`
+
 import javax.inject.{Inject, Singleton}
 import model._
 import model.des.CustomerInformation
@@ -50,6 +52,15 @@ class ShowResultsFormatter @Inject() (
     calendarData match {
       case Some(data) => if (data.countReturns == 0) Ok(classic_none(vrn, address)) else Ok(classic_some(vrn, data.latestReceivedOnFormatted, address))
       case None       => Ok(classic_none(vrn, address))
+    }
+  }
+
+  def computeEngmtClassic(
+                                calendarData: Option[CalendarData],
+                              ): String = {
+    calendarData match {
+      case Some(data) => if (data.countReturns == 0) `repayment-type`.none_in_progress else `repayment-type`.in_progress_classic
+      case None => `repayment-type`.none_in_progress
     }
   }
 
@@ -114,6 +125,16 @@ class ShowResultsFormatter @Inject() (
           inflightBankDetails
         ))
 
+    }
+  }
+
+  def computeEngmt(
+                   allRepaymentData: AllRepaymentData
+                 ): String = {
+    if (allRepaymentData.inProgressRepaymentData.nonEmpty || allRepaymentData.completedRepaymentData.nonEmpty) {
+      `repayment-type`.one_in_progress_multiple_delayed
+    } else {
+      `repayment-type`.none_in_progress
     }
   }
 

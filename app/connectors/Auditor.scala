@@ -56,10 +56,25 @@ class Auditor @Inject() (
 
   }
 
+  def auditEngagement(transactionName: String, engmtType: String)(
+      implicit
+      request: Request[_]): Future[AuditResult] = {
+    val auditTypeIn = "engagement"
+
+    val event = DataEvent(
+      auditSource = "vat-repayment-tracker-frontend",
+      auditType   = auditTypeIn,
+      tags        = Auditor.auditTags(request, transactionName),
+      detail      = Auditor.engagementDetail(engmtType)
+    )
+
+    auditConnector.sendEvent(event)
+  }
+
   private def convertToMap(inProgressList: List[RepaymentDataNoRiskingStatus]): Map[String, String] = {
     inProgressList
       .zipWithIndex
-      .map{
+      .map {
         case (row, index) =>
           val k = s"inprogress_$index"
           val v = s"returnCreationDate: ${CommonFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${CommonFormatter.formatAmount(row.amount)}"
@@ -69,6 +84,12 @@ class Auditor @Inject() (
 }
 
 object Auditor {
+
+  object `repayment-type` {
+    val one_in_progress_multiple_delayed = "one_in_progress_multiple_delayed"
+    val none_in_progress = "none_in_progress"
+    val in_progress_classic = "in_progress_classic"
+  }
 
   def auditTags(request: Request[_], transactionName: String): Map[String, String] = {
 
@@ -82,6 +103,12 @@ object Auditor {
       "deviceID" -> hc.deviceID.getOrElse("-"),
       "path" -> request.path,
       "transactionName" -> transactionName)
+  }
+
+  def engagementDetail(engmtType: String): Map[String, String] = {
+    Map(
+      "engmtType" -> engmtType
+    )
   }
 
 }
