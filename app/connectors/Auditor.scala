@@ -59,7 +59,7 @@ class Auditor @Inject() (
   def auditEngagement(transactionName: String, engmtType: String)(
       implicit
       request: Request[_]): Future[AuditResult] = {
-    val auditTypeIn = "engagement"
+    val auditTypeIn = "EngagementStatus"
 
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
