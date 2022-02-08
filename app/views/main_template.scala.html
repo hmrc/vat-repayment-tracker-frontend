@@ -91,7 +91,7 @@
         Header(
         homepageUrl = "https://www.gov.uk",
         serviceName = Some(Messages(navTitle)),
-        serviceUrl = "",
+        serviceUrl = viewConfig.frontendBaseUrl + request.path,
         signOutHref = if (isLoggedIn) Some(routes.Controller.signout.url) else None,
         phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl)),
     ))),
