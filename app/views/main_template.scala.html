@@ -3,6 +3,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Header, ReportTechnicalIssue}
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En, LanguageSelect}
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
 @import langswitch.Languages
 @import config.ViewConfig
 @import req.RequestSupport.isLoggedIn
@@ -14,7 +15,7 @@
         hmrcHeader: HmrcHeader,
         languageSelect: HmrcLanguageSelect,
 
-        hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         standardBetaBanner: StandardBetaBanner,
@@ -80,12 +81,7 @@
         </article>
     </div>
 
-    @hmrcReportTechnicalIssue(
-        uk.gov.hmrc.hmrcfrontend.views.html.components.ReportTechnicalIssue(
-            viewConfig.appName,
-            language = if (messages.lang.code == "cy") Cy else En
-        )
-    )
+    @hmrcReportTechnicalIssueHelper()
 }
 
 @govukLayout(
