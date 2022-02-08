@@ -21,25 +21,27 @@
 @import model.ManageOrTrackOptions
 @import org.joda.time.DateTime
 @import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichErrorSummary
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorSummary
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 
 @this(
-mainTemplate: views.html.main_template,
-viewsHelpers: views.ViewsHelpers,
-        govukErrorSummary: GovukErrorSummary,
-viewConfig: ViewConfig,
-        govukButton: GovukButton,
-bread_crumbs: views.html.partials.bread_crumbs
+        mainTemplate: views.html.main_template,
+        viewsHelpers: views.ViewsHelpers,
+        govukErrorSummary: uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary,
+        viewConfig: ViewConfig,
+        govukButton: uk.gov.hmrc.govukfrontend.views.html.components.GovukButton,
+        bread_crumbs: views.html.partials.bread_crumbs
 )
 @(
-vrn: Vrn,
-bankDetailsOption : Option[BankDetails],
-ddDetailsOption : Option[BankDetails],
-form: Form[ManageOrTrack],
-inflightBankDetails : Boolean
+        vrn: Vrn,
+        bankDetailsOption: Option[BankDetails],
+        ddDetailsOption: Option[BankDetails],
+        form: Form[ManageOrTrack],
+        inflightBankDetails: Boolean
 )(
-implicit
-request: Request[_],
-messages:Messages
+        implicit
+        request: Request[_],
+        messages: Messages
 )
 
 
