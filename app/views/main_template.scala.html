@@ -5,22 +5,21 @@
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import langswitch.Languages
 @import config.ViewConfig
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter
 @import req.RequestSupport.isLoggedIn
 
 @this(
-        govukLayout: GovukLayout,
-        twoThirdsMainContent: uk.gov.hmrc.govukfrontend.views.html.layouts.twoThirdsMainContent,
-        govukBackLink: GovukBackLink,
+        govukLayout: uk.gov.hmrc.govukfrontend.views.html.components.GovukLayout,
+        twoThirdsMainContent: uk.gov.hmrc.govukfrontend.views.html.components.TwoThirdsMainContent,
+        govukBackLink: uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink,
         hmrcHeader: HmrcHeader,
         languageSelect: HmrcLanguageSelect,
 
-        reportTechnicalIssues: HmrcReportTechnicalIssue,
+        hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
         hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         standardBetaBanner: StandardBetaBanner,
 
-        hmrcStandardFooter: HmrcStandardFooter,
+        hmrcStandardFooter: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter,
         hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
         mainScripts: views.html.scripts,
 
@@ -81,9 +80,12 @@
         </article>
     </div>
 
-    <div class="govuk-!-display-none-print">
-    @reportTechnicalIssues(ReportTechnicalIssue(serviceCode = "vat-repayment-tracker-frontend", language = if(messages.lang.code == "cy") Cy else En))
-    </div>
+    @hmrcReportTechnicalIssue(
+        uk.gov.hmrc.hmrcfrontend.views.html.components.ReportTechnicalIssue(
+            viewConfig.appName,
+            language = if (messages.lang.code == "cy") Cy else En
+        )
+    )
 }
 
 @govukLayout(
