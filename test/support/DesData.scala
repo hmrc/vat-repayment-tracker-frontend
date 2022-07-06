@@ -850,6 +850,57 @@ object DesData {
   )
 
   //language=JSON
+  def storedRepaymentDetails4(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
+    s"""[
+             {
+               "_id":"5db1c9826b00005f47616c61",
+               "creationDate":"$date",
+               "vrn":"101747008",
+               "repaymentDetailsData":{
+                 "returnCreationDate":"$date",
+                 "sentForRiskingDate":"$date",
+                 "lastUpdateReceivedDate":"$date",
+                 "periodKey":"18AC",
+                 "riskingStatus":"$status1",
+                 "vatToPay_BOX5":0.00,
+                 "supplementDelayDays":6,
+                 "originalPostingAmount":5.56
+               }
+             },
+             {
+               "_id":"5db1c9826b00005f47616c62",
+               "creationDate":"$date",
+               "vrn":"101747008",
+               "repaymentDetailsData":{
+                 "returnCreationDate":"$date",
+                 "sentForRiskingDate":"$date",
+                 "lastUpdateReceivedDate":"$date",
+                 "periodKey":"18AC",
+                 "riskingStatus":"$status2",
+                 "vatToPay_BOX5":6.56,
+                 "supplementDelayDays":6,
+                 "originalPostingAmount":5.56
+               }
+             },
+             {
+               "_id":"5db1c9826b00005f47616c63",
+               "creationDate":"$date",
+               "vrn":"101747008",
+               "repaymentDetailsData":{
+                 "returnCreationDate":"$date",
+                 "sentForRiskingDate":"$date",
+                 "lastUpdateReceivedDate":"2019-10-24",
+                 "periodKey":"18AC",
+                 "riskingStatus":"$status3",
+                 "vatToPay_BOX5":6.56,
+                 "supplementDelayDays":6,
+                 "originalPostingAmount":5.56
+               }
+             }
+        ]""".stripMargin
+  )
+
+  //language=JSON
   def repaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
     s"""[
           {
@@ -901,6 +952,42 @@ object DesData {
              "periodKey": "18AG",
              "riskingStatus": "$status1",
              "vatToPay_BOX5": 6.56,
+             "supplementDelayDays": 6,
+             "originalPostingAmount": 5.56
+         },
+         {
+            "returnCreationDate": "$date",
+            "sentForRiskingDate": "$date",
+            "lastUpdateReceivedDate": "$date",
+            "periodKey": "18AG",
+            "riskingStatus": "$status2",
+            "vatToPay_BOX5": 6.56,
+            "supplementDelayDays": 6,
+            "originalPostingAmount": 5.56
+        },
+        {
+             "returnCreationDate": "$date",
+             "sentForRiskingDate": "$date",
+             "lastUpdateReceivedDate": "$date",
+             "periodKey": "18AG",
+             "riskingStatus": "$status3",
+             "vatToPay_BOX5": 6.56,
+             "supplementDelayDays": 6,
+             "originalPostingAmount": 5.56
+         }
+      ]""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetails4(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
+    s"""[
+          {
+             "returnCreationDate": "$date",
+             "sentForRiskingDate": "$date",
+             "lastUpdateReceivedDate": "$date",
+             "periodKey": "18AG",
+             "riskingStatus": "$status1",
+             "vatToPay_BOX5": 0.00,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
          },

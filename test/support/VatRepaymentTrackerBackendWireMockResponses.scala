@@ -63,4 +63,14 @@ object VatRepaymentTrackerBackendWireMockResponses {
 
   }
 
+  def repaymentDetailS4(vrn: Vrn, date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus, periodKey: PeriodKey): StubMapping = {
+    stubFor(get(urlEqualTo(s"""/vat-repayment-tracker-backend/find/vrn/${vrn.value}/${periodKey.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(
+          DesData.storedRepaymentDetails4(date, status1, status2, status3).toString()
+            .stripMargin)))
+
+  }
+
 }

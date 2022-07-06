@@ -29,6 +29,8 @@ class TestConnector @Inject() (httpClient: HttpClient)(implicit executionContext
 
   val port = 19001
 
+  def viewProgress(vrn: Vrn, periodKey: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](s"http://localhost:$port/vat-repayment-tracker-frontend/view-progress/${periodKey}")
+
   def showResults(vrn: Vrn)(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](s"http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}")
 
   def viewRepaymentAccount(implicit hc: HeaderCarrier): Future[HttpResponse] = httpClient.GET[HttpResponse](
