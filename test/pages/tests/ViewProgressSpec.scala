@@ -203,6 +203,21 @@ class ViewProgressSpec extends ItSpec {
     ViewProgress.estimatedDate.isDefined shouldBe true
   }
 
+  // not a good test :-(  You have to look in logfile for 'KNOZ' msgs, remove once issue has been fixed ( OPS-8163 )
+  "check zero amount logger" in {
+    setup(rdsp      = 4, periodKey = PeriodKey("18AG"), ft = ft_credit, status3 = REPAYMENT_APPROVED)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£0.00")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL, CLAIM_QUERIED))
+    ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = false)
+    ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
+
+  }
+
   private def setup(
       useBankDetails: Boolean       = true,
       inPast:         Boolean       = false,
@@ -232,6 +247,9 @@ class ViewProgressSpec extends ItSpec {
         case 3 =>
           PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
           VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
+        case 4 =>
+          PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
+          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS4(vrn, date.toString, status1, status2, status3, periodKey)
       }
 
       ft match {

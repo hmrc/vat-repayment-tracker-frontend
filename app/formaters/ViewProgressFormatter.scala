@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import model._
 import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, REPAYMENT_ADJUSTED, REPAYMENT_APPROVED, REPAYMENT_SUSPENDED, SENT_FOR_RISKING}
 import model.des._
+import play.api.Logger
 import play.api.i18n.Messages
 import play.api.libs.json.JsResult.Exception
 import play.api.mvc.{Request, Result, Results}
@@ -37,6 +38,8 @@ class ViewProgressFormatter @Inject() (
                                        viewConfig:      ViewConfig,
                                        periodFormatter: PeriodFormatter)(implicit ec: ExecutionContext) extends Results {
 
+  private val logger = Logger(this.getClass)
+
   def computeViewProgress(
       vrn:           Vrn,
       periodKey:     PeriodKey,
@@ -51,6 +54,11 @@ class ViewProgressFormatter @Inject() (
     val returnCreditChargeExists = desFormatter.getReturnCreditChargeExists(financialData, periodKey)
     val returnDebitChargeExists = desFormatter.getReturnDebitChargeExists(financialData, periodKey)
 
+
+// ** For the KNOZ error (showing £0.00) I think the vrd data is not ordered and need to be sorted, something like this:
+//    implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
+//    val vrd = vrd1.sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
+
     val estRepaymentDate = getEstimatedRepaymentDate(vrd(0).repaymentDetailsData.returnCreationDate, vrd(0).repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
       if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5,
@@ -58,6 +66,10 @@ class ViewProgressFormatter @Inject() (
       estRepaymentDate,
       periodFormatter.formatPeriodKey(periodKey.value),
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
+
+    if( viewProgress.amount == 0  && vrd(0).repaymentDetailsData.riskingStatus != CLAIM_QUERIED ) {
+      logger.info(s"KNOZ: zero amount- riskingStatus: ${vrd(0).repaymentDetailsData.riskingStatus}, lst: ${vrd.map( a => s"[Status ${a.repaymentDetailsData.riskingStatus}, origAmt: ${a.repaymentDetailsData.originalPostingAmount} BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[",",","]")}  viewProgress=$viewProgress")
+    }
 
     Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
                            viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue()))
