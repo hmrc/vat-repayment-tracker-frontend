@@ -68,7 +68,7 @@ class ViewProgressFormatter @Inject() (
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
 
     if( viewProgress.amount == 0  && vrd(0).repaymentDetailsData.riskingStatus != CLAIM_QUERIED ) {
-      logger.info(s"KNOZ: zero amount- riskingStatus: ${vrd(0).repaymentDetailsData.riskingStatus}, lst: ${vrd.map( a => s"[Status ${a.repaymentDetailsData.riskingStatus}, origAmt: ${a.repaymentDetailsData.originalPostingAmount} BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[",",","]")}  viewProgress=$viewProgress")
+      logger.warn(s"KNOZ: zero amount- riskingStatus: ${vrd(0).repaymentDetailsData.riskingStatus}, lst: ${vrd.map( a => s"[Status ${a.repaymentDetailsData.riskingStatus}, origAmt: ${a.repaymentDetailsData.originalPostingAmount} BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[",",","]")}  viewProgress=$viewProgress")
     }
 
     Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
