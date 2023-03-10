@@ -98,12 +98,12 @@ manage_or_track.payment_and_repayments = Taliadau ac ad-daliadau
 manage_or_track.there_is_a_problem = Mae problem wedi codi
 manage_or_track.manage_direct_debit = Rheoli’ch Debyd Uniongyrchol
 manage_or_track.set_up_direct_debit = Sefydlu Debyd Uniongyrchol
-manage_or_track.hmrc_automatically = Bydd CThEM yn casglu’ch taliadau Ffurflen TAW yn awtomatig pan fyddant yn ddyledus
+manage_or_track.hmrc_automatically = Bydd CThEF yn casglu’ch taliadau Ffurflen TAW yn awtomatig pan fyddant yn ddyledus
 manage_or_track.manage_repayment_bank_account = Rheoli’ch cyfrif banc ar gyfer ad-daliadau
 manage_or_track.set_up_repayment_bank_account = Sefydlu cyfrif banc ar gyfer ad-daliadau
-manage_or_track.tell_pay_money = Rhoi gwybod i CThEM ble i dalu’ch arian
+manage_or_track.tell_pay_money = Rhoi gwybod i CThEF ble i dalu’ch arian
 manage_or_track.track_vat_repayments = Dilyn hynt eich ad-daliadau TAW
-manage_or_track.view_hmrc_owe_you = Bwrw golwg dros yr hyn sydd ar CThEM i chi
+manage_or_track.view_hmrc_owe_you = Bwrw golwg dros yr hyn sydd ar CThEF i chi
 manage_or_track.account_sortcode = Cyfrif: {0}, Cod didoli: {1}
 
 
@@ -197,7 +197,7 @@ view_progress_formatter.making_sure_right_amount = Rydym yn gwneud yn siŵr ein 
 view_progress_formatter.repayment_amount_changed = Rydym wedi newid y swm i’w ad-dalu
 view_progress_formatter.amount_we_pay_you = Y swm y byddwch yn ei dalu i chi
 view_progress_formatter.repayment_has_been_approved = Mae’ch ad-daliad wedi cael ei gymeradwyo
-view_progress_formatter.now_owe_hmrc = Erbyn hyn, mae arnoch y swm hwn i CThEM
+view_progress_formatter.now_owe_hmrc = Erbyn hyn, mae arnoch y swm hwn i CThEF
 view_progress_formatter.amount_to_pay = Y swm i’w dalu
 view_progress_formatter.need_to_make_vat_payment = Mae’n rhaid i chi wneud taliad TAW
 view_progress_formatter.repayment_approved = Ad-daliad wedi’i gymeradwyo
@@ -219,7 +219,7 @@ view_progress_formatter.repayment_complete_bank_details_adjusted = Gwnaethom anf
 view_progress_formatter.send_cheque_to_business_address = Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p class="govuk-body">Os na chewch lythyr yn ystod y dyddiau nesaf, gwiriwch <a class="govuk-link" href={0}>hanes eich taliadau TAW</a>.
 view_progress_formatter.claimed_vat_repayment_post = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Byddwn yn anfon siec i gyfeiriad eich busnes. Bydd hon yn eich cyrraedd cyn pen 5 i 6 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p class="govuk-body">Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a class="govuk-link" href={2}>hanes eich taliadau TAW</a>.
 view_progress_formatter.claimed_vat_repayment_of = Gwnaethoch hawlio £{0}. Rydym wedi cyfrifo’r swm hwn i fod yn anghywir, felly byddwn yn ad-dalu £{1} i chi. Bydd hwn yn cyrraedd eich cyfrif banc ar gyfer ad-daliadau cyn pen 3 diwrnod gwaith. Gwnaethom anfon llythyr atoch yn esbonio pam y gwnaethom newid eich swm. </p><p class="govuk-body">Os na chewch lythyr o fewn y 7 diwrnod nesaf, gwiriwch <a class="govuk-link" href={1}>hanes eich taliadau TAW</a>.
-view_progress_formatter.calculated_original_amount_claimed = Gwnaethom gyfrifo bod y swm gwreiddiol o £{0} y gwnaethoch ei hawlio’n anghywir. Erbyn hyn, mae arnoch £{1} i CThEM. Gwnaethom anfon llythyr atoch gyda’r rheswm dros y newid hwn.
+view_progress_formatter.calculated_original_amount_claimed = Gwnaethom gyfrifo bod y swm gwreiddiol o £{0} y gwnaethoch ei hawlio’n anghywir. Erbyn hyn, mae arnoch £{1} i CThEF. Gwnaethom anfon llythyr atoch gyda’r rheswm dros y newid hwn.
 
 accessibility-statement.title = Datganiad Hygyrchedd
 
