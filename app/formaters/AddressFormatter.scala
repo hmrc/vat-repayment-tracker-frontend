@@ -28,15 +28,15 @@ class AddressFormatter @Inject() (countriesService: CountriesService) {
 
   def getFormattedAddressMtd(address: Address): String = {
 
-    val country: String = address.countryCode match {
-      case Some(code) => if (code == "GB") "" else if (code == "GBR") "" else countriesService.getCountry(code)
+    val countryName: String = address.countryCode match {
+      case Some(code) => if (code == "GB") "" else if (code == "GBR") "" else countriesService.getCountryName(code)
       case None       => ""
     }
     address.line1.fold("")(_ + lineReturn) +
       address.line2.fold("")(_ + lineReturn) +
       address.line3.fold("")(_ + lineReturn) +
       address.line4.fold("")(_ + lineReturn) +
-      address.postCode.fold("")(_ + lineReturn) + country
+      address.postCode.fold("")(_ + lineReturn) + countryName
 
   }
 

@@ -25,7 +25,8 @@ class CountriesServiceSpec extends ItSpec {
 
     "should Return a country when Given  a code " in {
 
-      countryService.getCountry("GBR") shouldBe "United Kingdom"
+      countryService.getCountryName("GB") shouldBe "United Kingdom"
+      countryService.getCountryName("HK") shouldBe "Hong Kong"
     }
   }
 }
