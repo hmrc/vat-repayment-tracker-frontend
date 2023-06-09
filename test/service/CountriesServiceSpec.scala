@@ -252,7 +252,7 @@ class CountriesServiceSpec extends ItSpec {
       countryService.getCountryName("TH") shouldBe "Thailand"
       countryService.getCountryName("TJ") shouldBe "Tajikistan"
       countryService.getCountryName("TK") shouldBe "Tokelau"
-      countryService.getCountryName("TL") shouldBe "Timor-Leste"
+      countryService.getCountryName("TL") shouldBe "East Timor"
       countryService.getCountryName("TM") shouldBe "Turkmenistan"
       countryService.getCountryName("TN") shouldBe "Tunisia"
       countryService.getCountryName("TO") shouldBe "Tonga"
