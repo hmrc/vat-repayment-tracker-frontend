@@ -247,7 +247,7 @@ class CountriesService {
     Country("TH", "Thailand"),
     Country("TJ", "Tajikistan"),
     Country("TK", "Tokelau"),
-    Country("TL", "Timor-Leste"),
+    Country("TL", "East Timor"),
     Country("TM", "Turkmenistan"),
     Country("TN", "Tunisia"),
     Country("TO", "Tonga"),
