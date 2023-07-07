@@ -34,8 +34,8 @@ package support
 
 import java.time._
 import java.time.format.DateTimeFormatter
-
 import com.google.inject.{AbstractModule, Provides}
+
 import javax.inject.Singleton
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
@@ -47,9 +47,8 @@ import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 import play.api.mvc.{AnyContentAsEmpty, Request, Result}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.ExecutionContext
 
@@ -117,7 +116,12 @@ trait ItSpec
 
   def injector: Injector = fakeApplication().injector
 
-  def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
+  def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(
+    FakeRequest()
+      .withSession(
+        SessionKeys.sessionId -> "IamATestSessionId",
+        SessionKeys.authToken -> "authToken")
+  )
 
   protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
 

@@ -46,9 +46,13 @@ class Actions @Inject() (
 
       override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
 
+        logger.info(s"Validate Mtd Vrn action - request : $request")
         request.typedVrn match {
-          case TypedVrn.MtdVrn(_) => Future.successful(Right(request))
+          case TypedVrn.MtdVrn(_) =>
+            logger.info(s"Validate Mtd Vrn action - Success")
+            Future.successful(Right(request))
           case _ =>
+            logger.info(s"Validate Mtd Vrn action - Fail")
             logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
             if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
             implicit val req: AuthenticatedRequest[_] = request

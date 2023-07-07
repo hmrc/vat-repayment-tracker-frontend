@@ -43,13 +43,14 @@ class BankAccountCocConnector @Inject() (
   private val bUrl: String = configuration.get[String]("urls.bank-back-url")
 
   def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
+    logger.info(s"reached bank account coc connector with vrn $vrn and returnPage $returnPage")
 
     val bkUrl: String = s"$bUrl${returnPage.value}"
-    logger.debug(s"Using back url : $bkUrl")
+    logger.info(s"Using back url : $bkUrl")
     val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, isAgent = false, bkUrl, bkUrl, bkUrl)
-    logger.debug(s"Calling bank-account-coc start journey for vrn $vrn")
+    logger.info(s"Calling bank-account-coc start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
-    logger.debug(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
+    logger.info(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
     httpClient.POST[ViewRepaymentRequest, NextUrl](startJourneyURL, viewRepaymentRequest)
 
   }
