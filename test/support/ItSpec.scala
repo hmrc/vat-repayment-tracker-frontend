@@ -119,8 +119,6 @@ trait ItSpec
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(FakeRequest())
 
-  def status(of: Result): Int = of.header.status
-
   protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
 
   def goToViaPath(path: String): Unit = webDriver.get(s"$webdriverUr$path")
