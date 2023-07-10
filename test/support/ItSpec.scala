@@ -44,7 +44,7 @@ import org.scalatest.{BeforeAndAfterEach, FreeSpecLike, Matchers}
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
 import play.api.inject.Injector
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
-import play.api.mvc.{AnyContentAsEmpty, Request, Result}
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}

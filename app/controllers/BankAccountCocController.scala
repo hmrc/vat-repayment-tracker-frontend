@@ -48,10 +48,6 @@ class BankAccountCocController @Inject() (
   def startBankAccountCocJourney(returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
     actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit  request: AuthenticatedRequest[_] =>
       import requestSupport._
-      logger.info(s"request: $request")
-      logger.info(s"returnPage: ${returnPage.toString}")
-      logger.info(s"audi: ${audit.toString}")
-      logger.info(s"request.typedVrn.vrn - ${request.typedVrn.vrn}")
 
       if (audit) {
         logger.debug("startBankAccountCocJourney... trying to audit")
@@ -69,7 +65,6 @@ class BankAccountCocController @Inject() (
         }
       } else {
         logger.debug("startBankAccountCocJourney... will not audit")
-        logger.info(s"BankAccountCocController.startJourney - REACHED HERE")
         for {
           nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
         } yield Redirect(nextUrl.nextUrl)
