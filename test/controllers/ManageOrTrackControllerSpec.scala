@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.ViewConfig
 import model.des.RiskingStatus.INITIAL
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses}
@@ -30,6 +31,9 @@ class ManageOrTrackControllerSpec extends ItSpec {
   val periodKey: PeriodKey = PeriodKey("18AG")
 
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
+
+  val serviceBaseUrl = s"${configMap("urls.frontend-base")}/vat-repayment-tracker"
+  val nonMtdUserPageUrl = s"$serviceBaseUrl/non-mtd-user"
 
   "GET /vat-repayment-tracker/manage-or-track-vrt" - {
     "authorised gets 'Manage or track VRT'" in {
@@ -53,7 +57,7 @@ class ManageOrTrackControllerSpec extends ItSpec {
       PaymentsOrchestratorStub.ddOk(vrn)
       val result = controller.manageOrTrack(vrn)(fakeRequest)
       status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result) shouldBe Some("http://localhost:19001/vat-repayment-tracker/non-mtd-user")
+      redirectLocation(result) shouldBe Some(nonMtdUserPageUrl)
 
     }
   }

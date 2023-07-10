@@ -29,6 +29,8 @@ class ControllerSpec extends ItSpec {
   val vrn: Vrn = Vrn("2345678890")
   val periodKey: PeriodKey = PeriodKey("18AG")
 
+  val loginUrl: String = configMap("urls.login").toString
+
   val controller: Controller = injector.instanceOf[Controller]
 
   "GET /show-results/vrn/:vrn" - {
@@ -51,10 +53,8 @@ class ControllerSpec extends ItSpec {
       AuditWireMockResponses.auditIsAvailable
       GgStub.signInPage(19001, vrn)
       val result = controller.showResults(vrn)(fakeRequest)
-      //      contentAsString(result) should include("Sign in using Government Gateway")
       status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result) shouldBe Some("http://localhost:11111/auth-login-stub/gg-sign-in?continue=http%3A%2F%2Flocalhost%3A19001%2F&origin=pay-online")
-
+      redirectLocation(result).getOrElse("None found") should include(loginUrl)
     }
   }
   "GET /view-repayment-account" - {

@@ -27,7 +27,7 @@ class BankAccountCocControllerSpec extends ItSpec {
 
   val controller: BankAccountCocController = injector.instanceOf[BankAccountCocController]
 
-  "GET /bank0account-coc/start-journey/manage-or-track" - {
+  "GET /bank-account-coc/start-journey/manage-or-track" - {
     "authorised starts bank account change of circumstances journey" in {
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       BankAccountCocWireMockResponses.bankOk
@@ -35,7 +35,7 @@ class BankAccountCocControllerSpec extends ItSpec {
       AuditWireMockResponses.auditIsAvailable
       val result = controller.startBankAccountCocJourney(returnPage = ReturnPage("manage-or-track"), audit = false)(fakeRequest)
       status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result) shouldBe Some("https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed")
+      redirectLocation(result) shouldBe Some(BankAccountCocWireMockResponses.dummyNextUrl)
 
     }
   }

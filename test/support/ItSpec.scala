@@ -103,8 +103,10 @@ trait ItSpec
     .configure(configMap).build()
 
   def configMap: Map[String, Any] = Map[String, Any](
-    "microservice.services.auth.port" -> WireMockSupport.port, "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
-    "microservice.services.direct-debit-backend.port" -> WireMockSupport.port, "microservice.services.bank-account-coc.port" -> WireMockSupport.port,
+    "microservice.services.auth.port" -> WireMockSupport.port,
+    "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
+    "microservice.services.direct-debit-backend.port" -> WireMockSupport.port,
+    "microservice.services.bank-account-coc.port" -> WireMockSupport.port,
     "microservice.services.vat-repayment-tracker-backend.port" -> WireMockSupport.port,
     "microservice.services.pay-api.port" -> WireMockSupport.port,
     "auditing.consumer.baseUri.port" -> WireMockSupport.port,

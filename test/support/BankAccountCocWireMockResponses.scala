@@ -21,13 +21,15 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
 object BankAccountCocWireMockResponses {
 
+  val dummyNextUrl: String = "https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"
+
   def bankOk: StubMapping = {
     stubFor(post(urlEqualTo("/bank-account-coc/start-journey-of-change-bank-account"))
       .willReturn(aResponse()
         .withStatus(201)
         .withBody(
           s"""
-           {"nextUrl":"https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"}
+           {"nextUrl":"$dummyNextUrl"}
        """.stripMargin)))
 
   }
