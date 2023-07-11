@@ -126,11 +126,12 @@
      }
   </div>
 
-
-   <div class="form-field">
-    <button id="next" type="submit" class="govuk-button" onclick="getPaymentMethod()">@Messages("continue")</button>
-   </div>
-     </fieldset>
+  @govukButton(Button(
+      inputType = Some("submit"),
+      content = Text(Messages("continue")),
+      attributes = Map("id" -> "continue"),
+      classes = "govuk-!-display-none-print"
+      ))
 
     </div>
     }

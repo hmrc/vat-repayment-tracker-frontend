@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import views.html.helper.CSPNonce
+
 @this(
         hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts,
 )
@@ -22,4 +24,4 @@
 
 @hmrcScripts()
 
-<script src='@routes.Assets.versioned("javascripts/application.js")'></script>
+<script @{CSPNonce.attr} src='@routes.Assets.versioned("javascripts/application.js")'></script>
