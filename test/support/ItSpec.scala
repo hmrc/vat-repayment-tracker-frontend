@@ -35,20 +35,23 @@ package support
 import java.time._
 import java.time.format.DateTimeFormatter
 import com.google.inject.{AbstractModule, Provides}
+import org.openqa.selenium
 
 import javax.inject.Singleton
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.{Cookie, WebDriver}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfterEach, FreeSpecLike, Matchers}
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
 import play.api.inject.Injector
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
-import play.api.mvc.{AnyContentAsEmpty, Request}
+import play.api.mvc.{AnyContentAsEmpty, CookieHeaderEncoding, Request, Session, SessionCookieBaker, Cookie => PlayCookie}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
+import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 
 import scala.concurrent.ExecutionContext
 
@@ -124,10 +127,6 @@ trait ItSpec
         SessionKeys.sessionId -> "IamATestSessionId",
         SessionKeys.authToken -> "authToken")
   )
-
-  protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
-
-  def goToViaPath(path: String): Unit = webDriver.get(s"$webdriverUr$path")
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 

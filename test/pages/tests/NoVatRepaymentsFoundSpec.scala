@@ -18,9 +18,9 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.NoVatRepaymentsFoundPage
-import support.{AuditWireMockResponses, AuthWireMockResponses, PaymentsOrchestratorStub, ItSpec}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, PaymentsOrchestratorStub}
 
-class NoVatRepaymentsFoundSpec extends ItSpec {
+class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
@@ -31,6 +31,7 @@ class NoVatRepaymentsFoundSpec extends ItSpec {
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
+    login()
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
 

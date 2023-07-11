@@ -18,9 +18,9 @@ package pages.tests.classic
 
 import model.{EnrolmentKeys, Vrn}
 import pages.classic.VatRepaymentsClassic
-import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, VatWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, VatWireMockResponses}
 
-class VatRepaymentsClassicSpec extends ItSpec {
+class VatRepaymentsClassicSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
@@ -30,6 +30,7 @@ class VatRepaymentsClassicSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
     VatWireMockResponses.calendarOk(vrn, isCurrent = false)
     VatWireMockResponses.designatoryDetailsOk(vrn)
+    login()
     goToViaPath(path)
     VatRepaymentsClassic.assertPageIsDisplayed(vrn)
     VatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"
@@ -42,6 +43,7 @@ class VatRepaymentsClassicSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
     VatWireMockResponses.calendarOk(vrn)
     VatWireMockResponses.designatoryDetailsOk(vrn)
+    login()
     goToViaPath(path)
     VatRepaymentsClassic.readReceivedOnDate shouldBe "05 Jul 2016"
   }
@@ -51,6 +53,7 @@ class VatRepaymentsClassicSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
     VatWireMockResponses.calendarOk(vrn)
     VatWireMockResponses.designatoryDetails404(vrn)
+    login()
     goToViaPath(path)
     VatRepaymentsClassic.afterAddress404AssertPageIsDisplayed(vrn)
 

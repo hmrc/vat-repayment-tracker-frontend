@@ -18,9 +18,9 @@ package pages.tests.classic
 
 import model.{EnrolmentKeys, Vrn}
 import pages.classic.NoVatRepaymentsClassic
-import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, VatWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, VatWireMockResponses}
 
-class NoVatRepaymentsClassicSpec extends ItSpec {
+class NoVatRepaymentsClassicSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
@@ -30,6 +30,7 @@ class NoVatRepaymentsClassicSpec extends ItSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
     VatWireMockResponses.calendar404(vrn)
     VatWireMockResponses.designatoryDetailsOk(vrn)
+    login()
     goToViaPath(path)
     NoVatRepaymentsClassic.assertPageIsDisplayed(vrn)
     NoVatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"

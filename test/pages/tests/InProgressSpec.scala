@@ -24,7 +24,7 @@ import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, NonMtdUser}
 import support._
 
-class InProgressSpec extends ItSpec {
+class InProgressSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
@@ -119,14 +119,14 @@ class InProgressSpec extends ItSpec {
 
   "12. display Submit VAT Return CTA if repayments are suspended" in {
     BankAccountCocWireMockResponses.bankOk
-    setup(ft              = ft_debit, singleRepayment = true, status1 = RiskingStatus.REPAYMENT_SUSPENDED)
-    InProgress.containsSuspendedWarning(true)
+    setup(ft      = ft_debit, status1 = RiskingStatus.REPAYMENT_SUSPENDED)
+    InProgress.containsSuspendedWarning(result = true)
   }
 
   "13. don't display Submit VAT Return CTA if no repayments suspended" in {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, singleRepayment = false)
-    InProgress.containsSuspendedWarning(false)
+    InProgress.containsSuspendedWarning(result = false)
   }
 
   private def setup(
@@ -164,6 +164,7 @@ class InProgressSpec extends ItSpec {
       case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
     }
 
+    login()
     goToViaPath(path)
   }
 
