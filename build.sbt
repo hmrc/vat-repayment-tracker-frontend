@@ -2,7 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSetting
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "vat-repayment-tracker-frontend"
-val scalaV = "2.12.12"
+val scalaV = "2.13.10"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
