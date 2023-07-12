@@ -67,6 +67,7 @@ class BrowserSpec extends ItSpec {
             .withBody("You have been logged in")
             .withHeader(HeaderNames.SET_COOKIE, headerValue)
         )
+
     )
   }
 
