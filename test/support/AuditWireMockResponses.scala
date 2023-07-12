@@ -18,11 +18,10 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import org.scalatest.Matchers
-import play.api.Logger
+import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object AuditWireMockResponses extends Matchers {
 

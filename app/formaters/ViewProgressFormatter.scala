@@ -72,7 +72,7 @@ class ViewProgressFormatter @Inject() (
     }
 
     Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
-                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue()))
+                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue))
   }
 
   private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {

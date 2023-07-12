@@ -16,20 +16,15 @@
 
 package support
 
-import org.scalatest._
-import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.diagrams.Diagrams
+import com.gargoylesoftware.htmlunit.WebClient
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
-trait RichMatchers
-  extends Matchers
-  with Diagrams
-  with TryValues
-  with EitherValues
-  with OptionValues
-  with AppendedClues
-  with ScalaFutures
-  with StreamlinedXml
-  with Inside
-  with Eventually
-  with IntegrationPatience
+class CustomHtmlUnitDriver extends HtmlUnitDriver {
+  override def modifyWebClient(client: WebClient): WebClient = {
+
+    val modifiedClient: WebClient = super.modifyWebClient(client)
+    modifiedClient.getOptions.setThrowExceptionOnScriptError(false)
+    setJavascriptEnabled(true)
+    modifiedClient
+  }
+}

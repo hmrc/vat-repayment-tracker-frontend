@@ -58,7 +58,7 @@ class AuthenticatedAction @Inject() (
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     implicit val r: Request[A] = request
 
-    af.authorised.retrieve(Retrievals.allEnrolments) { enrolments =>
+    af.authorised().retrieve(Retrievals.allEnrolments) { enrolments =>
       logger.info(s"AuthenticatedAction.invokeBlock AuthorisedFunctions.authorised.retrieve(allEnrolments) found $enrolments")
 
       val mtd = enrolments.enrolments.collectFirst {

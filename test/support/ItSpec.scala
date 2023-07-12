@@ -35,23 +35,20 @@ package support
 import java.time._
 import java.time.format.DateTimeFormatter
 import com.google.inject.{AbstractModule, Provides}
-import org.openqa.selenium
 
 import javax.inject.Singleton
-import org.openqa.selenium.{Cookie, WebDriver}
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.{BeforeAndAfterEach, FreeSpecLike, Matchers}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
 import play.api.inject.Injector
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
-import play.api.mvc.{AnyContentAsEmpty, CookieHeaderEncoding, Request, Session, SessionCookieBaker, Cookie => PlayCookie}
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
-import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.ExecutionContext
 
@@ -59,7 +56,7 @@ import scala.concurrent.ExecutionContext
  * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
  */
 trait ItSpec
-  extends FreeSpecLike
+  extends AnyFreeSpec
   with RichMatchers
   with BeforeAndAfterEach
   with GuiceOneServerPerTest
@@ -96,7 +93,6 @@ trait ItSpec
     interval = scaled(Span(300, Millis)))
 
   implicit val emptyHC: HeaderCarrier = HeaderCarrier()
-  val webdriverUr: String = s"http://localhost:$port"
   val connector: TestConnector = injector.instanceOf[TestConnector]
 
   def httpClient: HttpClient = fakeApplication().injector.instanceOf[HttpClient]

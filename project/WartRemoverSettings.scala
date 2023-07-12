@@ -8,7 +8,6 @@ object  WartRemoverSettings {
   lazy val wartRemoverWarning = {
     val warningWarts = Seq(
       JavaSerializable,
-      StringPlusAny,
       AsInstanceOf,
       IsInstanceOf
     )

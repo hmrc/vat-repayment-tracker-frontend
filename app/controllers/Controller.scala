@@ -56,7 +56,7 @@ class Controller @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def nonMtdUser(): Action[AnyContent] = actions.loggedIn.async { implicit request =>
+  def nonMtdUser: Action[AnyContent] = actions.loggedIn.async { implicit request =>
     for {
       _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress)
     } yield Ok(views_non_mtd_user())

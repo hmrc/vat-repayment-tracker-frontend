@@ -27,10 +27,13 @@ import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 
 class BrowserSpec extends ItSpec {
-
   protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
 
-  def goToViaPath(path: String): Unit = webDriver.get(s"$webdriverUr$path")
+  lazy val webdriverUrl: String = s"http://localhost:$port"
+
+  def goToViaPath(path: String): Unit = {
+    webDriver.get(s"$webdriverUrl$path")
+  }
 
   lazy val cookieCrypto: SessionCookieCrypto = injector.instanceOf[SessionCookieCrypto]
   lazy val cookieBaker: SessionCookieBaker = injector.instanceOf[SessionCookieBaker]
@@ -68,4 +71,5 @@ class BrowserSpec extends ItSpec {
   }
 
   val loginPath = "/login"
+
 }

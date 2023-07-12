@@ -67,6 +67,6 @@ object ManageOrTrack extends CommonPage {
 
   def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
-  def clickCallBac()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
+  def clickCallBac(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
 
 }

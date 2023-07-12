@@ -106,6 +106,7 @@ class ManageOrTrackSpec extends BrowserSpec {
         case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
         case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
         case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+        case _           => throw new IllegalArgumentException("no ft match")
       }
 
       login()

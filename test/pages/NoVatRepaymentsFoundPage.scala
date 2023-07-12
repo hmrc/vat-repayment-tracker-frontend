@@ -33,7 +33,7 @@ object NoVatRepaymentsFoundPage extends CommonPage {
     readMainMessage shouldBe "No VAT repayments in progress"
     readAccName shouldBe "Name on account: Account holder"
     readAccNumber shouldBe "Account number: ****2222"
-    readAccSortCode() shouldBe "Sort code: 66 77 88"
+    readAccSortCode shouldBe "Sort code: 66 77 88"
   }
 
 }

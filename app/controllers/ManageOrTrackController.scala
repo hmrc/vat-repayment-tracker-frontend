@@ -55,7 +55,7 @@ class ManageOrTrackController @Inject() (
         manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
     }
 
-  def manageOrTrackSubmit(): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+  def manageOrTrackSubmit: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
       import requestSupport._
       manageOrTrackForm.bindFromRequest().fold(
@@ -79,6 +79,7 @@ class ManageOrTrackController @Inject() (
                       for {
                         nextUrl <- directDebitBackendConnector.startJourney(request.typedVrn.vrn)
                       } yield Redirect(nextUrl.nextUrl)
+                    case _ => throw new IllegalArgumentException("choice does not match a ManageOrTrackOption value")
                   }
                 case None =>
                   manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)).withError("manage", Messages("manage_or_track_controller.choose_an_option")))

@@ -45,7 +45,7 @@
 )
 
 
-@errorLink() ={
+@errorLink ={
    @if(form.errors("manage").nonEmpty) {
      @for(error <- form.errors("manage")) {aria-describedby="manage-errorKey"}
    }
@@ -67,10 +67,10 @@
 
    @viewsHelpers.form(
    action = controllers.routes.ManageOrTrackController.manageOrTrackSubmit,
-   'id -> "manageform",
-   'class -> "form js-form",
-   'autocomplete -> "off",
-   'novalidate -> "novalidate"
+   Symbol("id") -> "manageform",
+   Symbol("class") -> "form js-form",
+   Symbol("autocomplete") -> "off",
+   Symbol("novalidate") -> "novalidate"
    ) {
 
 

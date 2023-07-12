@@ -30,7 +30,7 @@ object NoVatRepaymentsClassic extends CommonPage {
     readMainMessage shouldBe "No VAT repayments in progress"
   }
 
-  def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
+  def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
 }
 
