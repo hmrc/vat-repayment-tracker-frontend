@@ -121,10 +121,7 @@ trait ItSpec
   def injector: Injector = fakeApplication().injector
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(
-    FakeRequest()
-      .withSession(
-        SessionKeys.sessionId -> "IamATestSessionId",
-        SessionKeys.authToken -> "authToken")
+    FakeRequest().withSession(SessionKeys.authToken -> "authToken")
   )
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
