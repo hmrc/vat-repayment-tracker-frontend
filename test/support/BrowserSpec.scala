@@ -31,9 +31,7 @@ class BrowserSpec extends ItSpec {
 
   lazy val webdriverUrl: String = s"http://localhost:$port"
 
-  def goToViaPath(path: String): Unit = {
-    webDriver.get(s"$webdriverUrl$path")
-  }
+  def goToViaPath(path: String): Unit = webDriver.get(s"$webdriverUrl$path")
 
   lazy val cookieCrypto: SessionCookieCrypto = injector.instanceOf[SessionCookieCrypto]
   lazy val cookieBaker: SessionCookieBaker = injector.instanceOf[SessionCookieBaker]

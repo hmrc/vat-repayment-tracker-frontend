@@ -59,7 +59,6 @@ class AuthenticatedAction @Inject() (
     implicit val r: Request[A] = request
 
     af.authorised().retrieve(Retrievals.allEnrolments) { enrolments =>
-      logger.info(s"AuthenticatedAction.invokeBlock AuthorisedFunctions.authorised.retrieve(allEnrolments) found $enrolments")
 
       val mtd = enrolments.enrolments.collectFirst {
         case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
@@ -90,10 +89,8 @@ class AuthenticatedAction @Inject() (
 
     }.recover {
       case _: NoActiveSession =>
-        logger.info(s"AuthenticatedAction.invokeBlock AuthorisedFunctions.authorised.retrieve(allEnrolments) user not logged in, no active session")
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
       case e: AuthorisationException =>
-        logger.info(s"AuthenticatedAction.invokeBlock AuthorisedFunctions.authorised.retrieve(allEnrolments) AuthorisationException : ${e.reason}")
         logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(viewConfig.nonMtdUser)
     }

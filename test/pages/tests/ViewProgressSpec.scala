@@ -21,7 +21,6 @@ import model.des.RiskingStatus._
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-
 import pages.{InProgress, ViewProgress}
 import support._
 
@@ -34,38 +33,38 @@ class ViewProgressSpec extends BrowserSpec {
   val ft_debit: Int = 3
 
   "id: 1 click view progress basic" in {
-      setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
-      InProgress.clickViewProgress()
-      ViewProgress.checkAmount("£6.56")
-      ViewProgress.checkEstimatedRepaymentDate(6)
-      ViewProgress.checkStatusExists(List(INITIAL))
-      ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
-      ViewProgress.checkMainMessage("Your repayment is being processed")
-      ViewProgress.backExists()
+    setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepaymentDate(6)
+    ViewProgress.checkStatusExists(List(INITIAL))
+    ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
+    ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.backExists()
   }
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
     setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED)
     InProgress.clickViewProgress()
-      ViewProgress.checkAmount("£0.00")
-      ViewProgress.checkEstimatedRepaymentDate(6)
-      ViewProgress.checkStatusExists(List(CLAIM_QUERIED, INITIAL))
-      ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
-      ViewProgress.checkMainMessage("Your repayment is being processed")
-      ViewProgress.payUrl(expectedValue = false)
-      ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.checkAmount("£0.00")
+    ViewProgress.checkEstimatedRepaymentDate(6)
+    ViewProgress.checkStatusExists(List(CLAIM_QUERIED, INITIAL))
+    ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
+    ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
     setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING)
-      InProgress.clickViewProgress()
-      ViewProgress.checkAmount("£6.56")
-      ViewProgress.checkEstimatedRepaymentDate(6)
-      ViewProgress.checkStatusExists(List(SENT_FOR_RISKING, INITIAL))
-      ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
-      ViewProgress.checkMainMessage("Your repayment is being processed")
-      ViewProgress.payUrl(expectedValue = false)
-      ViewProgress.historyUrl(expectedValue = false)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepaymentDate(6)
+    ViewProgress.checkStatusExists(List(SENT_FOR_RISKING, INITIAL))
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
+    ViewProgress.checkMainMessage("Your repayment is being processed")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
