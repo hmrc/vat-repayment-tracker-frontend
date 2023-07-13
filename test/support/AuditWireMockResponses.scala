@@ -19,7 +19,6 @@ package support
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.scalatest.Matchers
-import play.api.Logger
 import play.api.libs.json.Json
 
 import scala.collection.JavaConverters._
