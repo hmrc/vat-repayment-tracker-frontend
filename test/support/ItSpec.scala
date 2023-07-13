@@ -35,7 +35,6 @@ package support
 import java.time._
 import java.time.format.DateTimeFormatter
 import com.google.inject.{AbstractModule, Provides}
-
 import javax.inject.Singleton
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.BeforeAndAfterEach
@@ -49,7 +48,6 @@ import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import org.scalatest.matchers.should.Matchers
-
 import scala.concurrent.ExecutionContext
 
 /**
@@ -93,7 +91,6 @@ trait ItSpec
     interval = scaled(Span(300, Millis)))
 
   implicit val emptyHC: HeaderCarrier = HeaderCarrier()
-  val connector: TestConnector = injector.instanceOf[TestConnector]
 
   def httpClient: HttpClient = fakeApplication().injector.instanceOf[HttpClient]
 
@@ -118,10 +115,7 @@ trait ItSpec
   def injector: Injector = fakeApplication().injector
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(
-    FakeRequest()
-      .withSession(
-        SessionKeys.sessionId -> "IamATestSessionId",
-        SessionKeys.authToken -> "authToken")
+    FakeRequest().withSession(SessionKeys.authToken -> "authToken")
   )
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

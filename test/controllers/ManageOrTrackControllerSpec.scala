@@ -16,9 +16,8 @@
 
 package controllers
 
-import config.ViewConfig
 import model.des.RiskingStatus.INITIAL
-import model.{EnrolmentKeys, PeriodKey, Vrn}
+import model.EnrolmentKeys
 import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses}
 import play.api.http.Status
 import play.api.test.Helpers._
@@ -27,8 +26,7 @@ import play.api.test.Helpers.status
 import java.time.LocalDate
 
 class ManageOrTrackControllerSpec extends ItSpec {
-  val vrn: Vrn = Vrn("2345678890")
-  val periodKey: PeriodKey = PeriodKey("18AG")
+  import support.VatData.{vrn, periodKey}
 
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
 

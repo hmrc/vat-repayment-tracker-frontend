@@ -280,6 +280,9 @@ class ViewProgressSpec extends BrowserSpec {
           goToViaPath(path)
         case _ => goToViaPath(path)
       }
+
+      login()
+      goToViaPath(path)
     }
 
   class TestSetup(
@@ -341,7 +344,6 @@ class ViewProgressSpec extends BrowserSpec {
     //        goToViaPath(path)
     //      case _ => goToViaPath(path)
     //    }
-
 
     println(s"inside new TestSetup, attempting login")
     login()
