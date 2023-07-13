@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
 object BankAccountCocWireMockResponses {
 
-  val dummyNextUrl: String = "https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"
+  val dummyNextUrl: String = "/dummy"
 
   def bankOk: StubMapping = {
     stubFor(post(urlEqualTo("/bank-account-coc/start-journey-of-change-bank-account"))

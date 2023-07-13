@@ -24,7 +24,6 @@ import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, RE
 import model.des._
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.libs.json.JsResult.Exception
 import play.api.mvc.{Request, Result, Results}
 import req.RequestSupport
 

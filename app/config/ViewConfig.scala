@@ -22,7 +22,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 case class ViewConfig(
     appName:                       String,
-    assetsPrefix:                  String,
     authUrl:                       String,
     frontendBaseUrl:               String,
     loginUrl:                      String,
@@ -48,13 +47,12 @@ case class ViewConfig(
   val supportLanguages: Boolean = true
   val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
-  val nonMtdUser = s"$frontendBaseUrl/vat-repayment-tracker/non-mtd-user"
+
   def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
 
   @Inject
   def this(servicesConfig: ServicesConfig) = this(
     appName                       = servicesConfig.getString("appName"),
-    assetsPrefix                  = servicesConfig.getString(s"assets.url") + servicesConfig.getString(s"assets.version"),
     authUrl                       = servicesConfig.baseUrl("auth"),
     frontendBaseUrl               = servicesConfig.getString("urls.frontend-base"),
     loginUrl                      = servicesConfig.getString("urls.login"),

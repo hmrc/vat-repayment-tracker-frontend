@@ -35,11 +35,12 @@ package support
 import java.time._
 import java.time.format.DateTimeFormatter
 import com.google.inject.{AbstractModule, Provides}
+
 import javax.inject.Singleton
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.freespec.AnyFreeSpec
-import org.scalatestplus.play.guice.GuiceOneServerPerTest
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.Injector
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 import play.api.mvc.{AnyContentAsEmpty, Request}
@@ -48,6 +49,7 @@ import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import org.scalatest.matchers.should.Matchers
+
 import scala.concurrent.ExecutionContext
 
 /**
@@ -57,7 +59,7 @@ trait ItSpec
   extends AnyFreeSpec
   with RichMatchers
   with BeforeAndAfterEach
-  with GuiceOneServerPerTest
+  with GuiceOneServerPerSuite
   with WireMockSupport
   with Matchers {
 
@@ -95,8 +97,9 @@ trait ItSpec
   def httpClient: HttpClient = fakeApplication().injector.instanceOf[HttpClient]
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .configure(configMap)
     .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .configure(configMap).build()
+    .build()
 
   def configMap: Map[String, Any] = Map[String, Any](
     "microservice.services.auth.port" -> WireMockSupport.port,

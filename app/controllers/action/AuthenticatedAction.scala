@@ -19,6 +19,7 @@ package controllers.action
 import com.google.inject.Inject
 import config.ViewConfig
 import connectors.PaymentsOrchestratorConnector
+import controllers.routes
 import model.EnrolmentKeys.{vatDecEnrolmentKey, vatVarEnrolmentKey, _}
 import model.TypedVrn.{ClassicVrn, MtdVrn}
 import model.{TypedVrn, Vrn}
@@ -59,7 +60,6 @@ class AuthenticatedAction @Inject() (
     implicit val r: Request[A] = request
 
     af.authorised().retrieve(Retrievals.allEnrolments) { enrolments =>
-
       val mtd = enrolments.enrolments.collectFirst {
         case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
           identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => MtdVrn(Vrn(vrn)) }
@@ -92,7 +92,7 @@ class AuthenticatedAction @Inject() (
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
       case e: AuthorisationException =>
         logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        Redirect(viewConfig.nonMtdUser)
+        Redirect(routes.Controller.nonMtdUser.url)
     }
   }
 

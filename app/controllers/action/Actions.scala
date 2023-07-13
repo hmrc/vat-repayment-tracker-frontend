@@ -18,6 +18,7 @@ package controllers.action
 
 import com.google.inject.Inject
 import config.ViewConfig
+import controllers.routes
 import model.TypedVrn
 import play.api.Logger
 import play.api.mvc.Results.Redirect
@@ -52,7 +53,7 @@ class Actions @Inject() (
             logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
             if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
             implicit val req: AuthenticatedRequest[_] = request
-            Future.successful(Left(Redirect(viewConfig.nonMtdUser)))
+            Future.successful(Left(Redirect(routes.Controller.nonMtdUser.url)))
         }
 
       }

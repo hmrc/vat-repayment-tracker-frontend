@@ -256,7 +256,7 @@ class ViewProgressSpec extends BrowserSpec {
         case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
         case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
         case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
-        case _           => throw new IllegalArgumentException("no ft match")
+        case other       => throw new IllegalArgumentException(s"no ft match for $other")
       }
 
       login()

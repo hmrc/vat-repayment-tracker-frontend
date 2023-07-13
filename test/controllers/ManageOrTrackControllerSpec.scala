@@ -31,7 +31,7 @@ class ManageOrTrackControllerSpec extends ItSpec {
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
 
   val serviceBaseUrl = s"${configMap("urls.frontend-base")}/vat-repayment-tracker"
-  val nonMtdUserPageUrl = s"$serviceBaseUrl/non-mtd-user"
+  val nonMtdUserPageUrl = "/vat-repayment-tracker/non-mtd-user"
 
   "GET /vat-repayment-tracker/manage-or-track-vrt" - {
     "authorised gets 'Manage or track VRT'" in {

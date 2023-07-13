@@ -28,7 +28,7 @@ class BankAccountCocConnectorSpec extends ItSpec {
     BankAccountCocWireMockResponses.bankOk
     AuditWireMockResponses.auditIsAvailable
     val result = bankAccountCocConnector.startJourney(vrn, ReturnPage("manage-or-track-vrt")).futureValue
-    result.nextUrl shouldBe "https://www.development.tax.service.gov.uk/change-bank-account/5d8c93b52300000b00271aed"
+    result.nextUrl shouldBe BankAccountCocWireMockResponses.dummyNextUrl
   }
 
 }

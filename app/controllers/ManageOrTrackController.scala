@@ -46,7 +46,7 @@ class ManageOrTrackController @Inject() (
     ec: ExecutionContext)
   extends FrontendBaseController(cc) {
 
-  def manageOrTrackVrt: Action[AnyContent] =
+  val manageOrTrackVrt: Action[AnyContent] =
     actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
       import requestSupport._
       if (viewConfig.isShuttered)
@@ -55,7 +55,7 @@ class ManageOrTrackController @Inject() (
         manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
     }
 
-  def manageOrTrackSubmit: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+  val manageOrTrackSubmit: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
       import requestSupport._
       manageOrTrackForm.bindFromRequest().fold(

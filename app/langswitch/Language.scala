@@ -26,7 +26,7 @@ import controllers.ValueClassBinder._
 
 import scala.collection.immutable
 
-sealed trait Language extends EnumEntry {
+sealed trait Language extends EnumEntry with Product with Serializable {
   def code: String
   def label: String
   val toPlayLang: Lang = Lang(code)
@@ -57,7 +57,8 @@ object Languages extends Enum[Language] {
     override def label: String = "Cymraeg"
   }
 
-  val availableLanguages: Seq[Language] = List[Language](English, Welsh)
+  val availableLanguages: Seq[Language] = List(English, Welsh)
+
   override def values: immutable.IndexedSeq[Language] = findValues
 }
 

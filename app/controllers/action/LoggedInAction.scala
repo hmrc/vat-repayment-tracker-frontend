@@ -18,6 +18,7 @@ package controllers.action
 
 import com.google.inject.Inject
 import config.ViewConfig
+import controllers.routes
 import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -45,7 +46,7 @@ class LoggedInAction @Inject() (
         Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
       case e: AuthorisationException =>
         logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        Redirect(viewConfig.nonMtdUser)
+        Redirect(routes.Controller.nonMtdUser.url)
     }
   }
 
