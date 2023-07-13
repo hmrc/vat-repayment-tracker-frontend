@@ -23,7 +23,7 @@ import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
 import support._
 
-class ManageOrTrackSpec extends ItSpec {
+class ManageOrTrackSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/manage-or-track-vrt"""
@@ -108,6 +108,7 @@ class ManageOrTrackSpec extends ItSpec {
         case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
 
+      login()
       goToViaPath(path)
     }
 

@@ -36,7 +36,7 @@ import model.{EnrolmentKeys, Vrn}
 import pages._
 import support._
 
-class CompletedSpec extends ItSpec {
+class CompletedSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
@@ -123,6 +123,8 @@ class CompletedSpec extends ItSpec {
         case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
         case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
+
+      login()
       goToViaPath(path)
     }
 

@@ -18,9 +18,9 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.{ManageOrTrack, Shuttered}
-import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
 
-class ShutteredSpec extends ItSpec {
+class ShutteredSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
 
@@ -65,6 +65,7 @@ class ShutteredSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    login()
     goToViaPath(path)
     ManageOrTrack.assertPageIsDisplayed(vrn, noddDisplayed = true, nobankDisplayed = true, isShuttered = true)
   }

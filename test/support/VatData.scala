@@ -16,12 +16,15 @@
 
 package support
 
-import java.time.LocalDate
+import model.{PeriodKey, Vrn}
 
+import java.time.LocalDate
 import model.vat.{CalendarData, CalendarPeriod, VatDesignatoryDetailsAddress}
 import play.api.libs.json.{JsValue, Json}
 
 object VatData {
+  val vrn: Vrn = Vrn("2345678890")
+  val periodKey: PeriodKey = PeriodKey("18AG")
 
   val calendarPeriod: CalendarPeriod = CalendarPeriod(LocalDate.parse("2016-04-01"), LocalDate.parse("2016-06-30"), None)
   val previousPeriod1: CalendarPeriod = CalendarPeriod(LocalDate.parse("2016-01-01"), LocalDate.parse("2016-03-31"), Some(LocalDate.parse("2016-04-05")))

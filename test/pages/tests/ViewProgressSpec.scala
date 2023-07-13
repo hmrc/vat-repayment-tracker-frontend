@@ -24,7 +24,7 @@ import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ViewProgress}
 import support._
 
-class ViewProgressSpec extends ItSpec {
+class ViewProgressSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
   val path = s"""/vat-repayment-tracker/show-vrt"""
@@ -257,6 +257,8 @@ class ViewProgressSpec extends ItSpec {
         case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
         case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       }
+
+      login()
       goToViaPath(path)
     }
 }
