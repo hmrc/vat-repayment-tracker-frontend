@@ -21,8 +21,7 @@ import model.des.RiskingStatus._
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+
 import pages.{InProgress, ViewProgress}
 import support._
 
@@ -34,18 +33,8 @@ class ViewProgressSpec extends BrowserSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  override def beforeAll(): Unit = {
-    super.beforeAll()
-    login()
-  }
-  override def afterEach(): Unit = {
-    super.afterEach()
-  }
-
-
   "id: 1 click view progress basic" in {
       setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
-      println(webDriver.getCurrentUrl)
       InProgress.clickViewProgress()
       ViewProgress.checkAmount("£6.56")
       ViewProgress.checkEstimatedRepaymentDate(6)
@@ -57,7 +46,6 @@ class ViewProgressSpec extends BrowserSpec {
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
     setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED)
-    println(webDriver.getCurrentUrl)
     InProgress.clickViewProgress()
       ViewProgress.checkAmount("£0.00")
       ViewProgress.checkEstimatedRepaymentDate(6)
@@ -272,14 +260,7 @@ class ViewProgressSpec extends BrowserSpec {
         case _           => throw new IllegalArgumentException("no ft match")
       }
 
-//      webDriver.manage().getCookieNamed("mdtp") match {
-//        case null =>
-//          login()
-//          goToViaPath(path)
-//        case _ => goToViaPath(path)
-//      }
-
-//      login()
+      login()
       goToViaPath(path)
     }
 }
