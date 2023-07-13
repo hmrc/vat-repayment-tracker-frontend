@@ -97,7 +97,6 @@ trait ItSpec
 
   implicit val emptyHC: HeaderCarrier = HeaderCarrier()
   val webdriverUr: String = s"http://localhost:$port"
-  val connector: TestConnector = injector.instanceOf[TestConnector]
 
   def httpClient: HttpClient = fakeApplication().injector.instanceOf[HttpClient]
 

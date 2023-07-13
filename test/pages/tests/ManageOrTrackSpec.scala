@@ -61,11 +61,8 @@ class ManageOrTrackSpec extends BrowserSpec {
 
   "6. click vrtLabel" in {
     setup()
-    println(s"after set up - url : ${webDriver.getCurrentUrl}")
     ManageOrTrack.clickVrtLabel()
-    println(s"after click vrt label - url : ${webDriver.getCurrentUrl}")
     ManageOrTrack.clickContinue()
-    println(s"after click continue - url : ${webDriver.getCurrentUrl}")
     InProgress.assertPageIsDisplayed(amount = "£6.56")
   }
 

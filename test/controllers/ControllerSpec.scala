@@ -26,8 +26,7 @@ import support.{AuditWireMockResponses, AuthWireMockResponses, GgStub, ItSpec, P
 import java.time.LocalDate
 
 class ControllerSpec extends ItSpec {
-  val vrn: Vrn = Vrn("2345678890")
-  val periodKey: PeriodKey = PeriodKey("18AG")
+  import support.VatData.{vrn, periodKey}
 
   val loginUrl: String = configMap("urls.login").toString
 

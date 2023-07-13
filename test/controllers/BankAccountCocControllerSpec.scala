@@ -23,7 +23,7 @@ import play.api.test.Helpers.status
 import support.{AuditWireMockResponses, AuthWireMockResponses, BankAccountCocWireMockResponses, ItSpec, PaymentsOrchestratorStub}
 
 class BankAccountCocControllerSpec extends ItSpec {
-  val vrn: Vrn = Vrn("2345678890")
+  import support.VatData.vrn
 
   val controller: BankAccountCocController = injector.instanceOf[BankAccountCocController]
 
