@@ -34,52 +34,50 @@ class ViewProgressSpec extends BrowserSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  "id: 1 click view progress basic" in {
-    new TestSetup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404) {
-      println(s"inside specific test 1 - current Url ${myWebDriver.getCurrentUrl}, attempting click view progress")
-      InProgress.clickViewProgress()(myWebDriver)
-      println(s"click view progress complete now at url ${myWebDriver.getCurrentUrl}")
-      ViewProgress.checkAmount("£6.56")(myWebDriver)
-      ViewProgress.checkEstimatedRepaymentDate(6)(myWebDriver)
-      ViewProgress.checkStatusExists(List(INITIAL))(myWebDriver)
-      ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))(myWebDriver)
-      ViewProgress.checkMainMessage("Your repayment is being processed")(myWebDriver)
-      ViewProgress.backExists()(myWebDriver)
-      println("end of test 1 - at url: ${myWebDriver.getCurrentUrl}")
-    }
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    login()
+  }
+  override def afterEach(): Unit = {
+    super.afterEach()
+  }
 
+
+  "id: 1 click view progress basic" in {
+      setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
+      println(webDriver.getCurrentUrl)
+      InProgress.clickViewProgress()
+      ViewProgress.checkAmount("£6.56")
+      ViewProgress.checkEstimatedRepaymentDate(6)
+      ViewProgress.checkStatusExists(List(INITIAL))
+      ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
+      ViewProgress.checkMainMessage("Your repayment is being processed")
+      ViewProgress.backExists()
   }
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
-    new TestSetup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED) {
-      println(s"inside specific test 2 - current Url ${myWebDriver.getCurrentUrl}, attempting click view progress")
-      InProgress.clickViewProgress()(myWebDriver)
-      println(s"click view progress complete now at url ${myWebDriver.getCurrentUrl}")
-      ViewProgress.checkAmount("£0.00")(myWebDriver)
-      ViewProgress.checkEstimatedRepaymentDate(6)(myWebDriver)
-      ViewProgress.checkStatusExists(List(CLAIM_QUERIED, INITIAL))(myWebDriver)
-      ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))(myWebDriver)
-      ViewProgress.checkMainMessage("Your repayment is being processed")(myWebDriver)
-      ViewProgress.payUrl(expectedValue = false)(myWebDriver)
-      ViewProgress.historyUrl(expectedValue = false)(myWebDriver)
-      println(myWebDriver.getCurrentUrl)
-    }
-
+    setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED)
+    println(webDriver.getCurrentUrl)
+    InProgress.clickViewProgress()
+      ViewProgress.checkAmount("£0.00")
+      ViewProgress.checkEstimatedRepaymentDate(6)
+      ViewProgress.checkStatusExists(List(CLAIM_QUERIED, INITIAL))
+      ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
+      ViewProgress.checkMainMessage("Your repayment is being processed")
+      ViewProgress.payUrl(expectedValue = false)
+      ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
-    new TestSetup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING) {
-      println(s"inside specific test 3 - current Url ${myWebDriver.getCurrentUrl}, attempting click view progress")
-      InProgress.clickViewProgress()(myWebDriver)
-      println(s"click view progress complete now at url ${myWebDriver.getCurrentUrl}")
-      ViewProgress.checkAmount("£6.56")(myWebDriver)
-      ViewProgress.checkEstimatedRepaymentDate(6)(myWebDriver)
-      ViewProgress.checkStatusExists(List(SENT_FOR_RISKING, INITIAL))(myWebDriver)
-      ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))(myWebDriver)
-      ViewProgress.checkMainMessage("Your repayment is being processed")(myWebDriver)
-      ViewProgress.payUrl(expectedValue = false)(myWebDriver)
-      ViewProgress.historyUrl(expectedValue = false)(myWebDriver)
-    }
+    setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING)
+      InProgress.clickViewProgress()
+      ViewProgress.checkAmount("£6.56")
+      ViewProgress.checkEstimatedRepaymentDate(6)
+      ViewProgress.checkStatusExists(List(SENT_FOR_RISKING, INITIAL))
+      ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
+      ViewProgress.checkMainMessage("Your repayment is being processed")
+      ViewProgress.payUrl(expectedValue = false)
+      ViewProgress.historyUrl(expectedValue = false)
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
@@ -274,84 +272,14 @@ class ViewProgressSpec extends BrowserSpec {
         case _           => throw new IllegalArgumentException("no ft match")
       }
 
-      webDriver.manage().getCookieNamed("mdtp") match {
-        case null =>
-          login()
-          goToViaPath(path)
-        case _ => goToViaPath(path)
-      }
+//      webDriver.manage().getCookieNamed("mdtp") match {
+//        case null =>
+//          login()
+//          goToViaPath(path)
+//        case _ => goToViaPath(path)
+//      }
 
-      login()
+//      login()
       goToViaPath(path)
     }
-
-  class TestSetup(
-      useBankDetails: Boolean       = true,
-      inPast:         Boolean       = false,
-      status1:        RiskingStatus = INITIAL,
-      status2:        RiskingStatus = CLAIM_QUERIED,
-      status3:        RiskingStatus = REPAYMENT_ADJUSTED, rdsp: Int,
-      periodKey:        PeriodKey,
-      ft:               Int,
-      periodKeyBackend: PeriodKey = PeriodKey("18AG")
-  ) {
-    VatRepaymentTrackerBackendWireMockResponses.storeOk()
-    AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-    if (useBankDetails) {
-      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    } else {
-      PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-    }
-    val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
-    rdsp match {
-      case 1 =>
-        PaymentsOrchestratorStub.repaymentDetailS1(vrn, date.toString, status1, periodKey)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
-      case 2 =>
-        PaymentsOrchestratorStub.repaymentDetailS2(vrn, date.toString, status1, status2)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2, periodKey)
-      case 3 =>
-        PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
-      case 4 =>
-        PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
-        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS4(vrn, date.toString, status1, status2, status3, periodKey)
-    }
-
-    ft match {
-      case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-      case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
-      case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
-      case _           => throw new IllegalArgumentException("no ft match")
-    }
-
-    implicit val myWebDriver: WebDriver = new HtmlUnitDriver(false)
-
-    def goToViaPath(path: String): Unit = {
-      println(s"reached inside of goToViaPath($path)")
-      myWebDriver.get(s"$webdriverUrl$path")
-    }
-
-    protected def login(): Unit = {
-      logInResponse(cookieCrypto, cookieBaker)
-      myWebDriver.get(s"http://localhost:${WireMockSupport.port}$loginPath")
-    }
-
-    //    myWebDriver.manage().getCookieNamed("mdtp") match {
-    //      case null =>
-    //        login()
-    //        goToViaPath(path)
-    //      case _ => goToViaPath(path)
-    //    }
-
-    println(s"inside new TestSetup, attempting login")
-    login()
-    println("reached completion of log in, in new TestSetup")
-    println(s"current url - after login : ${myWebDriver.getCurrentUrl}")
-    println(s"inside new TestSetup, attempting goToViaPath")
-    goToViaPath(path)
-    println(s"current url - after goToViaPath : ${myWebDriver.getCurrentUrl}")
-    println("reached end of new TestSetup")
-  }
 }
