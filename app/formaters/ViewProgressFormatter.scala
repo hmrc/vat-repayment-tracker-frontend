@@ -31,11 +31,11 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class ViewProgressFormatter @Inject() (
-                                        view_progress: views.html.view_progress,
-                                       requestSupport:  RequestSupport,
-                                       desFormatter:    DesFormatter,
-                                       viewConfig:      ViewConfig,
-                                       periodFormatter: PeriodFormatter)(implicit ec: ExecutionContext) extends Results {
+    view_progress:   views.html.view_progress,
+    requestSupport:  RequestSupport,
+    desFormatter:    DesFormatter,
+    viewConfig:      ViewConfig,
+    periodFormatter: PeriodFormatter)(implicit ec: ExecutionContext) extends Results {
 
   private val logger = Logger(this.getClass)
 
@@ -53,10 +53,9 @@ class ViewProgressFormatter @Inject() (
     val returnCreditChargeExists = desFormatter.getReturnCreditChargeExists(financialData, periodKey)
     val returnDebitChargeExists = desFormatter.getReturnDebitChargeExists(financialData, periodKey)
 
-
-// ** For the KNOZ error (showing £0.00) I think the vrd data is not ordered and need to be sorted, something like this:
-//    implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
-//    val vrd = vrd1.sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
+    // ** For the KNOZ error (showing £0.00) I think the vrd data is not ordered and need to be sorted, something like this:
+    //    implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
+    //    val vrd = vrd1.sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
 
     val estRepaymentDate = getEstimatedRepaymentDate(vrd(0).repaymentDetailsData.returnCreationDate, vrd(0).repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
@@ -66,12 +65,12 @@ class ViewProgressFormatter @Inject() (
       periodFormatter.formatPeriodKey(periodKey.value),
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
 
-    if( viewProgress.amount == 0  && vrd(0).repaymentDetailsData.riskingStatus != CLAIM_QUERIED ) {
-      logger.warn(s"KNOZ: zero amount- riskingStatus: ${vrd(0).repaymentDetailsData.riskingStatus}, lst: ${vrd.map( a => s"[Status ${a.repaymentDetailsData.riskingStatus}, origAmt: ${a.repaymentDetailsData.originalPostingAmount} BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[",",","]")}  viewProgress=$viewProgress")
+    if (viewProgress.amount == 0 && vrd(0).repaymentDetailsData.riskingStatus != CLAIM_QUERIED) {
+      logger.warn(s"KNOZ: zero amount- riskingStatus: ${vrd(0).repaymentDetailsData.riskingStatus}, lst: ${vrd.map(a => s"[Status ${a.repaymentDetailsData.riskingStatus}, origAmt: ${a.repaymentDetailsData.originalPostingAmount} BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[", ",", "]")}  viewProgress=$viewProgress")
     }
 
     Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
-                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue))
+                     viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue))
   }
 
   private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {
@@ -116,11 +115,11 @@ class ViewProgressFormatter @Inject() (
 
       //id:1
       case INITIAL => WhatsHappendSoFar(INITIAL,
-                                              vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
-                                              Messages("view_progress_formatter.checking_amount"),
-                                              Messages("view_progress_formatter.we_received_your_return"),
-                                              Messages("view_progress_formatter.amount_you_claimed"),
-                                              Messages("view_progress_formatter.repayment_being_processed")
+                                        vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                                        Messages("view_progress_formatter.checking_amount"),
+                                        Messages("view_progress_formatter.we_received_your_return"),
+                                        Messages("view_progress_formatter.amount_you_claimed"),
+                                        Messages("view_progress_formatter.repayment_being_processed")
       )
 
       case CLAIM_QUERIED =>
@@ -190,7 +189,7 @@ class ViewProgressFormatter @Inject() (
                           vrtRepaymentDetailData.repaymentDetailsData.lastUpdateReceivedDate.getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
                           Messages("view_progress_formatter.now_owe_hmrc"),
                           Messages("view_progress_formatter.calculated_original_amount_claimed", CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount),
-                                                                                               CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)),
+                                                                                                 CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5)),
                           Messages("view_progress_formatter.amount_to_pay"), Messages("view_progress_formatter.need_to_make_vat_payment"))
 
       case REPAYMENT_APPROVED =>
@@ -255,7 +254,7 @@ class ViewProgressFormatter @Inject() (
   }
 
   private def computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate:       LocalDate,
-                                                           vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_], messages:Messages): WhatsHappendSoFar = {
+                                                           vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_], messages: Messages): WhatsHappendSoFar = {
 
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
       case ADJUSMENT_TO_TAX_DUE =>

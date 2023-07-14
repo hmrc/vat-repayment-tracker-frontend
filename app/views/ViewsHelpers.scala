@@ -16,15 +16,12 @@
 
 package views
 
-
 import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ViewsHelpers @Inject() (
-
-
     //copied from uk.gov.hmrc.play.views.html.helpers
-    val form:               FormWithCSRF,
+    val form: FormWithCSRF
 )

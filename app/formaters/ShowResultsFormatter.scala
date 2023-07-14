@@ -56,11 +56,11 @@ class ShowResultsFormatter @Inject() (
   }
 
   def computeEngmtClassic(
-                                calendarData: Option[CalendarData],
-                              ): String = {
+      calendarData: Option[CalendarData]
+  ): String = {
     calendarData match {
       case Some(data) => if (data.countReturns == 0) `repayment-type`.none_in_progress else `repayment-type`.in_progress_classic
-      case None => `repayment-type`.none_in_progress
+      case None       => `repayment-type`.none_in_progress
     }
   }
 
@@ -129,8 +129,8 @@ class ShowResultsFormatter @Inject() (
   }
 
   def computeEngmt(
-                   allRepaymentData: AllRepaymentData
-                 ): String = {
+      allRepaymentData: AllRepaymentData
+  ): String = {
     if (allRepaymentData.inProgressRepaymentData.nonEmpty || allRepaymentData.completedRepaymentData.nonEmpty) {
       `repayment-type`.one_in_progress_multiple_delayed
     } else {

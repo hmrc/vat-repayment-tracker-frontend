@@ -1,5 +1,4 @@
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "vat-repayment-tracker-frontend"
 val scalaV = "2.13.10"
@@ -11,20 +10,24 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     resolvers ++= Seq(Resolver.jcenterRepo),
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
     retrieveManaged := false,
     routesGenerator := InjectedRoutesGenerator,
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+    (update / evictionWarningOptions) := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+    (Compile / doc / sources) := Seq.empty
   )
   .settings(majorVersion := 1)
   .settings(ScalariformSettings())
   .settings(ScoverageSettings())
-  .settings(WartRemoverSettings.wartRemoverError)
-  .settings(WartRemoverSettings.wartRemoverWarning)
-  .settings(wartremoverErrors in(Test, compile) --= Seq(Wart.Any, Wart.Equals, Wart.Null, Wart.NonUnitStatements, Wart.PublicInference))
-  .settings(wartremoverExcluded ++=
-    routes.in(Compile).value ++
-      (baseDirectory.value / "test").get ++
-      Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala"))
+  .settings(
+    WartRemoverSettings.wartRemoverError,
+    WartRemoverSettings.wartRemoverWarning,
+    (Test/ compile / wartremoverErrors) --= Seq(Wart.Any, Wart.Equals, Wart.Null, Wart.NonUnitStatements, Wart.PublicInference),
+    wartremoverExcluded ++=
+      (Compile / routes).value ++
+        (baseDirectory.value / "test").get ++
+        Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala")
+  )
   .settings(PlayKeys.playDefaultPort := 9863)
   .settings(scalaSettings: _*)
   .settings(defaultSettings(): _*)

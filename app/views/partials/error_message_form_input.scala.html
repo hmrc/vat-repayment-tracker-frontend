@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import org.joda.time.DateTime
+@import java.time.LocalDate
 
 
 @(
@@ -27,6 +27,8 @@ m: Messages
 
 @if(form.errors(errorKey).nonEmpty) {
 @for(error <- form.errors(errorKey)) {
-<span id="@error.message-errorKey" class="error-message"><span class="visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
+<span id="@error.message-errorKey" class="error-message">
+ <span class="visually-hidden">@Messages("generic_prefixerror"):</span>@Messages(error.message,LocalDate.now().getYear)
+</span>
 }
 }
