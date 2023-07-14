@@ -37,9 +37,9 @@ object VatRepaymentsClassic extends CommonPage {
     readTitle shouldBe "Sorry, there is a problem with the service - Business tax account - GOV.UK"
   }
 
-  def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
+  def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readReceivedOnDate()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("receivedOn")).getText)
+  def readReceivedOnDate(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("receivedOn")).getText)
 
 }
 

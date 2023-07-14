@@ -19,7 +19,7 @@ package support
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.Vrn
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 object GgStub extends Matchers {
 

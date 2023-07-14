@@ -21,13 +21,15 @@ import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL}
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.scalatest.time.{Seconds, Span}
 import pages.{InProgress, NonMtdUser}
 import support._
 
 class InProgressSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path = "/vat-repayment-tracker/show-vrt"
 
   val periodKey: PeriodKey = PeriodKey("18AG")
   val ft_404: Int = 1
@@ -76,8 +78,13 @@ class InProgressSpec extends BrowserSpec {
   "6. Get ShowResults authorised, no enrolments" in {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkNoEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString)
+
+    login()
     goToViaPath(path)
-    NonMtdUser.assertPageIsDisplayed
+
+    eventually(Timeout(Span(5, Seconds))) {
+      NonMtdUser.assertPageIsDisplayed
+    }
   }
 
   "7. check negative amount" in {
@@ -162,6 +169,7 @@ class InProgressSpec extends BrowserSpec {
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
       case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
       case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+      case other       => throw new IllegalArgumentException(s"no ft match for $other")
     }
 
     login()

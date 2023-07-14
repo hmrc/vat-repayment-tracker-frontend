@@ -16,6 +16,7 @@
 
 package support
 
+import com.gargoylesoftware.htmlunit.WebClient
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor, urlPathEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.openqa.selenium.WebDriver
@@ -26,11 +27,24 @@ import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 
+class CustomHtmlUnitDriver extends HtmlUnitDriver {
+  override def modifyWebClient(client: WebClient): WebClient = {
+
+    val modifiedClient: WebClient = super.modifyWebClient(client)
+    modifiedClient.getOptions.setThrowExceptionOnScriptError(false)
+    modifiedClient.getOptions.setRedirectEnabled(true)
+    modifiedClient.getOptions.setJavaScriptEnabled(true)
+    modifiedClient
+  }
+}
+
 class BrowserSpec extends ItSpec {
+  protected implicit val webDriver: WebDriver = new CustomHtmlUnitDriver
 
-  protected implicit val webDriver: WebDriver = new HtmlUnitDriver(false)
+  lazy val webdriverUrl: String = s"http://localhost:$port"
 
-  def goToViaPath(path: String): Unit = webDriver.get(s"$webdriverUr$path")
+  def goToViaPath(path: String): Unit =
+    webDriver.navigate().to(s"$webdriverUrl$path")
 
   lazy val cookieCrypto: SessionCookieCrypto = injector.instanceOf[SessionCookieCrypto]
   lazy val cookieBaker: SessionCookieBaker = injector.instanceOf[SessionCookieBaker]
@@ -38,7 +52,7 @@ class BrowserSpec extends ItSpec {
 
   protected def login(): Unit = {
     logInResponse(cookieCrypto, cookieBaker)
-    webDriver.get(s"http://localhost:${WireMockSupport.port}$loginPath")
+    webDriver.navigate().to(s"http://localhost:${WireMockSupport.port}$loginPath")
   }
 
   def logInResponse(

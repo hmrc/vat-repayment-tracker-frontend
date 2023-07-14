@@ -29,7 +29,7 @@ import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class Controller @Inject() (
@@ -56,18 +56,18 @@ class Controller @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def nonMtdUser(): Action[AnyContent] = actions.loggedIn.async { implicit request =>
+  val nonMtdUser: Action[AnyContent] = actions.loggedIn.async { implicit request =>
     for {
       _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress)
     } yield Ok(views_non_mtd_user())
   }
 
-  def signout: Action[AnyContent] =
+  val signout: Action[AnyContent] =
     Action.async { implicit request =>
       Redirect(viewConfig.feedbackUrlForLogout).withNewSession
     }
 
-  def showVrt: Action[AnyContent] = actions.securedAction.async {
+  val showVrt: Action[AnyContent] = actions.securedAction.async {
     implicit request: AuthenticatedRequest[_] =>
 
       logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")

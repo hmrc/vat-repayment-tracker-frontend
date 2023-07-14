@@ -24,7 +24,6 @@ import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, RE
 import model.des._
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.libs.json.JsResult.Exception
 import play.api.mvc.{Request, Result, Results}
 import req.RequestSupport
 
@@ -72,7 +71,7 @@ class ViewProgressFormatter @Inject() (
     }
 
     Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
-                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue()))
+                           viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue))
   }
 
   private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {

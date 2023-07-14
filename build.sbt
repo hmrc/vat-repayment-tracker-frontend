@@ -2,7 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSetting
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "vat-repayment-tracker-frontend"
-val scalaV = "2.12.12"
+val scalaV = "2.13.10"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
@@ -40,7 +40,6 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions ++= Seq(
       "-Xfatal-warnings",
       "-Xlint:-missing-interpolator,_",
-      "-Yno-adapted-args",
       "-Ywarn-value-discard",
       "-Ywarn-dead-code",
       "-deprecation",
@@ -48,7 +47,6 @@ lazy val microservice = Project(appName, file("."))
       "-unchecked",
       "-language:implicitConversions",
       "-language:reflectiveCalls",
-      "-Ypartial-unification", //required by cats
       "-Ywarn-unused:-imports,-patvars,-privates,-locals,-explicits,-implicits,_"
     )
   )

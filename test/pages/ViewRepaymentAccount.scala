@@ -27,8 +27,8 @@ object ViewRepaymentAccount extends CommonPage {
     readTitle shouldBe "Your VAT repayments will be sent to this account - Business tax account - GOV.UK"
     //readAccName() shouldBe s"""Account number: ${accountHolderName}"""
     readAccNumber should include ("****2222")
-    readAccSortCode() should include ("66 77 88")
-    readMainMessage() shouldBe "Your VAT repayments will be sent to this account"
+    readAccSortCode should include ("66 77 88")
+    readMainMessage shouldBe "Your VAT repayments will be sent to this account"
   }
 
 }

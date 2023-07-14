@@ -25,15 +25,15 @@ trait CommonDetail extends CommonPage {
 
   val path = "/vat-repayment-tracker/show-vrt"
 
-  def breadCrumbsExists()(implicit driver: WebDriver): Assertion = idPresent("viewVatAccount") shouldBe true
+  def breadCrumbsExists(implicit driver: WebDriver): Assertion = idPresent("viewVatAccount") shouldBe true
 
-  def clickManageAccount()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
+  def clickManageAccount(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
-  def clickCallBac()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
+  def clickCallBac(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
 
-  def clickInProgress()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())
+  def clickInProgress(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())
 
-  def clickCompleted()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
+  def clickCompleted(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
 
   def assertPageIsDisplayed(
       checkBank:      Boolean = true,
@@ -60,7 +60,7 @@ trait CommonDetail extends CommonPage {
 
     }
 
-  def readAddress()(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
+  def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
   def readAmount()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[3]")).getText)
 
