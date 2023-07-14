@@ -36,17 +36,15 @@ class BankAccountCocController @Inject() (
     paymentsOrchestratorConnector: PaymentsOrchestratorConnector,
     auditor:                       Auditor,
     vrtService:                    VrtService,
-    requestSupport:                RequestSupport,
+    requestSupport:                RequestSupport
 )(
     implicit
-    ec: ExecutionContext)
-
-  extends FrontendBaseController(cc) {
+    ec: ExecutionContext) extends FrontendBaseController(cc) {
 
   private val logger = Logger(this.getClass)
 
   def startBankAccountCocJourney(returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
-    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit  request: AuthenticatedRequest[_] =>
+    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
       import requestSupport._
 
       if (audit) {

@@ -15,9 +15,9 @@ object ScoverageSettings {
       ".*LanuageSwitchController.*",
       ".*language_selection.*"
     ).mkString(";"),
-    ScoverageKeys.coverageMinimum := 80,  //should be a lot higher but we are where we are
+    ScoverageKeys.coverageMinimumStmtTotal := 80,  //should be a lot higher but we are where we are
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
-    parallelExecution in Test := false
+    (Test/ parallelExecution) := false
   )
 }

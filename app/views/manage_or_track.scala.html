@@ -19,7 +19,7 @@
 @import model.Vrn
 @import model.des._
 @import model.ManageOrTrackOptions
-@import org.joda.time.DateTime
+@import java.time.LocalDate
 @import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichErrorSummary
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorSummary
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
@@ -91,7 +91,8 @@
        @if(form.errors("manage").nonEmpty) {
         @for(error <- form.errors("manage")) {
          <span id="manage-errorKey" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span>@Messages(error.message,DateTime.now.year().get)</span>
+          <span class="govuk-visually-hidden">@messages("generic_prefixerror"):</span>@Messages(error.message, LocalDate.now.getYear)
+         </span>
         }
        }
 
