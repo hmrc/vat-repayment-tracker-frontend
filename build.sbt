@@ -1,7 +1,7 @@
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
 
 val appName = "vat-repayment-tracker-frontend"
-val scalaV = "2.13.10"
+val scalaV = "2.13.11"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
@@ -19,6 +19,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(majorVersion := 1)
   .settings(ScalariformSettings())
   .settings(ScoverageSettings())
+  .settings(SbtUpdatesSettings.sbtUpdatesSettings)
   .settings(
     WartRemoverSettings.wartRemoverError,
     WartRemoverSettings.wartRemoverWarning,
