@@ -55,6 +55,20 @@ class AuthenticatedAction @Inject() (
     }
   }
 
+  private def isDeregistered(vrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
+    if (viewConfig.isShuttered) Future.successful(false)
+    else {
+      for {
+        customer <- orchestrator.getCustomerData(vrn.vrn)
+      } yield {
+        customer match {
+          case Some(x) => x.isDeregistered
+          case None    => false
+        }
+      }
+    }
+  }
+
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     implicit val r: Request[A] = request
@@ -78,14 +92,18 @@ class AuthenticatedAction @Inject() (
 
       }
 
-      if (Vrn.isMtdEnroled(typedVrn)) {
-        isPartial(typedVrn).flatMap(isPartialResult =>
+      isDeregistered(typedVrn).flatMap {
+        case true => throw new DeregistrationException
+        case false =>
+          if (Vrn.isMtdEnroled(typedVrn)) {
+            isPartial(typedVrn).flatMap(isPartialResult =>
 
-          block(new AuthenticatedRequest(request, enrolments, if (isPartialResult) ClassicVrn(typedVrn.vrn) else typedVrn, isPartialResult))
+              block(new AuthenticatedRequest(request, enrolments, if (isPartialResult) ClassicVrn(typedVrn.vrn) else typedVrn, isPartialResult))
 
-        )
-      } else
-        block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+            )
+          } else
+            block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+      }
 
     }.recover {
       case _: NoActiveSession =>
@@ -93,11 +111,15 @@ class AuthenticatedAction @Inject() (
       case e: AuthorisationException =>
         logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(routes.Controller.nonMtdUser.url)
+      case e: DeregistrationException =>
+        Redirect(routes.Controller.deregistered.url)
     }
   }
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def executionContext: ExecutionContext = cc.executionContext
+
+  case class DeregistrationException(reason: String = "VAT registration cancelled") extends RuntimeException(reason)
 
 }

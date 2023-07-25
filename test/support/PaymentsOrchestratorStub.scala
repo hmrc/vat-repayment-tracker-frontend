@@ -72,6 +72,12 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.customerDataOkWithoutBankDetails.toString())))
 
+  def customerDataOkDeregistered(vrn: Vrn): StubMapping =
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(DesData.customerDataOkDeregistered.toString())))
+
   def financialsNotFound(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse().withStatus(404)

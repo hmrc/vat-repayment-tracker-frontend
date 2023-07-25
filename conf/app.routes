@@ -21,6 +21,7 @@ GET        /bank-account-coc/start-journey/:returnPage              controllers.
 GET        /view-progress/:periodKey                                controllers.Controller.viewProgress(periodKey : PeriodKey)
 GET        /spj/:amountInPence                                      controllers.PayApiController.startPaymentsJourney(amountInPence : Long)
 GET        /shuttered                                               controllers.ShutteredController.shuttered
+GET        /vrt-vat-registration-cancelled                          controllers.Controller.deregistered
 
 #Session
 GET         /session/keep-alive                                     controllers.TimeoutController.keepAliveSession()

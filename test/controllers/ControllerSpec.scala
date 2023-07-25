@@ -29,6 +29,7 @@ class ControllerSpec extends ItSpec {
   import support.VatData.{vrn, periodKey}
 
   val loginUrl: String = configMap("urls.login").toString
+  val vrtVatRegistrationCancelledUrl: String = "/vrt-vat-registration-cancelled"
 
   val controller: Controller = injector.instanceOf[Controller]
 
@@ -54,6 +55,18 @@ class ControllerSpec extends ItSpec {
       val result = controller.showResults(vrn)(fakeRequest)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).getOrElse("None found") should include(loginUrl)
+    }
+    "deregistered redirected to 'vrt vat registration cancelled' page" in {
+      AuditWireMockResponses.auditIsAvailable
+      AuthWireMockResponses.authOkWithEnrolments(
+        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+        vrn                     = vrn,
+        enrolment               = EnrolmentKeys.mtdVatEnrolmentKey
+      )
+      PaymentsOrchestratorStub.customerDataOkDeregistered(vrn)
+      val result = controller.showResults(vrn)(fakeRequest)
+      status(result) shouldBe Status.SEE_OTHER
+      redirectLocation(result).getOrElse("None found") should include(vrtVatRegistrationCancelledUrl)
     }
   }
   "GET /view-repayment-account" - {

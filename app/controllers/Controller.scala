@@ -36,6 +36,7 @@ class Controller @Inject() (
     cc:                                  ControllerComponents,
     views_non_mtd_user:                  views.html.non_mtd_user,
     view_repayment_account:              views.html.view_repayment_account,
+    vrt_vat_registration_cancelled:      views.html.vrt_vat_registration_cancelled,
     paymentsOrchestratorConnector:       PaymentsOrchestratorConnector,
     requestSupport:                      RequestSupport,
     desFormatter:                        DesFormatter,
@@ -130,6 +131,10 @@ class Controller @Inject() (
 
       url
 
+  }
+
+  val deregistered: Action[AnyContent] = actions.loggedIn.async { implicit request =>
+    Ok(vrt_vat_registration_cancelled())
   }
 
   //------------------------------------------------------------------------------------------------------------------------------

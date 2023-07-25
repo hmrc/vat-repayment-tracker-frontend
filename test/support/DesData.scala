@@ -717,6 +717,17 @@ object DesData {
      }
        """.stripMargin)
 
+  val customerDataOkDeregistered: JsValue = Json.parse(
+    s"""{
+            "approvedInformation":{
+              "deregistration":{
+                "deregistrationReason": "0001",
+                "effectDateOfCancellation": "2001-01-01",
+                "lastReturnDueDate": "2001-01-01"
+              }
+            }
+        }""".stripMargin)
+
   // language=JSON
   def ddOk: JsValue = Json.parse(
     s"""
