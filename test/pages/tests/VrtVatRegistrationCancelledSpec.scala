@@ -28,18 +28,23 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     "GET /vat-repayment-tracker-frontend/show-results/vrn/:vrn" in {
       testSetup(s"/vat-repayment-tracker-frontend/show-results/vrn/$vrn")
       VrtVatRegistrationCancelledPage.assertPageIsDisplayed
+      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
+
     }
     "GET /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn" in {
       testSetup(s"/vat-repayment-tracker-frontend/manage-or-track/vrn/$vrn")
       VrtVatRegistrationCancelledPage.assertPageIsDisplayed
+      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
     }
     "GET /vat-repayment-tracker/view-repayment-account" in {
       testSetup("/vat-repayment-tracker/view-repayment-account")
       VrtVatRegistrationCancelledPage.assertPageIsDisplayed
+      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
     }
     "GET /vat-repayment-tracker/manage-or-track-vrt" in {
       testSetup("/vat-repayment-tracker/manage-or-track-vrt")
       VrtVatRegistrationCancelledPage.assertPageIsDisplayed
+      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
     }
 
   }

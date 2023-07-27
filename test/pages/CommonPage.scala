@@ -141,6 +141,11 @@ trait CommonPage
     }
   }
 
+  def hasTextHyperLinkedTo(text: String, link: String)(implicit webDriver: WebDriver): Assertion = {
+    probing(_.findElement(By.partialLinkText(text))
+      .getAttribute("href")) shouldBe link
+  }
+
   def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
     true

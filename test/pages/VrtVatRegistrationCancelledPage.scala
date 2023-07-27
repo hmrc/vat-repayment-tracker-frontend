@@ -17,6 +17,7 @@
 package pages
 
 import org.openqa.selenium.WebDriver
+import org.scalatest.Assertion
 
 object VrtVatRegistrationCancelledPage extends CommonPage {
 
@@ -27,6 +28,17 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
     readTitle shouldBe "You cannot use this service - Business tax account - GOV.UK"
     readMainMessage shouldBe "You cannot use this service"
     assertContentMatchesExpectedLines(Expected.mainText)
+  }
+
+  def assertHyperLinkedTextDisplayed(implicit wd: WebDriver): Assertion = {
+    hasTextHyperLinkedTo(
+      "deal with HMRC if you need some help",
+      "https://www.gov.uk/get-help-hmrc-extra-support"
+    )
+    hasTextHyperLinkedTo(
+      "Relay UK",
+      "https://www.relayuk.bt.com/"
+    )
   }
 
   object Expected {
