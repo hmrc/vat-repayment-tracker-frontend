@@ -22,6 +22,7 @@ import connectors.PaymentsOrchestratorConnector
 import controllers.routes
 import model.EnrolmentKeys.{vatDecEnrolmentKey, vatVarEnrolmentKey, _}
 import model.TypedVrn.{ClassicVrn, MtdVrn}
+import model.des.CustomerInformation
 import model.{TypedVrn, Vrn}
 import play.api.Logger
 import play.api.mvc.Results._
@@ -41,31 +42,19 @@ class AuthenticatedAction @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  private def isPartial(mtdVrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
+  private def isPartial(customer: Option[CustomerInformation]): Boolean = {
     if (viewConfig.isShuttered) Future.successful(false)
-    else {
-      for {
-        customer <- orchestrator.getCustomerData(mtdVrn.vrn)
-      } yield {
-        customer match {
-          case Some(x) => x.isPartiallyMigrated
-          case None    => false
-        }
-      }
+    customer match {
+      case Some(x) => x.isPartiallyMigrated
+      case None    => false
     }
   }
 
-  private def isDeregistered(vrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
+  private def isDeregistered(customer: Option[CustomerInformation]): Boolean = {
     if (viewConfig.isShuttered) Future.successful(false)
-    else {
-      for {
-        customer <- orchestrator.getCustomerData(vrn.vrn)
-      } yield {
-        customer match {
-          case Some(x) => x.isDeregistered
-          case None    => false
-        }
-      }
+    customer match {
+      case Some(x) => x.isDeregistered
+      case None    => false
     }
   }
 
@@ -92,17 +81,18 @@ class AuthenticatedAction @Inject() (
 
       }
 
-      isDeregistered(typedVrn).flatMap {
-        case true => throw new DeregistrationException
-        case false =>
+      orchestrator.getCustomerData(typedVrn.vrn).map { customer =>
+        if (isDeregistered(customer)) {
+          throw new DeregistrationException
+        } else {
           if (Vrn.isMtdEnroled(typedVrn)) {
-            isPartial(typedVrn).flatMap(isPartialResult =>
-
-              block(new AuthenticatedRequest(request, enrolments, if (isPartialResult) ClassicVrn(typedVrn.vrn) else typedVrn, isPartialResult))
-
-            )
-          } else
-            block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+            if (isPartial(customer)) {
+              block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
+            } else {
+              block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+            }
+          }
+        }
       }
 
     }.recover {
