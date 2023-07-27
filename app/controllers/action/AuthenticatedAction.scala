@@ -78,21 +78,13 @@ class AuthenticatedAction @Inject() (
         case (None, Some(nonMdt)) => nonMdt
         case (Some(mdt), Some(_)) => mdt
         case _                    => throw new InsufficientEnrolments
-
       }
 
-      orchestrator.getCustomerData(typedVrn.vrn).map { customer =>
-        if (isDeregistered(customer)) {
-          throw new DeregistrationException
-        } else {
-          if (Vrn.isMtdEnroled(typedVrn)) {
-            if (isPartial(customer)) {
-              block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
-            } else {
-              block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
-            }
-          }
-        }
+      orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
+        if (isDeregistered(customer)) throw new DeregistrationException
+        else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
+          block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
+        } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
       }
 
     }.recover {
@@ -102,6 +94,7 @@ class AuthenticatedAction @Inject() (
         logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(routes.Controller.nonMtdUser.url)
       case e: DeregistrationException =>
+        logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(routes.Controller.deregistered.url)
     }
   }
