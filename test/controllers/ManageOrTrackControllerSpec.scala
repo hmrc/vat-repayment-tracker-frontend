@@ -45,7 +45,7 @@ class ManageOrTrackControllerSpec extends ItSpec {
       status(result) shouldBe Status.OK
     }
   }
-  "GET /manage-or-track/vrn/:vrn" - {
+  "GET /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn" - {
     "shows vrt for 'Manage or track' no-mtd" in {
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)

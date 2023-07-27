@@ -31,11 +31,29 @@ message: Messages
 
 
 
-@mainTemplate(title = Messages("shuttered.title"), timeoutDialog = false) {
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 id="main-message"  class="govuk-heading-xl">@Messages("shuttered.title")</h1>
+@mainTemplate(title = message("vrt_vat_registration_cancelled.title"), timeoutDialog = false) {
+    <div class="govuk-grid-row govuk-!-padding-bottom-1">
+        <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-3">
+            <h1 id="main-message"  class="govuk-heading-xl">@message("vrt_vat_registration_cancelled.title")</h1>
+
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p1"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p2"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p3"))</p>
+
+            <h2 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.extra_support.header")</h2>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p1"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p2"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p3"))</p>
+
+            <h3 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.before_you_call.header")</h3>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@message("vrt_vat_registration_cancelled.before_you_call.l1")</li>
+                <li>@message("vrt_vat_registration_cancelled.before_you_call.l2")</li>
+            </ul>
+
         </div>
+
+
     </div>
 
 }

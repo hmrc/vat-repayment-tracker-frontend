@@ -225,6 +225,17 @@ view_progress_formatter.claimed_vat_repayment_post = You claimed £{0}. We calcu
 view_progress_formatter.claimed_vat_repayment_of = You claimed £{0}. We calculated this amount was incorrect so we will repay you £{1}.  This will reach your repayment bank account in 3 working days.  We sent you a letter explaining why we changed your amount. </p><p class="govuk-body">If you do not receive a letter in the next 7 days, check your <a class="govuk-link" href={2}>VAT payments history</a>.
 view_progress_formatter.calculated_original_amount_claimed = We calculated that the original amount of £{0} you claimed was incorrect. You now owe HMRC £{1}. We sent you a letter with the reason for this change.
 
+vrt_vat_registration_cancelled.title = You cannot use this service
+vrt_vat_registration_cancelled.p1 = You cannot use the track your VAT repayments service because your VAT registration has been cancelled.
+vrt_vat_registration_cancelled.p2 = Call us on <strong>0300 200 3835</strong> if you cannot track VAT repayments online.
+vrt_vat_registration_cancelled.p3 = Our opening times are Monday to Friday, 8am to 6pm. We are closed on weekends and bank holidays.
+vrt_vat_registration_cancelled.extra_support.header = If you need extra support
+vrt_vat_registration_cancelled.extra_support.p1 = Find out the different ways to <a class="govuk-link" id="extra-support" href="https://www.gov.uk/get-help-hmrc-extra-support">deal with HMRC if you need some help</a>.
+vrt_vat_registration_cancelled.extra_support.p2 = You can also use <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> if you cannot hear or speak on the phone: dial <strong>18001</strong> then <strong>0345 300 3900</strong>.
+vrt_vat_registration_cancelled.extra_support.p3 = If you are outside the UK: <strong>+44 2890 538 192</strong>
+vrt_vat_registration_cancelled.before_you_call.header = Before you call, make sure you have:
+vrt_vat_registration_cancelled.before_you_call.l1 = your VAT registration number. This is 9 numbers, for example, 123456789
+vrt_vat_registration_cancelled.before_you_call.l2 = your bank details
 
 accessibility-statement.title = Accessibility Statement
 
