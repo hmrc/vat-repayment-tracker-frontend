@@ -116,12 +116,16 @@ object PPOB {
 }
 
 final case class Deregistration(
-    deregistrationReason:     String,
-    effectDateOfCancellation: LocalDate,
-    lastReturnDueDate:        LocalDate
+    deregistrationReason:     Option[String],
+    effectDateOfCancellation: Option[LocalDate],
+    lastReturnDueDate:        Option[LocalDate]
 ) {
 
-  val hasDeregistrationReason: Boolean = deregistrationReason.nonEmpty
+  val hasDeregistrationReason: Boolean = deregistrationReason match {
+    case Some(reason) if reason != "" => true
+    case _                            => false
+  }
+
 }
 
 object Deregistration {

@@ -51,7 +51,6 @@ class AuthenticatedAction @Inject() (
   }
 
   private def isDeregistered(customer: Option[CustomerInformation]): Boolean = {
-    if (viewConfig.isShuttered) Future.successful(false)
     customer match {
       case Some(x) => x.isDeregistered
       case None    => false
@@ -81,7 +80,9 @@ class AuthenticatedAction @Inject() (
       }
 
       orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
+
         if (isDeregistered(customer)) throw new DeregistrationException
+
         else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
           block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
         } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
