@@ -31,9 +31,7 @@ message: Messages
 
 
 
-@mainTemplate(title = message("vrt_vat_registration_cancelled.title"), timeoutDialog = false) {
-
-<a href="@{viewConfig.viewVatAccount}" id="back" class="govuk-back-link">@Messages("back")</a>
+@mainTemplate(title = message("vrt_vat_registration_cancelled.title"), timeoutDialog = false, backButtonUrl = Some(Call("GET", viewConfig.viewVatAccount))) {
 
 <div class="govuk-grid-row govuk-!-padding-bottom-1">
         <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-3">

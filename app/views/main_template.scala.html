@@ -83,8 +83,9 @@
 }
 
 @beforeContentBlock = {
+@hmrcLanguageSelectHelper()
 @backButtonUrl.map{ call =>
-    @partials.back_button(call)
+    @govukBackLink(BackLink(href = call.url, attributes = Map("id" -> "back-link"), content = Text(messages("back"))))
 }
 }
 
@@ -111,7 +112,7 @@
         signOutHref = if (isLoggedIn) Some(routes.Controller.signout.url) else None,
         phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl)),
     ))),
-    beforeContentBlock = Some(hmrcLanguageSelectHelper()),
+    beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(scripts),
     footerBlock = Some(hmrcStandardFooter()),
     mainContentLayout = (if (!fullWidth) Some(twoThirdsMainContent.apply _) else None)
