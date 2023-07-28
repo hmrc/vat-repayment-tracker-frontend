@@ -22,6 +22,7 @@ import org.scalatest.Assertion
 object VrtVatRegistrationCancelledPage extends CommonPage {
 
   val path: String = "/vat-repayment-tracker/vrt-vat-registration-cancelled"
+  val backButtonUrl: String = ""
 
   def assertPageIsDisplayed(implicit wd: WebDriver): Unit = {
     currentPath shouldBe path

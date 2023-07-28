@@ -146,6 +146,14 @@ trait CommonPage
       .getAttribute("href")) shouldBe link
   }
 
+
+  def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion = {
+    readBackButtonUrl() shouldBe url
+  }
+
+  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(_.findElement(By.id("back"))
+    .getAttribute("href"))
+
   def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
     true

@@ -19,6 +19,7 @@ package support
 import com.gargoylesoftware.htmlunit.WebClient
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor, urlPathEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import config.ViewConfig
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import play.api.http.HeaderNames
@@ -39,6 +40,8 @@ class CustomHtmlUnitDriver extends HtmlUnitDriver {
 }
 
 class BrowserSpec extends ItSpec {
+  lazy val viewConfig: ViewConfig = fakeApplication().injector.instanceOf[ViewConfig]
+
   protected implicit val webDriver: WebDriver = new CustomHtmlUnitDriver
 
   lazy val webdriverUrl: String = s"http://localhost:$port"
