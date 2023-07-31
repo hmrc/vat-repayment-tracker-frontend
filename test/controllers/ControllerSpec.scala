@@ -21,11 +21,11 @@ import model.EnrolmentKeys
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.test.Helpers.status
-import support.{AuditWireMockResponses, AuthWireMockResponses, GgStub, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses, VatWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, DeregisteredBehaviour, GgStub, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses, VatWireMockResponses}
 
 import java.time.LocalDate
 
-class ControllerSpec extends ItSpec {
+class ControllerSpec extends ItSpec with DeregisteredBehaviour {
   import support.VatData.{vrn, periodKey}
 
   val loginUrl: String = configMap("urls.login").toString
@@ -55,6 +55,9 @@ class ControllerSpec extends ItSpec {
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result).getOrElse("None found") should include(loginUrl)
     }
+    "deregistered redirected to 'vrt vat registration cancelled' page" in {
+      assertDeregisteredRedirectedIn(controller.showResults(vrn), vrn)
+    }
   }
   "GET /view-repayment-account" - {
     "authorised views repayment account" in {
@@ -63,6 +66,11 @@ class ControllerSpec extends ItSpec {
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       val result = controller.viewRepaymentAccount(audit = true)(fakeRequest)
       status(result) shouldBe Status.OK
+    }
+    "deregistered redirected to 'vrt vat registration cancelled' page" in {
+      List(true, false).foreach { auditBooleanValue =>
+        assertDeregisteredRedirectedIn(controller.viewRepaymentAccount(auditBooleanValue), vrn)
+      }
     }
 
   }
@@ -88,6 +96,9 @@ class ControllerSpec extends ItSpec {
       val result = controller.showVrt(fakeRequest)
       contentAsString(result) should include("No VAT repayments in progress")
       status(result) shouldBe Status.OK
+    }
+    "deregistered redirected to 'vrt vat registration cancelled' page" in {
+      assertDeregisteredRedirectedIn(controller.showVrt, vrn)
     }
 
   }

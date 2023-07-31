@@ -22,6 +22,7 @@ import connectors.PaymentsOrchestratorConnector
 import controllers.routes
 import model.EnrolmentKeys.{vatDecEnrolmentKey, vatVarEnrolmentKey, _}
 import model.TypedVrn.{ClassicVrn, MtdVrn}
+import model.des.CustomerInformation
 import model.{TypedVrn, Vrn}
 import play.api.Logger
 import play.api.mvc.Results._
@@ -41,16 +42,12 @@ class AuthenticatedAction @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  private def isPartial(mtdVrn: TypedVrn)(implicit request: Request[_]): Future[Boolean] = {
-    if (viewConfig.isShuttered) Future.successful(false)
+  private def isPartial(customer: Option[CustomerInformation]): Boolean = {
+    if (viewConfig.isShuttered) false
     else {
-      for {
-        customer <- orchestrator.getCustomerData(mtdVrn.vrn)
-      } yield {
-        customer match {
-          case Some(x) => x.isPartiallyMigrated
-          case None    => false
-        }
+      customer match {
+        case Some(x) => x.isPartiallyMigrated
+        case None    => false
       }
     }
   }
@@ -75,17 +72,17 @@ class AuthenticatedAction @Inject() (
         case (None, Some(nonMdt)) => nonMdt
         case (Some(mdt), Some(_)) => mdt
         case _                    => throw new InsufficientEnrolments
-
       }
 
-      if (Vrn.isMtdEnroled(typedVrn)) {
-        isPartial(typedVrn).flatMap(isPartialResult =>
+      orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
 
-          block(new AuthenticatedRequest(request, enrolments, if (isPartialResult) ClassicVrn(typedVrn.vrn) else typedVrn, isPartialResult))
-
-        )
-      } else
-        block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+        if (customer.exists(_.isDeregistered)) {
+          logger.debug(s"Unauthorised because VAT registration cancelled")
+          Future(Redirect(routes.Controller.deregistered.url))
+        } else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
+          block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
+        } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+      }
 
     }.recover {
       case _: NoActiveSession =>
@@ -99,5 +96,4 @@ class AuthenticatedAction @Inject() (
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def executionContext: ExecutionContext = cc.executionContext
-
 }

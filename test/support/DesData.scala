@@ -53,6 +53,43 @@ object DesData {
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val vrtRepaymentDetailData: VrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
 
+  object DeregistrationData {
+    val deregistrationData: Deregistration = Deregistration(
+      deregistrationReason     = Some("0001"),
+      effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
+      lastReturnDueDate        = Some(LocalDate.parse("2001-01-01"))
+    )
+
+    val deregistrationDataNoReason: Deregistration = Deregistration(
+      deregistrationReason     = None,
+      effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
+      lastReturnDueDate        = Some(LocalDate.parse("2001-01-01"))
+    )
+
+    val deregistrationDataBlankReason: Deregistration = Deregistration(
+      deregistrationReason     = Some(""),
+      effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
+      lastReturnDueDate        = Some(LocalDate.parse("2001-01-01"))
+    )
+  }
+
+  object DeregisteredCustomerInformation {
+    val approvedCustomerInformationDeregistered: CustomerInformation = CustomerInformation(
+      Some(approvedInformation.copy(deregistration = Some(DeregistrationData.deregistrationData))),
+      None
+    )
+
+    val approvedCustomerInformationDeregisteredNoReason: CustomerInformation = CustomerInformation(
+      Some(approvedInformation.copy(deregistration = Some(DeregistrationData.deregistrationDataNoReason))),
+      None
+    )
+
+    val approvedCustomerInformationDeregisteredBlankReason: CustomerInformation = CustomerInformation(
+      Some(approvedInformation.copy(deregistration = Some(DeregistrationData.deregistrationDataBlankReason))),
+      None
+    )
+  }
+
   //language=JSON
   val vrtRepaymentDetailDataJson: JsValue = Json.parse(
     s"""{
@@ -281,7 +318,7 @@ object DesData {
         },
         {
           "returnCreationDate": "2001-01-01",
-          "sentForRiskingDate": "2001-01-01",
+          "sentForRiskingDate": "2001-01-01",x
           "lastUpdateReceivedDate": "2001-01-01",
           "periodKey": "18AD",
           "riskingStatus": "REPAYMENT_SUSPENDED",
@@ -329,6 +366,37 @@ object DesData {
               }
             }
         }""".stripMargin)
+
+  val approvedInformationDeregisteredJson: JsValue = Json.parse(
+    s"""
+       {
+          "approvedInformation":{
+             "customerDetails": {
+                "welshIndicator": true,
+                "isPartialMigration": false
+             },
+             "bankDetails":{
+                "accountHolderName":"Account holder",
+                "bankAccountNumber":"11112222",
+                "sortCode":"667788"
+             },
+             "PPOB":{
+                "address":{
+                   "line1":"VAT PPOB Line1",
+                   "line2":"VAT PPOB Line2",
+                   "line3":"VAT PPOB Line3",
+                   "line4":"VAT PPOB Line4",
+                   "postCode":"TF3 4ER",
+                   "countryCode":"GB"
+                }
+             },
+             "deregistration":{
+                "deregistrationReason":"0001",
+                "effectDateOfCancellation":"2001-01-01",
+                "lastReturnDueDate":"2001-01-01"
+             }
+          }
+       }""".stripMargin)
 
   //language=JSON
   val financialDataJson: JsValue = Json.parse(
@@ -716,6 +784,17 @@ object DesData {
          }
      }
        """.stripMargin)
+
+  val customerDataOkDeregistered: JsValue = Json.parse(
+    s"""{
+            "approvedInformation":{
+              "deregistration":{
+                "deregistrationReason": "0001",
+                "effectDateOfCancellation": "2001-01-01",
+                "lastReturnDueDate": "2001-01-01"
+              }
+            }
+        }""".stripMargin)
 
   // language=JSON
   def ddOk: JsValue = Json.parse(

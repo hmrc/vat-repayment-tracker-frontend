@@ -19,11 +19,11 @@ package pages
 import java.io.{FileInputStream, FileOutputStream}
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 import org.openqa.selenium.{By, OutputType, TakesScreenshot, WebDriver}
 import org.scalatest.Assertion
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.selenium.WebBrowser
+import org.scalatestplus.selenium.WebBrowser.xpath
 import play.api.Logger
 import support.RichMatchers
 
@@ -104,6 +104,9 @@ trait CommonPage
 
   def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
 
+  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(_.findElement(By.id("back-link"))
+    .getAttribute("href"))
+
   def readMainMessage(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
 
   def readAccName(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
@@ -130,6 +133,26 @@ trait CommonPage
     probing(_.getPageSource.contains(text))
   }
 
+  def readMain()(implicit webDriver: WebDriver): String = xpath("""//*[@id="content"]""").element.text
+
+  def assertContentMatchesExpectedLines(expectedLines: List[String])(implicit wd: WebDriver): Unit = {
+    val content = readMain().stripSpaces().replaceAll("\n", " ")
+    expectedLines.foreach { expectedLine =>
+      withClue(s"\nThe page content should include '$expectedLine'") {
+        content should include(expectedLine)
+      }
+    }
+  }
+
+  def hasTextHyperLinkedTo(text: String, link: String)(implicit webDriver: WebDriver): Assertion = {
+    probing(_.findElement(By.partialLinkText(text))
+      .getAttribute("href")) shouldBe link
+  }
+
+  def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion = {
+    readBackButtonUrl() shouldBe url
+  }
+
   def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
     true
@@ -140,6 +163,21 @@ trait CommonPage
   def formatDate(date: LocalDate): String = {
     val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
     date.format(pattern1)
+  }
+
+  implicit class StringOps(s: String) {
+    /**
+     * Transforms string so it's easier it to compare.
+     * It also replaces `unchecked`
+     *
+     */
+    def stripSpaces(): String = s
+      .replaceAll("unchecked", "") //when you run tests from intellij webdriver.getText adds extra 'unchecked' around selection
+      .replaceAll("[^\\S\\r\\n]+", " ") //replace many consecutive white-spaces (but not new lines) with one space
+      .replaceAll("[\r\n]+", "\n") //replace many consecutive new lines with one new line
+      .split("\n").map(_.trim) //trim each line
+      .filterNot(_ == "") //remove any empty lines
+      .mkString("\n")
   }
 
 }

@@ -18,14 +18,14 @@ package controllers
 
 import model.des.RiskingStatus.INITIAL
 import model.EnrolmentKeys
-import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, DeregisteredBehaviour, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses}
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.test.Helpers.status
 
 import java.time.LocalDate
 
-class ManageOrTrackControllerSpec extends ItSpec {
+class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
   import support.VatData.{vrn, periodKey}
 
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
@@ -44,8 +44,11 @@ class ManageOrTrackControllerSpec extends ItSpec {
       val result = controller.manageOrTrackVrt(fakeRequest)
       status(result) shouldBe Status.OK
     }
+    "deregistered redirected to 'vrt vat registration cancelled' page" in {
+      assertDeregisteredRedirectedIn(controller.manageOrTrackVrt, vrn)
+    }
   }
-  "GET /manage-or-track/vrn/:vrn" - {
+  "GET /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn" - {
     "shows vrt for 'Manage or track' no-mtd" in {
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
@@ -56,7 +59,9 @@ class ManageOrTrackControllerSpec extends ItSpec {
       val result = controller.manageOrTrack(vrn)(fakeRequest)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result) shouldBe Some(nonMtdUserPageUrl)
-
+    }
+    "deregistered redirected to 'vrt vat registration cancelled' page" in {
+      assertDeregisteredRedirectedIn(controller.manageOrTrack(vrn), vrn)
     }
   }
 

@@ -18,6 +18,8 @@ package model.des
 
 import play.api.libs.json._
 
+import java.time.LocalDate
+
 final case class CustomerInformation(approvedInformation: Option[ApprovedInformation], inFlightInformation: Option[InFlightInformation]) {
   val approvedInformationExists: Boolean = approvedInformation.isDefined
   val inFlightInformationExists: Boolean = inFlightInformation.isDefined
@@ -47,6 +49,13 @@ final case class CustomerInformation(approvedInformation: Option[ApprovedInforma
     } yield isPartialMigration
   }.getOrElse(false)
 
+  val isDeregistered: Boolean = {
+    for {
+      approved <- approvedInformation
+      deregistration <- approved.deregistration
+    } yield deregistration.deregistrationReason.nonEmpty
+  }.getOrElse(false)
+
 }
 
 object CustomerInformation {
@@ -71,7 +80,8 @@ final case class ApprovedInformation
   (
     customerDetails: Option[CustomerDetails],
     bankDetails:     Option[BankDetails],
-    PPOB:            Option[PPOB]
+    PPOB:            Option[PPOB],
+    deregistration:  Option[Deregistration]  = None
 ) {
 
   val bankDetailsExist: Boolean = bankDetails match {
@@ -103,6 +113,16 @@ final case class PPOB(address: Option[Address])
 
 object PPOB {
   implicit val format: OFormat[PPOB] = Json.format[PPOB]
+}
+
+final case class Deregistration(
+    deregistrationReason:     Option[String],
+    effectDateOfCancellation: Option[LocalDate],
+    lastReturnDueDate:        Option[LocalDate]
+)
+
+object Deregistration {
+  implicit val format: OFormat[Deregistration] = Json.format[Deregistration]
 }
 
 final case class Address(

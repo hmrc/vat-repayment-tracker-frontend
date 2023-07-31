@@ -45,6 +45,16 @@ class CustomerInformationSpec extends UnitSpec {
     DesData.approvedCustomerInformation.PPOBDetailsChangeIndicatorExists shouldBe None
   }
 
+  "Deregistration data included" - {
+    "to json" in {
+      Json.toJson(DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered) shouldBe DesData.approvedInformationDeregisteredJson
+
+    }
+    "from json" in {
+      DesData.approvedInformationDeregisteredJson.as[CustomerInformation] shouldBe DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered
+    }
+  }
+
   "empty bankdetails should be false" in {
     val bd = BankDetails(None, None, None)
     bd.detailsExist shouldBe false
@@ -72,5 +82,22 @@ class CustomerInformationSpec extends UnitSpec {
   "acc no and sortCode should be true" in {
     val bd = BankDetails(None, Some("AA"), Some("123456"))
     bd.detailsExist shouldBe true
+  }
+
+  "Deregistration" - {
+    "empty Deregistration data should NOT be deregistered" in {
+      DesData.approvedCustomerInformation
+        .isDeregistered shouldBe false
+    }
+
+    "Deregistration data with deregisteredReason should be deregistered" in {
+      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered
+        .isDeregistered shouldBe true
+    }
+
+    "Deregistration data with NO deregisteredReason should NOT be deregistered" in {
+      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregisteredNoReason
+        .isDeregistered shouldBe false
+    }
   }
 }

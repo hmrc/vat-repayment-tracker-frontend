@@ -1,0 +1,60 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.ViewConfig
+
+@this(
+mainTemplate: views.html.main_template,
+viewsHelpers: views.ViewsHelpers,
+viewConfig: ViewConfig
+)
+
+@(
+)(
+implicit
+request: Request[_],
+message: Messages
+)
+
+
+
+@mainTemplate(title = message("vrt_vat_registration_cancelled.title"), timeoutDialog = false, backButtonUrl = Some(Call("GET", viewConfig.viewVatAccount))) {
+
+<div class="govuk-grid-row govuk-!-padding-bottom-1">
+        <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-3">
+            <h1 id="main-message"  class="govuk-heading-xl">@message("vrt_vat_registration_cancelled.title")</h1>
+
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p1"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p2"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p3"))</p>
+
+            <h2 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.extra_support.header")</h2>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p1"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p2"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p3"))</p>
+
+            <h3 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.before_you_call.header")</h3>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@message("vrt_vat_registration_cancelled.before_you_call.l1")</li>
+                <li>@message("vrt_vat_registration_cancelled.before_you_call.l2")</li>
+            </ul>
+
+        </div>
+
+
+    </div>
+
+}
