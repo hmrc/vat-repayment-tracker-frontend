@@ -43,17 +43,12 @@ class AuthenticatedAction @Inject() (
   private val logger = Logger(this.getClass)
 
   private def isPartial(customer: Option[CustomerInformation]): Boolean = {
-    if (viewConfig.isShuttered) Future.successful(false)
-    customer match {
-      case Some(x) => x.isPartiallyMigrated
-      case None    => false
-    }
-  }
-
-  private def isDeregistered(customer: Option[CustomerInformation]): Boolean = {
-    customer match {
-      case Some(x) => x.isDeregistered
-      case None    => false
+    if (viewConfig.isShuttered) false
+    else {
+      customer match {
+        case Some(x) => x.isPartiallyMigrated
+        case None    => false
+      }
     }
   }
 
@@ -81,9 +76,10 @@ class AuthenticatedAction @Inject() (
 
       orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
 
-        if (isDeregistered(customer)) throw new DeregistrationException
-
-        else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
+        if (customer.exists(_.isDeregistered)) {
+          logger.debug(s"Unauthorised because VAT registration cancelled")
+          Future(Redirect(routes.Controller.deregistered.url))
+        } else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
           block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
         } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
       }
@@ -94,16 +90,10 @@ class AuthenticatedAction @Inject() (
       case e: AuthorisationException =>
         logger.debug(s"Unauthorised because of ${e.reason}, $e")
         Redirect(routes.Controller.nonMtdUser.url)
-      case e: DeregistrationException =>
-        logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        Redirect(routes.Controller.deregistered.url)
     }
   }
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def executionContext: ExecutionContext = cc.executionContext
-
-  case class DeregistrationException(reason: String = "VAT registration cancelled") extends RuntimeException(reason)
-
 }

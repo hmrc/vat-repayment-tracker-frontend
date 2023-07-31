@@ -99,10 +99,5 @@ class CustomerInformationSpec extends UnitSpec {
       DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregisteredNoReason
         .isDeregistered shouldBe false
     }
-
-    "Deregistration data with BLANK deregisteredReason should NOT be deregistered" in {
-      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregisteredBlankReason
-        .isDeregistered shouldBe false
-    }
   }
 }

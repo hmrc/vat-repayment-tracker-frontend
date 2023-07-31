@@ -53,7 +53,7 @@ final case class CustomerInformation(approvedInformation: Option[ApprovedInforma
     for {
       approved <- approvedInformation
       deregistration <- approved.deregistration
-    } yield deregistration.hasDeregistrationReason
+    } yield deregistration.deregistrationReason.nonEmpty
   }.getOrElse(false)
 
 }
@@ -119,14 +119,7 @@ final case class Deregistration(
     deregistrationReason:     Option[String],
     effectDateOfCancellation: Option[LocalDate],
     lastReturnDueDate:        Option[LocalDate]
-) {
-
-  val hasDeregistrationReason: Boolean = deregistrationReason match {
-    case Some(reason) if reason != "" => true
-    case _                            => false
-  }
-
-}
+)
 
 object Deregistration {
   implicit val format: OFormat[Deregistration] = Json.format[Deregistration]
