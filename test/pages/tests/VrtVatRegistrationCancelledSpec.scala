@@ -16,7 +16,9 @@
 
 package pages.tests
 
+import langswitch.Languages.Welsh
 import model.{EnrolmentKeys, Vrn}
+import org.scalatest.Assertion
 import pages.VrtVatRegistrationCancelledPage
 import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, PaymentsOrchestratorStub}
 
@@ -27,29 +29,21 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
   "When deregistered for VAT redirect to 'VRT VAT Registration Cancelled' page from" - {
     "GET /vat-repayment-tracker-frontend/show-results/vrn/:vrn" in {
       testSetup(s"/vat-repayment-tracker-frontend/show-results/vrn/$vrn")
-      VrtVatRegistrationCancelledPage.assertPageIsDisplayed
-      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
-      VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo(viewConfig.viewVatAccount)
+      testPage()
+
     }
     "GET /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn" in {
       testSetup(s"/vat-repayment-tracker-frontend/manage-or-track/vrn/$vrn")
-      VrtVatRegistrationCancelledPage.assertPageIsDisplayed
-      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
-      VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo(viewConfig.viewVatAccount)
+      testPage()
     }
     "GET /vat-repayment-tracker/view-repayment-account" in {
       testSetup("/vat-repayment-tracker/view-repayment-account")
-      VrtVatRegistrationCancelledPage.assertPageIsDisplayed
-      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
-      VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo(viewConfig.viewVatAccount)
+      testPage()
     }
     "GET /vat-repayment-tracker/manage-or-track-vrt" in {
       testSetup("/vat-repayment-tracker/manage-or-track-vrt")
-      VrtVatRegistrationCancelledPage.assertPageIsDisplayed
-      VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed
-      VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo(viewConfig.viewVatAccount)
+      testPage()
     }
-
   }
 
   private def testSetup(path: String): Unit = {
@@ -62,6 +56,16 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     PaymentsOrchestratorStub.customerDataOkDeregistered(vrn)
     login()
     goToViaPath(path)
+  }
+
+  private def testPage(): Assertion = {
+    VrtVatRegistrationCancelledPage.clickOnWelshLink()
+    VrtVatRegistrationCancelledPage.assertPageIsDisplayed(Welsh)
+    VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed(Welsh)
+    VrtVatRegistrationCancelledPage.clickOnEnglishLink()
+    VrtVatRegistrationCancelledPage.assertPageIsDisplayed()
+    VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed()
+    VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo(viewConfig.viewVatAccount)
   }
 
 }

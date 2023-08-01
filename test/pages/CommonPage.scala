@@ -55,6 +55,10 @@ trait CommonPage
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
+  def clickOnEnglishLink()(implicit driver: WebDriver): Unit = probing(_.findElement(By.partialLinkText("English")).click())
+
+  def clickOnWelshLink()(implicit driver: WebDriver): Unit = probing(_.findElement(By.partialLinkText("Cymraeg")).click())
+
   def clickViewProgress()(implicit driver: WebDriver): Unit =
     probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[4]/a")).click())
 

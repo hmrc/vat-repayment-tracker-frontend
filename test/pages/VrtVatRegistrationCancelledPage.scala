@@ -16,6 +16,8 @@
 
 package pages
 
+import langswitch.Language
+import langswitch.Languages.{English, Welsh}
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
@@ -24,16 +26,29 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
   val path: String = "/vat-repayment-tracker/vrt-vat-registration-cancelled"
   val backButtonUrl: String = ""
 
-  def assertPageIsDisplayed(implicit wd: WebDriver): Unit = {
-    currentPath shouldBe path
-    readTitle shouldBe "You cannot use this service - Business tax account - GOV.UK"
-    readMainMessage shouldBe "You cannot use this service"
-    assertContentMatchesExpectedLines(Expected.mainText)
+  def expectedTitle(language: Language): String = language match {
+    case English => "You cannot use this service - Business tax account - GOV.UK"
+    case Welsh   => "Ni allwch ddefnyddio’r gwasanaeth hwn - Cyfrif treth busnes - GOV.UK"
   }
 
-  def assertHyperLinkedTextDisplayed(implicit wd: WebDriver): Assertion = {
+  def expectedMainMessage(language: Language): String = language match {
+    case English => "You cannot use this service"
+    case Welsh   => "Ni allwch ddefnyddio’r gwasanaeth hwn"
+  }
+
+  def assertPageIsDisplayed(language: Language = English)(implicit wd: WebDriver): Unit = {
+    currentPath shouldBe path
+    readTitle shouldBe expectedTitle(language)
+    readMainMessage shouldBe expectedMainMessage(language)
+    assertContentMatchesExpectedLines(Expected.MainText()(language))
+  }
+
+  def assertHyperLinkedTextDisplayed(language: Language = English)(implicit wd: WebDriver): Assertion = {
     hasTextHyperLinkedTo(
-      "deal with HMRC if you need some help",
+      language match {
+        case English => "deal with HMRC if you need some help"
+        case Welsh   => "ddelio â CThEF os oes angen help arnoch chi"
+      },
       "https://www.gov.uk/get-help-hmrc-extra-support"
     )
     hasTextHyperLinkedTo(
@@ -43,18 +58,40 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
   }
 
   object Expected {
-    val mainText: List[String] = List(
-      "You cannot use this service",
-      "You cannot use the track your VAT repayments service because your VAT registration has been cancelled.",
-      "Call us on 0300 200 3835 if you cannot track VAT repayments online.",
-      "Our opening times are Monday to Friday, 8am to 6pm. We are closed on weekends and bank holidays.",
-      "If you need extra support",
-      "Find out the different ways to deal with HMRC if you need some help.",
-      "You can also use Relay UK if you cannot hear or speak on the phone: dial 18001 then 0345 300 3900.",
-      "If you are outside the UK: +44 2890 538 192",
-      "Before you call, make sure you have:",
-      "your VAT registration number. This is 9 numbers, for example, 123456789",
-      "your bank details"
-    )
+
+    object MainText {
+      def apply()(implicit language: Language): List[String] = language match {
+        case English => mainTextEnglish
+        case Welsh   => mainTextWelsh
+      }
+
+      val mainTextEnglish: List[String] = List(
+        "You cannot use this service",
+        "You cannot use the track your VAT repayments service because your VAT registration has been cancelled.",
+        "Call us on 0300 200 3835 if you cannot track VAT repayments online.",
+        "Our opening times are Monday to Friday, 8am to 6pm. We are closed on weekends and bank holidays.",
+        "If you need extra support",
+        "Find out the different ways to deal with HMRC if you need some help.",
+        "You can also use Relay UK if you cannot hear or speak on the phone: dial 18001 then 0345 300 3900.",
+        "If you are outside the UK: +44 2890 538 192",
+        "Before you call, make sure you have:",
+        "your VAT registration number. This is 9 numbers, for example, 123456789",
+        "your bank details"
+      )
+
+      val mainTextWelsh: List[String] = List(
+        "Ni allwch ddefnyddio’r gwasanaeth hwn",
+        "Ni allwch ddefnyddio’r gwasanaeth dilyn hynt eich ad-daliadau TAW oherwydd bod eich cofrestriad TAW wedi’i ganslo.",
+        "Os na allwch ddilyn hynt eich ad-daliadau TAW ar-lein, ffoniwch ni ar 0300 200 3705.",
+        "Ein horiau agor yw Dydd Llun i Ddydd Gwener, 08:30 i 17:00. Rydym ar gau ar benwythnosau a gwyliau banc.",
+        "Os oes angen cymorth ychwanegol arnoch chi",
+        "Dysgwch am y ffyrdd gwahanol o ddelio â CThEF os oes angen help arnoch chi.",
+        "Gallwch hefyd ddefnyddio Relay UK os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0345 300 3900. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw.",
+        "Os ydych y tu allan i’r DU: +44 300 200 1900",
+        "Cyn i chi ffonio, sicrhewch fod gennych y canlynol:",
+        "eich rhif TAW. Mae hyn yn cynnwys 9 o gymeriadau, er enghraifft, 123456789",
+        "eich manylion banc"
+      )
+    }
   }
 }
