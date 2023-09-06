@@ -22,7 +22,7 @@ object AppDependencies {
     "com.typesafe.play"      %% "play-test"              % current,
     "org.pegdown"            % "pegdown"                 % "1.6.0" ,
     "org.scalatestplus.play" %% "scalatestplus-play"     % "5.1.0",
-    "com.github.tomakehurst" % "wiremock-standalone"     % "3.0.1",
+    "org.wiremock"           % "wiremock-standalone"     % "3.0.3",
     "com.vladsch.flexmark"   % "flexmark-all"            % "0.64.8"
     // FORMAT: ON
   ).map(_ % Test)
