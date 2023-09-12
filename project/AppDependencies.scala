@@ -3,7 +3,7 @@ import sbt._
 
 object AppDependencies {
 
-  val bootstrapVersion = "7.21.0"
+  val bootstrapVersion = "7.22.0"
 
   val compile = Seq(
     // FORMAT: OFF
@@ -17,12 +17,12 @@ object AppDependencies {
   val test = Seq(
     // FORMAT: OFF
     "uk.gov.hmrc"            %% "bootstrap-test-play-28" % bootstrapVersion,
-    "org.scalatest"          %% "scalatest"              % "3.2.16",
+    "org.scalatest"          %% "scalatest"              % "3.2.17",
     "org.jsoup"              % "jsoup"                   % "1.16.1",
     "com.typesafe.play"      %% "play-test"              % current,
     "org.pegdown"            % "pegdown"                 % "1.6.0" ,
     "org.scalatestplus.play" %% "scalatestplus-play"     % "5.1.0",
-    "org.wiremock"           % "wiremock-standalone"     % "3.0.3",
+    "org.wiremock"           % "wiremock-standalone"     % "3.0.4",
     "com.vladsch.flexmark"   % "flexmark-all"            % "0.64.8"
     // FORMAT: ON
   ).map(_ % Test)
