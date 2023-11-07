@@ -27,7 +27,7 @@ import support._
 class ViewProgressSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path = "/vat-repayment-tracker/show-vrt"
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
@@ -215,51 +215,75 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+  }
 
+  "the lastUpdateReceivedDate should determine the main message and the amount shown" in {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+
+    val today = LocalDate.now().toString
+    val oneDayAgo = LocalDate.now().minusDays(1).toString
+    val twoDaysAgo = LocalDate.now().minusDays(2).toString
+
+    PaymentsOrchestratorStub.repaymentDetailS3(vrn, twoDaysAgo, INITIAL, today, REPAYMENT_APPROVED, oneDayAgo, SENT_FOR_RISKING)
+    VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, twoDaysAgo, INITIAL, today, REPAYMENT_APPROVED, oneDayAgo, SENT_FOR_RISKING, PeriodKey("18AG"))
+
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+
+    login()
+    goToViaPath(path)
+
+    InProgress.clickViewProgress()
+
+    ViewProgress.checkMainMessage("Your repayment has been approved")
+    ViewProgress.checkAmount("£4.56")
   }
 
   private def setup(
-      useBankDetails: Boolean       = true,
-      inPast:         Boolean       = false,
-      status1:        RiskingStatus = INITIAL,
-      status2:        RiskingStatus = CLAIM_QUERIED,
-      status3:        RiskingStatus = REPAYMENT_ADJUSTED, rdsp: Int,
+      useBankDetails:   Boolean       = true,
+      inPast:           Boolean       = false,
+      status1:          RiskingStatus = INITIAL,
+      status2:          RiskingStatus = CLAIM_QUERIED,
+      status3:          RiskingStatus = REPAYMENT_ADJUSTED,
+      rdsp:             Int,
       periodKey:        PeriodKey,
       ft:               Int,
-      periodKeyBackend: PeriodKey = PeriodKey("18AG")): Unit =
-    {
-      VatRepaymentTrackerBackendWireMockResponses.storeOk()
-      AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-      if (useBankDetails) {
-        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-      } else {
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-      }
-      val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
-      rdsp match {
-        case 1 =>
-          PaymentsOrchestratorStub.repaymentDetailS1(vrn, date.toString, status1, periodKey)
-          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date.toString, status1, periodKeyBackend)
-        case 2 =>
-          PaymentsOrchestratorStub.repaymentDetailS2(vrn, date.toString, status1, status2)
-          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date.toString, status1, status2, periodKey)
-        case 3 =>
-          PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
-          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date.toString, status1, status2, status3, periodKey)
-        case 4 =>
-          PaymentsOrchestratorStub.repaymentDetailS3(vrn, date.toString, status1, status2, status3)
-          VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS4(vrn, date.toString, status1, status2, status3, periodKey)
-      }
-
-      ft match {
-        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
-        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
-        case other       => throw new IllegalArgumentException(s"no ft match for $other")
-      }
-
-      login()
-      goToViaPath(path)
+      periodKeyBackend: PeriodKey     = PeriodKey("18AG")
+  ): Unit = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    if (useBankDetails) {
+      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    } else {
+      PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
     }
+    val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
+    rdsp match {
+      case 1 =>
+        PaymentsOrchestratorStub.repaymentDetailS1(vrn, date, status1, periodKey)
+        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date, status1, periodKeyBackend)
+      case 2 =>
+        PaymentsOrchestratorStub.repaymentDetailS2(vrn, date, status1, status2)
+        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS2(vrn, date, status1, status2, periodKey)
+      case 3 =>
+        PaymentsOrchestratorStub.repaymentDetailS3(vrn, date, status1, status2, status3)
+        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS3(vrn, date, status1, status2, status3, periodKey)
+      case 4 =>
+        PaymentsOrchestratorStub.repaymentDetailS3(vrn, date, status1, status2, status3)
+        VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS4(vrn, date, status1, status2, status3, periodKey)
+    }
+
+    ft match {
+      case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+      case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+      case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+      case other       => throw new IllegalArgumentException(s"no ft match for $other")
+    }
+
+    login()
+    goToViaPath(path)
+  }
 }

@@ -33,13 +33,16 @@ package pages.tests
  */
 
 import model.{EnrolmentKeys, Vrn}
+import org.openqa.selenium.By
 import pages._
 import support._
+
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 class CompletedSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path = s"/vat-repayment-tracker/show-vrt"
 
   val ft_404: Int = 1
   val ft_credit: Int = 2
@@ -77,6 +80,21 @@ class CompletedSpec extends BrowserSpec {
 
   "6. multiple completed " in {
     setup(partialBankDetails = true, singleRepayment = false)
+    Completed.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true, period = "1 January to 31 January 2018")
+
+    Completed.readRowForPeriod("18AA") shouldBe Seq(
+      "01 Jan 2001", "1 January to 31 January 2018", "£6.56", "View history View history for accounting period 1 January to 31 January 2018"
+    )
+    Completed.readRowForPeriod("18AD") shouldBe Seq(
+      "01 Jan 2001", "1 April to 30 April 2018", "£6.56", "View history View history for accounting period 1 April to 30 April 2018"
+    )
+    Completed.readRowForPeriod("18AG") shouldBe Seq(
+      "01 Jan 2001", "1 July to 31 July 2018", "£6.56", "View history View history for accounting period 1 July to 31 July 2018"
+    )
+    Completed.readRowForPeriod("18AJ") shouldBe Seq(
+      "01 Jan 2001", "1 October to 31 October 2018", "£5.56", "View history View history for accounting period 1 October to 31 October 2018"
+    )
+
     Completed.uniqueToPage
     Completed.viewProgressLink
   }

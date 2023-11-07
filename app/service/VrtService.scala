@@ -19,23 +19,21 @@ package service
 import java.time.LocalDate
 import connectors.VatRepaymentTrackerBackendConnector
 import formaters.{DesFormatter, PeriodFormatter}
+
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model._
-import model.des.RiskingStatus.CLAIM_QUERIED
+import model.des.RiskingStatus.{CLAIM_QUERIED, REPAYMENT_APPROVED}
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.Request
-
-import scala.concurrent.ExecutionContext
 
 @Singleton
 class VrtService @Inject() (
     vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
     periodFormatter:                     PeriodFormatter,
     desFormatter:                        DesFormatter
-)
-  (implicit ec: ExecutionContext) {
+) {
 
   private val logger = Logger(this.getClass)
 
@@ -61,7 +59,7 @@ class VrtService @Inject() (
         //if something is completed, remove from the current list
         AllRepaymentData(
           hasSuspendedPayment,
-          currentData.filterNot(completed.contains(_)),
+          currentData.filterNot(current => completed.exists(comp => current.periodKey == comp.periodKey && current.returnCreationDate == comp.returnCreationDate)),
           completed
         )
       case None => dealWithNodata
@@ -74,7 +72,12 @@ class VrtService @Inject() (
     for {
       rd <- repaymentDetails
       if !outDatedPredicate(rd, financialData)
-    } yield RepaymentData(periodFormatter.formatPeriodKey(rd.periodKey), if (rd.riskingStatus == CLAIM_QUERIED) rd.originalPostingAmount else rd.vatToPay_BOX5, rd.returnCreationDate, rd.riskingStatus, rd.periodKey)
+    } yield RepaymentData(
+      periodFormatter.formatPeriodKey(rd.periodKey),
+      if (rd.riskingStatus == CLAIM_QUERIED || rd.riskingStatus == REPAYMENT_APPROVED) rd.originalPostingAmount else rd.vatToPay_BOX5,
+      rd.returnCreationDate,
+      rd.riskingStatus,
+      rd.periodKey)
 
   }
 
