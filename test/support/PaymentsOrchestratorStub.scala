@@ -106,6 +106,12 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.repaymentDetails3(date, status1, status2, status3).toString())))
 
+  def repaymentDetailS3(vrn: Vrn, date1: String, status1: RiskingStatus, date2: String, status2: RiskingStatus, date3: String, status3: RiskingStatus): StubMapping =
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(DesData.repaymentDetails3(date1, status1, date2, status2, date3, status3).toString())))
+
   def repaymentDetailS4(vrn: Vrn, date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()

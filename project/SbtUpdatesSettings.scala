@@ -9,7 +9,10 @@ object SbtUpdatesSettings {
     dependencyUpdatesFailBuild := true,
     (Compile / compile) := ((Compile / compile) dependsOn dependencyUpdates).value,
     dependencyUpdatesFilter -= moduleFilter("org.scala-lang"),
-    dependencyUpdatesFilter -= moduleFilter("com.typesafe.play")
+    dependencyUpdatesFilter -= moduleFilter("com.typesafe.play"),
+    // locked by version of play
+    dependencyUpdatesFilter -= moduleFilter("org.scalatestplus.play", "scalatestplus-play")
+
   )
 
 }

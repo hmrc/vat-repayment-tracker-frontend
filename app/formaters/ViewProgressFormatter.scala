@@ -25,19 +25,17 @@ import model.des._
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.{Request, Result, Results}
-import req.RequestSupport
-
-import scala.concurrent.ExecutionContext
 
 @Singleton
 class ViewProgressFormatter @Inject() (
     view_progress:   views.html.view_progress,
-    requestSupport:  RequestSupport,
     desFormatter:    DesFormatter,
     viewConfig:      ViewConfig,
-    periodFormatter: PeriodFormatter)(implicit ec: ExecutionContext) extends Results {
+    periodFormatter: PeriodFormatter) extends Results {
 
   private val logger = Logger(this.getClass)
+
+  private val localDateDescendingOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
 
   def computeViewProgress(
       vrn:           Vrn,
@@ -53,20 +51,29 @@ class ViewProgressFormatter @Inject() (
     val returnCreditChargeExists = desFormatter.getReturnCreditChargeExists(financialData, periodKey)
     val returnDebitChargeExists = desFormatter.getReturnDebitChargeExists(financialData, periodKey)
 
-    // ** For the KNOZ error (showing £0.00) I think the vrd data is not ordered and need to be sorted, something like this:
-    //    implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
-    //    val vrd = vrd1.sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
+    val latestUpdate =
+      vrd.sortBy(_.repaymentDetailsData.lastUpdateReceivedDate)(Ordering.Option(localDateDescendingOrdering))
+        .headOption
+        .getOrElse(throw new Exception("Could not find any repayment progress items"))
+    val latestRiskingStatus = latestUpdate.repaymentDetailsData.riskingStatus
 
-    val estRepaymentDate = getEstimatedRepaymentDate(vrd(0).repaymentDetailsData.returnCreationDate, vrd(0).repaymentDetailsData.supplementDelayDays)
+    val estRepaymentDate = getEstimatedRepaymentDate(latestUpdate.repaymentDetailsData.returnCreationDate, latestUpdate.repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
-      if (vrd(0).repaymentDetailsData.riskingStatus == CLAIM_QUERIED) vrd(0).repaymentDetailsData.originalPostingAmount else vrd(0).repaymentDetailsData.vatToPay_BOX5,
-      vrd(0).repaymentDetailsData.returnCreationDate,
+      if (latestRiskingStatus == CLAIM_QUERIED || latestRiskingStatus == REPAYMENT_APPROVED) latestUpdate.repaymentDetailsData.originalPostingAmount
+      else latestUpdate.repaymentDetailsData.vatToPay_BOX5,
+      latestUpdate.repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
       periodFormatter.formatPeriodKey(periodKey.value),
       computeWhatsHappenedSoFarList(estRepaymentDate, vrd, bankDetailsExist, returnCreditChargeExists, addressDetails, bankDetails, returnDebitChargeExists))
 
-    if (viewProgress.amount == 0 && vrd(0).repaymentDetailsData.riskingStatus != CLAIM_QUERIED) {
-      logger.warn(s"KNOZ: zero amount- riskingStatus: ${vrd(0).repaymentDetailsData.riskingStatus}, lst: ${vrd.map(a => s"[Status ${a.repaymentDetailsData.riskingStatus}, origAmt: ${a.repaymentDetailsData.originalPostingAmount} BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[", ",", "]")}  viewProgress=$viewProgress")
+    if (viewProgress.amount == 0 && latestRiskingStatus != CLAIM_QUERIED) {
+      logger.warn(s"KNOZ: zero amount- riskingStatus: ${latestRiskingStatus.toString}, " +
+        s"lst: ${
+          vrd.map(a => s"[Status ${a.repaymentDetailsData.riskingStatus}, " +
+            s"origAmt: ${a.repaymentDetailsData.originalPostingAmount} " +
+            s"BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[", ",", "]")
+        }  " +
+        s"viewProgress=$viewProgress")
     }
 
     Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
@@ -90,7 +97,10 @@ class ViewProgressFormatter @Inject() (
 
     //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
 
-    val nonCompleteRows: List[WhatsHappendSoFar] = desFormatter.addMissingStatus(vrd).sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate)).map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
+    val nonCompleteRows: List[WhatsHappendSoFar] =
+      desFormatter.addMissingStatus(vrd)
+        .sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
+        .map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
 
     val completedCreditRows: List[WhatsHappendSoFar] = if (returnCreditChargeExists)
       vrd.filter(f => f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)

@@ -254,7 +254,17 @@ object DesData {
              "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 1,
              "originalPostingAmount": 5.56
-          }
+          },
+          {
+                 "returnCreationDate": "2001-01-01",
+                 "sentForRiskingDate": "2001-01-01",
+                 "lastUpdateReceivedDate": "2001-01-01",
+                 "periodKey": "18AJ",
+                 "riskingStatus": "INITIAL",
+                 "vatToPay_BOX5": 6.56,
+                 "supplementDelayDays": 1,
+                 "originalPostingAmount": 5.56
+           }
         ]""".stripMargin
   )
 
@@ -928,6 +938,56 @@ object DesData {
         ]""".stripMargin
   )
 
+  def storedRepaymentDetails3(date1: String, status1: RiskingStatus, date2: String, status2: RiskingStatus, date3: String, status3: RiskingStatus): JsValue = Json.parse(
+    s"""[
+               {
+                 "_id":"5db1c9826b00005f47616c61",
+                 "creationDate":"$date1",
+                 "vrn":"101747008",
+                 "repaymentDetailsData":{
+                   "returnCreationDate":"$date1",
+                   "sentForRiskingDate":"$date1",
+                   "lastUpdateReceivedDate":"$date1",
+                   "periodKey":"18AG",
+                   "riskingStatus":"$status1",
+                   "vatToPay_BOX5":1.23,
+                   "supplementDelayDays":6,
+                   "originalPostingAmount":2.34
+                 }
+               },
+               {
+                 "_id":"5db1c9826b00005f47616c62",
+                 "creationDate":"$date2",
+                 "vrn":"101747008",
+                 "repaymentDetailsData":{
+                   "returnCreationDate":"$date2",
+                   "sentForRiskingDate":"$date2",
+                   "lastUpdateReceivedDate":"$date2",
+                   "periodKey":"18AG",
+                   "riskingStatus":"$status2",
+                   "vatToPay_BOX5":3.45,
+                   "supplementDelayDays":6,
+                   "originalPostingAmount":4.56
+                 }
+               },
+               {
+                 "_id":"5db1c9826b00005f47616c63",
+                 "creationDate":"$date3",
+                 "vrn":"101747008",
+                 "repaymentDetailsData":{
+                   "returnCreationDate":"$date3",
+                   "sentForRiskingDate":"$date3",
+                   "lastUpdateReceivedDate":"2019-10-24",
+                   "periodKey":"18AG",
+                   "riskingStatus":"$status3",
+                   "vatToPay_BOX5":5.67,
+                   "supplementDelayDays":6,
+                   "originalPostingAmount":6.78
+                 }
+               }
+          ]""".stripMargin
+  )
+
   //language=JSON
   def storedRepaymentDetails4(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
     s"""[
@@ -1048,6 +1108,42 @@ object DesData {
              "returnCreationDate": "$date",
              "sentForRiskingDate": "$date",
              "lastUpdateReceivedDate": "$date",
+             "periodKey": "18AG",
+             "riskingStatus": "$status3",
+             "vatToPay_BOX5": 6.56,
+             "supplementDelayDays": 6,
+             "originalPostingAmount": 5.56
+         }
+      ]""".stripMargin
+  )
+
+  //language=JSON
+  def repaymentDetails3(date1: String, status1: RiskingStatus, date2: String, status2: RiskingStatus, date3: String, status3: RiskingStatus): JsValue = Json.parse(
+    s"""[
+          {
+             "returnCreationDate": "$date1",
+             "sentForRiskingDate": "$date1",
+             "lastUpdateReceivedDate": "$date1",
+             "periodKey": "18AG",
+             "riskingStatus": "$status1",
+             "vatToPay_BOX5": 6.56,
+             "supplementDelayDays": 6,
+             "originalPostingAmount": 5.56
+         },
+         {
+            "returnCreationDate": "$date2",
+            "sentForRiskingDate": "$date2",
+            "lastUpdateReceivedDate": "$date2",
+            "periodKey": "18AG",
+            "riskingStatus": "$status2",
+            "vatToPay_BOX5": 6.56,
+            "supplementDelayDays": 6,
+            "originalPostingAmount": 5.56
+        },
+        {
+             "returnCreationDate": "$date3",
+             "sentForRiskingDate": "$date3",
+             "lastUpdateReceivedDate": "$date3",
              "periodKey": "18AG",
              "riskingStatus": "$status3",
              "vatToPay_BOX5": 6.56,
