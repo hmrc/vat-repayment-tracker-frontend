@@ -3,6 +3,3 @@
 ->         /vat-repayment-tracker-frontend   deprecated.Routes
 
 ->         /                          health.Routes
-
-
-GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
