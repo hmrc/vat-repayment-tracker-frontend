@@ -21,6 +21,8 @@ import model.des.RiskingStatus._
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
+import org.openqa.selenium.WebDriver
+import pages.ViewProgress.ProgressTimelineItem
 import pages.{InProgress, ViewProgress}
 import support._
 
@@ -41,6 +43,10 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.backExists()
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem("Checking amount", "21 Nov 2023", List("We received your return and are now checking the repayment amount we owe you."))
+    )
   }
 
   "id: 2 , add in INITIAL status (CLAIM QUERIED)" in {
@@ -53,6 +59,19 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "21 Nov 2023",
+        List("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
@@ -65,6 +84,19 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "21 Nov 2023",
+        List("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
@@ -77,6 +109,22 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is delayed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Estimated repayment date has passed",
+        "02 Oct 2023",
+        List(
+          "You do not need to do anything right now. We are working on repaying you as soon as possible.",
+          "We have sent you a letter to explain that your repayment is delayed."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "02 Oct 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 3 , REPAYMENT_ADJUSTED" in {
@@ -90,6 +138,23 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment amount changed",
+        "21 Nov 2023",
+        List(
+          "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
+            "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
+          "If you do not receive a letter in the next 7 days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 5, ADJUSMENT_TO_TAX_DUE" in {
@@ -103,6 +168,22 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("You need to make a VAT payment")
     ViewProgress.payUrl(expectedValue = true)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "You now owe HMRC",
+        "21 Nov 2023",
+        List(
+          "We calculated that the original amount of £5.56 you claimed was incorrect. You now owe HMRC £6.56. We sent " +
+            "you a letter with the reason for this change."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 6, REPAYMENT_APPROVED" in {
@@ -116,6 +197,19 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment approved",
+        "21 Nov 2023",
+        List("This will reach your repayment bank account in 3 workings days.")
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists" in {
@@ -129,6 +223,72 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "21 Nov 2023",
+        List(
+          "We sent an adjusted payment of £6.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment amount changed",
+        "21 Nov 2023",
+        List(
+          "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
+            "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
+          "If you do not receive a letter in the next 7 days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
+  "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists AND no bank details" in {
+    setup(rdsp           = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_ADJUSTED, useBankDetails = false)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "21 Nov 2023",
+        List(
+          "We sent you an adjusted payment of £6.56 as a cheque to",
+          "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER\n."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment amount changed",
+        "21 Nov 2023",
+        List(
+          "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. We will send a " +
+            "cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter " +
+            "explaining why we changed your amount.",
+          "If you do not receive a letter in the next 7 days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 8, ADJUSMENT_TO_TAX_DUE AND Debit Charge Exists" in {
@@ -142,6 +302,27 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "21 Nov 2023",
+        List("We received your VAT payment.")
+      ),
+      ProgressTimelineItem(
+        "You now owe HMRC",
+        "21 Nov 2023",
+        List(
+          "We calculated that the original amount of £5.56 you claimed was incorrect. You now owe HMRC £6.56. We sent " +
+            "you a letter with the reason for this change."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists" in {
@@ -155,6 +336,67 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "21 Nov 2023",
+        List(
+          "We sent a payment of £5.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment approved",
+        "21 Nov 2023",
+        List("This will reach your repayment bank account in 3 workings days.")
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
+  "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists AND no bank details" in {
+    setup(rdsp           = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_APPROVED, useBankDetails = false)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL))
+    ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = true)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "21 Nov 2023",
+        List(
+          "We sent a payment of £5.56 as a cheque to",
+          "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER\n."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment approved",
+        "21 Nov 2023",
+        List(
+          "We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a " +
+            "letter explaining why we changed your amount.",
+          "If you do not receive a letter in the next few days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "check 3 status" in {
@@ -169,6 +411,36 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
 
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "24 Oct 2019",
+        List(
+          "We sent a payment of £5.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment approved",
+        "24 Oct 2019",
+        List("This will reach your repayment bank account in 3 workings days.")
+      ),
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "21 Nov 2023",
+        List(
+          "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if " +
+            "we need any further information."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING) , #001 status" in {
@@ -181,6 +453,22 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "21 Nov 2023",
+        List(
+          "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if " +
+            "we need any further information."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "display action required messaging if payment is suspended" in {
@@ -191,6 +479,23 @@ class ViewProgressSpec extends BrowserSpec {
 
     ViewProgress.amount shouldBe None
     ViewProgress.estimatedDate shouldBe None
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "You must submit your latest VAT return",
+        "21 Nov 2023",
+        List(
+          "We cannot process your repayment until you submit your VAT return for the last accounting period.\n\n" +
+            "Submit your return"
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+
   }
 
   "don't display action required messaging if payment is not suspended" in {
@@ -201,6 +506,22 @@ class ViewProgressSpec extends BrowserSpec {
 
     ViewProgress.amount.isDefined shouldBe true
     ViewProgress.estimatedDate.isDefined shouldBe true
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "21 Nov 2023",
+        List(
+          "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if" +
+            " we need any further information."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   // not a good test :-(  You have to look in logfile for 'KNOZ' msgs, remove once issue has been fixed ( OPS-8163 )
@@ -215,6 +536,37 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "24 Oct 2019",
+        List(
+          "We sent a payment of £5.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment approved",
+        "24 Oct 2019",
+        List("This will reach your repayment bank account in 3 workings days.")
+      ),
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "21 Nov 2023",
+        List(
+          "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if " +
+            "we need any further information."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "21 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   "the lastUpdateReceivedDate should determine the main message and the amount shown" in {
@@ -239,6 +591,27 @@ class ViewProgressSpec extends BrowserSpec {
 
     ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.checkAmount("£4.56")
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment approved",
+        "21 Nov 2023",
+        List("This will reach your repayment bank account in 3 workings days.")
+      ),
+      ProgressTimelineItem(
+        "Sending for further checks",
+        "20 Nov 2023",
+        List(
+          "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you " +
+            "if we need any further information."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        "19 Nov 2023",
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
   }
 
   private def setup(

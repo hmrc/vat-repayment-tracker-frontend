@@ -19,13 +19,16 @@ package pages
 import model.des.RiskingStatus
 
 import java.time.LocalDate
-import org.openqa.selenium.{By, WebDriver}
+import org.openqa.selenium.{By, WebDriver, WebElement}
 import org.scalatest.Assertion
 import pages.InProgress.probing
 
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.Try
 
 object ViewProgress extends CommonPage {
+
+  final case class ProgressTimelineItem(heading: String, date: String, paragraphs: List[String])
 
   def amount(implicit webDriver: WebDriver): Option[String] = Try {
     probing(_.findElement(By.id(s"amount")).getText)
@@ -89,5 +92,18 @@ object ViewProgress extends CommonPage {
   def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("history-url") shouldBe expectedValue
 
   def payUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("pay-url") shouldBe expectedValue
+
+  def getProgressTimelineItems(implicit wd: WebDriver): List[ProgressTimelineItem] = {
+    val events = wd.findElements(By.cssSelector(".hmrc-timeline-event")).asScala.toList
+    events.map(event =>
+      ProgressTimelineItem(
+        event.findElement(By.cssSelector(".hmrc-timeline-event-title")).getText,
+        event.findElement(By.cssSelector(".hmrc-timeline-event-meta")).getText,
+        event.findElements(By.cssSelector(".govuk-body:not(.hmrc-timeline-event-meta)")).asScala.toList.map(_.getText)
+      )
+
+    )
+
+  }
 
 }

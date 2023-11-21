@@ -16,10 +16,8 @@
 
 package pages
 
-import model.Vrn
-import org.openqa.selenium.{By, WebDriver, WebElement}
+import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
-import play.api.Logger
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
