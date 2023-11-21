@@ -43,7 +43,10 @@ class ViewProgressFormatter @Inject() (
       vrd:           List[VrtRepaymentDetailData],
       customerData:  Option[CustomerInformation],
       financialData: Option[FinancialData]
-  )(implicit request: Request[_], messages: Messages): Result = {
+  )(
+      implicit
+      request: Request[_], messages: Messages
+  ): Result = {
 
     val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
     val bankDetails = desFormatter.getBankDetails(customerData)
@@ -80,11 +83,9 @@ class ViewProgressFormatter @Inject() (
                      viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue))
   }
 
-  private def showPayUrl(whatsHappendSoFar: WhatsHappendSoFar): Boolean = {
-    if (whatsHappendSoFar.isComplete) false
-    else if (whatsHappendSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE) true
-    else false
-  }
+  private def showPayUrl(whatsHappenedSoFar: WhatsHappendSoFar): Boolean =
+    if (whatsHappenedSoFar.isComplete) false
+    else whatsHappenedSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE
 
   private def computeWhatsHappenedSoFarList(estRepaymentDate:         LocalDate,
                                             vrd:                      List[VrtRepaymentDetailData],
@@ -92,7 +93,7 @@ class ViewProgressFormatter @Inject() (
                                             returnCreditChargeExists: Boolean,
                                             addressDetails:           Option[String],
                                             bankDetailsOption:        Option[BankDetails],
-                                            returnDebitChargeExists:  Boolean)(implicit request: Request[_], messages: Messages): List[WhatsHappendSoFar] = {
+                                            returnDebitChargeExists:  Boolean)(implicit messages: Messages): List[WhatsHappendSoFar] = {
     implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
 
     //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
@@ -100,27 +101,24 @@ class ViewProgressFormatter @Inject() (
     val nonCompleteRows: List[WhatsHappendSoFar] =
       desFormatter.addMissingStatus(vrd)
         .sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
-        .map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
+        .map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, bankDetailsOption))
 
     val completedCreditRows: List[WhatsHappendSoFar] = if (returnCreditChargeExists)
       vrd.filter(f => f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
-        .map (m => computeWhatsHappenedSoFarCompleteCreditCharge(estRepaymentDate, m, bankDetailsExist, addressDetails, bankDetailsOption))
+        .map (m => computeWhatsHappenedSoFarCompleteCreditCharge(m, bankDetailsExist, addressDetails, bankDetailsOption))
     else List()
 
     val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE)
-      .map (m => computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate, m))
+      .map (computeWhatsHappenedSoFarCompleteDebitCharge)
     else List()
 
     completedCreditRows ::: completedDebitRows ::: nonCompleteRows
-
   }
 
   private def computeWhatsHappenedSoFar(estRepaymentDate:       LocalDate,
                                         vrtRepaymentDetailData: VrtRepaymentDetailData,
                                         bankDetailsExist:       Boolean,
-                                        addressDetails:         Option[String],
-                                        bankDetailsOption:      Option[BankDetails])(implicit request: Request[_], message: Messages): WhatsHappendSoFar = {
-
+                                        bankDetailsOption:      Option[BankDetails])(implicit message: Messages): WhatsHappendSoFar =
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
 
       //id:1
@@ -218,14 +216,11 @@ class ViewProgressFormatter @Inject() (
                           Messages("view_progress_formatter.repayment_suspended"),
         )
     }
-  }
 
-  private def computeWhatsHappenedSoFarCompleteCreditCharge(estRepaymentDate:       LocalDate,
-                                                            vrtRepaymentDetailData: VrtRepaymentDetailData,
+  private def computeWhatsHappenedSoFarCompleteCreditCharge(vrtRepaymentDetailData: VrtRepaymentDetailData,
                                                             bankDetailsExist:       Boolean,
                                                             addressDetails:         Option[String],
-                                                            bankDetailsOption:      Option[BankDetails])(implicit messages: Messages, request: Request[_]): WhatsHappendSoFar = {
-
+                                                            bankDetailsOption:      Option[BankDetails])(implicit messages: Messages): WhatsHappendSoFar =
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
 
       case REPAYMENT_ADJUSTED =>
@@ -250,22 +245,18 @@ class ViewProgressFormatter @Inject() (
                           Messages("view_progress_formatter.repayment_complete"),
           if (bankDetailsExist) {
             bankDetailsOption match {
-              case Some(bankDetails) => Messages("view_progress_formatter.repayment_complete_bank_details", bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5))
+              case Some(bankDetails) => Messages("view_progress_formatter.repayment_complete_bank_details", bankDetails.formatAccountHolderName, bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode, CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount))
               case None              => throw new RuntimeException("No Bank details")
             }
 
           } else {
-            Messages("view_progress_formatter.repayment_complete_address", addressDetails.getOrElse(Messages("view_progress_formatter.address_not_available")), CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.vatToPay_BOX5))
+            Messages("view_progress_formatter.repayment_complete_address", addressDetails.getOrElse(Messages("view_progress_formatter.address_not_available")), CommonFormatter.formatAmount(vrtRepaymentDetailData.repaymentDetailsData.originalPostingAmount))
           }, Messages("view_progress_formatter.amount_we_paid_you"), Messages("view_progress_formatter.repayment_is_complete"), isComplete = true)
       case status =>
         throw new RuntimeException(s"Illegal state reached: building completed repayment view for $status")
     }
 
-  }
-
-  private def computeWhatsHappenedSoFarCompleteDebitCharge(estRepaymentDate:       LocalDate,
-                                                           vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_], messages: Messages): WhatsHappendSoFar = {
-
+  private def computeWhatsHappenedSoFarCompleteDebitCharge(vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit messages: Messages): WhatsHappendSoFar =
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
       case ADJUSMENT_TO_TAX_DUE =>
         //id:8 -- to complete
@@ -279,18 +270,11 @@ class ViewProgressFormatter @Inject() (
         throw new RuntimeException(s"Illegal state reached: building completed repayment view for $status")
     }
 
-  }
-
   private def getEstimatedRepaymentDate(returnCreationDate: LocalDate, supplementDelayDays: Option[Int]): LocalDate =
-    {
-      returnCreationDate.plusDays(supplementDelayDays.getOrElse(0) + 30)
-    }
+    returnCreationDate.plusDays(supplementDelayDays.getOrElse(0) + 30)
 
-  private def showEstimatedRepaymentDate(vrd: List[VrtRepaymentDetailData]): Boolean = {
-
+  private def showEstimatedRepaymentDate(vrd: List[VrtRepaymentDetailData]): Boolean =
     !vrd.exists(f => (f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED ||
       f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE) || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
-
-  }
 
 }
