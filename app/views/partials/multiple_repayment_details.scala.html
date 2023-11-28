@@ -14,26 +14,16 @@
  * limitations under the License.
  *@
 
-@import config.ViewConfig
-@import model.des._
 @import model.RepaymentDataNoRiskingStatus
 @import model.PeriodKey
-@import model.Vrn
 @import formaters.CommonFormatter
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
-)
+@this()
 
 @(
-repayments: List[RepaymentDataNoRiskingStatus],
-vrn : Vrn,
-appender: String)(
-implicit
-request: Request[_],
-message: Messages,
-)
+  repayments: List[RepaymentDataNoRiskingStatus],
+  appender: String
+)(implicit message: Messages)
 
 
 <table class="govuk-table">

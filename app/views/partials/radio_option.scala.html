@@ -15,15 +15,13 @@
  *@
 
 @(
-field: Field,
-name: String,
-value: String,
-id: String,
-text: String,
-hint: Option[String],
-attributes: Option[String])(
-implicit
-m: Messages
+  field: Field,
+  name: String,
+  value: String,
+  id: String,
+  text: String,
+  hint: Option[String],
+  attributes: Option[String]
 )
 
 <div class="govuk-radios__item" @attributes.fold(Html("")){ attributes => @attributes }>

@@ -16,24 +16,22 @@
 
 package pages.classic
 
-import model.Vrn
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 import pages.CommonPage
-import pages.ErrorPage.readTitle
 
 object VatRepaymentsClassic extends CommonPage {
 
   val path = "/vat-repayment-tracker/show-vrt"
 
-  def assertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""$path"""
+  def assertPageIsDisplayed()(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe path
     readTitle shouldBe "Your VAT repayments - Business tax account - GOV.UK"
     readMainMessage shouldBe "Your VAT repayments"
   }
 
-  def afterAddress404AssertPageIsDisplayed(vrn: Vrn)(implicit wd: WebDriver): Assertion = {
-    currentPath shouldBe s"""$path"""
+  def afterAddress404AssertPageIsDisplayed()(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe path
     readTitle shouldBe "Sorry, there is a problem with the service - Business tax account - GOV.UK"
   }
 

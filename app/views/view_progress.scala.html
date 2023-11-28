@@ -19,26 +19,17 @@
 @import model._
 @import formaters.CommonFormatter
 
-@this(
-mainTemplate: views.html.main_template,
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
-)
+@this(mainTemplate: views.html.main_template, viewConfig: ViewConfig)
 
 @(
-vrn: Vrn,
-viewProgress: ViewProgress,
-showEstimatedRepaymentDat: Boolean,
-amountDescription: String,
-pageTitle: String,
-showHistoryUrl: Boolean,
-showPayUrl: Boolean,
-amountInPence: Long
-)(
-implicit
-request: Request[_],
-messages: Messages
-)
+  viewProgress: ViewProgress,
+  showEstimatedRepaymentDat: Boolean,
+  amountDescription: String,
+  pageTitle: String,
+  showHistoryUrl: Boolean,
+  showPayUrl: Boolean,
+  amountInPence: Long
+)(implicit request: Request[_], messages: Messages)
 
 
 

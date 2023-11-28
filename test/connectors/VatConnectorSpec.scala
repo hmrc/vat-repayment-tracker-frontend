@@ -18,12 +18,10 @@ package connectors
 
 import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
 import model.Vrn
-import play.api.Logger
 import support.{AuditWireMockResponses, ItSpec, VatData, VatWireMockResponses}
 
 class VatConnectorSpec extends ItSpec {
 
-  private val logger = Logger(this.getClass)
   val vrn: Vrn = Vrn("2345678890")
 
   val vatConnector: VatConnector = injector.instanceOf[VatConnector]

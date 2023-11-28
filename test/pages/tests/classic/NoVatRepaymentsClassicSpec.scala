@@ -18,7 +18,7 @@ package pages.tests.classic
 
 import model.{EnrolmentKeys, Vrn}
 import pages.classic.NoVatRepaymentsClassic
-import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, VatWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, VatWireMockResponses}
 
 class NoVatRepaymentsClassicSpec extends BrowserSpec {
 
@@ -32,7 +32,7 @@ class NoVatRepaymentsClassicSpec extends BrowserSpec {
     VatWireMockResponses.designatoryDetailsOk(vrn)
     login()
     goToViaPath(path)
-    NoVatRepaymentsClassic.assertPageIsDisplayed(vrn)
+    NoVatRepaymentsClassic.assertPageIsDisplayed()
     NoVatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"
 
   }

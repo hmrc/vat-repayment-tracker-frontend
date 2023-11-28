@@ -29,6 +29,7 @@ import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
 
+import scala.annotation.unused
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -63,10 +64,9 @@ class Controller @Inject() (
     } yield Ok(views_non_mtd_user())
   }
 
-  val signout: Action[AnyContent] =
-    Action.async { implicit request =>
-      Redirect(viewConfig.feedbackUrlForLogout).withNewSession
-    }
+  val signout: Action[AnyContent] = Action.async { _ =>
+    Redirect(viewConfig.feedbackUrlForLogout).withNewSession
+  }
 
   val showVrt: Action[AnyContent] = actions.securedAction.async {
     implicit request: AuthenticatedRequest[_] =>
@@ -114,7 +114,7 @@ class Controller @Inject() (
         financialData <- financialDataF
         vrd <- vatRepaymentTrackerBackendConnector.find(request.typedVrn.vrn, periodKey)
       } yield {
-        viewProgressFormatter.computeViewProgress(request.typedVrn.vrn, periodKey, vrd, customerData, financialData)
+        viewProgressFormatter.computeViewProgress(periodKey, vrd, customerData, financialData)
       }
     }
 
@@ -122,15 +122,13 @@ class Controller @Inject() (
     implicit request: AuthenticatedRequest[_] =>
 
       val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
-      val url = for {
+
+      for {
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(view_repayment_account(bankDetails, request.typedVrn.vrn, ReturnPage("view-repayment-account"), audit))
+        Ok(view_repayment_account(bankDetails, ReturnPage("view-repayment-account"), audit))
       }
-
-      url
-
   }
 
   val deregistered: Action[AnyContent] = actions.loggedIn.async { implicit request =>
@@ -140,7 +138,7 @@ class Controller @Inject() (
   //------------------------------------------------------------------------------------------------------------------------------
 
   //deprecate this when the URL changes to vat-repayment-tracker
-  def showResults(vrn: Vrn): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+  def showResults(@unused vrn: Vrn): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
       val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
       val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)

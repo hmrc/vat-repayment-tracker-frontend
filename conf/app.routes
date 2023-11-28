@@ -4,8 +4,6 @@
 
 GET        /assets/*file                        controllers.Assets.versioned(path = "/public", file: Asset)
 
-GET        /language/:language                             @langswitch.LanguageSwitchController.switchToLanguage(language: Language)
-
 #govuk link
 GET        /show-vrt                                                controllers.Controller.showVrt
 #V and C to use the following

@@ -47,7 +47,7 @@ class VrtService @Inject() (
           _ = vatRepaymentTrackerBackendConnector.store(vrtRepaymentDetailData)
         } yield logger.debug(s"cached vat repayment data for vrn : $vrn")
 
-        val data = getRepaymentData(rd, vrn, financialData)
+        val data = getRepaymentData(rd, financialData)
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
         val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(_.riskingStatus.inProgress).map(m =>
           RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey)).toList.distinct
@@ -67,7 +67,7 @@ class VrtService @Inject() (
 
   }
 
-  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], vrn: Vrn, financialData: Option[FinancialData])(implicit request: Request[_], messages: Messages): Seq[RepaymentData] = {
+  private def getRepaymentData(repaymentDetails: Seq[RepaymentDetailData], financialData: Option[FinancialData])(implicit messages: Messages): Seq[RepaymentData] = {
 
     for {
       rd <- repaymentDetails

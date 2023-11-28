@@ -3,7 +3,7 @@ import sbt._
 
 object AppDependencies {
 
-  val bootstrapVersion = "8.0.0"
+  val bootstrapVersion = "8.1.0"
 
   val compile = Seq(
     // FORMAT: OFF
@@ -18,7 +18,7 @@ object AppDependencies {
     // FORMAT: OFF
     "uk.gov.hmrc"            %% "bootstrap-test-play-28" % bootstrapVersion,
     "org.scalatest"          %% "scalatest"              % "3.2.17",
-    "org.jsoup"              % "jsoup"                   % "1.16.2",
+    "org.jsoup"              % "jsoup"                   % "1.17.1",
     "com.typesafe.play"      %% "play-test"              % current,
     "org.pegdown"            % "pegdown"                 % "1.6.0" ,
     "org.scalatestplus.play" %% "scalatestplus-play"     % "5.1.0",

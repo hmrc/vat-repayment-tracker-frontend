@@ -17,19 +17,9 @@
 @import config.ViewConfig
 @import model.Vrn
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
-)
+@this(viewConfig: ViewConfig)
 
-@(
- vrn : Vrn,
- address : String
-)(
-implicit
-request: Request[_],
-messages: Messages
-)
+@(vrn : Vrn, address : String)(implicit messages: Messages)
 
 </br>
 <h2 class="govuk-heading-m">@Messages("repayment_details_classic.h2")</h2>

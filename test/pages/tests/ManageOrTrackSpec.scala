@@ -35,28 +35,28 @@ class ManageOrTrackSpec extends BrowserSpec {
 
   "1. user is authorised, bank dd option, manage bank option " in {
     setup()
-    ManageOrTrack.assertPageIsDisplayed(vrn, ddDisplayed = true, bankDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(ddDisplayed   = true, bankDisplayed = true)
   }
 
   "2. user is authorised, manage dd option " in {
     setup(useBankDetails = false)
-    ManageOrTrack.assertPageIsDisplayed(vrn, ddDisplayed = true, nobankDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(ddDisplayed     = true, nobankDisplayed = true)
   }
 
   "3. user is authorised, manage bank option " in {
     setup(useDdDetails = false)
-    ManageOrTrack.assertPageIsDisplayed(vrn, bankDisplayed = true, noddDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(bankDisplayed = true, noddDisplayed = true)
 
   }
 
   "4. user is authorised, manage no bank or dd option " in {
     setup(useBankDetails = false, useDdDetails = false)
-    ManageOrTrack.assertPageIsDisplayed(vrn, noddDisplayed = true, nobankDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(noddDisplayed   = true, nobankDisplayed = true)
   }
 
   "5. user is authorised, manage no bank or dd option but inflight bank " in {
     setup(useBankDetails = false, useDdDetails = false, inflight = true)
-    ManageOrTrack.assertPageIsDisplayed(vrn, noddDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(noddDisplayed = true)
   }
 
   "6. click vrtLabel" in {
@@ -71,7 +71,7 @@ class ManageOrTrackSpec extends BrowserSpec {
     setup()
     ManageOrTrack.clickBankLabel()
     ManageOrTrack.clickContinue()
-    ViewRepaymentAccount.assertPageIsDisplayed(vrn, """/vat-repayment-tracker/view-repayment-account""")
+    ViewRepaymentAccount.assertPageIsDisplayed("/vat-repayment-tracker/view-repayment-account")
     ManageOrTrack.clickCallBac
     AuditWireMockResponses.bacWasNotAudited()
   }

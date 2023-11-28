@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package deprecatedcontrollers
+package model
 
-import controllers.{Controller, ManageOrTrackController}
-import model.Vrn
-import play.api.mvc.{Action, AnyContent}
+sealed trait Language
 
-import javax.inject.{Inject, Singleton}
+object Language {
 
-@Singleton
-class DeprecateController @Inject() (manageOrTrackController: ManageOrTrackController,
-                                     controller:              Controller
-) {
+  case object English extends Language
 
-  def manageOrTrack(vrn: Vrn): Action[AnyContent] = manageOrTrackController.manageOrTrack(vrn)
-
-  def showResults(vrn: Vrn): Action[AnyContent] = controller.showResults(vrn)
+  case object Welsh extends Language
 
 }

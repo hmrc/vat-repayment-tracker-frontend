@@ -17,18 +17,11 @@
 @import config.ViewConfig
 
 @this(
-mainTemplate: views.html.main_template,
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
+  mainTemplate: views.html.main_template,
+  viewConfig: ViewConfig
 )
 
-@(
-)(
-implicit
-request: Request[_],
-messages: Messages
-)
-
+@()(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(title = Messages("non_mtd_user.title"), timeoutDialog = false) {
     <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">

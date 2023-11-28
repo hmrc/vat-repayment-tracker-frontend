@@ -21,16 +21,13 @@ import play.api.Logger
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{Action, _}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class ShutteredController @Inject() (
     cc:   ControllerComponents,
     view: views.html.shuttered
-)(
-    implicit
-    message: MessagesApi,
-    ec:      ExecutionContext)
+)(implicit message: MessagesApi)
 
   extends FrontendBaseController(cc) {
 

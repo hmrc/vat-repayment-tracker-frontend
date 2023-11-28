@@ -16,7 +16,7 @@
 
 package pages.tests
 
-import langswitch.Languages.Welsh
+import model.Language.Welsh
 import model.{EnrolmentKeys, Vrn}
 import org.scalatest.Assertion
 import pages.VrtVatRegistrationCancelledPage

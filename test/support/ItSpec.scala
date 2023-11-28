@@ -50,6 +50,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import org.scalatest.matchers.should.Matchers
 
+import scala.annotation.unused
 import scala.concurrent.ExecutionContext
 
 /**
@@ -80,6 +81,7 @@ trait ItSpec
 
     @Provides
     @Singleton
+    @unused
     def clock: Clock = {
       val fixedInstant = LocalDateTime.parse(frozenTimeString).toInstant(ZoneOffset.UTC)
       Clock.fixed(fixedInstant, ZoneId.systemDefault)

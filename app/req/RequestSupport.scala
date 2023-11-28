@@ -17,7 +17,6 @@
 package req
 
 import javax.inject.Inject
-import langswitch.Language
 import play.api.i18n._
 import play.api.mvc.Request
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
@@ -36,8 +35,6 @@ class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I
 }
 
 object RequestSupport {
-
-  implicit def language(implicit messages: Messages): Language = Language()(messages)
 
   implicit def hc[A](implicit request: Request[A]): HeaderCarrier = HcProvider.headerCarrier
 
