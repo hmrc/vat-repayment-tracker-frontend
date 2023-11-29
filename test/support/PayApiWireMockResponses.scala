@@ -18,21 +18,40 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import model.payapi.SpjRequestBtaVat
 
 object PayApiWireMockResponses {
 
-  def payOk: StubMapping = {
-    stubFor(post(urlEqualTo("/pay-api/bta/vat/journey/start"))
+  private val expectedStartJourneyUrl = "/pay-api/bta/vat/journey/start"
+
+  val nextUrl = "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"
+
+  def payOk: StubMapping =
+    stubFor(post(urlEqualTo(expectedStartJourneyUrl))
       .willReturn(aResponse()
         .withStatus(200)
         .withBody(
-          """
-      {
-        "journeyId": "TestJourneyId-44f9-ad7f-01e1d3d8f151",
-        "nextUrl": "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"
-      }
+          s"""
+          |{
+          |  "journeyId": "TestJourneyId-44f9-ad7f-01e1d3d8f151",
+          |  "nextUrl": "$nextUrl"
+          |}
     """.stripMargin)))
-  }
+
+  def verifyStartJourneyCalled(expectedRequest: SpjRequestBtaVat) =
+    verify(
+      exactly(1),
+      postRequestedFor(urlEqualTo(expectedStartJourneyUrl))
+        .withRequestBody(equalToJson(
+          s"""{
+            |  "amountInPence": ${expectedRequest.amountInPence.toString},
+            |  "returnUrl": "${expectedRequest.returnUrl}",
+            |  "backUrl": "${expectedRequest.backUrl}",
+            |  "vrn": "${expectedRequest.vrn.value}"
+            |}
+            |""".stripMargin
+        ))
+    )
 
 }
 

@@ -18,18 +18,34 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import model.dd.CreateVATJourneyRequest
 
 object DDBackendWireMockResponses {
 
-  def ddOk: StubMapping = {
-    stubFor(post(urlEqualTo("/direct-debit-backend/vc/vat/journey/start"))
+  private val startJourneyExpectedUrl = "/direct-debit-backend/vc/vat/journey/start"
+
+  val nextUrl =
+    "https://www.qa.tax.service.gov.uk/direct-debit/enter-bank-details/11f4e440-1db1-4138-9a66-cb73db12174e"
+
+  def ddOk: StubMapping =
+    stubFor(post(urlEqualTo(startJourneyExpectedUrl))
       .willReturn(aResponse()
         .withStatus(201)
-        .withBody(
-          s"""
-            {"nextUrl":"https://www.qa.tax.service.gov.uk/direct-debit/enter-bank-details/11f4e440-1db1-4138-9a66-cb73db12174e"}
-       """.stripMargin)))
+        .withBody(s"""{"nextUrl":"$nextUrl"}""")))
 
-  }
+  def verifyStartJourneyCalled(expectedRequest: CreateVATJourneyRequest) =
+    verify(
+      exactly(1),
+      postRequestedFor(urlEqualTo(startJourneyExpectedUrl))
+        .withRequestBody(equalToJson(
+          s"""{
+             |  "userId": "${expectedRequest.userId}",
+             |  "userIdType": "${expectedRequest.userIdType}",
+             |  "returnUrl": "${expectedRequest.returnUrl}",
+             |  "backUrl": "${expectedRequest.backUrl}"
+             |}
+             |""".stripMargin
+        ))
+    )
 
 }

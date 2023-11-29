@@ -39,13 +39,8 @@ case class ViewConfig(
     timeoutDialogTimeout:          Int,
     timeoutDialogCountdown:        Int) {
 
-  val reportAProblemPartialUrl = s"$contactBaseUrl/contact/problem_reports_ajax?service=$appName"
-  val reportAProblemNonJSUrl = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$appName"
-  val reportAccessibilityProblemUrl = s"$frontendBaseUrl/contact/accessibility?service=$appName"
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
   val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
-  val supportLanguages: Boolean = true
-  val signOut = s"$frontendBaseUrl/vat-repayment-tracker/signout"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
 
   def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"

@@ -48,7 +48,7 @@ class Actions @Inject() (
         request.typedVrn match {
           case TypedVrn.MtdVrn(_) => Future.successful(Right(request))
           case _ =>
-            logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
+            logger.debug(s"User logged in with ${request.typedVrn.vrn.value}, this is non-mtd")
             if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
             Future.successful(Left(Redirect(routes.Controller.nonMtdUser.url)))
         }

@@ -50,7 +50,7 @@
 @head = {
 
     @if(timeoutDialog) {
-        @hmrcTimeoutDialogHelper(signOutUrl = routes.TimeoutController.killSession().url)
+        @hmrcTimeoutDialogHelper(signOutUrl = routes.TimeoutController.killSession.url)
     }
 
     @hmrcTrackingConsentSnippet()

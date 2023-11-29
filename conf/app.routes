@@ -22,5 +22,5 @@ GET        /shuttered                                               controllers.
 GET        /vrt-vat-registration-cancelled                          controllers.Controller.deregistered
 
 #Session
-GET         /session/keep-alive                                     controllers.TimeoutController.keepAliveSession()
-GET         /delete-answers                                         controllers.TimeoutController.killSession()
+GET         /session/keep-alive                                     controllers.TimeoutController.keepAliveSession
+GET         /delete-answers                                         controllers.TimeoutController.killSession
