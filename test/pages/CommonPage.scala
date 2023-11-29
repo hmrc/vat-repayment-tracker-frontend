@@ -23,7 +23,6 @@ import org.openqa.selenium.{By, OutputType, TakesScreenshot, WebDriver}
 import org.scalatest.Assertion
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.selenium.WebBrowser
-import org.scalatestplus.selenium.WebBrowser.xpath
 import play.api.Logger
 import support.RichMatchers
 
@@ -32,7 +31,6 @@ import scala.util.Random
 
 trait CommonPage
   extends WebBrowser
-  // with PatienceConfiguration
   with RichMatchers {
 
   private val logger = Logger(this.getClass)

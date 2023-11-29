@@ -33,11 +33,8 @@ package pages.tests
  */
 
 import model.{EnrolmentKeys, Vrn}
-import org.openqa.selenium.By
 import pages._
 import support._
-
-import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 class CompletedSpec extends BrowserSpec {
 

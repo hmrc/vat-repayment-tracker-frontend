@@ -18,7 +18,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.{ManageOrTrack, Shuttered}
-import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, VatRepaymentTrackerBackendWireMockResponses}
 
 class ShutteredSpec extends BrowserSpec {
 
@@ -67,7 +67,7 @@ class ShutteredSpec extends BrowserSpec {
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
     login()
     goToViaPath(path)
-    ManageOrTrack.assertPageIsDisplayed(vrn, noddDisplayed = true, nobankDisplayed = true, isShuttered = true)
+    ManageOrTrack.assertPageIsDisplayed(noddDisplayed   = true, nobankDisplayed = true, isShuttered = true)
   }
 
 }

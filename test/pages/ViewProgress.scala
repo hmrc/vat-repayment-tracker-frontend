@@ -19,9 +19,8 @@ package pages
 import model.des.RiskingStatus
 
 import java.time.LocalDate
-import org.openqa.selenium.{By, WebDriver, WebElement}
+import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
-import pages.InProgress.probing
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.Try

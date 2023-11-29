@@ -21,7 +21,6 @@ import controllers.action.{Actions, AuthenticatedRequest}
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.mvc.{Action, _}
-import req.RequestSupport
 
 import scala.concurrent.ExecutionContext
 

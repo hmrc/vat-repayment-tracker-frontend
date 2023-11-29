@@ -24,16 +24,20 @@ import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
+import scala.annotation.unused
+
 @Singleton
 class ErrorHandler @Inject() (
     val messagesApi:         MessagesApi,
     implicit val viewConfig: ViewConfig,
     error_template:          views.html.error.error_template) extends FrontendErrorHandler {
+
   override def standardErrorTemplate(
-      pageTitle: String,
-      heading:   String,
-      message:   String)(
+      @unused pageTitle: String,
+      @unused heading:   String,
+      message:           String)(
       implicit
       request: Request[_]
-  ): Html = error_template(pageTitle, heading, message)
+  ): Html = error_template(message)
+
 }

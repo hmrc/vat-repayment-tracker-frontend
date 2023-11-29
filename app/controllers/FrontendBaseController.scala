@@ -19,7 +19,6 @@ package controllers
 import play.api.mvc._
 
 import scala.concurrent.Future
-import scala.language.implicitConversions
 
 abstract class FrontendBaseController(cc: ControllerComponents)
   extends BaseControllerHelpers {

@@ -17,7 +17,6 @@
 package controllers.action
 
 import com.google.inject.Inject
-import config.ViewConfig
 import controllers.routes
 import model.TypedVrn
 import play.api.Logger
@@ -28,7 +27,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class Actions @Inject() (
     authoriseAction: AuthenticatedAction,
-    viewConfig:      ViewConfig,
     loggedInAction:  LoggedInAction,
     shutteredAction: ShutteredAction)(implicit ec: ExecutionContext) {
 
@@ -50,9 +48,8 @@ class Actions @Inject() (
         request.typedVrn match {
           case TypedVrn.MtdVrn(_) => Future.successful(Right(request))
           case _ =>
-            logger.debug(s"""User logged in with ${request.typedVrn.vrn.value}, this is non-mtd""")
+            logger.debug(s"User logged in with ${request.typedVrn.vrn.value}, this is non-mtd")
             if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
-            implicit val req: AuthenticatedRequest[_] = request
             Future.successful(Left(Redirect(routes.Controller.nonMtdUser.url)))
         }
 

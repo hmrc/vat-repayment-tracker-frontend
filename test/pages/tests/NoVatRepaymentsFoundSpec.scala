@@ -18,7 +18,7 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.NoVatRepaymentsFoundPage
-import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, ItSpec, PaymentsOrchestratorStub}
+import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, PaymentsOrchestratorStub}
 
 class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
@@ -33,7 +33,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
     login()
     goToViaPath(path)
-    NoVatRepaymentsFoundPage.assertPageIsDisplayed(vrn)
+    NoVatRepaymentsFoundPage.assertPageIsDisplayed()
 
   }
 

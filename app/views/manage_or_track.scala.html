@@ -16,7 +16,6 @@
 
 @import config.ViewConfig
 @import model.ManageOrTrack
-@import model.Vrn
 @import model.des._
 @import model.ManageOrTrackOptions
 @import java.time.LocalDate
@@ -33,7 +32,6 @@
         bread_crumbs: views.html.partials.bread_crumbs
 )
 @(
-        vrn: Vrn,
         bankDetailsOption: Option[BankDetails],
         ddDetailsOption: Option[BankDetails],
         form: Form[ManageOrTrack],
@@ -47,13 +45,77 @@
 
 @errorLink ={
    @if(form.errors("manage").nonEmpty) {
-     @for(error <- form.errors("manage")) {aria-describedby="manage-errorKey"}
+     @for(_ <- form.errors("manage")) {aria-describedby="manage-errorKey"}
    }
 }
 
+@manageDDRadioOption(ddDetails: BankDetails) = @{
+    views.html.partials.radio_option(
+        form("manage"),
+        "manage",
+        ManageOrTrackOptions.dd.toString,
+        ManageOrTrackOptions.dd.toString,
+        Messages("manage_or_track.manage_direct_debit"),
+        Some(Messages("manage_or_track.account_sortcode", ddDetails.obscureBankAccountNumber, ddDetails.formatSortCode)),
+        None
+    )
+}
 
+@setUpDDRadioOption = @{
+    views.html.partials.radio_option(
+        form("manage"),
+        "manage",
+        ManageOrTrackOptions.nodd.toString,
+        ManageOrTrackOptions.nodd.toString,
+        Messages("manage_or_track.set_up_direct_debit"),
+        Some(Messages("manage_or_track.hmrc_automatically")),
+        None
+    )
+}
 
-@mainTemplate(  title = if (viewConfig.isShuttered) Messages("manage_or_track.shuttered") else if (form.errors.nonEmpty) s"""${Messages("generic_prefixerror")}: ${Messages("manage_or_track.manage_or_track")}""" else Messages("manage_or_track.manage_or_track")) {
+@manageRepaymentAccountRadioOption(bankDetails: BankDetails) = @{
+    views.html.partials.radio_option(
+        form("manage"),
+        "manage",
+        ManageOrTrackOptions.bank.toString,
+        ManageOrTrackOptions.bank.toString,
+        Messages("manage_or_track.manage_repayment_bank_account"),
+        Some(Messages("manage_or_track.account_sortcode", bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode)),
+        None
+    )
+}
+
+@setUpRepaymentAccountRadioOption = @{
+    views.html.partials.radio_option(
+        form("manage"),
+        "manage",
+        ManageOrTrackOptions.nobank.toString,
+        ManageOrTrackOptions.nobank.toString,
+        Messages("manage_or_track.set_up_repayment_bank_account"),
+        Some(Messages("manage_or_track.tell_pay_money")),
+        None
+    )
+}
+
+@trackRepaymentsRadioOptions = @{
+    views.html.partials.radio_option(
+        form("manage"),
+        "manage",
+        ManageOrTrackOptions.vrt.toString,
+        ManageOrTrackOptions.vrt.toString,
+        Messages("manage_or_track.track_vat_repayments"),
+        Some(Messages("manage_or_track.view_hmrc_owe_you")),
+        None
+    )
+}
+
+@title = @{
+    if (viewConfig.isShuttered) Messages("manage_or_track.shuttered")
+    else if (form.errors.nonEmpty) s"""${Messages("generic_prefixerror")}: ${Messages("manage_or_track.manage_or_track")}"""
+    else Messages("manage_or_track.manage_or_track")
+}
+
+@mainTemplate(title = title) {
  @bread_crumbs(Messages("manage_or_track.payment_and_repayments"))
  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -62,22 +124,15 @@
     @govukErrorSummary(ErrorSummary( title = Text(Messages("manage_or_track.there_is_a_problem"))).withFormErrorsAsText(form, Map("manage" -> "dd") ))
    }
 
-
-
-
    @viewsHelpers.form(
-   action = controllers.routes.ManageOrTrackController.manageOrTrackSubmit,
-   Symbol("id") -> "manageform",
-   Symbol("class") -> "form js-form",
-   Symbol("autocomplete") -> "off",
-   Symbol("novalidate") -> "novalidate"
+     action = controllers.routes.ManageOrTrackController.manageOrTrackSubmit,
+     Symbol("id") -> "manageform",
+     Symbol("class") -> "form js-form",
+     Symbol("autocomplete") -> "off",
+     Symbol("novalidate") -> "novalidate"
    ) {
 
-
-
-
-
-    <div class="govuk-form-group @form.errors("manage").map { e => govuk-form-group--error }" >
+    <div class="govuk-form-group @form.errors("manage").map { _ => govuk-form-group--error }">
      <fieldset id="manage" class="govuk-fieldset govuk-!-padding-bottom-1" @errorLink>
       <legend>
       <h1 id="main-message" class="govuk-heading-xl">@{
@@ -97,46 +152,29 @@
        }
 
       <div class="govuk-form-group">
-       @{
-       ddDetailsOption.map(ddDetails =>
-       views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.dd.toString, ManageOrTrackOptions.dd.toString, Messages("manage_or_track.manage_direct_debit"), Some(Messages("manage_or_track.account_sortcode",ddDetails.obscureBankAccountNumber, ddDetails.formatSortCode )), None)
-       )
-       }
-       <!-- No DD -->
-       @{
-       if (!(ddDetailsOption.isDefined)) {
-        views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nodd.toString, ManageOrTrackOptions.nodd.toString, Messages("manage_or_track.set_up_direct_debit"), Some(Messages("manage_or_track.hmrc_automatically")), None)
-       }
-       }
-       @{
+        @{ddDetailsOption.map(manageDDRadioOption)}
 
-       bankDetailsOption.map(bankDetails =>
-       views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.bank.toString, ManageOrTrackOptions.bank.toString, Messages("manage_or_track.manage_repayment_bank_account"), Some(Messages("manage_or_track.account_sortcode",bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode ) ), None)
-       )
-       }
-       <!-- No Bank -->
-       @{
-       if ((!(bankDetailsOption.isDefined))  && (!(inflightBankDetails))){
-        views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.nobank.toString, ManageOrTrackOptions.nobank.toString, Messages("manage_or_track.set_up_repayment_bank_account"), Some(Messages("manage_or_track.tell_pay_money")), None)
-       }
-       }
-       @{
-        if (!(viewConfig.isShuttered)) {
-         views.html.partials.radio_option(form("manage"), "manage", ManageOrTrackOptions.vrt.toString, ManageOrTrackOptions.vrt.toString, Messages("manage_or_track.track_vat_repayments"), Some(Messages("manage_or_track.view_hmrc_owe_you")), None)
-       }
-     }
-  </div>
+        <!-- No DD -->
+        @{if(ddDetailsOption.isEmpty) setUpDDRadioOption}
 
-  @govukButton(Button(
-      inputType = Some("submit"),
-      content = Text(Messages("continue")),
-      attributes = Map("id" -> "next"),
-      classes = "govuk-!-display-none-print"
-      ))
+        @{bankDetailsOption.map(manageRepaymentAccountRadioOption)}
 
-    </div>
-    }
+        <!-- No Bank -->
+       @{if(bankDetailsOption.isEmpty && !inflightBankDetails) setUpRepaymentAccountRadioOption}
 
+       @{if (!viewConfig.isShuttered) trackRepaymentsRadioOptions}
+      </div>
+
+      @govukButton(
+          Button(
+              inputType = Some("submit"),
+              content = Text(Messages("continue")),
+              attributes = Map("id" -> "next"),
+              classes = "govuk-!-display-none-print"
+          )
+      )
    </div>
+   }
   </div>
- }
+ </div>
+}

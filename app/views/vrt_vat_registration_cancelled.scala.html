@@ -16,18 +16,9 @@
 
 @import config.ViewConfig
 
-@this(
-mainTemplate: views.html.main_template,
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
-)
+@this(mainTemplate: views.html.main_template, viewConfig: ViewConfig)
 
-@(
-)(
-implicit
-request: Request[_],
-message: Messages
-)
+@()(implicit request: Request[_], message: Messages)
 
 
 

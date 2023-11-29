@@ -16,21 +16,18 @@
 
 package controllers
 
-import controllers.action.Actions
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import com.google.inject.{Inject, Singleton}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
-class TimeoutController @Inject() (actions:        Actions,
-                                   delete_answers: views.html.session.delete_answers,
+@Singleton
+class TimeoutController @Inject() (delete_answers: views.html.session.delete_answers,
                                    mcc:            MessagesControllerComponents)
-  (implicit ec: ExecutionContext) extends FrontendController(mcc) {
-  implicit def toFuture(r: Result): Future[Result] = Future.successful(r)
+  extends FrontendController(mcc) {
 
-  def keepAliveSession(): Action[AnyContent] = Action(NoContent)
+  val keepAliveSession: Action[AnyContent] = Action(NoContent)
 
-  def killSession(): Action[AnyContent] = Action { implicit request =>
+  val killSession: Action[AnyContent] = Action { implicit request =>
     Ok(delete_answers()).withNewSession
   }
 }

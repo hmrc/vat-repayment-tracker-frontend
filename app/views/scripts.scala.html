@@ -16,11 +16,9 @@
 
 @import views.html.helper.CSPNonce
 
-@this(
-        hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts,
-)
+@this(hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts)
 
-@()(implicit request: play.api.mvc.Request[_], messages: Messages)
+@()(implicit request: play.api.mvc.Request[_])
 
 @hmrcScripts()
 

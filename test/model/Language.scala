@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package enumformat
+package model
 
-import enumeratum.{Enum, EnumEntry}
-import play.api.libs.json._
+sealed trait Language
 
-object EnumFormat {
-  def apply[T <: EnumEntry](e: Enum[T]): Format[T] = Format(
-    Reads {
-      case JsString(value) => e.withNameOption(value).map(JsSuccess(_)).getOrElse[JsResult[T]](JsError(s"Unknown ${e.getClass.getSimpleName} value: $value"))
-      case _               => JsError("Can only parse String")
-    },
-    Writes(v => JsString(v.entryName)))
+object Language {
+
+  case object English extends Language
+
+  case object Welsh extends Language
+
 }

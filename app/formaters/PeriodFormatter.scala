@@ -16,18 +16,16 @@
 
 package formaters
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.mvc.Request
-import req.RequestSupport
 
 @Singleton
-class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
+class PeriodFormatter {
 
   private val logger = Logger(this.getClass)
 
-  def formatPeriodKey(periodKey: String)(implicit request: Request[_], messages: Messages): String = {
+  def formatPeriodKey(periodKey: String)(implicit messages: Messages): String = {
     if (periodKey.length != 4) throw new RuntimeException(s"Invalid length periodkey: $periodKey")
 
     //starts at 0!
@@ -47,7 +45,7 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
 
   }
 
-  private def formatPeriodKeyMonthly(char4: Char, yearString: String)(implicit request: Request[_], messages: Messages) = {
+  private def formatPeriodKeyMonthly(char4: Char, yearString: String)(implicit messages: Messages) = {
 
     logger.debug(s"Called formatPeriodKeyMonthly with $char4, $yearString")
 
@@ -75,7 +73,7 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
     returnStr
   }
 
-  private def formatPeriodKeyQuarterly(quarter: String, yearString: String)(implicit request: Request[_], messages: Messages) = {
+  private def formatPeriodKeyQuarterly(quarter: String, yearString: String)(implicit messages: Messages) = {
 
     logger.debug(s"Called formatPeriodKeyQuarterly with $quarter, $yearString")
     val year = ("20" + yearString).toInt
@@ -100,7 +98,7 @@ class PeriodFormatter @Inject() (requestSupport: RequestSupport) {
 
   }
 
-  private def formatPeriodKeyYearly(char4: Char, year: String)(implicit request: Request[_], messages: Messages) = {
+  private def formatPeriodKeyYearly(char4: Char, year: String)(implicit messages: Messages) = {
 
     logger.debug(s"Called formatPeriodKeyYearly with $char4, $year")
 

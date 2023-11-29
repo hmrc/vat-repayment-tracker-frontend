@@ -14,14 +14,12 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{BackLink, FooterItem, HtmlContent, Text}
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.phasebanner.PhaseBanner
-@import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Header, ReportTechnicalIssue}
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En, LanguageSelect}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{BackLink, Text}
+
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.Header
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
-@import langswitch.Languages
-@import config.ViewConfig
+
 @import req.RequestSupport.isLoggedIn
 
 @this(
@@ -29,34 +27,20 @@
         twoThirdsMainContent: uk.gov.hmrc.govukfrontend.views.html.components.TwoThirdsMainContent,
         govukBackLink: uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink,
         hmrcHeader: HmrcHeader,
-        languageSelect: HmrcLanguageSelect,
-
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         standardBetaBanner: StandardBetaBanner,
-
         hmrcStandardFooter: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter,
         hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
         mainScripts: views.html.scripts,
-
-        viewsHelpers: views.ViewsHelpers,
         viewConfig: config.ViewConfig
 )
 
 @(      title: String,
-        pageTitle1: Option[String] = None,
         timeoutDialog: Boolean = true,
-        maybeSidebarLinks: Option[Html] = None,
         contentHeader: Option[Html] = None,
-        bodyClasses: Option[String] = None,
-        mainClass: Option[String] = None,
         scriptElem: Option[Html] = None,
-        linksElem:  Option[Html] = None,
-        googleAnalyticsCalls: Seq[String] = Seq.empty,
-        noGetHelp:Boolean = false,
-        welshToggleEnabled:Boolean = true,
-        hasUserPanel: Boolean = false,
         navTitle: String = "heading_bta",
         fullWidth: Boolean = true,
         backButtonUrl: Option[play.api.mvc.Call] = None
@@ -66,7 +50,7 @@
 @head = {
 
     @if(timeoutDialog) {
-        @hmrcTimeoutDialogHelper(signOutUrl = routes.TimeoutController.killSession().url)
+        @hmrcTimeoutDialogHelper(signOutUrl = routes.TimeoutController.killSession.url)
     }
 
     @hmrcTrackingConsentSnippet()

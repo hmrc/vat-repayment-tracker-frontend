@@ -21,14 +21,11 @@ import model.Vrn
 import play.api.mvc.{Action, AnyContent}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
 
 @Singleton
 class DeprecateController @Inject() (manageOrTrackController: ManageOrTrackController,
                                      controller:              Controller
-)(
-    implicit
-    ec: ExecutionContext) {
+) {
 
   def manageOrTrack(vrn: Vrn): Action[AnyContent] = manageOrTrackController.manageOrTrack(vrn)
 

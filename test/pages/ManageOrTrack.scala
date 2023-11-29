@@ -16,7 +16,6 @@
 
 package pages
 
-import model.Vrn
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 
@@ -25,7 +24,6 @@ object ManageOrTrack extends CommonPage {
   val path = "/vat-repayment-tracker/manage-or-track-vrt"
 
   def assertPageIsDisplayed(
-      vrn:             Vrn,
       ddDisplayed:     Boolean = false,
       bankDisplayed:   Boolean = false,
       noddDisplayed:   Boolean = false,

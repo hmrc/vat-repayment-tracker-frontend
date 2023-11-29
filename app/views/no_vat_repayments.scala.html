@@ -20,7 +20,6 @@
 
 @this(
   mainTemplate: views.html.main_template,
-  viewsHelpers: views.ViewsHelpers,
   repaymentDetails: views.html.partials.repayment_details,
   viewConfig: ViewConfig
 )
@@ -30,7 +29,6 @@
   bankDetails: Option[BankDetails],
   address: Option[String],
   addressExists: Boolean,
-  vrn: Vrn,
   inflightBankDetails : Boolean)(
   implicit
   request: Request[_],
@@ -46,7 +44,7 @@
       <p class="govuk-body">@Messages("no_vat_repayments.repayments_hours")</p>
       <p class="govuk-body">@Messages("no_vat_repayments.expecting_repayment")</p>
       <p class="govuk-link govuk-!-margin-bottom-9"><a class="govuk-link govuk-!-margin-bottom-9" href=@{viewConfig.viewVatAccount}>@Messages("no_vat_repayments.view_account")</a></p>
-      @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
+      @repaymentDetails(showBankDetails, bankDetails, address, addressExists, inflightBankDetails)
     </div>
   </div>
 

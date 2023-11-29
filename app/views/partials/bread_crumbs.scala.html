@@ -16,18 +16,9 @@
 
 @import config.ViewConfig
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
-)
+@this(viewConfig: ViewConfig)
 
-@(
-currentPage : String
-)(
-implicit
-request: Request[_],
-messages: Messages,
-)
+@(currentPage : String)(implicit messages: Messages)
 
 
 <div class="govuk-breadcrumbs">

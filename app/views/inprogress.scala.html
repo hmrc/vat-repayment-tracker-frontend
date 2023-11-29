@@ -21,27 +21,21 @@
 
 
 @this(
-mainTemplate: views.html.main_template,
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig,
-repaymentDetails: views.html.partials.repayment_details,
-multiple_repayments: views.html.partials.multiple_repayment_details,
-bread_crumbs: views.html.partials.bread_crumbs
+  mainTemplate: views.html.main_template,
+  viewConfig: ViewConfig,
+  repaymentDetails: views.html.partials.repayment_details,
+  multiple_repayments: views.html.partials.multiple_repayment_details,
+  bread_crumbs: views.html.partials.bread_crumbs
 )
 
 @(
-hasSuspendedRepayments: Boolean,
-inProgress: List[RepaymentDataNoRiskingStatus],
-showBankDetails: Boolean,
-bankDetails: Option[BankDetails],
-address: Option[String],
-addressExists: Boolean,
-vrn: Vrn,
-inflightBankDetails : Boolean)(
-implicit
-request: Request[_],
-messages: Messages
-)
+  hasSuspendedRepayments: Boolean,
+  inProgress: List[RepaymentDataNoRiskingStatus],
+  showBankDetails: Boolean,
+  bankDetails: Option[BankDetails],
+  address: Option[String],
+  addressExists: Boolean,
+  inflightBankDetails : Boolean)(implicit request: Request[_], messages: Messages)
 
 
 @mainTemplate(title = Messages("inprogress.title")) {
@@ -76,7 +70,7 @@ messages: Messages
                         <h2 class="govuk-heading-l" >@Messages("in_progress")</h2>
                     }
 
-                    @multiple_repayments(inProgress,vrn,"_inprogress")
+                    @multiple_repayments(inProgress, "_inprogress")
                     <div id="inprogress-exist"></div>
                 </section>
                 <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="completed">
@@ -90,7 +84,7 @@ messages: Messages
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @repaymentDetails(showBankDetails,bankDetails,address,addressExists,vrn,inflightBankDetails)
+            @repaymentDetails(showBankDetails, bankDetails, address, addressExists, inflightBankDetails)
         </div>
     </div>
 }

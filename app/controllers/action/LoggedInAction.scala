@@ -37,7 +37,6 @@ class LoggedInAction @Inject() (
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    implicit val r: Request[A] = request
 
     af.authorised() {
       block(request)

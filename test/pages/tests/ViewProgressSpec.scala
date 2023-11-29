@@ -21,10 +21,11 @@ import model.des.RiskingStatus._
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
-import org.openqa.selenium.WebDriver
 import pages.ViewProgress.ProgressTimelineItem
 import pages.{InProgress, ViewProgress}
 import support._
+
+import java.time.format.DateTimeFormatter
 
 class ViewProgressSpec extends BrowserSpec {
 
@@ -33,6 +34,12 @@ class ViewProgressSpec extends BrowserSpec {
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
+
+  val today = LocalDate.now()
+
+  def formatDayShortMonthYear(d: LocalDate) = d.format(DateTimeFormatter.ofPattern("dd MMM YYYY"))
+
+  val formattedTodayString = formatDayShortMonthYear(today)
 
   "id: 1 click view progress basic" in {
     setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
@@ -45,7 +52,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.backExists()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
-      ProgressTimelineItem("Checking amount", "21 Nov 2023", List("We received your return and are now checking the repayment amount we owe you."))
+      ProgressTimelineItem("Checking amount", formattedTodayString, List("We received your return and are now checking the repayment amount we owe you."))
     )
   }
 
@@ -63,12 +70,12 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Sending for further checks",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -88,18 +95,20 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Sending for further checks",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.")
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
   }
 
   "id: 4 , add in INITIAL status (CLAIM QUERIED) in past" in {
+    val _50DaysAgoFormattedString = formatDayShortMonthYear(LocalDate.now().minusDays(50))
+
     setup(inPast    = true, rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = CLAIM_QUERIED)
     InProgress.clickViewProgress()
     ViewProgress.checkAmount("£0.00")
@@ -113,7 +122,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Estimated repayment date has passed",
-        "02 Oct 2023",
+        _50DaysAgoFormattedString,
         List(
           "You do not need to do anything right now. We are working on repaying you as soon as possible.",
           "We have sent you a letter to explain that your repayment is delayed."
@@ -121,7 +130,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "02 Oct 2023",
+        _50DaysAgoFormattedString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -142,7 +151,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment amount changed",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
             "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
@@ -151,7 +160,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -172,7 +181,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "You now owe HMRC",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We calculated that the original amount of £5.56 you claimed was incorrect. You now owe HMRC £6.56. We sent " +
             "you a letter with the reason for this change."
@@ -180,7 +189,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -201,12 +210,12 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment approved",
-        "21 Nov 2023",
+        formattedTodayString,
         List("This will reach your repayment bank account in 3 workings days.")
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -227,7 +236,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We sent an adjusted payment of £6.56 to your repayment bank account:",
           "Name: Account holder",
@@ -237,7 +246,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Repayment amount changed",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
             "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
@@ -246,7 +255,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -267,7 +276,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We sent you an adjusted payment of £6.56 as a cheque to",
           "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER\n."
@@ -275,7 +284,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Repayment amount changed",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. We will send a " +
             "cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter " +
@@ -285,7 +294,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -306,12 +315,12 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your VAT payment.")
       ),
       ProgressTimelineItem(
         "You now owe HMRC",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We calculated that the original amount of £5.56 you claimed was incorrect. You now owe HMRC £6.56. We sent " +
             "you a letter with the reason for this change."
@@ -319,7 +328,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -340,7 +349,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We sent a payment of £5.56 to your repayment bank account:",
           "Name: Account holder",
@@ -350,12 +359,12 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Repayment approved",
-        "21 Nov 2023",
+        formattedTodayString,
         List("This will reach your repayment bank account in 3 workings days.")
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -376,7 +385,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We sent a payment of £5.56 as a cheque to",
           "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER\n."
@@ -384,7 +393,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Repayment approved",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We will send a cheque to your business address. This will reach you in 5 to 6 working days. We sent you a " +
             "letter explaining why we changed your amount.",
@@ -393,7 +402,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -429,7 +438,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Sending for further checks",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if " +
             "we need any further information."
@@ -437,7 +446,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -457,7 +466,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Sending for further checks",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if " +
             "we need any further information."
@@ -465,7 +474,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -483,7 +492,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "You must submit your latest VAT return",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We cannot process your repayment until you submit your VAT return for the last accounting period.\n\n" +
             "Submit your return"
@@ -491,7 +500,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -510,7 +519,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Sending for further checks",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if" +
             " we need any further information."
@@ -518,7 +527,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -555,7 +564,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Sending for further checks",
-        "21 Nov 2023",
+        formattedTodayString,
         List(
           "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if " +
             "we need any further information."
@@ -563,7 +572,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "21 Nov 2023",
+        formattedTodayString,
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )
@@ -595,12 +604,12 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment approved",
-        "21 Nov 2023",
+        formattedTodayString,
         List("This will reach your repayment bank account in 3 workings days.")
       ),
       ProgressTimelineItem(
         "Sending for further checks",
-        "20 Nov 2023",
+        formatDayShortMonthYear(LocalDate.now().minusDays(1)),
         List(
           "We are making sure we pay you the right amount. You do not need to do anything, but we may contact you " +
             "if we need any further information."
@@ -608,7 +617,7 @@ class ViewProgressSpec extends BrowserSpec {
       ),
       ProgressTimelineItem(
         "Checking amount",
-        "19 Nov 2023",
+        formatDayShortMonthYear(LocalDate.now().minusDays(2)),
         List("We received your return and are now checking the repayment amount we owe you.")
       )
     )

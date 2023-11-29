@@ -17,19 +17,17 @@
 @import req.RequestSupport
 
 
-@this(viewConf: config.ViewConfig,
-        viewsHelpers: views.ViewsHelpers)
-
+@this(viewConf: config.ViewConfig)
 
 @()(implicit messages:Messages, r: Request[_])
 
 
 @timeoutKeepAliveUrl = @{
-    routes.TimeoutController.keepAliveSession().url
+    routes.TimeoutController.keepAliveSession.url
 }
 
 @killUrl = @{
-    routes.TimeoutController.killSession().url
+    routes.TimeoutController.killSession.url
 }
 
 <script type="text/javascript">

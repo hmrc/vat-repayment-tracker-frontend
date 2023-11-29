@@ -16,8 +16,8 @@
 
 package pages
 
-import langswitch.Language
-import langswitch.Languages.{English, Welsh}
+import model.Language
+import model.Language._
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 

@@ -26,8 +26,6 @@ import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.{Request, Result, Results}
 
-import scala.concurrent.ExecutionContext
-
 @Singleton
 class ShowResultsFormatter @Inject() (
     no_vat_repayments:    views.html.no_vat_repayments,
@@ -37,7 +35,7 @@ class ShowResultsFormatter @Inject() (
     completed:            views.html.completed,
     inprogress:           views.html.inprogress,
     desFormatter:         DesFormatter,
-    addressFormatter:     AddressFormatter)(implicit ec: ExecutionContext) extends Results {
+    addressFormatter:     AddressFormatter) extends Results {
 
   private val logger = Logger(this.getClass)
 
@@ -90,7 +88,6 @@ class ShowResultsFormatter @Inject() (
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        vrn,
         inflightBankDetails
       ))
     } else if (allRepaymentData.inProgressRepaymentData.isEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
@@ -100,7 +97,6 @@ class ShowResultsFormatter @Inject() (
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        vrn,
         inflightBankDetails
       ))
     } else if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty) {
@@ -111,7 +107,6 @@ class ShowResultsFormatter @Inject() (
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        vrn,
         inflightBankDetails
       ))
     } else {
@@ -121,7 +116,6 @@ class ShowResultsFormatter @Inject() (
           bankDetails,
           addressDetails,
           addressDetailsExist,
-          vrn,
           inflightBankDetails
         ))
 

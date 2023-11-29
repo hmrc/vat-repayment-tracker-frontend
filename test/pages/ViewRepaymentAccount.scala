@@ -16,16 +16,15 @@
 
 package pages
 
-import model.Vrn
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
 object ViewRepaymentAccount extends CommonPage {
 
-  def assertPageIsDisplayed(vrn: Vrn, path: String = "/vat-repayment-tracker-frontend/view-repayment-account")(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed(path: String = "/vat-repayment-tracker-frontend/view-repayment-account")(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""$path"""
     readTitle shouldBe "Your VAT repayments will be sent to this account - Business tax account - GOV.UK"
-    //readAccName() shouldBe s"""Account number: ${accountHolderName}"""
+
     readAccNumber should include ("****2222")
     readAccSortCode should include ("66 77 88")
     readMainMessage shouldBe "Your VAT repayments will be sent to this account"

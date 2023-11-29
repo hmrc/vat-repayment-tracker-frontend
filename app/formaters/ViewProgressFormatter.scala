@@ -38,7 +38,6 @@ class ViewProgressFormatter @Inject() (
   private val localDateDescendingOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
 
   def computeViewProgress(
-      vrn:           Vrn,
       periodKey:     PeriodKey,
       vrd:           List[VrtRepaymentDetailData],
       customerData:  Option[CustomerInformation],
@@ -79,8 +78,17 @@ class ViewProgressFormatter @Inject() (
         s"viewProgress=$viewProgress")
     }
 
-    Ok(view_progress(vrn, viewProgress, showEstimatedRepaymentDate(vrd), viewProgress.whatsHappenedSoFar(0).amountDescription, viewProgress.whatsHappenedSoFar(0).pageTitle,
-                     viewProgress.whatsHappenedSoFar(0).isComplete, showPayUrl(viewProgress.whatsHappenedSoFar(0)), (viewProgress.amount * 100).longValue))
+    Ok(
+      view_progress(
+        viewProgress,
+        showEstimatedRepaymentDate(vrd),
+        viewProgress.whatsHappenedSoFar(0).amountDescription,
+        viewProgress.whatsHappenedSoFar(0).pageTitle,
+        viewProgress.whatsHappenedSoFar(0).isComplete,
+        showPayUrl(viewProgress.whatsHappenedSoFar(0)),
+        (viewProgress.amount * 100).longValue
+      )
+    )
   }
 
   private def showPayUrl(whatsHappenedSoFar: WhatsHappendSoFar): Boolean =

@@ -20,7 +20,6 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.des.RiskingStatus
 import model.{PeriodKey, Vrn}
-import play.api.libs.json.Json
 
 object PaymentsOrchestratorStub extends TestHelper {
 

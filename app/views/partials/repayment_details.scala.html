@@ -18,22 +18,15 @@
 @import model.des._
 @import model._
 
-@this(
-viewsHelpers: views.ViewsHelpers,
-viewConfig: ViewConfig
-)
+@this(viewConfig: ViewConfig)
 
 @(
-showBankDetails: Boolean,
-bankDetailsOption: Option[BankDetails],
-address: Option[String],
-addressExists: Boolean,
-vrn: Vrn,
-inflightBankDetails : Boolean)(
-implicit
-request: Request[_],
-message: Messages
-)
+  showBankDetails: Boolean,
+  bankDetailsOption: Option[BankDetails],
+  address: Option[String],
+  addressExists: Boolean,
+  inflightBankDetails : Boolean
+)(implicit message: Messages)
 
 
 @if(showBankDetails) {
