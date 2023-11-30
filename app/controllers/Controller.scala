@@ -16,6 +16,7 @@
 
 package controllers
 
+import cats.data.NonEmptyList
 import config.ViewConfig
 import connectors.Auditor.`repayment-type`
 import connectors._
@@ -114,7 +115,14 @@ class Controller @Inject() (
         financialData <- financialDataF
         vrd <- vatRepaymentTrackerBackendConnector.find(request.typedVrn.vrn, periodKey)
       } yield {
-        viewProgressFormatter.computeViewProgress(periodKey, vrd, customerData, financialData)
+        vrd match {
+          case Nil =>
+            logger.info("No VAT repayment data found from backend: redirecting to manage or track page")
+            Redirect(routes.ManageOrTrackController.manageOrTrackVrt)
+
+          case head :: tail =>
+            viewProgressFormatter.computeViewProgress(periodKey, NonEmptyList(head, tail), customerData, financialData)
+        }
       }
     }
 

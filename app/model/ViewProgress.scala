@@ -16,6 +16,7 @@
 
 package model
 
+import cats.data.NonEmptyList
 import model.des.RiskingStatus
 
 import java.time.LocalDate
@@ -25,7 +26,7 @@ final case class ViewProgress(
     returnCreationDate:     LocalDate,
     estimatedRepaymentDate: LocalDate,
     period:                 String,
-    whatsHappenedSoFar:     List[WhatsHappendSoFar]) {
+    whatsHappenedSoFar:     NonEmptyList[WhatsHappendSoFar]) {
 
   val isComplete: Boolean = whatsHappenedSoFar.exists(_.isComplete)
   val repaymentSuspended: Boolean = whatsHappenedSoFar.exists(_.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED)

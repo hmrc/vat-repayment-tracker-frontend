@@ -16,8 +16,12 @@
 
 package formaters
 
+import cats.data.NonEmptyList
+import cats.kernel.Order
+
 import java.time.LocalDate
 import config.ViewConfig
+
 import javax.inject.{Inject, Singleton}
 import model._
 import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, REPAYMENT_ADJUSTED, REPAYMENT_APPROVED, REPAYMENT_SUSPENDED, SENT_FOR_RISKING}
@@ -39,7 +43,7 @@ class ViewProgressFormatter @Inject() (
 
   def computeViewProgress(
       periodKey:     PeriodKey,
-      vrd:           List[VrtRepaymentDetailData],
+      vrd:           NonEmptyList[VrtRepaymentDetailData],
       customerData:  Option[CustomerInformation],
       financialData: Option[FinancialData]
   )(
@@ -54,9 +58,7 @@ class ViewProgressFormatter @Inject() (
     val returnDebitChargeExists = desFormatter.getReturnDebitChargeExists(financialData, periodKey)
 
     val latestUpdate =
-      vrd.sortBy(_.repaymentDetailsData.lastUpdateReceivedDate)(Ordering.Option(localDateDescendingOrdering))
-        .headOption
-        .getOrElse(throw new Exception("Could not find any repayment progress items"))
+      vrd.sortBy(_.repaymentDetailsData.lastUpdateReceivedDate)(Order.fromOrdering(Ordering.Option(localDateDescendingOrdering))).head
     val latestRiskingStatus = latestUpdate.repaymentDetailsData.riskingStatus
 
     val estRepaymentDate = getEstimatedRepaymentDate(latestUpdate.repaymentDetailsData.returnCreationDate, latestUpdate.repaymentDetailsData.supplementDelayDays)
@@ -73,7 +75,7 @@ class ViewProgressFormatter @Inject() (
         s"lst: ${
           vrd.map(a => s"[Status ${a.repaymentDetailsData.riskingStatus}, " +
             s"origAmt: ${a.repaymentDetailsData.originalPostingAmount} " +
-            s"BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").mkString("[", ",", "]")
+            s"BOX5: ${a.repaymentDetailsData.vatToPay_BOX5}]").toList.mkString("[", ",", "]")
         }  " +
         s"viewProgress=$viewProgress")
     }
@@ -82,10 +84,10 @@ class ViewProgressFormatter @Inject() (
       view_progress(
         viewProgress,
         showEstimatedRepaymentDate(vrd),
-        viewProgress.whatsHappenedSoFar(0).amountDescription,
-        viewProgress.whatsHappenedSoFar(0).pageTitle,
-        viewProgress.whatsHappenedSoFar(0).isComplete,
-        showPayUrl(viewProgress.whatsHappenedSoFar(0)),
+        viewProgress.whatsHappenedSoFar.head.amountDescription,
+        viewProgress.whatsHappenedSoFar.head.pageTitle,
+        viewProgress.whatsHappenedSoFar.head.isComplete,
+        showPayUrl(viewProgress.whatsHappenedSoFar.head),
         (viewProgress.amount * 100).longValue
       )
     )
@@ -96,17 +98,17 @@ class ViewProgressFormatter @Inject() (
     else whatsHappenedSoFar.riskingStatus == ADJUSMENT_TO_TAX_DUE
 
   private def computeWhatsHappenedSoFarList(estRepaymentDate:         LocalDate,
-                                            vrd:                      List[VrtRepaymentDetailData],
+                                            vrd:                      NonEmptyList[VrtRepaymentDetailData],
                                             bankDetailsExist:         Boolean,
                                             returnCreditChargeExists: Boolean,
                                             addressDetails:           Option[String],
                                             bankDetailsOption:        Option[BankDetails],
-                                            returnDebitChargeExists:  Boolean)(implicit messages: Messages): List[WhatsHappendSoFar] = {
-    implicit val localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
+                                            returnDebitChargeExists:  Boolean)(implicit messages: Messages): NonEmptyList[WhatsHappendSoFar] = {
+    implicit val localDateOrdering: Order[LocalDate] = Order.fromOrdering(Ordering.fromLessThan(_ isAfter _))
 
     //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
 
-    val nonCompleteRows: List[WhatsHappendSoFar] =
+    val nonCompleteRows: NonEmptyList[WhatsHappendSoFar] =
       desFormatter.addMissingStatus(vrd)
         .sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
         .map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, bankDetailsOption))
@@ -120,7 +122,7 @@ class ViewProgressFormatter @Inject() (
       .map (computeWhatsHappenedSoFarCompleteDebitCharge)
     else List()
 
-    completedCreditRows ::: completedDebitRows ::: nonCompleteRows
+    nonCompleteRows.prependList(completedCreditRows ::: completedDebitRows)
   }
 
   private def computeWhatsHappenedSoFar(estRepaymentDate:       LocalDate,
@@ -281,7 +283,7 @@ class ViewProgressFormatter @Inject() (
   private def getEstimatedRepaymentDate(returnCreationDate: LocalDate, supplementDelayDays: Option[Int]): LocalDate =
     returnCreationDate.plusDays(supplementDelayDays.getOrElse(0) + 30)
 
-  private def showEstimatedRepaymentDate(vrd: List[VrtRepaymentDetailData]): Boolean =
+  private def showEstimatedRepaymentDate(vrd: NonEmptyList[VrtRepaymentDetailData]): Boolean =
     !vrd.exists(f => (f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED ||
       f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE) || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
 
