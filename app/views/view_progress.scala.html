@@ -92,7 +92,7 @@
 
 
             <ol class="hmrc-timeline">
-            @for(whsf <- viewProgress.whatsHappenedSoFar) {
+            @for(whsf <- viewProgress.whatsHappenedSoFar.toList) {
                 <li class="hmrc-timeline-event" id="@{whsf.riskingStatus}@{whsf.complete}_timeline">
                     <h2 class="hmrc-timeline-event-title govuk-heading-m" id="@{whsf.riskingStatus}@{whsf.complete}_event">@{whsf.title}</h2>
                     <p class="govuk-body hmrc-timeline-event-meta" id="@{whsf.riskingStatus}@{whsf.complete}_date">@{CommonFormatter.formatDate(whsf.date)}</p>

@@ -103,4 +103,20 @@ class ControllerSpec extends ItSpec with DeregisteredBehaviour {
 
   }
 
+  "GET /view-progress should" - {
+
+    "redirect the user to /manage-or-track-vrt when no repayment data is found in the BE" in {
+      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString, vrn, EnrolmentKeys.mtdVatEnrolmentKey)
+      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
+      VatRepaymentTrackerBackendWireMockResponses.noRepaymentDetails(vrn, periodKey)
+
+      val result = controller.viewProgress(periodKey)(fakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.ManageOrTrackController.manageOrTrackVrt.url)
+
+    }
+
+  }
+
 }
