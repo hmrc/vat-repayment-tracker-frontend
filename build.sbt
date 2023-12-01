@@ -1,4 +1,4 @@
-import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
+import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 val appName = "vat-repayment-tracker-frontend"
 val scalaV = "2.13.12"
@@ -30,10 +30,8 @@ lazy val microservice = Project(appName, file("."))
         Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala")
   )
   .settings(PlayKeys.playDefaultPort := 9863)
-  .settings(scalaSettings: _*)
-  .settings(defaultSettings(): _*)
-  .settings(integrationTestSettings())
-  .configs(IntegrationTest)
+  .settings(scalaSettings *)
+  .settings(defaultSettings() *)
   .settings(
     routesImport ++= Seq(
       "model._",
