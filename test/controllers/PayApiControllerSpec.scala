@@ -42,8 +42,8 @@ class PayApiControllerSpec extends ItSpec {
         PayApiWireMockResponses.verifyStartJourneyCalled(
           SpjRequestBtaVat(
             100L,
-            "http://localhost:19001/vat-repayment-tracker/show-results-vrt2345678890",
-            "http://localhost:19001/vat-repayment-tracker/show-results-vrt2345678890",
+            "http://localhost:9863/vat-repayment-tracker/show-vrt",
+            "http://localhost:9863/vat-repayment-tracker/show-vrt",
             vrn
           )
         )

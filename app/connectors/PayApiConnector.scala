@@ -16,24 +16,22 @@
 
 package connectors
 
-import config.ViewConfig
-import javax.inject.{Inject, Singleton}
 import model.Vrn
 import model.payapi.{SpjRequestBtaVat, SpjResponse}
-import play.api.{Configuration, Logger}
 import play.api.mvc.Request
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PayApiConnector @Inject() (
     servicesConfig: ServicesConfig,
     httpClient:     HttpClient,
-    configuration:  Configuration,
-    viewConfig:     ViewConfig)
+    configuration:  Configuration)
   (implicit ec: ExecutionContext) {
 
   import req.RequestSupport._
@@ -46,9 +44,8 @@ class PayApiConnector @Inject() (
 
   def startJourney(amountInPence: Long, vrn: Vrn)(implicit request: Request[_]): Future[SpjResponse] = {
 
-    val bUrl: String = s"${viewConfig.frontendBaseUrl}$payBackUrl${vrn.value}"
-    val journeyRequest: SpjRequestBtaVat = SpjRequestBtaVat(amountInPence, bUrl, bUrl, vrn)
-    logger.debug(s"Using back url : $bUrl")
+    val journeyRequest: SpjRequestBtaVat = SpjRequestBtaVat(amountInPence, payBackUrl, payBackUrl, vrn)
+    logger.debug(s"Using back url : $payBackUrl")
     logger.debug(s"Calling pay-api start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling pay-api start journey for vrn with url $startJourneyURL)")
