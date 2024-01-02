@@ -9,11 +9,9 @@ object SbtUpdatesSettings {
     dependencyUpdatesFailBuild := true,
     (Compile / compile) := ((Compile / compile) dependsOn dependencyUpdates).value,
     dependencyUpdatesFilter -= moduleFilter("org.scala-lang"),
-    dependencyUpdatesFilter -= moduleFilter("com.typesafe.play"),
+    dependencyUpdatesFilter -= moduleFilter("org.playframework"),
     // locked by version of play
-    dependencyUpdatesFilter -= moduleFilter("org.scalatestplus.play", "scalatestplus-play"),
-    // enumeratum-play 1.8.0 incompatible with enumeratum 1.7.3
-    dependencyUpdatesFilter -= moduleFilter("com.beachape", "enumeratum-play")
+    dependencyUpdatesFilter -= moduleFilter("org.scalatestplus.play", "scalatestplus-play")
 
   )
 

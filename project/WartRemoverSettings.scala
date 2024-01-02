@@ -26,7 +26,6 @@ object  WartRemoverSettings {
       JavaSerializable,
       LeakingSealed,
       MutableDataStructures,
-      Null,
       OptionPartial,
       Recursion,
       Return,
