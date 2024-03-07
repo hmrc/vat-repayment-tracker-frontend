@@ -139,7 +139,6 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 3 , REPAYMENT_ADJUSTED" in {
     setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_ADJUSTED)
     InProgress.clickViewProgress()
-    println(webDriver.getPageSource)
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
