@@ -37,9 +37,9 @@ class ViewProgressFormatter @Inject() (
     viewConfig:      ViewConfig,
     periodFormatter: PeriodFormatter) extends Results {
 
-  private val logger = Logger(this.getClass)
+  implicit val localDateOrdering: Order[LocalDate] = Order.fromOrdering(Ordering.fromLessThan(_ isAfter _))
 
-  private val localDateDescendingOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isAfter _)
+  private val logger = Logger(this.getClass)
 
   def computeViewProgress(
       periodKey:     PeriodKey,
@@ -58,12 +58,15 @@ class ViewProgressFormatter @Inject() (
     val returnDebitChargeExists = desFormatter.getReturnDebitChargeExists(financialData, periodKey)
 
     val latestUpdate =
-      vrd.sortBy(_.repaymentDetailsData.lastUpdateReceivedDate)(Order.fromOrdering(Ordering.Option(localDateDescendingOrdering))).head
+      vrd.sortBy(repaymentData => (repaymentData.repaymentDetailsData.sorted, repaymentData.repaymentDetailsData.lastUpdateReceivedDate)).head
     val latestRiskingStatus = latestUpdate.repaymentDetailsData.riskingStatus
 
     val estRepaymentDate = getEstimatedRepaymentDate(latestUpdate.repaymentDetailsData.returnCreationDate, latestUpdate.repaymentDetailsData.supplementDelayDays)
     val viewProgress: ViewProgress = ViewProgress(
-      if (latestRiskingStatus == CLAIM_QUERIED || latestRiskingStatus == REPAYMENT_APPROVED) latestUpdate.repaymentDetailsData.originalPostingAmount
+      if (latestRiskingStatus == CLAIM_QUERIED
+        || latestRiskingStatus == REPAYMENT_APPROVED
+        || latestRiskingStatus == INITIAL
+        || latestRiskingStatus == SENT_FOR_RISKING) latestUpdate.repaymentDetailsData.originalPostingAmount
       else latestUpdate.repaymentDetailsData.vatToPay_BOX5,
       latestUpdate.repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
@@ -104,7 +107,6 @@ class ViewProgressFormatter @Inject() (
                                             addressDetails:           Option[String],
                                             bankDetailsOption:        Option[BankDetails],
                                             returnDebitChargeExists:  Boolean)(implicit messages: Messages): NonEmptyList[WhatsHappendSoFar] = {
-    implicit val localDateOrdering: Order[LocalDate] = Order.fromOrdering(Ordering.fromLessThan(_ isAfter _))
 
     //If a row is now complete because the call to 1166 brings back data , we want to show the completed row and the non completed row.
 

@@ -37,14 +37,14 @@ class InProgressSpec extends BrowserSpec {
   val ft_debit: Int = 3
 
   val details: Map[String, String] = Map(
-    ("inprogress_0", "returnCreationDate: 01 Jan 2001, periodKey: 18AA, amount: 6.56"),
-    ("inprogress_1", "returnCreationDate: 01 Jan 2001, periodKey: 18AD, amount: 6.56"),
+    ("inprogress_0", "returnCreationDate: 01 Jan 2001, periodKey: 18AA, amount: 5.56"),
+    ("inprogress_1", "returnCreationDate: 01 Jan 2001, periodKey: 18AD, amount: 5.56"),
     ("inprogress_2", "returnCreationDate: 01 Jan 2001, periodKey: 18AJ, amount: 5.56")
   )
 
   "1. user is authorised and financial data found" in {
     setup()
-    InProgress.assertPageIsDisplayed(amount = "£6.56")
+    InProgress.assertPageIsDisplayed(amount = "£0.00")
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
@@ -60,7 +60,7 @@ class InProgressSpec extends BrowserSpec {
 
   "3. user is authorised and financial data found but partial" in {
     setup(partialBankDetails = true)
-    InProgress.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true)
+    InProgress.assertPageIsDisplayed(amount         = "£0.00", partialAccount = true)
     InProgress.uniqueToPage
   }
 
@@ -71,7 +71,7 @@ class InProgressSpec extends BrowserSpec {
 
   "5. user is authorised and address data found" in {
     setup(useBankDetails = false)
-    InProgress.assertPageIsDisplayed(checkBank    = false, checkAddress = true, amount = "£6.56")
+    InProgress.assertPageIsDisplayed(checkBank    = false, checkAddress = true, amount = "£0.00")
     InProgress.uniqueToPage
   }
 
@@ -95,7 +95,7 @@ class InProgressSpec extends BrowserSpec {
     PaymentsOrchestratorStub.financialsOkCredit(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
-    InProgress.assertPageIsDisplayed(amount = "£6.56")
+    InProgress.assertPageIsDisplayed(amount = "£0.00")
   }
 
   "8. multiple inprogress " in {

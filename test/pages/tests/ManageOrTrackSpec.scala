@@ -63,7 +63,7 @@ class ManageOrTrackSpec extends BrowserSpec {
     setup()
     ManageOrTrack.clickVrtLabel()
     ManageOrTrack.clickContinue()
-    InProgress.assertPageIsDisplayed(amount = "£6.56")
+    InProgress.assertPageIsDisplayed(amount = "£0.00")
   }
 
   "7. click bankLabel" in {

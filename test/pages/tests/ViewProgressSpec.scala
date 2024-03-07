@@ -44,7 +44,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 1 click view progress basic" in {
     setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(INITIAL))
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
@@ -84,7 +84,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING)" in {
     setup(rdsp      = 1, periodKey = PeriodKey("18AG"), ft = ft_404, status1 = SENT_FOR_RISKING)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(SENT_FOR_RISKING, INITIAL))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
@@ -139,6 +139,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 3 , REPAYMENT_ADJUSTED" in {
     setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_ADJUSTED)
     InProgress.clickViewProgress()
+    println(webDriver.getPageSource)
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
@@ -198,7 +199,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 6, REPAYMENT_APPROVED" in {
     setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = REPAYMENT_APPROVED)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£5.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
@@ -337,7 +338,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists" in {
     setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_APPROVED)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£5.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL))
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = true)
@@ -373,7 +374,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists AND no bank details" in {
     setup(rdsp           = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_APPROVED, useBankDetails = false)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£5.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL))
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = true)
@@ -411,7 +412,7 @@ class ViewProgressSpec extends BrowserSpec {
   "check 3 status" in {
     setup(rdsp      = 3, periodKey = PeriodKey("18AG"), ft = ft_credit, status3 = REPAYMENT_APPROVED)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£5.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL, CLAIM_QUERIED))
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = true)
@@ -455,7 +456,7 @@ class ViewProgressSpec extends BrowserSpec {
   "id: 2 , add in INITIAL status (SENT_FOR_RISKING) , #001 status" in {
     setup(rdsp             = 1, periodKey = PeriodKey("#001"), ft = ft_404, status1 = SENT_FOR_RISKING, periodKeyBackend = PeriodKey("%23001"))
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkAmount("£0.00")
     ViewProgress.checkEstimatedRepaymentDate(6)
     ViewProgress.checkStatusExists(List(SENT_FOR_RISKING, INITIAL))
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
@@ -537,7 +538,7 @@ class ViewProgressSpec extends BrowserSpec {
   "check zero amount logger" in {
     setup(rdsp      = 4, periodKey = PeriodKey("18AG"), ft = ft_credit, status3 = REPAYMENT_APPROVED)
     InProgress.clickViewProgress()
-    ViewProgress.checkAmount("£0.00")
+    ViewProgress.checkAmount("£5.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL, CLAIM_QUERIED))
     ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = false)

@@ -23,7 +23,7 @@ import formaters.{DesFormatter, PeriodFormatter}
 import javax.inject.{Inject, Singleton}
 import model.des._
 import model._
-import model.des.RiskingStatus.{CLAIM_QUERIED, REPAYMENT_APPROVED}
+import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL, REPAYMENT_APPROVED, SENT_FOR_RISKING}
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.Request
@@ -74,7 +74,10 @@ class VrtService @Inject() (
       if !outDatedPredicate(rd, financialData)
     } yield RepaymentData(
       periodFormatter.formatPeriodKey(rd.periodKey),
-      if (rd.riskingStatus == CLAIM_QUERIED || rd.riskingStatus == REPAYMENT_APPROVED) rd.originalPostingAmount else rd.vatToPay_BOX5,
+      if (rd.riskingStatus == CLAIM_QUERIED
+        || rd.riskingStatus == REPAYMENT_APPROVED
+        || rd.riskingStatus == SENT_FOR_RISKING
+        || rd.riskingStatus == INITIAL) rd.originalPostingAmount else rd.vatToPay_BOX5,
       rd.returnCreationDate,
       rd.riskingStatus,
       rd.periodKey)

@@ -22,7 +22,7 @@ object AppDependencies {
     "org.jsoup"              % "jsoup"                   % "1.17.2",
     "org.playframework"      %% "play-test"              % current,
     "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.1",
-    "org.wiremock"           % "wiremock-standalone"     % "3.3.1"
+    "org.wiremock"           % "wiremock-standalone"     % "3.4.2"
     // FORMAT: ON
   ).map(_ % Test)
 
