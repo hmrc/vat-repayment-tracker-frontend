@@ -50,6 +50,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.backExists()
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem("Checking amount", formattedTodayString, List("We received your return and are now checking the repayment amount we owe you."))
@@ -66,6 +67,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -91,6 +93,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -118,6 +121,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is delayed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -147,6 +151,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -177,6 +182,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("You need to make a VAT payment")
     ViewProgress.payUrl(expectedValue = true)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -206,6 +212,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -232,6 +239,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -272,6 +280,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -311,6 +320,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -345,6 +355,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -381,6 +392,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -419,6 +431,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -462,6 +475,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -488,6 +502,7 @@ class ViewProgressSpec extends BrowserSpec {
 
     ViewProgress.amount shouldBe None
     ViewProgress.estimatedDate shouldBe None
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -515,6 +530,7 @@ class ViewProgressSpec extends BrowserSpec {
 
     ViewProgress.amount.isDefined shouldBe true
     ViewProgress.estimatedDate.isDefined shouldBe true
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -545,6 +561,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
     ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
@@ -600,6 +617,7 @@ class ViewProgressSpec extends BrowserSpec {
 
     ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.checkAmount("£4.56")
+    ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
