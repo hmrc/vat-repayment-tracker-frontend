@@ -37,7 +37,8 @@ case class ViewConfig(
     accessibilityStatementPath:    String,
     isShuttered:                   Boolean,
     timeoutDialogTimeout:          Int,
-    timeoutDialogCountdown:        Int) {
+    timeoutDialogCountdown:        Int,
+    webchatUrl:                    String) {
 
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
   val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
@@ -63,7 +64,8 @@ case class ViewConfig(
     timeoutDialogTimeout          = servicesConfig.getInt("timeout-dialog.timeout"),
     timeoutDialogCountdown        = servicesConfig.getInt("timeout-dialog.countdown"),
     accessibilityStatementBaseUrl = servicesConfig.getString("accessibility-statement-frontend.url"),
-    accessibilityStatementPath    = servicesConfig.getString("accessibility-statement-frontend.path")
+    accessibilityStatementPath    = servicesConfig.getString("accessibility-statement-frontend.path"),
+    webchatUrl                    = servicesConfig.getString("urls.webchatUrl")
 
   )
 

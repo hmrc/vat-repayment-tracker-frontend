@@ -128,6 +128,7 @@ view_progress.pay_now = Talu nawr
 view_progress.estimated_repayment_date = Amcangyfrif o’r dyddiad ad-dalu
 view_progress.repayment_history = Hanes eich ad-daliadau
 view_progress.repayment_progress = Cynnydd eich ad-daliadau
+view_progress.repayment.AskHMRC = Gofyn i CThEF (yn agor tab newydd)
 
 
 view_repayment_account.title = Caiff eich ad-daliadau TAW eu hanfon i’r cyfrif hwn

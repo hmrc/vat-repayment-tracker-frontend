@@ -92,6 +92,13 @@ object ViewProgress extends CommonPage {
 
   def payUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("pay-url") shouldBe expectedValue
 
+  def assertWebchatLinkPresent()(implicit wd: WebDriver): Assertion = {
+    hasTextHyperLinkedTo(
+      "Ask HMRC (opens in new tab)",
+      "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+    )
+  }
+
   def getProgressTimelineItems(implicit wd: WebDriver): List[ProgressTimelineItem] = {
     val events = wd.findElements(By.cssSelector(".hmrc-timeline-event")).asScala.toList
     events.map(event =>
