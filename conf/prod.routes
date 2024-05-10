@@ -1,5 +1,4 @@
 # Add all the application routes to the app.routes file
 ->         /vat-repayment-tracker     app.Routes
-->         /vat-repayment-tracker-frontend   deprecated.Routes
 
 ->         /                          health.Routes

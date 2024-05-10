@@ -30,7 +30,6 @@ import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
 
-import scala.annotation.unused
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -61,7 +60,7 @@ class Controller @Inject() (
 
   val nonMtdUser: Action[AnyContent] = actions.loggedIn.async { implicit request =>
     for {
-      _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress)
+      _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress, request.typedVrn.map(_.vrn))
     } yield Ok(views_non_mtd_user())
   }
 
@@ -83,7 +82,7 @@ class Controller @Inject() (
             calendarData <- calendarDataF
             designatoryDetails <- designatoryDetailsF
             engmtType = showResultsFormatter.computeEngmtClassic(calendarData)
-            _ <- auditor.auditEngagement("showVrt", engmtType)
+            _ <- auditor.auditEngagement("showVrt", engmtType, Some(request.typedVrn.vrn))
           } yield showResultsFormatter.computeViewClassic(vrnNonMtd, calendarData, designatoryDetails)
 
         case TypedVrn.MtdVrn(vrnMtd) =>
@@ -98,7 +97,7 @@ class Controller @Inject() (
 
             allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData)
             engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
-            _ <- auditor.auditEngagement("showVrt", engmtType)
+            _ <- auditor.auditEngagement("showVrt", engmtType, Some(request.typedVrn.vrn))
           } yield showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd)
       }
 
@@ -141,29 +140,6 @@ class Controller @Inject() (
 
   val deregistered: Action[AnyContent] = actions.loggedIn.async { implicit request =>
     Ok(vrt_vat_registration_cancelled())
-  }
-
-  //------------------------------------------------------------------------------------------------------------------------------
-
-  //deprecate this when the URL changes to vat-repayment-tracker
-  def showResults(@unused vrn: Vrn): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
-    implicit request: AuthenticatedRequest[_] =>
-      val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
-      val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
-      val financialDataF = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
-
-      val result = for {
-        customerData <- customerDataF
-        repaymentDetails <- repaymentDetailsF
-        financialData <- financialDataF
-
-        allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
-        engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
-        _ <- auditor.auditEngagement("showResults", engmtType)
-      } yield showResultsFormatter.computeView(allRepaymentData, customerData, request.typedVrn.vrn)
-
-      result
-
   }
 
 }

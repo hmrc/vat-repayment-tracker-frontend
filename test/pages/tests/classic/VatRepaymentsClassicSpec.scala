@@ -36,6 +36,7 @@ class VatRepaymentsClassicSpec extends BrowserSpec {
     VatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"
     VatRepaymentsClassic.readReceivedOnDate shouldBe "05 Apr 2016"
 
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "in_progress_classic"))
   }
 
   "2. user is authorised and vat repayments found (current period)" in {
@@ -46,6 +47,8 @@ class VatRepaymentsClassicSpec extends BrowserSpec {
     login()
     goToViaPath(path)
     VatRepaymentsClassic.readReceivedOnDate shouldBe "05 Jul 2016"
+
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "in_progress_classic"))
   }
 
   "3. user is authorised and vat repayments found (current period), 404 when getting address data" in {

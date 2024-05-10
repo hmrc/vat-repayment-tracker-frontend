@@ -35,6 +35,8 @@ class NoVatRepaymentsClassicSpec extends BrowserSpec {
     NoVatRepaymentsClassic.assertPageIsDisplayed()
     NoVatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"
 
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+
   }
 
 }

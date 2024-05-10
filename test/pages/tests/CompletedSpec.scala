@@ -39,11 +39,14 @@ import support._
 class CompletedSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"/vat-repayment-tracker/show-vrt"
+  val path = "/vat-repayment-tracker/show-vrt"
 
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
+
+  def expectEngagementStatusAudited() =
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
 
   "1. user is authorised and financial data found" in {
     setup()
@@ -52,27 +55,37 @@ class CompletedSpec extends BrowserSpec {
     Completed.checktabs
     Completed.breadCrumbsExists
     Completed.containsBAC(result = false)
+
+    expectEngagementStatusAudited()
   }
 
   "2. BAC shown" in {
     setup(useBankDetails = false)
     Completed.containsBAC(result = true)
+
+    expectEngagementStatusAudited()
   }
 
   "3. BAC not shown" in {
     setup(useBankDetails = false, inflight = true)
     Completed.containsBAC(result = false)
+
+    expectEngagementStatusAudited()
   }
 
   "4. user is authorised and financial data found but partial" in {
     setup(partialBankDetails = true)
     Completed.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true)
     Completed.uniqueToPage
+
+    expectEngagementStatusAudited()
   }
 
   "5. click in completed link" in {
     setup()
     Completed.viewProgressLink
+
+    expectEngagementStatusAudited()
   }
 
   "6. multiple completed " in {
@@ -94,6 +107,8 @@ class CompletedSpec extends BrowserSpec {
 
     Completed.uniqueToPage
     Completed.viewProgressLink
+
+    expectEngagementStatusAudited()
   }
 
   "7. check audit" in {

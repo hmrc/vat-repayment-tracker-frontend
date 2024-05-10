@@ -32,13 +32,13 @@ class Actions @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def loggedIn: ActionBuilder[Request, AnyContent] = shutteredAction andThen loggedInAction
+  val loggedIn: ActionBuilder[LoggedInRequest, AnyContent] = shutteredAction andThen loggedInAction
 
-  def securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction
+  val securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction
 
-  def securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction andThen validateMtdVrn
+  val securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction andThen validateMtdVrn
 
-  def securedActionMtdVrnCheckWithoutShutterCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateMtdVrn
+  val securedActionMtdVrnCheckWithoutShutterCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateMtdVrn
 
   private def validateMtdVrn: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
     new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {

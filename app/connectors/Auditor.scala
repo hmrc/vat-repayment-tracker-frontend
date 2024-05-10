@@ -17,8 +17,9 @@
 package connectors
 
 import formaters.CommonFormatter
+
 import javax.inject.{Inject, Singleton}
-import model.RepaymentDataNoRiskingStatus
+import model.{RepaymentDataNoRiskingStatus, Vrn}
 import play.api.Logger
 import play.api.mvc.Request
 import req.RequestSupport
@@ -30,46 +31,42 @@ import uk.gov.hmrc.play.audit.model.DataEvent
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Auditor @Inject() (
-    auditConnector: AuditConnector)(
-    implicit
-    ec: ExecutionContext) {
+class Auditor @Inject() (auditConnector: AuditConnector)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 
   def audit(
       inProgress:      List[RepaymentDataNoRiskingStatus],
       auditTypeIn:     String,
-      transactionName: String)(
-      implicit
-      request: Request[_]): Future[AuditResult] = {
-
+      transactionName: String,
+      vrn:             Vrn
+  )(implicit request: Request[_]): Future[AuditResult] = {
     logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, $auditTypeIn, $transactionName")
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
       auditType   = auditTypeIn,
       tags        = Auditor.auditTags(request, transactionName),
-      detail      = convertToMap(inProgress)
+      detail      = convertToMap(inProgress) ++ identifierDetails(vrn)
     )
 
     auditConnector.sendEvent(event)
 
   }
 
-  def auditEngagement(transactionName: String, engmtType: String)(
-      implicit
-      request: Request[_]): Future[AuditResult] = {
+  def auditEngagement(transactionName: String, engmtType: String, vrn: Option[Vrn])(implicit request: Request[_]): Future[AuditResult] = {
     val auditTypeIn = "EngagementStatus"
 
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
       auditType   = auditTypeIn,
       tags        = Auditor.auditTags(request, transactionName),
-      detail      = Auditor.engagementDetail(engmtType)
+      detail      = Auditor.engagementDetail(engmtType) ++ vrn.map(identifierDetails).getOrElse(Map.empty)
     )
 
     auditConnector.sendEvent(event)
   }
+
+  private def identifierDetails(vrn: Vrn): Map[String, String] = Map("vrn" -> vrn.value)
 
   private def convertToMap(inProgressList: List[RepaymentDataNoRiskingStatus]): Map[String, String] = {
     inProgressList

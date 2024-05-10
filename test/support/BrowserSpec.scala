@@ -34,7 +34,7 @@ class CustomHtmlUnitDriver extends HtmlUnitDriver {
     val modifiedClient: WebClient = super.modifyWebClient(client)
     modifiedClient.getOptions.setThrowExceptionOnScriptError(false)
     modifiedClient.getOptions.setRedirectEnabled(true)
-    modifiedClient.getOptions.setJavaScriptEnabled(true)
+    modifiedClient.getOptions.setJavaScriptEnabled(false)
     modifiedClient
   }
 }

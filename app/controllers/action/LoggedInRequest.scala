@@ -1,5 +1,5 @@
-@*
- * Copyright 2023 HM Revenue & Customs
+/*
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,14 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import views.html.helper.CSPNonce
+package controllers.action
 
-@this(hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts)
+import model.TypedVrn
+import play.api.mvc.{Request, WrappedRequest}
 
-@()(implicit request: play.api.mvc.Request[_])
-
-@hmrcScripts()
-
-<script @{CSPNonce.attr} src='@routes.Assets.versioned("javascripts/application.js")'></script>
+final class LoggedInRequest[A](val request:  Request[A],
+                               val typedVrn: Option[TypedVrn]
+) extends WrappedRequest[A](request)

@@ -21,7 +21,7 @@ import model.EnrolmentKeys
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.test.Helpers.status
-import support.{AuditWireMockResponses, AuthWireMockResponses, DeregisteredBehaviour, GgStub, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses, VatWireMockResponses}
+import support.{AuditWireMockResponses, AuthWireMockResponses, DeregisteredBehaviour, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses, VatWireMockResponses}
 
 import java.time.LocalDate
 
@@ -32,33 +32,6 @@ class ControllerSpec extends ItSpec with DeregisteredBehaviour {
 
   val controller: Controller = injector.instanceOf[Controller]
 
-  "GET /show-results/vrn/:vrn" - {
-    "authorised shows results" in {
-      AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(
-        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
-        vrn                     = vrn,
-        enrolment               = EnrolmentKeys.mtdVatEnrolmentKey
-      )
-      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
-      PaymentsOrchestratorStub.financialsOkCredit(vrn)
-      VatRepaymentTrackerBackendWireMockResponses.storeOk()
-      val result = controller.showResults(vrn)(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
-    "not authorised redirects to login" in {
-      AuthWireMockResponses.authFailed
-      AuditWireMockResponses.auditIsAvailable
-      GgStub.signInPage(19001, vrn)
-      val result = controller.showResults(vrn)(fakeRequest)
-      status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result).getOrElse("None found") should include(loginUrl)
-    }
-    "deregistered redirected to 'vrt vat registration cancelled' page" in {
-      assertDeregisteredRedirectedIn(controller.showResults(vrn), vrn)
-    }
-  }
   "GET /view-repayment-account" - {
     "authorised views repayment account" in {
       AuditWireMockResponses.auditIsAvailable

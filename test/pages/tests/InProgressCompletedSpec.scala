@@ -42,26 +42,35 @@ import support._
 class InProgressCompletedSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path = "/vat-repayment-tracker/show-vrt"
 
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
+
+  def expectEngagementStatusAudited() =
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
 
   "1. user is authorised and financial data found" in {
     setup()
     InProgress.uniqueToPage
     InProgressCompleted.checktabs
     InProgressCompleted.breadCrumbsExists
+
+    expectEngagementStatusAudited()
   }
   "2. BAC shown" in {
     setup(useBankDetails = false)
     InProgressCompleted.containsBAC(result = true)
+
+    expectEngagementStatusAudited()
   }
 
   "3. BAC not shown" in {
     setup(useBankDetails = false, inflight = true)
     InProgressCompleted.containsBAC(result = false)
+
+    expectEngagementStatusAudited()
   }
 
   "4. click completed link" in {
@@ -69,6 +78,8 @@ class InProgressCompletedSpec extends BrowserSpec {
     InProgress.clickCompleted
     Completed.uniqueToPage
     InProgressCompleted.checktabs
+
+    expectEngagementStatusAudited()
   }
 
   "5. click completed link inpast but not completed" in {
@@ -76,12 +87,16 @@ class InProgressCompletedSpec extends BrowserSpec {
     InProgress.clickCompleted
     Completed.uniqueToPage
     InProgressCompleted.checktabs
+
+    expectEngagementStatusAudited()
   }
 
   "6. click completed link inpast completed" in {
     setup(inPast = true, ft = ft_debit)
     InProgressCompleted.checktabsInPast
     InProgress.completedLink
+
+    expectEngagementStatusAudited()
   }
 
   private def setup(
