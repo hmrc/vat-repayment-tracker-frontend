@@ -17,7 +17,6 @@
 package controllers
 
 import model.dd.CreateVATJourneyRequest
-import model.des.RiskingStatus.INITIAL
 import model.{EnrolmentKeys, ReturnPage}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -27,12 +26,11 @@ import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.Helpers._
 import play.api.test.Helpers.status
 
-import java.time.LocalDate
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
-  import support.VatData.{vrn, periodKey}
+  import support.VatData.vrn
 
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
 
@@ -231,23 +229,6 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
       an[IllegalArgumentException] shouldBe thrownBy(await(result))
     }
 
-  }
-
-  "GET /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn" - {
-    "shows vrt for 'Manage or track' no-mtd" in {
-      AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
-      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
-      VatRepaymentTrackerBackendWireMockResponses.storeOk()
-      PaymentsOrchestratorStub.ddOk(vrn)
-      val result = controller.manageOrTrack(vrn)(fakeRequest)
-      status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result) shouldBe Some(nonMtdUserPageUrl)
-    }
-    "deregistered redirected to 'vrt vat registration cancelled' page" in {
-      assertDeregisteredRedirectedIn(controller.manageOrTrack(vrn), vrn)
-    }
   }
 
 }

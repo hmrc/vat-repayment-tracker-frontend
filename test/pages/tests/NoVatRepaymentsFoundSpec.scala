@@ -35,6 +35,8 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed()
 
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+
   }
 
 }

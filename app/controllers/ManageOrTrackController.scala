@@ -30,7 +30,6 @@ import play.api.i18n.Messages
 import play.api.mvc.{Action, _}
 import req.RequestSupport
 
-import scala.annotation.unused
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -126,16 +125,4 @@ class ManageOrTrackController @Inject() (
     )(ManageOrTrack.apply)(ManageOrTrack.unapply))
   }
 
-  //------------------------------------------------------------------------------------------------------------------------------
-
-  //deprecate this when the URL changes to vat-repayment-tracker
-  def manageOrTrack(@unused vrn: Vrn): Action[AnyContent] =
-    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
-      import requestSupport._
-
-      if (viewConfig.isShuttered)
-        manageOrTrackViewShuttered(manageOrTrackForm.fill(ManageOrTrack(None)))
-      else
-        manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
-    }
 }

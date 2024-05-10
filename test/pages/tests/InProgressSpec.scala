@@ -39,8 +39,12 @@ class InProgressSpec extends BrowserSpec {
   val details: Map[String, String] = Map(
     ("inprogress_0", "returnCreationDate: 01 Jan 2001, periodKey: 18AA, amount: 5.56"),
     ("inprogress_1", "returnCreationDate: 01 Jan 2001, periodKey: 18AD, amount: 5.56"),
-    ("inprogress_2", "returnCreationDate: 01 Jan 2001, periodKey: 18AJ, amount: 5.56")
+    ("inprogress_2", "returnCreationDate: 01 Jan 2001, periodKey: 18AJ, amount: 5.56"),
+    ("vrn", s"${vrn.value}")
   )
+
+  def expectEngagementStatusAudited() =
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
 
   "1. user is authorised and financial data found" in {
     setup()
@@ -48,6 +52,8 @@ class InProgressSpec extends BrowserSpec {
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
+
+    expectEngagementStatusAudited()
   }
 
   "2. user is authorised and financial data found, CLAIM_QUERIED" in {
@@ -56,23 +62,31 @@ class InProgressSpec extends BrowserSpec {
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.breadCrumbsExists
+
+    expectEngagementStatusAudited()
   }
 
   "3. user is authorised and financial data found but partial" in {
     setup(partialBankDetails = true)
     InProgress.assertPageIsDisplayed(amount         = "£0.00", partialAccount = true)
     InProgress.uniqueToPage
+
+    expectEngagementStatusAudited()
   }
 
   "4. click completed link" in {
     setup()
     InProgress.completedLink
+
+    expectEngagementStatusAudited()
   }
 
   "5. user is authorised and address data found" in {
     setup(useBankDetails = false)
     InProgress.assertPageIsDisplayed(checkBank    = false, checkAddress = true, amount = "£0.00")
     InProgress.uniqueToPage
+
+    expectEngagementStatusAudited()
   }
 
   "6. Get ShowResults authorised, no enrolments" in {
@@ -84,6 +98,7 @@ class InProgressSpec extends BrowserSpec {
 
     eventually(Timeout(Span(5, Seconds))) {
       NonMtdUser.assertPageIsDisplayed
+      AuditWireMockResponses.engagementStatusAudited("nonMtdUser", Map("engmtType" -> "none_in_progress"))
     }
   }
 
@@ -96,12 +111,16 @@ class InProgressSpec extends BrowserSpec {
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     goToViaPath(path)
     InProgress.assertPageIsDisplayed(amount = "£0.00")
+
+    expectEngagementStatusAudited()
   }
 
   "8. multiple inprogress " in {
     setup(partialBankDetails = true, singleRepayment = false)
     InProgress.uniqueToPage
     InProgress.completedLink
+
+    expectEngagementStatusAudited()
   }
 
   "9. click view progress " in {

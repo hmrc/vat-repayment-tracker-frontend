@@ -53,13 +53,6 @@ class ShutteredSpec extends BrowserSpec {
     goToViaPath(path)
     Shuttered.uniqueToPage
   }
-  //deprecated route
-  "Check shuttered page is shown show-results " in {
-    val path = s"""/vat-repayment-tracker-frontend/show-results/vrn/2345"""
-    AuditWireMockResponses.auditIsAvailable
-    goToViaPath(path)
-    Shuttered.uniqueToPage
-  }
   "Check shuttered page is shown manage-or-track-vrt " in {
     val path = s"""/vat-repayment-tracker/manage-or-track-vrt"""
     AuditWireMockResponses.auditIsAvailable

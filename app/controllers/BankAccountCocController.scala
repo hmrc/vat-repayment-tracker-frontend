@@ -56,7 +56,12 @@ class BankAccountCocController @Inject() (
           repaymentDetails <- repaymentDetailsF
           financialData <- financialDataF
           allRepayments = vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
-          _ <- auditor.audit(allRepayments.inProgressRepaymentData, "initiateChangeVATRepaymentBankAccount", "initiate-change-vat-repayment-bank-account")
+          _ <- auditor.audit(
+            allRepayments.inProgressRepaymentData,
+            "initiateChangeVATRepaymentBankAccount",
+            "initiate-change-vat-repayment-bank-account",
+            request.typedVrn.vrn
+          )
           nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
         } yield {
           Redirect(nextUrl.nextUrl)

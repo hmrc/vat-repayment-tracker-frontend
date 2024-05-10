@@ -20,8 +20,7 @@ import com.google.inject.Inject
 import config.ViewConfig
 import connectors.PaymentsOrchestratorConnector
 import controllers.routes
-import model.EnrolmentKeys.{vatDecEnrolmentKey, vatVarEnrolmentKey, _}
-import model.TypedVrn.{ClassicVrn, MtdVrn}
+import model.TypedVrn.ClassicVrn
 import model.des.CustomerInformation
 import model.{TypedVrn, Vrn}
 import play.api.Logger
@@ -57,25 +56,9 @@ class AuthenticatedAction @Inject() (
     implicit val r: Request[A] = request
 
     af.authorised().retrieve(Retrievals.allEnrolments) { enrolments =>
-      val mtd = enrolments.enrolments.collectFirst {
-        case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
-          identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => MtdVrn(Vrn(vrn)) }
-      }.flatten
-
-      val nonMtd = enrolments.enrolments.collectFirst {
-        case Enrolment(key, identifiers, _, _) if Set(vatDecEnrolmentKey, vatVarEnrolmentKey).contains(key) =>
-          identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => ClassicVrn(Vrn(vrn)) }
-      }.flatten
-
-      val typedVrn: TypedVrn = (mtd, nonMtd) match {
-        case (Some(mdt), None)    => mdt
-        case (None, Some(nonMdt)) => nonMdt
-        case (Some(mdt), Some(_)) => mdt
-        case _                    => throw new InsufficientEnrolments
-      }
+      val typedVrn: TypedVrn = extractVrn(enrolments).getOrElse(throw InsufficientEnrolments())
 
       orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
-
         if (customer.exists(_.isDeregistered)) {
           logger.debug(s"Unauthorised because VAT registration cancelled")
           Future(Redirect(routes.Controller.deregistered.url))

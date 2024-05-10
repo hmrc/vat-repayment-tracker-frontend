@@ -33,7 +33,7 @@
         standardBetaBanner: StandardBetaBanner,
         hmrcStandardFooter: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter,
         hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
-        mainScripts: views.html.scripts,
+        hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts,
         viewConfig: config.ViewConfig
 )
 
@@ -62,7 +62,7 @@
 
 
 @scripts = {
-@mainScripts()
+@hmrcScripts()
 @if(scriptElem.isDefined){@scriptElem}
 }
 

@@ -27,15 +27,6 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
   val vrn: Vrn = Vrn("234567890")
 
   "When deregistered for VAT redirect to 'VRT VAT Registration Cancelled' page from" - {
-    "GET /vat-repayment-tracker-frontend/show-results/vrn/:vrn" in {
-      testSetup(s"/vat-repayment-tracker-frontend/show-results/vrn/$vrn")
-      testPage()
-
-    }
-    "GET /vat-repayment-tracker-frontend/manage-or-track/vrn/:vrn" in {
-      testSetup(s"/vat-repayment-tracker-frontend/manage-or-track/vrn/$vrn")
-      testPage()
-    }
     "GET /vat-repayment-tracker/view-repayment-account" in {
       testSetup("/vat-repayment-tracker/view-repayment-account")
       testPage()
