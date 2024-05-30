@@ -70,7 +70,7 @@ class ManageOrTrackController @Inject() (
                       Redirect(routes.Controller.showVrt)
 
                     case ManageOrTrackOptions.bank.value =>
-                      Redirect(routes.Controller.viewRepaymentAccount())
+                      Redirect(routes.Controller.viewRepaymentAccount)
 
                     case ManageOrTrackOptions.nobank.value =>
                       Redirect(routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("manage-or-track-vrt")))

@@ -12,10 +12,10 @@ POST       /manage-or-track-vrt                                     controllers.
 
 #Interenal route
 GET        /non-mtd-user                                            controllers.Controller.nonMtdUser
-GET        /view-repayment-account                                  controllers.Controller.viewRepaymentAccount(audit : Boolean ?= false)
+GET        /view-repayment-account                                  controllers.Controller.viewRepaymentAccount
 POST       /manage-or-track-submit                                  controllers.ManageOrTrackController.manageOrTrackSubmit
 GET        /signout                                                 controllers.Controller.signout
-GET        /bank-account-coc/start-journey/:returnPage              controllers.BankAccountCocController.startBankAccountCocJourney(returnPage : ReturnPage, audit : Boolean ?= false)
+GET        /bank-account-coc/start-journey/:returnPage              controllers.BankAccountCocController.startBankAccountCocJourney(returnPage : ReturnPage)
 GET        /view-progress/:periodKey                                controllers.Controller.viewProgress(periodKey : PeriodKey)
 GET        /spj/:amountInPence                                      controllers.PayApiController.startPaymentsJourney(amountInPence : Long)
 GET        /shuttered                                               controllers.ShutteredController.shuttered

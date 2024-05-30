@@ -177,7 +177,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
     "should redirect to the viewRepaymentAccount endpoint page if the user selects 'manage repayment account'" in {
       val result = performAction("manage" -> "bank")
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.Controller.viewRepaymentAccount().url)
+      redirectLocation(result) shouldBe Some(routes.Controller.viewRepaymentAccount.url)
     }
 
     "should redirect to the startBankCocJourney endpoint if the user selects 'set up a repayment account'" in {

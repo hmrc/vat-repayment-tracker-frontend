@@ -73,7 +73,7 @@ class ManageOrTrackSpec extends BrowserSpec {
     ManageOrTrack.clickContinue()
     ViewRepaymentAccount.assertPageIsDisplayed("/vat-repayment-tracker/view-repayment-account")
     ManageOrTrack.clickCallBac
-    AuditWireMockResponses.bacWasNotAudited()
+    AuditWireMockResponses.bacWasAuditedNoDetails()
   }
 
   private def setup(
