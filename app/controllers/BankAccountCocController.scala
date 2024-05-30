@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,36 +43,28 @@ class BankAccountCocController @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def startBankAccountCocJourney(returnPage: ReturnPage, audit: Boolean): Action[AnyContent] =
+  def startBankAccountCocJourney(returnPage: ReturnPage): Action[AnyContent] =
     actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
       import requestSupport._
 
-      if (audit) {
-        logger.debug("startBankAccountCocJourney... trying to audit")
-        val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
-        val financialDataF = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
+      logger.debug("startBankAccountCocJourney... trying to audit")
+      val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
+      val financialDataF = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
 
-        for {
-          repaymentDetails <- repaymentDetailsF
-          financialData <- financialDataF
-          allRepayments = vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
-          _ <- auditor.audit(
-            allRepayments.inProgressRepaymentData,
-            "initiateChangeVATRepaymentBankAccount",
-            "initiate-change-vat-repayment-bank-account",
-            request.typedVrn.vrn
-          )
-          nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
-        } yield {
-          Redirect(nextUrl.nextUrl)
-        }
-      } else {
-        logger.debug("startBankAccountCocJourney... will not audit")
-        for {
-          nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
-        } yield Redirect(nextUrl.nextUrl)
+      for {
+        repaymentDetails <- repaymentDetailsF
+        financialData <- financialDataF
+        allRepayments = vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
+        _ <- auditor.audit(
+          allRepayments.inProgressRepaymentData,
+          "initiateChangeVATRepaymentBankAccount",
+          "initiate-change-vat-repayment-bank-account",
+          request.typedVrn.vrn
+        )
+        nextUrl <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
+      } yield {
+        Redirect(nextUrl.nextUrl)
       }
-
     }
 
 }

@@ -37,13 +37,11 @@ class ControllerSpec extends ItSpec with DeregisteredBehaviour {
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-      val result = controller.viewRepaymentAccount(audit = true)(fakeRequest)
+      val result = controller.viewRepaymentAccount(fakeRequest)
       status(result) shouldBe Status.OK
     }
     "deregistered redirected to 'vrt vat registration cancelled' page" in {
-      List(true, false).foreach { auditBooleanValue =>
-        assertDeregisteredRedirectedIn(controller.viewRepaymentAccount(auditBooleanValue), vrn)
-      }
+      assertDeregisteredRedirectedIn(controller.viewRepaymentAccount, vrn)
     }
 
   }

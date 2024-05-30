@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,7 @@ class Controller @Inject() (
       }
     }
 
-  def viewRepaymentAccount(audit: Boolean): Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
+  val viewRepaymentAccount: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
 
       val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
@@ -134,7 +134,7 @@ class Controller @Inject() (
         customerData <- customerDataF
       } yield {
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(view_repayment_account(bankDetails, ReturnPage("view-repayment-account"), audit))
+        Ok(view_repayment_account(bankDetails, ReturnPage("view-repayment-account")))
       }
   }
 

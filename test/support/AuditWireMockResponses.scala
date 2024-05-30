@@ -44,18 +44,6 @@ object AuditWireMockResponses extends Matchers {
 
   }
 
-  def bacWasNotAudited(): Unit = {
-
-    verify(postRequestedFor(urlEqualTo("/write/audit")))
-    val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
-    val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains("initiateChangeVATRepaymentBankAccount"))
-    mayPaymentAuditEvent match {
-      case Some(_) => "expected 0 audit events" shouldBe "got 1 audit event"
-      case None    =>
-    }
-    ()
-  }
-
   def bacWasAuditedNoDetails(): Unit = {
     verify(postRequestedFor(urlEqualTo("/write/audit")))
     val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList

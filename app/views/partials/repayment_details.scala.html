@@ -36,7 +36,7 @@
  <p id="acc-name" class="govuk-body govuk-!-margin-bottom-1">@Messages("repayment_details.name_on_account") <strong>@{bankDetails.formatAccountHolderName}</strong></p>
  <p id="acc-sort-code" class="govuk-body govuk-!-margin-bottom-1">@Messages("repayment_details.sort_code") <strong>@{bankDetails.formatSortCode}</strong></p>
  <p id="acc-number" class="govuk-body">@Messages("repayment_details.account_number") <strong>@{bankDetails.obscureBankAccountNumber}</strong></p>
- <p ><a class="govuk-link govuk-!-font-size-19" href='@routes.Controller.viewRepaymentAccount(true)' id="manage-account">@Messages("repayment_details.manage_repayment")</a></p>
+ <p ><a class="govuk-link govuk-!-font-size-19" href='@routes.Controller.viewRepaymentAccount' id="manage-account">@Messages("repayment_details.manage_repayment")</a></p>
  }
 }
 
@@ -44,7 +44,7 @@
 <h2 class="govuk-heading-l" >@Messages("repayment_details.repayment_details")</h2>
 <p class="govuk-body govuk-!-margin-bottom-3" >@Messages("repayment_details.send_cheque")</p>
 <p id="address" class="govuk-body govuk-!-margin-bottom-3" >@Html(address.getOrElse(""))</p>
-<p class="govuk-body govuk-!-margin-bottom-3">@Messages("repayment_details.faster_payment") <a class="govuk-link"  href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"),true)' id="call-bac">@Messages("repayment_details.repayment_bank_account")</a></p>
+<p class="govuk-body govuk-!-margin-bottom-3">@Messages("repayment_details.faster_payment") <a class="govuk-link"  href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"))' id="call-bac">@Messages("repayment_details.repayment_bank_account")</a></p>
 <p class="govuk-body"><a class="govuk-link"  href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
 }
 

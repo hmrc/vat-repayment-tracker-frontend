@@ -19,8 +19,7 @@ package controllers
 import model.{EnrolmentKeys, ReturnPage}
 import play.api.http.Status
 import play.api.test.Helpers._
-import play.api.test.Helpers.status
-import support.{AuditWireMockResponses, AuthWireMockResponses, BankAccountCocWireMockResponses, ItSpec, PaymentsOrchestratorStub}
+import support._
 
 class BankAccountCocControllerSpec extends ItSpec {
   import support.VatData.vrn
@@ -33,7 +32,7 @@ class BankAccountCocControllerSpec extends ItSpec {
       BankAccountCocWireMockResponses.bankOk
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       AuditWireMockResponses.auditIsAvailable
-      val result = controller.startBankAccountCocJourney(returnPage = ReturnPage("manage-or-track"), audit = false)(fakeRequest)
+      val result = controller.startBankAccountCocJourney(returnPage = ReturnPage("manage-or-track"))(fakeRequest)
       status(result) shouldBe Status.SEE_OTHER
       redirectLocation(result) shouldBe Some(BankAccountCocWireMockResponses.dummyNextUrl)
 
