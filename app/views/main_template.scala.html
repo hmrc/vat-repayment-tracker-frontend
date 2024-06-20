@@ -45,7 +45,7 @@
         fullWidth: Boolean = true,
         backButtonUrl: Option[play.api.mvc.Call] = None
 )(
-        mainContent: Html)(implicit messages: play.api.i18n.Messages, request: Request[_])
+        mainContent: Html)(implicit messages: play.api.i18n.Messages, request: RequestHeader)
 
 @head = {
 

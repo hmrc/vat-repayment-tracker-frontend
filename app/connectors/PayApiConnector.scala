@@ -18,10 +18,12 @@ package connectors
 
 import model.Vrn
 import model.payapi.{SpjRequestBtaVat, SpjResponse}
+import play.api.libs.json.Json
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.StringContextOps
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
@@ -30,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class PayApiConnector @Inject() (
     servicesConfig: ServicesConfig,
-    httpClient:     HttpClient,
+    httpClient:     HttpClientV2,
     configuration:  Configuration)
   (implicit ec: ExecutionContext) {
 
@@ -49,7 +51,6 @@ class PayApiConnector @Inject() (
     logger.debug(s"Calling pay-api start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling pay-api start journey for vrn with url $startJourneyURL)")
-    httpClient.POST[SpjRequestBtaVat, SpjResponse](startJourneyURL, journeyRequest)
-
+    httpClient.post(url"$startJourneyURL").withBody(Json.toJson(journeyRequest)).execute[SpjResponse]
   }
 }

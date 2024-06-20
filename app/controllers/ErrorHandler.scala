@@ -17,27 +17,28 @@
 package controllers
 
 import config.ViewConfig
-
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.MessagesApi
-import play.api.mvc.Request
+import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
+import javax.inject.{Inject, Singleton}
 import scala.annotation.unused
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ErrorHandler @Inject() (
     val messagesApi:         MessagesApi,
     implicit val viewConfig: ViewConfig,
-    error_template:          views.html.error.error_template) extends FrontendErrorHandler {
+    error_template:          views.html.error.error_template,
+    implicit val ec:         ExecutionContext) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(
       @unused pageTitle: String,
       @unused heading:   String,
       message:           String)(
       implicit
-      request: Request[_]
-  ): Html = error_template(message)
+      request: RequestHeader
+  ): Future[Html] = Future.successful(error_template(message))
 
 }

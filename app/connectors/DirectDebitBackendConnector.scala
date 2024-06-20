@@ -19,18 +19,20 @@ package connectors
 import javax.inject.{Inject, Singleton}
 import model.dd.CreateVATJourneyRequest
 import model.{NextUrl, Vrn}
+import play.api.libs.json.Json
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.StringContextOps
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DirectDebitBackendConnector @Inject() (
     servicesConfig: ServicesConfig,
-    httpClient:     HttpClient,
+    httpClient:     HttpClientV2,
     configuration:  Configuration)
   (implicit ec: ExecutionContext) {
 
@@ -52,7 +54,7 @@ class DirectDebitBackendConnector @Inject() (
     logger.debug(s"Calling direct-debit-backend start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$sjUrl"
     logger.debug(s"Calling direct-debit-backend start journey for vrn with url $startJourneyURL)")
-    httpClient.POST[CreateVATJourneyRequest, NextUrl](startJourneyURL, createVATJourneyRequest)
+    httpClient.post(url"$startJourneyURL").withBody(Json.toJson(createVATJourneyRequest)).execute[NextUrl]
   }
 
 }
