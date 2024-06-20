@@ -19,6 +19,14 @@ package controllers.action
 import model.TypedVrn
 import play.api.mvc.{Request, WrappedRequest}
 
+<<<<<<< HEAD:app/controllers/action/LoggedInRequest.scala
 final class LoggedInRequest[A](val request:  Request[A],
                                val typedVrn: Option[TypedVrn]
 ) extends WrappedRequest[A](request)
+=======
+@()(implicit request: play.api.mvc.RequestHeader)
+
+@hmrcScripts()
+
+<script @{CSPNonce.attr} src='@routes.Assets.versioned("javascripts/application.js")'></script>
+>>>>>>> 8157a8c ([JG] OPS-10801 - updated readme, dependencies, httpclient):app/views/scripts.scala.html

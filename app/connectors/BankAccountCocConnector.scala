@@ -16,21 +16,23 @@
 
 package connectors
 
-import javax.inject.Inject
-import model.{NextUrl, ReturnPage, Vrn}
 import model.bank.ViewRepaymentRequest
+import model.{NextUrl, ReturnPage, Vrn}
+import play.api.libs.json.Json
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.StringContextOps
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 //@Singleton
 class BankAccountCocConnector @Inject() (
     servicesConfig: ServicesConfig,
-    httpClient:     HttpClient,
+    httpClient:     HttpClientV2,
     configuration:  Configuration)
   (implicit ec: ExecutionContext) {
 
@@ -50,7 +52,7 @@ class BankAccountCocConnector @Inject() (
     logger.debug(s"Calling bank-account-coc start journey for vrn $vrn")
     val startJourneyURL: String = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
-    httpClient.POST[ViewRepaymentRequest, NextUrl](startJourneyURL, viewRepaymentRequest)
+    httpClient.post(url"$startJourneyURL").withBody(Json.toJson(viewRepaymentRequest)).execute[NextUrl]
 
   }
 

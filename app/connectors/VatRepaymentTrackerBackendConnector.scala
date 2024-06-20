@@ -17,22 +17,23 @@
 package connectors
 
 import java.nio.charset.{StandardCharsets => SC}
-
 import javax.inject.{Inject, Singleton}
 import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
 import play.api.mvc.Request
 import play.api.Logger
+import play.api.libs.json.Json
 import play.utils.UriEncoding
-import uk.gov.hmrc.http.HttpResponse
+import uk.gov.hmrc.http.{HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VatRepaymentTrackerBackendConnector @Inject() (
     servicesConfig: ServicesConfig,
-    httpClient:     HttpClient)
+    httpClient:     HttpClientV2)
   (implicit ec: ExecutionContext) {
 
   private val serviceURL: String = servicesConfig.baseUrl("vat-repayment-tracker-backend")
@@ -42,20 +43,20 @@ class VatRepaymentTrackerBackendConnector @Inject() (
   import req.RequestSupport._
 
   def store(vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_]): Future[HttpResponse] = {
-    val storeVRDD: String = s"$serviceURL/vat-repayment-tracker-backend/store"
-    logger.debug(s"""calling vat-repayment-tracker-backend find with url $storeVRDD""")
+    val storeVRDDUrl: String = s"$serviceURL/vat-repayment-tracker-backend/store"
+    logger.debug(s"""calling vat-repayment-tracker-backend find with url $storeVRDDUrl""")
     logger.debug(s"storing: ${vrtRepaymentDetailData.toString}")
-    httpClient.POST[VrtRepaymentDetailData, HttpResponse](storeVRDD, vrtRepaymentDetailData)
+    httpClient.post(url"$storeVRDDUrl").withBody(Json.toJson(vrtRepaymentDetailData)).execute[HttpResponse]
   }
 
   def find(vrn: Vrn, periodKey: PeriodKey)(implicit request: Request[_]): Future[List[VrtRepaymentDetailData]] = {
     logger.debug(s"Calling vat-repayment-tracker-backend find with vrn :${vrn.value} and periodKey:  ${periodKey.value}")
 
     val periodEncoded = UriEncoding.encodePathSegment(periodKey.value, SC.UTF_8)
-    val findRDD: String = s"$serviceURL/vat-repayment-tracker-backend/find/vrn/${vrn.value}/$periodEncoded"
-    logger.debug(s"""calling vat-repayment-tracker-backend find with url $findRDD""")
+    val findRDDUrl: String = s"$serviceURL/vat-repayment-tracker-backend/find/vrn/${vrn.value}/$periodEncoded"
+    logger.debug(s"""calling vat-repayment-tracker-backend find with url $findRDDUrl""")
 
-    httpClient.GET[List[VrtRepaymentDetailData]](findRDD)
+    httpClient.get(url"$findRDDUrl").execute[List[VrtRepaymentDetailData]]
   }
 
 }

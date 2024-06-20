@@ -46,9 +46,10 @@ import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.{CSRFTokenHelper, FakeRequest}
 import play.api.{Application, Configuration, Environment}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import org.scalatest.matchers.should.Matchers
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.annotation.unused
 import scala.concurrent.ExecutionContext
@@ -96,7 +97,7 @@ trait ItSpec
 
   implicit val emptyHC: HeaderCarrier = HeaderCarrier()
 
-  def httpClient: HttpClient = fakeApplication().injector.instanceOf[HttpClient]
+  def httpClient: HttpClientV2 = fakeApplication().injector.instanceOf[HttpClientV2]
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(configMap)

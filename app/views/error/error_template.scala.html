@@ -14,12 +14,14 @@
  * limitations under the License.
  *@
 
+@import play.api.mvc.RequestHeader
+
 @this(
 
   mainTemplate: views.html.main_template
 )
 
-@(message: String)(implicit request: Request[_], messages: Messages)
+@(message: String)(implicit request: RequestHeader, messages: Messages)
 
 
 
