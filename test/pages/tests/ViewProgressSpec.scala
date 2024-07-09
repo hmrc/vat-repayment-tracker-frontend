@@ -244,7 +244,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        formattedTodayString,
+        "01 Mar 2018",
         List(
           "We sent an adjusted payment of £6.56 to your repayment bank account:",
           "Name: Account holder",
@@ -285,7 +285,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        formattedTodayString,
+        "01 Mar 2018",
         List(
           "We sent you an adjusted payment of £6.56 as a cheque to",
           "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER\n."
@@ -360,7 +360,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        formattedTodayString,
+        "01 Mar 2018",
         List(
           "We sent a payment of £5.56 to your repayment bank account:",
           "Name: Account holder",
@@ -397,7 +397,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        formattedTodayString,
+        "01 Mar 2018",
         List(
           "We sent a payment of £5.56 as a cheque to",
           "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER\n."
@@ -436,7 +436,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "24 Oct 2019",
+        "01 Mar 2018",
         List(
           "We sent a payment of £5.56 to your repayment bank account:",
           "Name: Account holder",
@@ -566,7 +566,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        "24 Oct 2019",
+        "01 Mar 2018",
         List(
           "We sent a payment of £5.56 to your repayment bank account:",
           "Name: Account holder",

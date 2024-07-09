@@ -32,7 +32,8 @@ object DesData {
   private val approvedInformation: ApprovedInformation = ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
   private val changeIndicators: ChangeIndicators = ChangeIndicators(Some(true), Some(false))
   private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators))
-  private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"))
+  private val items: Seq[Item] = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
+  private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
 
   private val repaymentDetail: RepaymentDetailData = RepaymentDetailData(
     LocalDate.parse("2001-01-01"),
@@ -419,7 +420,12 @@ object DesData {
           "financialTransactions":[
              {
                 "chargeType": "VAT Return Credit Charge",
-                "periodKey":"18AC"
+                "periodKey":"18AC",
+                "items": [
+                  {
+                    "clearingDate":"2001-01-01"
+                  }
+                ]
              }
           ]
        }
