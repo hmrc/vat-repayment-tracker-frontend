@@ -34,6 +34,8 @@ object DesData {
   private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators))
   private val items: Seq[Item] = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
   private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
+  private val itemsNoClearingDate: Seq[Item] = Seq(Item(None))
+  private val transactionNoClearingDate: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(itemsNoClearingDate))
 
   private val repaymentDetail: RepaymentDetailData = RepaymentDetailData(
     LocalDate.parse("2001-01-01"),
@@ -51,6 +53,7 @@ object DesData {
   val approvedCustomerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation), None)
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation), Some(inFlightInformation))
   val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
+  val financialDataNoClearingDate: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transactionNoClearingDate))
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val vrtRepaymentDetailData: VrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
 
@@ -425,6 +428,26 @@ object DesData {
                   {
                     "clearingDate":"2001-01-01"
                   }
+                ]
+             }
+          ]
+       }
+     """.stripMargin
+  )
+
+  val financialDataNoClearingDateJson: JsValue = Json.parse(
+    s"""
+       {
+          "idType":"VRN",
+          "idNumber":"2345678890",
+          "regimeType":"VATC",
+          "processingDate":"2019-08-20T10:44:05Z",
+          "financialTransactions":[
+             {
+                "chargeType": "VAT Return Credit Charge",
+                "periodKey":"18AC",
+                "items": [
+                  {}
                 ]
              }
           ]

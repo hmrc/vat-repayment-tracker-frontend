@@ -25,7 +25,15 @@ class FinancialDataSpec extends UnitSpec {
     Json.toJson(DesData.financialData) shouldBe DesData.financialDataJson
   }
 
+  "to json with no clearing date" in {
+    Json.toJson(DesData.financialDataNoClearingDate) shouldBe DesData.financialDataNoClearingDateJson
+  }
+
   "from json" in {
     DesData.financialDataJson.as[FinancialData] shouldBe DesData.financialData
+  }
+
+  "from json with no clearing date" in {
+    DesData.financialDataNoClearingDateJson.as[FinancialData] shouldBe DesData.financialDataNoClearingDate
   }
 }
