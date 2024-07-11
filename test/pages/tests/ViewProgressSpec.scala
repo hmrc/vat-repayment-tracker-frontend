@@ -34,6 +34,9 @@ class ViewProgressSpec extends BrowserSpec {
   val ft_404: Int = 1
   val ft_credit: Int = 2
   val ft_debit: Int = 3
+  val `ft_noClearingDate`: Int = 4
+  val `ft_twoClearingDates`: Int = 5
+  val `ft_emptyItemsArray`: Int = 6
 
   val today = LocalDate.now()
 
@@ -269,6 +272,88 @@ class ViewProgressSpec extends BrowserSpec {
     )
   }
 
+  "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists with several dates" in {
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = `ft_twoClearingDates`, status2 = REPAYMENT_ADJUSTED)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        "03 Mar 2018",
+        List(
+          "We sent an adjusted payment of £6.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment amount changed",
+        formattedTodayString,
+        List(
+          "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
+            "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
+          "If you do not receive a letter in the next 7 days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        formattedTodayString,
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
+  "id: 7, REPAYMENT_ADJUSTED, Credit Charge Exists, Clearing Date Does Not Exist" in {
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_noClearingDate, status2 = REPAYMENT_ADJUSTED)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        formattedTodayString,
+        List(
+          "We sent an adjusted payment of £6.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment amount changed",
+        formattedTodayString,
+        List(
+          "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
+            "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
+          "If you do not receive a letter in the next 7 days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        formattedTodayString,
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
   "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists AND no bank details" in {
     setup(rdsp           = 2, periodKey = PeriodKey("18AG"), ft = ft_credit, status2 = REPAYMENT_ADJUSTED, useBankDetails = false)
     InProgress.clickViewProgress()
@@ -298,6 +383,47 @@ class ViewProgressSpec extends BrowserSpec {
           "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. We will send a " +
             "cheque to your business address. This will reach you in 5 to 6 working days. We sent you a letter " +
             "explaining why we changed your amount.",
+          "If you do not receive a letter in the next 7 days, check your VAT payments history."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        formattedTodayString,
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
+  "id: 7, REPAYMENT_ADJUSTED AND Credit Charge Exists With Empty Items Array" in {
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = `ft_emptyItemsArray`, status2 = REPAYMENT_ADJUSTED)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.assertWebchatLinkPresent()
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment complete",
+        formattedTodayString,
+        List(
+          "We sent an adjusted payment of £6.56 to your repayment bank account:",
+          "Name: Account holder",
+          "Account number: ****2222",
+          "Sort code: 66 77 88."
+        )
+      ),
+      ProgressTimelineItem(
+        "Repayment amount changed",
+        formattedTodayString,
+        List(
+          "You claimed £5.56. We calculated this amount was incorrect so we will repay you £6.56. This will reach your " +
+            "repayment bank account in 3 working days. We sent you a letter explaining why we changed your amount.",
           "If you do not receive a letter in the next 7 days, check your VAT payments history."
         )
       ),
@@ -677,10 +803,13 @@ class ViewProgressSpec extends BrowserSpec {
     }
 
     ft match {
-      case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-      case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
-      case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
-      case other       => throw new IllegalArgumentException(s"no ft match for $other")
+      case `ft_404`              => PaymentsOrchestratorStub.financialsNotFound(vrn)
+      case `ft_credit`           => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+      case `ft_noClearingDate`   => PaymentsOrchestratorStub.financialsOkCreditNoClearingDate(vrn)
+      case `ft_twoClearingDates` => PaymentsOrchestratorStub.financialsOkCreditTwoClearingDates(vrn)
+      case `ft_emptyItemsArray`  => PaymentsOrchestratorStub.financialsOkCreditEmptyItemsArray(vrn)
+      case `ft_debit`            => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+      case other                 => throw new IllegalArgumentException(s"no ft match for $other")
     }
 
     login()
