@@ -70,8 +70,8 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 47 84"),
-            "Manage your repayment bank account" -> Some("Account: ****2222, Sort code: 66 77 88"),
+            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 ** **"),
+            "Manage your repayment bank account" -> Some("Account: ****2222, Sort code: 66 ** **"),
             "Track your VAT repayments" -> Some("View what HMRC owe you")
           )
         )
@@ -93,7 +93,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
           doc,
           List(
             "Set up a Direct Debit" -> Some("HMRC will automatically collect your VAT Return payments when due"),
-            "Manage your repayment bank account" -> Some("Account: ****2222, Sort code: 66 77 88"),
+            "Manage your repayment bank account" -> Some("Account: ****2222, Sort code: 66 ** **"),
             "Track your VAT repayments" -> Some("View what HMRC owe you")
           )
         )
@@ -114,7 +114,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 47 84"),
+            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 ** **"),
             "Set up a repayment bank account" -> Some("Tell HMRC where to pay your money"),
             "Track your VAT repayments" -> Some("View what HMRC owe you")
           )
@@ -136,7 +136,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 47 84"),
+            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 ** **"),
             "Track your VAT repayments" -> Some("View what HMRC owe you")
           )
         )

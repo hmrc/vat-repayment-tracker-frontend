@@ -43,6 +43,10 @@
 )
 
 
+@obfuscateSortCode(sortCode: Option[String]) = @{
+  sortCode.map(_.replaceAll(" ", "").take(2) + " ** **").getOrElse("")
+}
+
 @errorLink ={
    @if(form.errors("manage").nonEmpty) {
      @for(_ <- form.errors("manage")) {aria-describedby="manage-errorKey"}
@@ -56,7 +60,7 @@
         ManageOrTrackOptions.dd.toString,
         ManageOrTrackOptions.dd.toString,
         Messages("manage_or_track.manage_direct_debit"),
-        Some(Messages("manage_or_track.account_sortcode", ddDetails.obscureBankAccountNumber, ddDetails.formatSortCode)),
+        Some(Messages("manage_or_track.account_sortcode", ddDetails.obscureBankAccountNumber, obfuscateSortCode(ddDetails.sortCode))),
         None
     )
 }
@@ -80,7 +84,7 @@
         ManageOrTrackOptions.bank.toString,
         ManageOrTrackOptions.bank.toString,
         Messages("manage_or_track.manage_repayment_bank_account"),
-        Some(Messages("manage_or_track.account_sortcode", bankDetails.obscureBankAccountNumber, bankDetails.formatSortCode)),
+        Some(Messages("manage_or_track.account_sortcode", bankDetails.obscureBankAccountNumber, obfuscateSortCode(bankDetails.sortCode))),
         None
     )
 }
