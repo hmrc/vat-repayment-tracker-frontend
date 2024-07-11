@@ -144,37 +144,23 @@ final case class BankDetails(
     sortCode:          Option[String]
 ) {
 
-  val detailsExist: Boolean = {
+  val detailsExist: Boolean =
     accountHolderName.isDefined || bankAccountNumber.isDefined || sortCode.isDefined
-  }
-  val formatAccountHolderName: String = {
-    accountHolderName match {
-      case Some(ahn) => ahn
-      case None      => ""
-    }
-  }
 
-  val obscureBankAccountNumber: String = {
+  val formatAccountHolderName: String = accountHolderName.getOrElse("")
 
-    bankAccountNumber match {
-      case Some(ban) => "****" + ban.drop(4)
-      case None      => ""
-    }
-
+  val obscureBankAccountNumber: String = bankAccountNumber match {
+    case Some(ban) => "****" + ban.drop(4)
+    case None      => ""
   }
 
-  val formatSortCode: String = {
-
-    sortCode match {
-      case Some(sc) =>
-        {}
-        sc.length match {
-          case 6   => s"${sc.substring(0, 2)} ${sc.substring(2, 4)} ${sc.substring(4, 6)}"
-          case sor => throw new RuntimeException(s"Invalid sortcode length [$sor] for sortcode [$sortCode]")
-        }
-      case None => ""
-    }
-
+  val formatSortCode: String = sortCode match {
+    case Some(sc) =>
+      sc.length match {
+        case 6   => s"${sc.substring(0, 2)} ${sc.substring(2, 4)} ${sc.substring(4, 6)}"
+        case sor => throw new RuntimeException(s"Invalid sortcode length [$sor] for sortcode [$sortCode]")
+      }
+    case None => ""
   }
 
 }
