@@ -23,6 +23,8 @@ import javax.inject.{Inject, Singleton}
 import model.des._
 import model.{ChargeType, PeriodKey, VrtRepaymentDetailData}
 
+import java.time.LocalDate
+
 @Singleton
 class DesFormatter @Inject() (addressFormater: AddressFormatter) {
 
@@ -61,6 +63,28 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
     transactionIterable match {
       case Some(x) => if (x.nonEmpty) true else false
       case None    => false
+    }
+  }
+
+  def getTransactionWithPeriodKey(financialData: Option[FinancialData], periodKey: PeriodKey): Option[Transaction] = {
+    val transactionIterable = for {
+      fdAllOption <- financialData
+    } yield fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey))
+
+    transactionIterable match {
+      case Some(x) => x.headOption
+      case None    => None
+    }
+  }
+
+  def getClearingDate(transaction: Option[Transaction]): Option[LocalDate] = {
+    transaction.flatMap {
+      _.items.flatMap {
+        items =>
+          items.map(_.clearingDate).collect {
+            case Some(date) => date
+          }.maxOption
+      }
     }
   }
 

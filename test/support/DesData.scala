@@ -32,7 +32,10 @@ object DesData {
   private val approvedInformation: ApprovedInformation = ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
   private val changeIndicators: ChangeIndicators = ChangeIndicators(Some(true), Some(false))
   private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators))
-  private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"))
+  private val items: Seq[Item] = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
+  private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
+  private val itemsNoClearingDate: Seq[Item] = Seq(Item(None))
+  private val transactionNoClearingDate: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(itemsNoClearingDate))
 
   private val repaymentDetail: RepaymentDetailData = RepaymentDetailData(
     LocalDate.parse("2001-01-01"),
@@ -50,6 +53,7 @@ object DesData {
   val approvedCustomerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation), None)
   val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation), Some(inFlightInformation))
   val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
+  val financialDataNoClearingDate: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transactionNoClearingDate))
   val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
   val vrtRepaymentDetailData: VrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
 
@@ -419,7 +423,32 @@ object DesData {
           "financialTransactions":[
              {
                 "chargeType": "VAT Return Credit Charge",
-                "periodKey":"18AC"
+                "periodKey":"18AC",
+                "items": [
+                  {
+                    "clearingDate":"2001-01-01"
+                  }
+                ]
+             }
+          ]
+       }
+     """.stripMargin
+  )
+
+  val financialDataNoClearingDateJson: JsValue = Json.parse(
+    s"""
+       {
+          "idType":"VRN",
+          "idNumber":"2345678890",
+          "regimeType":"VATC",
+          "processingDate":"2019-08-20T10:44:05Z",
+          "financialTransactions":[
+             {
+                "chargeType": "VAT Return Credit Charge",
+                "periodKey":"18AC",
+                "items": [
+                  {}
+                ]
              }
           ]
        }
@@ -1223,6 +1252,128 @@ object DesData {
                            "dueDate": "2018-08-24",
                            "amount": 6.56,
                            "clearingDate": "2018-03-01"
+                       }
+                   ]
+               }
+           ]
+       }""".stripMargin)
+
+  def financialDataEmptyItemsArray(vrn: Vrn): JsValue =
+    Json.parse(
+      s"""
+         {
+           "idType": "VRN",
+           "idNumber": "${vrn.value}",
+           "regimeType": "VATC",
+           "processingDate": "2019-08-20T10:44:05Z",
+           "financialTransactions": [
+               {
+                   "chargeType": "VAT Return Credit Charge",
+                   "mainType": "VAT PA Default Interest",
+                   "periodKey": "18AG",
+                   "periodKeyDescription": "March 2018",
+                   "taxPeriodFrom": "2018-03-01",
+                   "taxPeriodTo": "2018-03-31",
+                   "businessPartner": "0100113120",
+                   "contractAccountCategory": "33",
+                   "contractAccount": "091700000405",
+                   "contractObjectType": "ZVAT",
+                   "contractObject": "00000180000000000165",
+                   "sapDocumentNumber": "003360001206",
+                   "sapDocumentNumberItem": "0002",
+                   "chargeReference": "XV002616013469",
+                   "mainTransaction": "4708",
+                   "subTransaction": "1175",
+                   "originalAmount": 6.56,
+                   "outstandingAmount": 6.56,
+                   "items": [
+                     {
+
+                     }
+                   ]
+               }
+           ]
+       }""".stripMargin)
+
+  def financialDataSeveralDates(vrn: Vrn): JsValue =
+    Json.parse(
+      s"""
+         {
+           "idType": "VRN",
+           "idNumber": "${vrn.value}",
+           "regimeType": "VATC",
+           "processingDate": "2019-08-20T10:44:05Z",
+           "financialTransactions": [
+               {
+                   "chargeType": "VAT Return Credit Charge",
+                   "mainType": "VAT PA Default Interest",
+                   "periodKey": "18AG",
+                   "periodKeyDescription": "March 2018",
+                   "taxPeriodFrom": "2018-03-01",
+                   "taxPeriodTo": "2018-03-31",
+                   "businessPartner": "0100113120",
+                   "contractAccountCategory": "33",
+                   "contractAccount": "091700000405",
+                   "contractObjectType": "ZVAT",
+                   "contractObject": "00000180000000000165",
+                   "sapDocumentNumber": "003360001206",
+                   "sapDocumentNumberItem": "0002",
+                   "chargeReference": "XV002616013469",
+                   "mainTransaction": "4708",
+                   "subTransaction": "1175",
+                   "originalAmount": 6.56,
+                   "outstandingAmount": 6.56,
+                   "items": [
+                       {
+                           "subItem": "000",
+                           "dueDate": "2018-08-24",
+                           "amount": 6.56,
+                           "clearingDate": "2018-03-01"
+                       },
+                       {
+                           "subItem": "001",
+                           "dueDate": "2018-08-24",
+                           "amount": 6.56,
+                           "clearingDate": "2018-03-03"
+                       }
+                   ]
+               }
+           ]
+       }""".stripMargin)
+
+  def financialDataSingleCreditNoClearingDate(vrn: Vrn): JsValue =
+    Json.parse(
+      s"""
+         {
+           "idType": "VRN",
+           "idNumber": "${vrn.value}",
+           "regimeType": "VATC",
+           "processingDate": "2019-08-20T10:44:05Z",
+           "financialTransactions": [
+               {
+                   "chargeType": "VAT Return Credit Charge",
+                   "mainType": "VAT PA Default Interest",
+                   "periodKey": "18AG",
+                   "periodKeyDescription": "March 2018",
+                   "taxPeriodFrom": "2018-03-01",
+                   "taxPeriodTo": "2018-03-31",
+                   "businessPartner": "0100113120",
+                   "contractAccountCategory": "33",
+                   "contractAccount": "091700000405",
+                   "contractObjectType": "ZVAT",
+                   "contractObject": "00000180000000000165",
+                   "sapDocumentNumber": "003360001206",
+                   "sapDocumentNumberItem": "0002",
+                   "chargeReference": "XV002616013469",
+                   "mainTransaction": "4708",
+                   "subTransaction": "1175",
+                   "originalAmount": 6.56,
+                   "outstandingAmount": 6.56,
+                   "items": [
+                       {
+                           "subItem": "000",
+                           "dueDate": "2018-08-24",
+                           "amount": 6.56
                        }
                    ]
                }

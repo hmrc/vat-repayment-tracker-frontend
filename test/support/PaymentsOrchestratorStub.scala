@@ -41,6 +41,24 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.financialDataSingleCredit(vrn: Vrn).toString())))
 
+  def financialsOkCreditNoClearingDate(vrn: Vrn): StubMapping =
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(DesData.financialDataSingleCreditNoClearingDate(vrn: Vrn).toString())))
+
+  def financialsOkCreditTwoClearingDates(vrn: Vrn): StubMapping =
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(DesData.financialDataSeveralDates(vrn: Vrn).toString())))
+
+  def financialsOkCreditEmptyItemsArray(vrn: Vrn): StubMapping =
+    stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(DesData.financialDataEmptyItemsArray(vrn: Vrn).toString())))
+
   def financialsOkDebit(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
