@@ -69,7 +69,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
   def getTransactionWithPeriodKey(financialData: Option[FinancialData], periodKey: PeriodKey): Option[Transaction] = {
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey))
+    } yield fdAllOption.financialTransactions.find(_.periodKey.contains(periodKey.value))
 
     transactionIterable match {
       case Some(x) => x.headOption
