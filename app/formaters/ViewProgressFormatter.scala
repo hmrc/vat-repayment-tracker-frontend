@@ -56,7 +56,6 @@ class ViewProgressFormatter @Inject() (
     val returnCreditChargeExists = desFormatter.getReturnCreditChargeExists(financialData, periodKey)
     val returnDebitChargeExists = desFormatter.getReturnDebitChargeExists(financialData, periodKey)
     val transactionForPeriodKey = desFormatter.getTransactionWithPeriodKey(financialData, periodKey)
-
     val latestUpdate =
       vrd.sortBy(repaymentData => (repaymentData.repaymentDetailsData.sorted, repaymentData.repaymentDetailsData.lastUpdateReceivedDate)).head
     val latestRiskingStatus = latestUpdate.repaymentDetailsData.riskingStatus

@@ -451,7 +451,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "Repayment complete",
-        formattedTodayString,
+        "01 Mar 2018",
         List("We received your VAT payment.")
       ),
       ProgressTimelineItem(
