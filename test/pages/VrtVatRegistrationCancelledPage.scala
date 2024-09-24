@@ -27,13 +27,13 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
   val backButtonUrl: String = ""
 
   def expectedTitle(language: Language): String = language match {
-    case English => "You cannot use this service - Business tax account - GOV.UK"
-    case Welsh   => "Ni allwch ddefnyddio’r gwasanaeth hwn - Cyfrif treth busnes - GOV.UK"
+    case English => "Call us to track your VAT repayments - Business tax account - GOV.UK"
+    case Welsh   => "Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW - Cyfrif treth busnes - GOV.UK"
   }
 
   def expectedMainMessage(language: Language): String = language match {
-    case English => "You cannot use this service"
-    case Welsh   => "Ni allwch ddefnyddio’r gwasanaeth hwn"
+    case English => "Call us to track your VAT repayments"
+    case Welsh   => "Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW"
   }
 
   def assertPageIsDisplayed(language: Language = English)(implicit wd: WebDriver): Unit = {
@@ -66,31 +66,28 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
       }
 
       val mainTextEnglish: List[String] = List(
-        "You cannot use this service",
-        "You cannot use the track your VAT repayments service because your VAT registration has been cancelled.",
-        "Call us on 0300 200 3835 if you cannot track VAT repayments online.",
+        "Call us to track your VAT repayments",
+        "You cannot track your VAT repayments online because your VAT registration has been cancelled.",
+        "Call us on 0300 200 3700 if you need to track a VAT repayment.",
+        "Before you call, make sure you have your VAT registration number which is 9 digits long, like 123456789.",
         "Our opening times are Monday to Friday, 8am to 6pm. We are closed on weekends and bank holidays.",
         "If you need extra support",
         "Find out the different ways to deal with HMRC if you need some help.",
         "You can also use Relay UK if you cannot hear or speak on the phone: dial 18001 then 0345 300 3900.",
-        "If you are outside the UK: +44 2890 538 192",
-        "Before you call, make sure you have:",
-        "your VAT registration number. This is 9 numbers, for example, 123456789",
-        "your bank details"
+        "If you’re calling from outside the UK",
+        "Call us on +44 2890 538 192",
+        "Our opening times are Monday to Friday, 8am to 6pm (UK time). We are closed on weekends and bank holidays."
       )
 
       val mainTextWelsh: List[String] = List(
-        "Ni allwch ddefnyddio’r gwasanaeth hwn",
-        "Ni allwch ddefnyddio’r gwasanaeth dilyn hynt eich ad-daliadau TAW oherwydd bod eich cofrestriad TAW wedi’i ganslo.",
-        "Os na allwch ddilyn hynt eich ad-daliadau TAW ar-lein, ffoniwch ni ar 0300 200 3705.",
+        "Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW",
+        "Ni allwch ddilyn hynt eich ad-daliadau TAW ar-lein oherwydd bod eich cofrestriad TAW wedi’i ganslo.",
+        "Os oes angen i chi ddilyn hynt eich ad-daliadau TAW, ffoniwch ni ar 0300 200 3705.",
+        "Cyn i chi ffonio, gwnewch yn siŵr bod gennych eich rhif cofrestru TAW, sy’n 9 digid o hyd, er enghraifft 123456789.",
         "Ein horiau agor yw Dydd Llun i Ddydd Gwener, 08:30 i 17:00. Rydym ar gau ar benwythnosau a gwyliau banc.",
         "Os oes angen cymorth ychwanegol arnoch chi",
         "Dysgwch am y ffyrdd gwahanol o ddelio â CThEF os oes angen help arnoch chi.",
-        "Gallwch hefyd ddefnyddio Relay UK os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0345 300 3900. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw.",
-        "Os ydych y tu allan i’r DU: +44 300 200 1900",
-        "Cyn i chi ffonio, sicrhewch fod gennych y canlynol:",
-        "eich rhif TAW. Mae hyn yn cynnwys 9 o gymeriadau, er enghraifft, 123456789",
-        "eich manylion banc"
+        "Gallwch hefyd ddefnyddio Relay UK os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0345 300 3900. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw."
       )
     }
   }

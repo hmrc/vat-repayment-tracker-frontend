@@ -3,11 +3,11 @@ import sbt._
 
 object AppDependencies {
 
-  val bootstrapVersion = "9.0.0"
+  val bootstrapVersion = "9.5.0"
 
   val compile = Seq(
     // FORMAT: OFF
-    "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "10.4.0",
+    "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "10.11.0",
     "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapVersion,
     "com.beachape"  %% "enumeratum"                 % "1.7.4",
     "com.beachape"  %% "enumeratum-play"            % "1.8.1",
@@ -22,7 +22,7 @@ object AppDependencies {
     "org.jsoup"              % "jsoup"                   % "1.18.1",
     "org.playframework"      %% "play-test"              % current,
     "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.1",
-    "org.wiremock"           % "wiremock-standalone"     % "3.8.0"
+    "org.wiremock"           % "wiremock-standalone"     % "3.9.1"
     // FORMAT: ON
   ).map(_ % Test)
 
