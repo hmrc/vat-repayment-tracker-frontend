@@ -139,8 +139,6 @@ trait CommonPage
 
   def assertContentMatchesExpectedLines(expectedLines: List[String])(implicit wd: WebDriver): Unit = {
     val content = readMain().stripSpaces().replaceAll("\n", " ")
-    println(content)
-    println(expectedLines)
     expectedLines.foreach { expectedLine =>
       withClue(s"\nThe page content should include '$expectedLine'") {
         content should include(expectedLine)
