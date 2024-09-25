@@ -224,12 +224,12 @@ view_progress_formatter.calculated_original_amount_claimed = Gwnaethom gyfrifo b
 
 vrt_vat_registration_cancelled.title = Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW
 vrt_vat_registration_cancelled.p1 = Ni allwch ddilyn hynt eich ad-daliadau TAW ar-lein oherwydd bod eich cofrestriad TAW wedi’i ganslo.
-vrt_vat_registration_cancelled.p2 = Os oes angen i chi ddilyn hynt eich ad-daliadau TAW, ffoniwch ni ar <strong>0300 200 3705</strong>.
+vrt_vat_registration_cancelled.p2 = Os oes angen i chi ddilyn hynt eich ad-daliadau TAW, ffoniwch ni ar <strong>0300 200 1900</strong>.
 vrt_vat_registration_cancelled.p3 = Cyn i chi ffonio, gwnewch yn siŵr bod gennych eich rhif cofrestru TAW, sy’n 9 digid o hyd, er enghraifft 123456789.
 vrt_vat_registration_cancelled.p4 = Ein horiau agor yw Dydd Llun i Ddydd Gwener, 08:30 i 17:00. Rydym ar gau ar benwythnosau a gwyliau banc.
 vrt_vat_registration_cancelled.extra_support.header = Os oes angen cymorth ychwanegol arnoch chi
 vrt_vat_registration_cancelled.extra_support.p1 = Dysgwch am y ffyrdd gwahanol o <a class="govuk-link" id="extra-support" href="https://www.gov.uk/get-help-hmrc-extra-support">ddelio â CThEF os oes angen help arnoch chi</a>.
-vrt_vat_registration_cancelled.extra_support.p2 = Gallwch hefyd ddefnyddio  <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0345 300 3900. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw.
+vrt_vat_registration_cancelled.extra_support.p2 = Gallwch hefyd ddefnyddio  <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> os na allwch glywed na siarad dros y ffôn: deialwch <strong>18001</strong> ac yna <strong>0300 200 3700</strong>. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw.
 
 accessibility-statement.title = Datganiad Hygyrchedd
 
