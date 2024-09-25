@@ -31,17 +31,17 @@
             <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p1"))</p>
             <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p2"))</p>
             <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p3"))</p>
+            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.p4"))</p>
 
             <h2 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.extra_support.header")</h2>
             <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p1"))</p>
             <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p2"))</p>
-            <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.extra_support.p3"))</p>
 
-            <h3 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.before_you_call.header")</h3>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>@message("vrt_vat_registration_cancelled.before_you_call.l1")</li>
-                <li>@message("vrt_vat_registration_cancelled.before_you_call.l2")</li>
-            </ul>
+            @if(message.lang.code == "en") {
+                <h3 class="govuk-heading-m">@message("vrt_vat_registration_cancelled.outside_the_uk.header")</h3>
+                <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.outside_the_uk.p1"))</p>
+                <p class="govuk-body">@Html(message("vrt_vat_registration_cancelled.outside_the_uk.p2"))</p>
+            }
 
         </div>
 
