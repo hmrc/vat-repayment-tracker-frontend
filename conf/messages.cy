@@ -229,7 +229,7 @@ vrt_vat_registration_cancelled.p3 = Cyn i chi ffonio, gwnewch yn siŵr bod genny
 vrt_vat_registration_cancelled.p4 = Ein horiau agor yw Dydd Llun i Ddydd Gwener, 08:30 i 17:00. Rydym ar gau ar benwythnosau a gwyliau banc.
 vrt_vat_registration_cancelled.extra_support.header = Os oes angen cymorth ychwanegol arnoch chi
 vrt_vat_registration_cancelled.extra_support.p1 = Dysgwch am y ffyrdd gwahanol o <a class="govuk-link" id="extra-support" href="https://www.gov.uk/get-help-hmrc-extra-support">ddelio â CThEF os oes angen help arnoch chi</a>.
-vrt_vat_registration_cancelled.extra_support.p2 = Gallwch hefyd ddefnyddio  <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> os na allwch glywed na siarad dros y ffôn: deialwch <strong>18001</strong> ac yna <strong>0300 200 3700</strong>. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw.
+vrt_vat_registration_cancelled.extra_support.p2 = Gallwch hefyd defnyddio  <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> os na allwch glywed na siarad dros y ffôn: deialwch <strong>18001</strong> ac yna <strong>0300 200 3700</strong>. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw.
 
 accessibility-statement.title = Datganiad Hygyrchedd
 
