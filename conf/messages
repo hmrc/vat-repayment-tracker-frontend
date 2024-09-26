@@ -233,9 +233,9 @@ vrt_vat_registration_cancelled.p3 = Before you call, make sure you have your VAT
 vrt_vat_registration_cancelled.p4 = Our opening times are Monday to Friday, 8am to 6pm. We are closed on weekends and bank holidays.
 vrt_vat_registration_cancelled.extra_support.header = If you need extra support
 vrt_vat_registration_cancelled.extra_support.p1 = Find out the different ways to <a class="govuk-link" id="extra-support" href="https://www.gov.uk/get-help-hmrc-extra-support">deal with HMRC if you need some help</a>.
-vrt_vat_registration_cancelled.extra_support.p2 = You can also use <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> if you cannot hear or speak on the phone: dial <strong>18001</strong> then <strong>0345 300 3900</strong>.
+vrt_vat_registration_cancelled.extra_support.p2 = You can also use <a class="govuk-link" id="relay-uk" href="https://www.relayuk.bt.com/">Relay UK</a> if you cannot hear or speak on the phone: dial <strong>18001</strong> then <strong>0300 200 3700</strong>.
 vrt_vat_registration_cancelled.outside_the_uk.header = If you’re calling from outside the UK
-vrt_vat_registration_cancelled.outside_the_uk.p1 = Call us on <strong>+44 2890 538 192</strong>
+vrt_vat_registration_cancelled.outside_the_uk.p1 = Call us on <strong>+44 2920 501 261</strong>
 vrt_vat_registration_cancelled.outside_the_uk.p2 = Our opening times are Monday to Friday, 8am to 6pm (UK time). We are closed on weekends and bank holidays.
 
 accessibility-statement.title = Accessibility Statement

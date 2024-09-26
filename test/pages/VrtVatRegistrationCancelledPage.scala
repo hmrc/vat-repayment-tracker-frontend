@@ -73,21 +73,21 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
         "Our opening times are Monday to Friday, 8am to 6pm. We are closed on weekends and bank holidays.",
         "If you need extra support",
         "Find out the different ways to deal with HMRC if you need some help.",
-        "You can also use Relay UK if you cannot hear or speak on the phone: dial 18001 then 0345 300 3900.",
+        "You can also use Relay UK if you cannot hear or speak on the phone: dial 18001 then 0300 200 3700.",
         "If you’re calling from outside the UK",
-        "Call us on +44 2890 538 192",
+        "Call us on +44 2920 501 261",
         "Our opening times are Monday to Friday, 8am to 6pm (UK time). We are closed on weekends and bank holidays."
       )
 
       val mainTextWelsh: List[String] = List(
         "Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW",
         "Ni allwch ddilyn hynt eich ad-daliadau TAW ar-lein oherwydd bod eich cofrestriad TAW wedi’i ganslo.",
-        "Os oes angen i chi ddilyn hynt eich ad-daliadau TAW, ffoniwch ni ar 0300 200 3705.",
+        "Os oes angen i chi ddilyn hynt eich ad-daliadau TAW, ffoniwch ni ar 0300 200 1900.",
         "Cyn i chi ffonio, gwnewch yn siŵr bod gennych eich rhif cofrestru TAW, sy’n 9 digid o hyd, er enghraifft 123456789.",
         "Ein horiau agor yw Dydd Llun i Ddydd Gwener, 08:30 i 17:00. Rydym ar gau ar benwythnosau a gwyliau banc.",
         "Os oes angen cymorth ychwanegol arnoch chi",
         "Dysgwch am y ffyrdd gwahanol o ddelio â CThEF os oes angen help arnoch chi.",
-        "Gallwch hefyd ddefnyddio Relay UK os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0345 300 3900. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw."
+        "Gallwch hefyd ddefnyddio Relay UK os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0300 200 3700. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw."
       )
     }
   }
