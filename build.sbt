@@ -13,7 +13,6 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
     retrieveManaged := false,
     routesGenerator := InjectedRoutesGenerator,
-    (update / evictionWarningOptions) := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     (Compile / doc / sources) := Seq.empty
   )
   .settings(majorVersion := 1)
