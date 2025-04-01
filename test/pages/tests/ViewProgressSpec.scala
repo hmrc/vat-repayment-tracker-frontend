@@ -132,7 +132,7 @@ class ViewProgressSpec extends BrowserSpec {
         _50DaysAgoFormattedString,
         List(
           "You do not need to do anything right now. We are working on repaying you as soon as possible.",
-          "We have sent you a letter to explain that your repayment is delayed."
+          "We'll contact you with any further information about the delay."
         )
       ),
       ProgressTimelineItem(
