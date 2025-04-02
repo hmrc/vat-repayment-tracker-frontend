@@ -195,7 +195,7 @@ view_progress_formatter.we_received_your_return = We received your return and ar
 view_progress_formatter.amount_you_claimed = Amount you claimed
 view_progress_formatter.repayment_being_processed = Your repayment is being processed
 view_progress_formatter.estimated_repayment_date_passed = Estimated repayment date has passed
-view_progress_formatter.do_not_need_anything = You do not need to do anything right now. We are working on repaying you as soon as possible. </p><p class="govuk-body">We''ll contact you with any further information about the delay.
+view_progress_formatter.do_not_need_anything = You do not need to do anything right now. We are working on repaying you as soon as possible. We''ll contact you with any further information about the delay.
 view_progress_formatter.repayment_delayed = Your repayment is delayed
 view_progress_formatter.sending_for_further_checks = Sending for further checks
 view_progress_formatter.making_sure_right_amount = We are making sure we pay you the right amount. You do not need to do anything, but we may contact you if we need any further information.

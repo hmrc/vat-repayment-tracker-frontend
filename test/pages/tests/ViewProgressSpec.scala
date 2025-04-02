@@ -131,8 +131,7 @@ class ViewProgressSpec extends BrowserSpec {
         "Estimated repayment date has passed",
         _50DaysAgoFormattedString,
         List(
-          "You do not need to do anything right now. We are working on repaying you as soon as possible.",
-          "We'll contact you with any further information about the delay."
+          "You do not need to do anything right now. We are working on repaying you as soon as possible. We'll contact you with any further information about the delay."
         )
       ),
       ProgressTimelineItem(

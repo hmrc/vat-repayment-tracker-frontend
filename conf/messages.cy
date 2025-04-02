@@ -191,7 +191,7 @@ view_progress_formatter.we_received_your_return = Mae’ch Ffurflen TAW wedi dod
 view_progress_formatter.amount_you_claimed = Y swm a hawliwyd gennych
 view_progress_formatter.repayment_being_processed = Mae’ch ad-daliad yn cael ei brosesu
 view_progress_formatter.estimated_repayment_date_passed = Mae’r dyddiad ad-dalu amcangyfrifiedig wedi mynd heibio 
-view_progress_formatter.do_not_need_anything = Does dim angen i chi wneud dim byd ar hyn o bryd. Rydym yn gweithio ar eich ad-dalu cyn gynted â phosibl. </p><p class="govuk-body">Byddwn yn cysylltu â chi gydag unrhyw wybodaeth bellach ynglŷn â’r oedi.
+view_progress_formatter.do_not_need_anything = Does dim angen i chi wneud dim byd ar hyn o bryd. Rydym yn gweithio ar eich ad-dalu cyn gynted â phosibl. Byddwn yn cysylltu â chi gydag unrhyw wybodaeth bellach ynglŷn â’r oedi.
 view_progress_formatter.repayment_delayed = Mae oedi i’ch ad-daliad
 view_progress_formatter.sending_for_further_checks = Anfon am wiriadau pellach
 view_progress_formatter.making_sure_right_amount = Rydym yn gwneud yn siŵr ein bod yn talu’r swm cywir i chi. Nid oes angen i chi wneud dim byd, ond mae’n bosibl y byddwn yn cysylltu â chi os bydd angen gwybodaeth bellach arnom.
