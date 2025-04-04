@@ -12,7 +12,9 @@ POST       /manage-or-track-vrt                                     controllers.
 
 #Interenal route
 GET        /non-mtd-user                                            controllers.Controller.nonMtdUser
+GET        /in-progress-check                                       controllers.Controller.inProgressCheck
 GET        /view-repayment-account                                  controllers.Controller.viewRepaymentAccount
+GET        /bank-details-being-updated                              controllers.Controller.bankDetailsBeingUpdated
 POST       /manage-or-track-submit                                  controllers.ManageOrTrackController.manageOrTrackSubmit
 GET        /signout                                                 controllers.Controller.signout
 GET        /bank-account-coc/start-journey/:returnPage              controllers.BankAccountCocController.startBankAccountCocJourney(returnPage : ReturnPage)

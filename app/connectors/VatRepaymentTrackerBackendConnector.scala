@@ -17,13 +17,15 @@
 package connectors
 
 import java.nio.charset.{StandardCharsets => SC}
+
 import javax.inject.{Inject, Singleton}
+import model.des.InProgressResponse
 import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
 import play.api.mvc.Request
 import play.api.Logger
 import play.api.libs.json.Json
 import play.utils.UriEncoding
-import uk.gov.hmrc.http.{HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -57,6 +59,11 @@ class VatRepaymentTrackerBackendConnector @Inject() (
     logger.debug(s"""calling vat-repayment-tracker-backend find with url $findRDDUrl""")
 
     httpClient.get(url"$findRDDUrl").execute[List[VrtRepaymentDetailData]]
+  }
+
+  def progressCheck(vrn: Vrn)(implicit hc: HeaderCarrier): Future[InProgressResponse] = {
+    httpClient.get(url"$serviceURL/progress/${vrn.value}")
+      .execute[InProgressResponse]
   }
 
 }
