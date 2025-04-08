@@ -25,13 +25,14 @@ import play.api.libs.json.{JsValue, Json}
 
 object DesData {
 
-  private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"))
+  private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None)
   private val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   private val ppob: PPOB = PPOB(Some(address))
   private val customerDetails: CustomerDetails = CustomerDetails(Some(true), Some(false))
   private val approvedInformation: ApprovedInformation = ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
   private val changeIndicators: ChangeIndicators = ChangeIndicators(Some(true), Some(false))
-  private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators))
+  private val inFlightChanges: InFlightChanges = InFlightChanges(Some(bankDetails))
+  private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators), Some(inFlightChanges))
   private val items: Seq[Item] = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
   private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
   private val itemsNoClearingDate: Seq[Item] = Seq(Item(None))

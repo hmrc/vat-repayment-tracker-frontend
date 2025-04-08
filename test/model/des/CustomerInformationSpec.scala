@@ -56,31 +56,31 @@ class CustomerInformationSpec extends UnitSpec {
   }
 
   "empty bankdetails should be false" in {
-    val bd = BankDetails(None, None, None)
+    val bd = BankDetails(None, None, None, None)
     bd.detailsExist shouldBe false
 
   }
 
   "just an accountNane should be true " in {
-    val bd = BankDetails(Some("AA"), None, None)
+    val bd = BankDetails(Some("AA"), None, None, None)
     bd.detailsExist shouldBe true
 
   }
 
   "just an accountNumber should be true " in {
-    val bd = BankDetails(None, Some("AA"), None)
+    val bd = BankDetails(None, Some("AA"), None, None)
     bd.detailsExist shouldBe true
 
   }
 
   "just a sortCode should be true " in {
-    val bd = BankDetails(None, None, Some("123456"))
+    val bd = BankDetails(None, None, Some("123456"), None)
     bd.detailsExist shouldBe true
 
   }
 
   "acc no and sortCode should be true" in {
-    val bd = BankDetails(None, Some("AA"), Some("123456"))
+    val bd = BankDetails(None, Some("AA"), Some("123456"), None)
     bd.detailsExist shouldBe true
   }
 

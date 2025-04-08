@@ -16,6 +16,10 @@
 
 package controllers
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
 import cats.data.NonEmptyList
 import config.ViewConfig
 import connectors.Auditor.`repayment-type`
@@ -24,11 +28,11 @@ import controllers.action.{Actions, AuthenticatedRequest}
 import formaters.{DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
 import model._
-import model.des.InProgressResponse
 import play.api.Logger
 import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
+import util.WelshDateUtil.StringOps
 
 import scala.concurrent.ExecutionContext
 
@@ -38,7 +42,6 @@ class Controller @Inject() (
     views_non_mtd_user:                  views.html.non_mtd_user,
     view_repayment_account:              views.html.view_repayment_account,
     vrt_vat_registration_cancelled:      views.html.vrt_vat_registration_cancelled,
-    bank_details_being_updated:          views.html.view_repayment_account,
     paymentsOrchestratorConnector:       PaymentsOrchestratorConnector,
     requestSupport:                      RequestSupport,
     desFormatter:                        DesFormatter,
@@ -126,19 +129,6 @@ class Controller @Inject() (
       }
     }
 
-  val inProgressCheck: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
-    implicit request: AuthenticatedRequest[_] =>
-
-      for {
-        inProgress <- vatRepaymentTrackerBackendConnector.progressCheck(request.typedVrn.vrn)
-      } yield {
-        inProgress match {
-          case InProgressResponse(Some(BankAccountDetails(_, _, _, _))) => Redirect(routes.Controller.bankDetailsBeingUpdated)
-          case _ => Redirect(routes.Controller.viewRepaymentAccount)
-        }
-      }
-  }
-
   val viewRepaymentAccount: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
     implicit request: AuthenticatedRequest[_] =>
 
@@ -147,21 +137,12 @@ class Controller @Inject() (
       for {
         customerData <- customerDataF
       } yield {
+        val inFlight = desFormatter.bankDetailsInFlight(customerData)
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(view_repayment_account(bankDetails, ReturnPage("view-repayment-account")))
-      }
-  }
-
-  val bankDetailsBeingUpdated: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
-    implicit request: AuthenticatedRequest[_] =>
-
-      val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
-
-      for {
-        customerData <- customerDataF
-      } yield {
-        val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(bank_details_being_updated(bankDetails, ReturnPage("view-repayment-account")))
+        val dateToDisplay = LocalDate.parse(desFormatter.getInFlightDate(customerData)).plusDays(40).format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK))
+        val welshDateToDisplay = dateToDisplay.welshMonth
+        println(welshDateToDisplay)
+        Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), dateToDisplay, welshDateToDisplay))
       }
   }
 
