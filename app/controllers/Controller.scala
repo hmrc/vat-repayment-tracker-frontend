@@ -141,7 +141,6 @@ class Controller @Inject() (
         val bankDetails = desFormatter.getBankDetails(customerData)
         val dateToDisplay = LocalDate.parse(desFormatter.getInFlightDate(customerData)).plusDays(40).format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK))
         val welshDateToDisplay = dateToDisplay.welshMonth
-        println(welshDateToDisplay)
         Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), dateToDisplay, welshDateToDisplay))
       }
   }
