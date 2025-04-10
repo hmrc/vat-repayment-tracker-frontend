@@ -132,10 +132,13 @@ view_progress.repayment.AskHMRC = Ask HMRC (opens in new tab)
 
 
 view_repayment_account.title = Your VAT repayments will be sent to this account
+view_repayment_account.title.inFlight = The bank account details for your VAT repayments are being updated
+view_repayment_account.warning = The updated bank account details will appear in your tax account by {0}, but may appear sooner.
 view_repayment_account.name_on_account = Name on account:
 view_repayment_account.sort_code = Sort code:
 view_repayment_account.account_number = Account number:
 view_repayment_account.change_account_details = Change account details
+view_repayment_account.return_to_vat = Return to VAT account
 
 
 repayment_details.h2 = Your repayment details

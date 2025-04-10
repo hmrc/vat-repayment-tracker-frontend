@@ -45,6 +45,14 @@ class CustomerInformationSpec extends UnitSpec {
     DesData.approvedCustomerInformation.PPOBDetailsChangeIndicatorExists shouldBe None
   }
 
+  "inFlight date exist" in {
+    DesData.customerInformation.inFlightDate shouldBe Some("01-01-2000")
+  }
+
+  "inFlight date exist as None" in {
+    DesData.approvedCustomerInformation.inFlightDate shouldBe None
+  }
+
   "Deregistration data included" - {
     "to json" in {
       Json.toJson(DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered) shouldBe DesData.approvedInformationDeregisteredJson
@@ -56,31 +64,31 @@ class CustomerInformationSpec extends UnitSpec {
   }
 
   "empty bankdetails should be false" in {
-    val bd = BankDetails(None, None, None)
+    val bd = BankDetails(None, None, None, None)
     bd.detailsExist shouldBe false
 
   }
 
   "just an accountNane should be true " in {
-    val bd = BankDetails(Some("AA"), None, None)
+    val bd = BankDetails(Some("AA"), None, None, None)
     bd.detailsExist shouldBe true
 
   }
 
   "just an accountNumber should be true " in {
-    val bd = BankDetails(None, Some("AA"), None)
+    val bd = BankDetails(None, Some("AA"), None, None)
     bd.detailsExist shouldBe true
 
   }
 
   "just a sortCode should be true " in {
-    val bd = BankDetails(None, None, Some("123456"))
+    val bd = BankDetails(None, None, Some("123456"), None)
     bd.detailsExist shouldBe true
 
   }
 
   "acc no and sortCode should be true" in {
-    val bd = BankDetails(None, Some("AA"), Some("123456"))
+    val bd = BankDetails(None, Some("AA"), Some("123456"), None)
     bd.detailsExist shouldBe true
   }
 

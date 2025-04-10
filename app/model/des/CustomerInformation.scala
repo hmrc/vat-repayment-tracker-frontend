@@ -56,6 +56,16 @@ final case class CustomerInformation(approvedInformation: Option[ApprovedInforma
     } yield deregistration.deregistrationReason.nonEmpty
   }.getOrElse(false)
 
+  val inFlightDate: Option[String] = {
+    for {
+      inflight <- inFlightInformation
+      inFlightChanges <- inflight.inFlightChanges
+      bankDetails <- inFlightChanges.bankDetails
+      formInformation <- bankDetails.formInformation
+      dateReceived <- formInformation.dateReceived
+    } yield dateReceived
+  }
+
 }
 
 object CustomerInformation {
@@ -63,7 +73,8 @@ object CustomerInformation {
 }
 
 final case class InFlightInformation(
-    changeIndicators: Option[ChangeIndicators]
+    changeIndicators: Option[ChangeIndicators],
+    inFlightChanges:  Option[InFlightChanges]
 )
 
 object InFlightInformation {
@@ -74,6 +85,18 @@ final case class ChangeIndicators(bankDetails: Option[Boolean], PPOBDetails: Opt
 
 object ChangeIndicators {
   implicit val format: OFormat[ChangeIndicators] = Json.format[ChangeIndicators]
+}
+
+final case class InFlightChanges(bankDetails: Option[BankDetails])
+
+object InFlightChanges {
+  implicit val format: OFormat[InFlightChanges] = Json.format[InFlightChanges]
+}
+
+final case class FormInformation(dateReceived: Option[String])
+
+object FormInformation {
+  implicit val format: OFormat[FormInformation] = Json.format[FormInformation]
 }
 
 final case class ApprovedInformation
@@ -141,7 +164,8 @@ object Address {
 final case class BankDetails(
     accountHolderName: Option[String],
     bankAccountNumber: Option[String],
-    sortCode:          Option[String]
+    sortCode:          Option[String],
+    formInformation:   Option[FormInformation]
 ) {
 
   val detailsExist: Boolean =

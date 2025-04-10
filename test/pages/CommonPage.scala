@@ -111,6 +111,8 @@ trait CommonPage
 
   def readMainMessage(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
 
+  def readWarning(implicit webDriver: WebDriver): String = probing(_.findElement(By.className("govuk-warning-text__text")).getText)
+
   def readAccName(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
 
   def readAccSortCode(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)

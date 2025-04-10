@@ -138,7 +138,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
       ddDetails <- ddDetailsOption.headOption
     } yield ddDetails
 
-    ddDetail.map(detail => BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode)))
+    ddDetail.map(detail => BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode), None))
 
   }
 
@@ -161,6 +161,18 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
     optBankDetails match {
       case Some(x) => x
       case None    => false
+    }
+  }
+
+  def getInFlightDate(customerData: Option[CustomerInformation]): String = {
+    val optDate = for {
+      cd <- customerData
+      dateReceived <- cd.inFlightDate
+    } yield dateReceived
+
+    optDate match {
+      case Some(x) => x
+      case None    => ""
     }
   }
 

@@ -16,19 +16,40 @@
 
 @import model.des._
 @import model._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import config.ViewConfig
 
-@this(mainTemplate: views.html.main_template)
+@this(
+ mainTemplate: views.html.main_template,
+ govukWarningText: GovukWarningText,
+ govukButton: GovukButton,
+ viewConfig: ViewConfig
+)
 
 @(
   bankDetailsOption: Option[BankDetails],
-  returnPage : ReturnPage
+  inFlight: Boolean,
+  returnPage : ReturnPage,
+  date: String,
+  welshDate: String
 )(implicit request: Request[_], messages: Messages)
 
+@title = @{
+  if (inFlight) Messages("view_repayment_account.title.inFlight")
+  else Messages("view_repayment_account.title")
+}
 
-@mainTemplate(title = Messages("view_repayment_account.title")) {
+@mainTemplate(title = title) {
  <div class="govuk-grid-row govuk-!-padding-bottom-2">
   <div class="govuk-grid-column-two-thirds">
-   <h1 id="main-message" class="govuk-heading-xl">@Messages("view_repayment_account.title")</h1>
+   <h1 id="main-message" class="govuk-heading-xl">@title</h1>
+
+   @if(inFlight) {
+    @govukWarningText(WarningText(content = Text(Messages(
+      "view_repayment_account.warning", if(messages.lang.code == "en") {date} else if(messages.lang.code == "cy") {welshDate}
+    ))))
+   }
+
    @bankDetailsOption.map{bankDetails =>
 
    <dl class="summary-list summary-list--undivided">
@@ -57,7 +78,18 @@
      </dd>
     </div>
    </dl>
-   <a class="govuk-link govuk-!-font-size-19" href='@routes.BankAccountCocController.startBankAccountCocJourney(returnPage)' id="call-bac">@Messages("view_repayment_account.change_account_details")</a>
+   <a class="govuk-link govuk-!-font-size-19" href='@routes.BankAccountCocController.startBankAccountCocJourney(returnPage)' id="call-bac">@{
+     if (!inFlight) Messages("view_repayment_account.change_account_details")
+     else Messages("")
+    }</a>
+
+   @if(inFlight) {
+    @govukButton(Button(
+     content = Text(Messages("view_repayment_account.return_to_vat")),
+     href = Some(viewConfig.viewVatAccount),
+     id = Some("return-to-vat")
+    ))
+   }
 
   </div>
  </div>
