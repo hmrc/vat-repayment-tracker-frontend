@@ -45,6 +45,14 @@ class CustomerInformationSpec extends UnitSpec {
     DesData.approvedCustomerInformation.PPOBDetailsChangeIndicatorExists shouldBe None
   }
 
+  "inFlight date exist" in {
+    DesData.customerInformation.inFlightDate shouldBe Some("01-01-2000")
+  }
+
+  "inFlight date exist as None" in {
+    DesData.approvedCustomerInformation.inFlightDate shouldBe None
+  }
+
   "Deregistration data included" - {
     "to json" in {
       Json.toJson(DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered) shouldBe DesData.approvedInformationDeregisteredJson

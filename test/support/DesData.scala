@@ -26,12 +26,13 @@ import play.api.libs.json.{JsValue, Json}
 object DesData {
 
   private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None)
+  private val inFlightBankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), Some(FormInformation(Some("01-01-2000"))))
   private val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   private val ppob: PPOB = PPOB(Some(address))
   private val customerDetails: CustomerDetails = CustomerDetails(Some(true), Some(false))
   private val approvedInformation: ApprovedInformation = ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
   private val changeIndicators: ChangeIndicators = ChangeIndicators(Some(true), Some(false))
-  private val inFlightChanges: InFlightChanges = InFlightChanges(Some(bankDetails))
+  private val inFlightChanges: InFlightChanges = InFlightChanges(Some(inFlightBankDetails))
   private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators), Some(inFlightChanges))
   private val items: Seq[Item] = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
   private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
@@ -706,6 +707,101 @@ object DesData {
                  "PPOBDetails": false,
                  "correspondenceContactDetails": false,
                  "bankDetails": false,
+                 "returnPeriod": false,
+                 "flatRateScheme": false,
+                 "businessActivities": false,
+                 "deregister": false,
+                 "effectiveDateOfRegistration": false,
+                 "mandationStatus": true
+             },
+             "inFlightChanges": {
+                 "bankDetails": {
+                     "formInformation": {
+                         "formBundle": "092000001020",
+                         "dateReceived": "2019-03-04"
+                     },
+                     "accountHolderName": "Account holder",
+                     "bankAccountNumber": "11112222",
+                     "sortCode": "667788"
+                 },
+                 "mandationStatus": {
+                     "formInformation": {
+                         "formBundle": "092000002124",
+                         "dateReceived": "2019-08-15"
+                     },
+                     "mandationStatus": "3"
+                 }
+             }
+         }
+     }
+       """.stripMargin)
+
+  // language=JSON
+  val customerDataOkWithBankDetailsInflight: JsValue = Json.parse(
+    s"""
+     {
+         "approvedInformation": {
+             "customerDetails": {
+                 "nameIsReadOnly": true,
+                 "organisationName": "TAXPAYER NAME_1",
+                 "dataOrigin": "0001",
+                 "mandationStatus": "1",
+                 "registrationReason": "0001",
+                 "effectiveRegistrationDate": "2017-01-02",
+                 "businessStartDate": "2017-01-01",
+                 "welshIndicator": true,
+                 "partyType": "50",
+                 "optionToTax": true,
+                 "isPartialMigration": false,
+                 "isInsolvent": false,
+                 "overseasIndicator": true
+             },
+             "PPOB": {
+                 "address": {
+                     "line1": "VAT PPOB Line1",
+                     "line2": "VAT PPOB Line2",
+                     "line3": "VAT PPOB Line3",
+                     "line4": "VAT PPOB Line4",
+                     "postCode": "TF3 4ER",
+                     "countryCode": "GB"
+                 },
+                 "contactDetails": {
+                     "primaryPhoneNumber": "012345678901",
+                     "mobileNumber": "012345678902",
+                     "faxNumber": "012345678903",
+                     "emailAddress": "lewis.hay@digital.hmrc.gov.uk",
+                     "emailVerified": true
+                 },
+                 "websiteAddress": "www.tumbleweed.com"
+             },
+            "bankDetails": {
+                 "accountHolderName": "Account holder",
+                 "bankAccountNumber": "11112222",
+                 "sortCode": "667788"
+             },
+             "businessActivities": {
+                 "primaryMainCode": "10410",
+                 "mainCode2": "10611",
+                 "mainCode3": "10710",
+                 "mainCode4": "10720"
+             },
+             "flatRateScheme": {
+                 "FRSCategory": "003",
+                 "FRSPercentage": 59.99,
+                 "startDate": "0001-01-01",
+                 "endDate": "9999-12-31",
+                 "limitedCostTrader": true
+             },
+             "returnPeriod": {
+                 "stdReturnPeriod": "MM"
+             }
+         },
+         "inFlightInformation": {
+             "changeIndicators": {
+                 "organisationDetails": false,
+                 "PPOBDetails": false,
+                 "correspondenceContactDetails": false,
+                 "bankDetails": true,
                  "returnPeriod": false,
                  "flatRateScheme": false,
                  "businessActivities": false,

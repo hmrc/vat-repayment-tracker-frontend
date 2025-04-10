@@ -16,7 +16,7 @@
 
 package util
 
-import SafeEquals._
+import cats.syntax.all._
 
 import scala.util.Try
 
