@@ -16,19 +16,23 @@
 
 package controllers
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
 import cats.data.NonEmptyList
 import config.ViewConfig
 import connectors.Auditor.`repayment-type`
 import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
 import formaters.{DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
-
 import javax.inject.{Inject, Singleton}
 import model._
 import play.api.Logger
 import play.api.mvc.{Action, _}
 import req.RequestSupport
 import service.VrtService
+import util.WelshDateUtil.StringOps
 
 import scala.concurrent.ExecutionContext
 
@@ -133,8 +137,11 @@ class Controller @Inject() (
       for {
         customerData <- customerDataF
       } yield {
+        val inFlight = desFormatter.bankDetailsInFlight(customerData)
         val bankDetails = desFormatter.getBankDetails(customerData)
-        Ok(view_repayment_account(bankDetails, ReturnPage("view-repayment-account")))
+        val dateToDisplay = LocalDate.parse(desFormatter.getInFlightDate(customerData)).plusDays(40).format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK))
+        val welshDateToDisplay = dateToDisplay.welshMonth
+        Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), dateToDisplay, welshDateToDisplay))
       }
   }
 

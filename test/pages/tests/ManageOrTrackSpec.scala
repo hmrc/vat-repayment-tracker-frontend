@@ -66,14 +66,31 @@ class ManageOrTrackSpec extends BrowserSpec {
     InProgress.assertPageIsDisplayed(amount = "£0.00")
   }
 
-  "7. click bankLabel" in {
+  "7. click bankLabel when bank details not in flight" in {
     BankAccountCocWireMockResponses.bankOk
     setup()
     ManageOrTrack.clickBankLabel()
     ManageOrTrack.clickContinue()
-    ViewRepaymentAccount.assertPageIsDisplayed("/vat-repayment-tracker/view-repayment-account")
+    ViewRepaymentAccount.assertPageIsDisplayed("Your VAT repayments will be sent to this account")
     ManageOrTrack.clickCallBac
     AuditWireMockResponses.bacWasAuditedNoDetails()
+  }
+
+  "8. click bankLabel when bank details in flight" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(inflight = true)
+    ManageOrTrack.clickBankLabel()
+    ManageOrTrack.clickContinue()
+    ViewRepaymentAccount.assertPageIsDisplayed("The bank account details for your VAT repayments are being updated")
+  }
+
+  "9. click bankLabel when bank details in flight in Welsh" in {
+    BankAccountCocWireMockResponses.bankOk
+    setup(inflight = true)
+    ManageOrTrack.clickOnWelshLink()
+    ManageOrTrack.clickBankLabel()
+    ManageOrTrack.clickContinue()
+    ViewRepaymentAccount.assertPageIsDisplayed("Mae’r manylion cyfrif banc ar gyfer eich ad-daliadau TAW yn cael eu diweddaru")
   }
 
   private def setup(
@@ -86,9 +103,12 @@ class ManageOrTrackSpec extends BrowserSpec {
       VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
 
-      if (inflight)
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
-      else {
+      if (inflight) {
+        if (useBankDetails)
+          PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
+        else
+          PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+      } else {
         if (useBankDetails)
           PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
         else
