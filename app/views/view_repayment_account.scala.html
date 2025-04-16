@@ -30,8 +30,8 @@
   bankDetailsOption: Option[BankDetails],
   inFlight: Boolean,
   returnPage : ReturnPage,
-  date: String,
-  welshDate: String
+  date: Option[String],
+  welshDate: Option[String]
 )(implicit request: Request[_], messages: Messages)
 
 @title = @{
@@ -46,7 +46,7 @@
 
    @if(inFlight) {
     @govukWarningText(WarningText(content = Text(Messages(
-      "view_repayment_account.warning", if(messages.lang.code == "en") {date} else if(messages.lang.code == "cy") {welshDate}
+      "view_repayment_account.warning", if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")}
     ))))
    }
 

@@ -139,9 +139,13 @@ class Controller @Inject() (
       } yield {
         val inFlight = desFormatter.bankDetailsInFlight(customerData)
         val bankDetails = desFormatter.getBankDetails(customerData)
-        val dateToDisplay = LocalDate.parse(desFormatter.getInFlightDate(customerData)).plusDays(40).format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK))
-        val welshDateToDisplay = dateToDisplay.welshMonth
-        Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), dateToDisplay, welshDateToDisplay))
+        if (inFlight) {
+          val dateToDisplay: String = LocalDate.parse(desFormatter.getInFlightDate(customerData)).plusDays(40).format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK))
+          val welshDateToDisplay: String = dateToDisplay.welshMonth
+          Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), Some(dateToDisplay), Some(welshDateToDisplay)))
+        } else {
+          Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), None, None))
+        }
       }
   }
 
