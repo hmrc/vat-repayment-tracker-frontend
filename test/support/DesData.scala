@@ -623,24 +623,6 @@ object DesData {
                  "deregister": false,
                  "effectiveDateOfRegistration": false,
                  "mandationStatus": true
-             },
-             "inFlightChanges": {
-                 "bankDetails": {
-                     "formInformation": {
-                         "formBundle": "092000001020",
-                         "dateReceived": "2019-03-04"
-                     },
-                     "accountHolderName": "Account holder",
-                     "bankAccountNumber": "11112222",
-                     "sortCode": "667788"
-                 },
-                 "mandationStatus": {
-                     "formInformation": {
-                         "formBundle": "092000002124",
-                         "dateReceived": "2019-08-15"
-                     },
-                     "mandationStatus": "3"
-                 }
              }
          }
      }
