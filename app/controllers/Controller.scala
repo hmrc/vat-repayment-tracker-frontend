@@ -28,9 +28,11 @@ import controllers.action.{Actions, AuthenticatedRequest}
 import formaters.{DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
 import javax.inject.{Inject, Singleton}
 import model._
+import model.des.CustomerInformation
 import play.api.Logger
 import play.api.mvc.{Action, _}
 import req.RequestSupport
+import scala.util.Try
 import service.VrtService
 import util.WelshDateUtil.StringOps
 
@@ -140,13 +142,29 @@ class Controller @Inject() (
         val inFlight = desFormatter.bankDetailsInFlight(customerData)
         val bankDetails = desFormatter.getBankDetails(customerData)
         if (inFlight) {
-          val dateToDisplay: String = LocalDate.parse(desFormatter.getInFlightDate(customerData)).plusDays(40).format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK))
+          val dateToDisplay = getDateToDisplay(customerData)
           val welshDateToDisplay: String = dateToDisplay.welshMonth
           Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), Some(dateToDisplay), Some(welshDateToDisplay)))
         } else {
           Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), None, None))
         }
       }
+  }
+
+  private def getDateToDisplay(customerData: Option[CustomerInformation]): String = desFormatter.getInFlightDate(customerData) match {
+    case Some(dateStr) =>
+      Try(LocalDate.parse(dateStr).plusDays(40))
+        .map(_.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK)))
+        .getOrElse {
+          throw new RuntimeException(
+            s"[Controller][viewRepaymentAccount] Failed to parse or format receivedDate [$dateStr] for in-flight changes."
+          )
+        }
+
+    case None =>
+      throw new RuntimeException(
+        "[Controller][viewRepaymentAccount] No receivedDate for in-flight changes found for customer."
+      )
   }
 
   val deregistered: Action[AnyContent] = actions.loggedIn.async { implicit request =>

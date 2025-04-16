@@ -164,16 +164,11 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
     }
   }
 
-  def getInFlightDate(customerData: Option[CustomerInformation]): String = {
-    val optDate = for {
+  def getInFlightDate(customerData: Option[CustomerInformation]): Option[String] = {
+    for {
       cd <- customerData
       dateReceived <- cd.inFlightDate
     } yield dateReceived
-
-    optDate match {
-      case Some(x) => x
-      case None    => ""
-    }
   }
 
 }
