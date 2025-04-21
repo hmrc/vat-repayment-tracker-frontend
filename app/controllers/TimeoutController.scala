@@ -28,6 +28,6 @@ class TimeoutController @Inject() (delete_answers: views.html.session.delete_ans
   val keepAliveSession: Action[AnyContent] = Action(NoContent)
 
   val killSession: Action[AnyContent] = Action { implicit request =>
-    Ok(delete_answers()).withNewSession
+    Ok(delete_answers())
   }
 }
