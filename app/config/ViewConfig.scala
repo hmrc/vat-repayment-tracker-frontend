@@ -38,13 +38,18 @@ case class ViewConfig(
     isShuttered:                   Boolean,
     timeoutDialogTimeout:          Int,
     timeoutDialogCountdown:        Int,
-    webchatUrl:                    String) {
+    webchatUrl:                    String,
+    basGatewayBaseUrl:             String
+) {
 
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
   val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
   val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
 
   def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
+
+  def signOutWithRedirect(continueUrl: String): String =
+    basGatewayBaseUrl + s"/bas-gateway/sign-out-without-state?continue=$frontendBaseUrl$continueUrl"
 
   @Inject
   def this(servicesConfig: ServicesConfig) = this(
@@ -65,16 +70,9 @@ case class ViewConfig(
     timeoutDialogCountdown        = servicesConfig.getInt("timeout-dialog.countdown"),
     accessibilityStatementBaseUrl = servicesConfig.getString("accessibility-statement-frontend.url"),
     accessibilityStatementPath    = servicesConfig.getString("accessibility-statement-frontend.path"),
-    webchatUrl                    = servicesConfig.getString("urls.webchatUrl")
+    webchatUrl                    = servicesConfig.getString("urls.webchatUrl"),
+    basGatewayBaseUrl             = servicesConfig.baseUrl("bas-gateway-frontend")
 
   )
-
-  // footer links
-  val cookiesUrl: String = "https://www.tax.service.gov.uk/help/cookies"
-  val privacyNoticeUrl: String = "https://www.tax.service.gov.uk/help/privacy"
-  val termsAndConditionsUrl: String = "https://www.tax.service.gov.uk/help/terms-and-conditions"
-  val helpUsingGovUkUrl: String = "https://www.gov.uk/help"
-
-  def accessibilityStatementUrl(relativeUrl: String): String = s"$accessibilityStatementBaseUrl/accessibility-statement${accessibilityStatementPath}?referrerUrl=$frontendBaseUrl$relativeUrl"
 
 }

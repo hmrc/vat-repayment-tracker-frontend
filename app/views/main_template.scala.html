@@ -50,7 +50,7 @@
 @head = {
 
     @if(timeoutDialog) {
-        @hmrcTimeoutDialogHelper(signOutUrl = routes.TimeoutController.killSession.url)
+        @hmrcTimeoutDialogHelper(signOutUrl = viewConfig.signOutWithRedirect(routes.TimeoutController.killSession.url))
     }
 
     @hmrcTrackingConsentSnippet()
@@ -93,7 +93,7 @@
         homepageUrl = "https://www.gov.uk",
         serviceName = Some(Messages(navTitle)),
         serviceUrl = viewConfig.frontendBaseUrl + request.path,
-        signOutHref = if (isLoggedIn) Some(routes.Controller.signout.url) else None,
+        signOutHref = if (isLoggedIn) Some(viewConfig.signOutWithRedirect(routes.Controller.signout.url)) else None,
         phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl)),
     ))),
     beforeContentBlock = Some(beforeContentBlock),

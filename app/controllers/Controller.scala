@@ -71,7 +71,7 @@ class Controller @Inject() (
   }
 
   val signout: Action[AnyContent] = Action.async { _ =>
-    Redirect(viewConfig.feedbackUrlForLogout).withNewSession
+    Redirect(viewConfig.feedbackUrlForLogout)
   }
 
   val showVrt: Action[AnyContent] = actions.securedAction.async {
