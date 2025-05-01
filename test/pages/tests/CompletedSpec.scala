@@ -59,21 +59,42 @@ class CompletedSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
-  "2. BAC shown" in {
+  "2. User has no bank details set up and no bank details in flight" in {
     setup(useBankDetails = false)
     Completed.containsBAC(result = true)
+    Completed.containsBankDetails(result = false)
+    Completed.containsBankWarning(result = false)
 
     expectEngagementStatusAudited()
   }
 
-  "3. BAC not shown" in {
+  "3. User has no bank details set up and bank details in flight" in {
     setup(useBankDetails = false, inflight = true)
     Completed.containsBAC(result = false)
+    Completed.containsBankDetails(result = false)
+    Completed.containsBankWarning(result = false)
+
+    expectEngagementStatusAudited()
+  }
+  "4. User has bank details set up and no bank details in flight" in {
+    setup()
+    Completed.containsBAC(result = false)
+    Completed.containsBankDetails(result = true)
+    Completed.containsBankWarning(result = false)
 
     expectEngagementStatusAudited()
   }
 
-  "4. user is authorised and financial data found but partial" in {
+  "5. User has bank details set up and bank details in flight" in {
+    setup(inflight = true)
+    Completed.containsBAC(result = false)
+    Completed.containsBankDetails(result = true)
+    Completed.containsBankWarning(result = true)
+
+    expectEngagementStatusAudited()
+  }
+
+  "6. user is authorised and financial data found but partial" in {
     setup(partialBankDetails = true)
     Completed.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true)
     Completed.uniqueToPage
@@ -81,14 +102,14 @@ class CompletedSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
-  "5. click in completed link" in {
+  "7. click in completed link" in {
     setup()
     Completed.viewProgressLink
 
     expectEngagementStatusAudited()
   }
 
-  "6. multiple completed " in {
+  "8. multiple completed " in {
     setup(partialBankDetails = true, singleRepayment = false)
     Completed.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true, period = "1 January to 31 January 2018")
 
@@ -111,7 +132,7 @@ class CompletedSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
-  "7. check audit" in {
+  "9. check audit" in {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, singleRepayment = false)
     InProgress.clickManageAccount
@@ -134,6 +155,8 @@ class CompletedSpec extends BrowserSpec {
       if (useBankDetails) {
         if (partialBankDetails)
           PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
+        else if (inflight)
+          PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
         else
           PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       } else {

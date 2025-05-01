@@ -50,6 +50,7 @@ multiple_repayment_details.view_progress = Bwrw golwg dros y cynnydd
 multiple_repayment_details.view_progress_accounting_period = Bwrw golwg dros gynnydd ar gyfer y cyfnod cyfrifyddu
 
 repayment_details.repayment_bank_details = Eich manylion banc ar gyfer ad-daliadau
+repayment_details.in_flight = Rydych wedi diweddaru manylion eich cyfrif banc yn ddiweddar. Bydd y diweddariadau hyn yn ymddangos yn eich cyfrif treth erbyn {0}, ond mae’n bosibl y byddant yn ymddangos yn gynt.
 repayment_details.currently_paid_bank_transfer = Rydych yn cael eich talu drwy drosglwyddiad banc ar hyn o bryd, a hynny i’r cyfrif canlynol:
 repayment_details.name_on_account = Yr enw sydd ar y cyfrif:
 repayment_details.sort_code = Cod didoli:

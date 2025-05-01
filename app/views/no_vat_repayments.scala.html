@@ -29,7 +29,9 @@
   bankDetails: Option[BankDetails],
   address: Option[String],
   addressExists: Boolean,
-  inflightBankDetails : Boolean)(
+  inflightBankDetails: Boolean,
+  date: Option[String],
+  welshDate: Option[String])(
   implicit
   request: Request[_],
   messages: Messages
@@ -44,7 +46,7 @@
       <p class="govuk-body">@Messages("no_vat_repayments.repayments_hours")</p>
       <p class="govuk-body">@Messages("no_vat_repayments.expecting_repayment")</p>
       <p class="govuk-link govuk-!-margin-bottom-9"><a class="govuk-link govuk-!-margin-bottom-9" href=@{viewConfig.viewVatAccount}>@Messages("no_vat_repayments.view_account")</a></p>
-      @repaymentDetails(showBankDetails, bankDetails, address, addressExists, inflightBankDetails)
+      @repaymentDetails(showBankDetails, bankDetails, address, addressExists, inflightBankDetails, date, welshDate)
     </div>
   </div>
 

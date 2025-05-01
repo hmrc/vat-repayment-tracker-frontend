@@ -65,7 +65,9 @@ class ShowResultsFormatter @Inject() (
   def computeView(
       allRepaymentData: AllRepaymentData,
       customerData:     Option[CustomerInformation],
-      vrn:              Vrn
+      vrn:              Vrn,
+      date:             Option[String],
+      welshDate:        Option[String]
   )(implicit request: Request[_], message: Messages): Result = {
 
     val bankDetailsExist = desFormatter.getBankDetailsExist(customerData)
@@ -88,7 +90,9 @@ class ShowResultsFormatter @Inject() (
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        inflightBankDetails
+        inflightBankDetails,
+        date,
+        welshDate
       ))
     } else if (allRepaymentData.inProgressRepaymentData.isEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
       Ok(completed(
@@ -97,7 +101,9 @@ class ShowResultsFormatter @Inject() (
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        inflightBankDetails
+        inflightBankDetails,
+        date,
+        welshDate
       ))
     } else if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty) {
       Ok(inprogress(
@@ -107,7 +113,9 @@ class ShowResultsFormatter @Inject() (
         bankDetails,
         addressDetails,
         addressDetailsExist,
-        inflightBankDetails
+        inflightBankDetails,
+        date,
+        welshDate
       ))
     } else {
       Ok(
@@ -116,7 +124,9 @@ class ShowResultsFormatter @Inject() (
           bankDetails,
           addressDetails,
           addressDetailsExist,
-          inflightBankDetails
+          inflightBankDetails,
+          date,
+          welshDate
         ))
 
     }

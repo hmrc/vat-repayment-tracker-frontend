@@ -104,7 +104,16 @@ class Controller @Inject() (
             allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData)
             engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
             _ <- auditor.auditEngagement("showVrt", engmtType, Some(request.typedVrn.vrn))
-          } yield showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd)
+          } yield {
+            val inFlight = desFormatter.bankDetailsInFlight(customerData)
+            if (inFlight) {
+              val dateToDisplay = getDateToDisplay(customerData)
+              val welshDateToDisplay: String = dateToDisplay.welshMonth
+              showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd, Some(dateToDisplay), Some(welshDateToDisplay))
+            } else {
+              showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd, None, None)
+            }
+          }
       }
 
   }

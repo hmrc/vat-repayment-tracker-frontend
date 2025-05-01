@@ -46,4 +46,12 @@ object Completed extends CommonDetail {
     containsText("For faster payment next time") shouldBe result
   }
 
+  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("You have recently updated your bank account details.") shouldBe result
+  }
+
+  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("You are currently paid by bank transfer to the following account:") shouldBe result
+  }
+
 }

@@ -39,4 +39,67 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   }
 
+  "2. User has no bank details set up and no bank details in flight" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
+    PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
+    login()
+    goToViaPath(path)
+
+    NoVatRepaymentsFoundPage.containsBAC(result = true)
+    NoVatRepaymentsFoundPage.containsBankDetails(result = false)
+    NoVatRepaymentsFoundPage.containsBankWarning(result = false)
+
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+  }
+
+  "3. User has no bank details set up and bank details in flight" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+    PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
+    login()
+    goToViaPath(path)
+
+    NoVatRepaymentsFoundPage.containsBAC(result = false)
+    NoVatRepaymentsFoundPage.containsBankDetails(result = false)
+    NoVatRepaymentsFoundPage.containsBankWarning(result = false)
+
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+  }
+
+  "4. User has bank details set up and no bank details in flight" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
+    login()
+    goToViaPath(path)
+
+    NoVatRepaymentsFoundPage.containsBAC(result = false)
+    NoVatRepaymentsFoundPage.containsBankDetails(result = true)
+    NoVatRepaymentsFoundPage.containsBankWarning(result = false)
+
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+  }
+
+  "5. User has bank details set up and bank details in flight" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
+    PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
+    login()
+    goToViaPath(path)
+
+    NoVatRepaymentsFoundPage.containsBAC(result = false)
+    NoVatRepaymentsFoundPage.containsBankDetails(result = true)
+    NoVatRepaymentsFoundPage.containsBankWarning(result = true)
+
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+  }
 }

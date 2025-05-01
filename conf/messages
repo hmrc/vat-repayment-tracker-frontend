@@ -51,6 +51,7 @@ multiple_repayment_details.view_progress = View progress
 multiple_repayment_details.view_progress_accounting_period = View progress for accounting period
 
 repayment_details.repayment_bank_details = Your repayment bank details
+repayment_details.in_flight = You have recently updated your bank account details. These updates will appear in your tax account by {0}, but may appear sooner.
 repayment_details.currently_paid_bank_transfer = You are currently paid by bank transfer to the following account:
 repayment_details.name_on_account = Name on account:
 repayment_details.sort_code = Sort code:

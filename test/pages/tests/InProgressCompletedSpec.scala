@@ -59,21 +59,42 @@ class InProgressCompletedSpec extends BrowserSpec {
 
     expectEngagementStatusAudited()
   }
-  "2. BAC shown" in {
+  "2. User has no bank details set up and no bank details in flight" in {
     setup(useBankDetails = false)
     InProgressCompleted.containsBAC(result = true)
+    InProgressCompleted.containsBankDetails(result = false)
+    InProgressCompleted.containsBankWarning(result = false)
 
     expectEngagementStatusAudited()
   }
 
-  "3. BAC not shown" in {
+  "3. User has no bank details set up and bank details in flight" in {
     setup(useBankDetails = false, inflight = true)
     InProgressCompleted.containsBAC(result = false)
+    InProgressCompleted.containsBankDetails(result = false)
+    InProgressCompleted.containsBankWarning(result = false)
+
+    expectEngagementStatusAudited()
+  }
+  "4. User has bank details set up and no bank details in flight" in {
+    setup()
+    InProgressCompleted.containsBAC(result = false)
+    InProgressCompleted.containsBankDetails(result = true)
+    InProgressCompleted.containsBankWarning(result = false)
 
     expectEngagementStatusAudited()
   }
 
-  "4. click completed link" in {
+  "5. User has bank details set up and bank details in flight" in {
+    setup(inflight = true)
+    InProgressCompleted.containsBAC(result = false)
+    InProgressCompleted.containsBankDetails(result = true)
+    InProgressCompleted.containsBankWarning(result = true)
+
+    expectEngagementStatusAudited()
+  }
+
+  "6. click completed link" in {
     setup()
     InProgress.clickCompleted
     Completed.uniqueToPage
@@ -82,7 +103,7 @@ class InProgressCompletedSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
-  "5. click completed link inpast but not completed" in {
+  "7. click completed link inpast but not completed" in {
     setup(inPast = true)
     InProgress.clickCompleted
     Completed.uniqueToPage
@@ -91,7 +112,7 @@ class InProgressCompletedSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
-  "6. click completed link inpast completed" in {
+  "8. click completed link inpast completed" in {
     setup(inPast = true, ft = ft_debit)
     InProgressCompleted.checktabsInPast
     InProgress.completedLink
@@ -112,6 +133,8 @@ class InProgressCompletedSpec extends BrowserSpec {
       if (useBankDetails) {
         if (partialBankDetails)
           PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
+        else if (inflight)
+          PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
         else
           PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       } else {

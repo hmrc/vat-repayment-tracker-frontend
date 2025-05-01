@@ -18,20 +18,27 @@
 @import model.des._
 @import model._
 
-@this(viewConfig: ViewConfig)
+@this(govukWarningText: GovukWarningText, viewConfig: ViewConfig)
 
 @(
   showBankDetails: Boolean,
   bankDetailsOption: Option[BankDetails],
   address: Option[String],
   addressExists: Boolean,
-  inflightBankDetails : Boolean
+  inflightBankDetails: Boolean,
+  date: Option[String],
+  welshDate: Option[String]
 )(implicit message: Messages)
 
 
 @if(showBankDetails) {
  @bankDetailsOption.map{bankDetails =>
  <h2 class="govuk-heading-l">@Messages("repayment_details.repayment_bank_details")</h2>
+ @if(inflightBankDetails) {
+  @govukWarningText(WarningText(content = Text(Messages(
+  "repayment_details.in_flight", if(message.lang.code == "en") {date.getOrElse("")} else if(message.lang.code == "cy") {welshDate.getOrElse("")}
+  ))))
+ }
  <p class="govuk-body"  >@Messages("repayment_details.currently_paid_bank_transfer")</p>
  <p id="acc-name" class="govuk-body govuk-!-margin-bottom-1">@Messages("repayment_details.name_on_account") <strong>@{bankDetails.formatAccountHolderName}</strong></p>
  <p id="acc-sort-code" class="govuk-body govuk-!-margin-bottom-1">@Messages("repayment_details.sort_code") <strong>@{bankDetails.formatSortCode}</strong></p>
