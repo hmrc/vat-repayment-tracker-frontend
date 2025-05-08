@@ -133,6 +133,12 @@ trait CommonPage
     case _: org.openqa.selenium.NoSuchElementException => None
   }
 
+  def getTextByCss(css: String)(implicit driver: WebDriver): Option[String] = try {
+    Some(driver.findElement(By.cssSelector(css)).getText)
+  } catch {
+    case _: org.openqa.selenium.NoSuchElementException => None
+  }
+
   def containsText(text: String)(implicit driver: WebDriver): Boolean = {
     probing(_.getPageSource.contains(text))
   }

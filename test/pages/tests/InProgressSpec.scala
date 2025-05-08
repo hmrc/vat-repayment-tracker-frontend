@@ -18,8 +18,8 @@ package pages.tests
 
 import model.des.RiskingStatus
 import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL}
-
 import java.time.LocalDate
+
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.{Seconds, Span}
@@ -155,6 +155,41 @@ class InProgressSpec extends BrowserSpec {
     InProgress.containsSuspendedWarning(result = false)
   }
 
+  "14. User has no bank details set up and no bank details in flight" in {
+    setup(useBankDetails = false)
+    InProgress.containsBAC(result = true)
+    InProgress.containsBankDetails(result = false)
+    InProgress.containsBankWarning(result = false)
+
+    expectEngagementStatusAudited()
+  }
+
+  "15. User has no bank details set up and bank details in flight" in {
+    setup(useBankDetails = false, inflight = true)
+    InProgress.containsBAC(result = false)
+    InProgress.containsBankDetails(result = false)
+    InProgress.containsBankWarning(result = false)
+
+    expectEngagementStatusAudited()
+  }
+  "16. User has bank details set up and no bank details in flight" in {
+    setup()
+    InProgress.containsBAC(result = false)
+    InProgress.containsBankDetails(result = true)
+    InProgress.containsBankWarning(result = false)
+
+    expectEngagementStatusAudited()
+  }
+
+  "17. User has bank details set up and bank details in flight" in {
+    setup(inflight = true)
+    InProgress.containsBAC(result = false)
+    InProgress.containsBankDetails(result = true)
+    InProgress.containsBankWarning(result = true)
+
+    expectEngagementStatusAudited()
+  }
+
   private def setup(
       useBankDetails:     Boolean       = true,
       partialBankDetails: Boolean       = false,
@@ -170,6 +205,8 @@ class InProgressSpec extends BrowserSpec {
     if (useBankDetails) {
       if (partialBankDetails)
         PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
+      else if (inflight)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
       else
         PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     } else {

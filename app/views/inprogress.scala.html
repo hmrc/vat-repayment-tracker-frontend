@@ -35,7 +35,9 @@
   bankDetails: Option[BankDetails],
   address: Option[String],
   addressExists: Boolean,
-  inflightBankDetails : Boolean)(implicit request: Request[_], messages: Messages)
+  inflightBankDetails: Boolean,
+  date: Option[String],
+  welshDate: Option[String])(implicit request: Request[_], messages: Messages)
 
 
 @mainTemplate(title = Messages("inprogress.title")) {
@@ -84,7 +86,7 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @repaymentDetails(showBankDetails, bankDetails, address, addressExists, inflightBankDetails)
+            @repaymentDetails(showBankDetails, bankDetails, address, addressExists, inflightBankDetails, date, welshDate)
         </div>
     </div>
 }
