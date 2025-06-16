@@ -1,9 +1,10 @@
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences._
+import sbt.Def
+import scalariform.formatter.preferences.*
 
 
 object ScalariformSettings {
-  def apply() = ScalariformKeys.preferences := ScalariformKeys.preferences.value
+  def apply(): Def.Setting[IFormattingPreferences] = ScalariformKeys.preferences := ScalariformKeys.preferences.value
     .setPreference(AlignArguments, true)
     .setPreference(AlignParameters, true)
     .setPreference(AlignSingleLineCaseStatements, true)

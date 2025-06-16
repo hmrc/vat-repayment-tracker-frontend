@@ -1,7 +1,8 @@
 $govuk-assets-path: "/vat-repayment-tracker/assets/lib/govuk-frontend/dist/govuk/assets/";
 $hmrc-assets-path: "/vat-repayment-tracker/assets/lib/hmrc-frontend/hmrc/";
+$govuk-new-organisation-colours: true;
 
-@import "lib/govuk-frontend/dist/govuk/all";
+@import "lib/govuk-frontend/dist/govuk/index";
 @import "lib/hmrc-frontend/hmrc/all";
 
 @import "timeline";
