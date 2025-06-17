@@ -1,11 +1,12 @@
-import sbt.Compile
+import sbt.{Def, *}
 import sbt.Keys.compile
-import wartremover.Wart._
+import wartremover.Wart
+import wartremover.Wart.*
 import wartremover.WartRemover.autoImport.{wartremoverErrors, wartremoverWarnings}
 
 object  WartRemoverSettings {
 
-  lazy val wartRemoverWarning = {
+  lazy val wartRemoverWarning: Def.Setting[Seq[Wart]] = {
     val warningWarts = Seq(
       JavaSerializable,
       AsInstanceOf,
@@ -13,7 +14,7 @@ object  WartRemoverSettings {
     )
     Compile / compile / wartremoverWarnings ++= warningWarts
   }
-  lazy val wartRemoverError = {
+  lazy val wartRemoverError: Def.Setting[Seq[Wart]] = {
     // Error
     val errorWarts = Seq(
       ArrayEquals,

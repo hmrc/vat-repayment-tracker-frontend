@@ -99,10 +99,12 @@ trait ItSpec
 
   def httpClient: HttpClientV2 = fakeApplication().injector.instanceOf[HttpClientV2]
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
-    .configure(configMap)
-    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .build()
+  override def fakeApplication(): Application = {
+    new GuiceApplicationBuilder()
+      .configure(configMap)
+      .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
+      .build()
+  }
 
   def configMap: Map[String, Any] = Map[String, Any](
     "microservice.services.auth.port" -> WireMockSupport.port,
@@ -118,7 +120,7 @@ trait ItSpec
     "auditing.enabled" -> true
   )
 
-  def injector: Injector = fakeApplication().injector
+  def injector: Injector = app.injector
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = CSRFTokenHelper.addCSRFToken(
     FakeRequest().withSession(SessionKeys.authToken -> "authToken")

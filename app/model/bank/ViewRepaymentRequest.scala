@@ -22,7 +22,8 @@ final case class ViewRepaymentRequest(vrn:            String,
                                       isAgent:        Boolean,
                                       returnUrl:      String,
                                       backUrl:        String,
-                                      convenienceUrl: String)
+                                      convenienceUrl: String,
+                                      origin:         String  = "VRT")
 
 object ViewRepaymentRequest {
   implicit val format: Format[ViewRepaymentRequest] = Json.format[ViewRepaymentRequest]
