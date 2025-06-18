@@ -31,7 +31,7 @@ no_vat_repayments_classic.no_returns_line4 = if we recently paid you, it can tak
 vat_repayments_classic.scala.title = Your VAT repayments
 vat_repayments_classic.scala.title.returns_line1 = Return received on:
 vat_repayments_classic.scala.title.returns_line2 = We will usually repay you within 30 days of receiving your return.
-vat_repayments_classic.scala.title.returns_line3 = " You do not need to contact us before this."
+vat_repayments_classic.scala.title.returns_line3 = You do not need to contact us before this.
 vat_repayments_classic.scala.title.returns_line4 = Your repayment will not show on this page once it has been completed and approved. It can take up to a week for you to receive the repayment after it has been approved.
 
 
@@ -52,6 +52,7 @@ multiple_repayment_details.view_progress_accounting_period = View progress for a
 
 repayment_details.repayment_bank_details = Your repayment bank details
 repayment_details.in_flight = You have recently updated your bank account details. These updates will appear in your tax account by {0}, but may appear sooner.
+repayment_details.added_bank_details = You’ll continue to receive repayments by cheque until we verify your bank account details. We’ll verify your bank account details by {0} or sooner.
 repayment_details.currently_paid_bank_transfer = You are currently paid by bank transfer to the following account:
 repayment_details.name_on_account = Name on account:
 repayment_details.sort_code = Sort code:

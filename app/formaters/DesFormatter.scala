@@ -111,23 +111,14 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
     } yield bd
   }
 
-  def getAddressDetailsExist(customerData: Option[CustomerInformation]): Boolean = customerData match {
-    case Some(cd) => cd.approvedInformation match {
-      case Some(ai) => ai.addressExists
-      case None     => false
-    }
-    case None => false
-  }
-
-  def getAddressDetailsExist2(customerData: Option[CustomerInformation]): Boolean = {
-
-    val maybeExists = for {
+  def getAddressDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
+    val addressExists = for {
       cd <- customerData
       ai <- cd.approvedInformation
-    } yield ai.addressExists
+      ppob <- ai.PPOB
+    } yield ppob.addressExists
 
-    maybeExists.getOrElse(false)
-
+    addressExists.getOrElse(false)
   }
 
   def getDDData(directDebitData: Option[DirectDebitData]): Option[BankDetails] = {

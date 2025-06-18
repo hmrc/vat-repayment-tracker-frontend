@@ -112,8 +112,6 @@ final case class ApprovedInformation
     case None      => false
   }
 
-  val addressExists: Boolean = PPOB.isDefined
-
 }
 
 final case class CustomerDetails(
@@ -132,7 +130,9 @@ object ApprovedInformation {
   implicit val format: OFormat[ApprovedInformation] = Json.format[ApprovedInformation]
 }
 
-final case class PPOB(address: Option[Address])
+final case class PPOB(address: Option[Address]) {
+  val addressExists: Boolean = address.isDefined
+}
 
 object PPOB {
   implicit val format: OFormat[PPOB] = Json.format[PPOB]

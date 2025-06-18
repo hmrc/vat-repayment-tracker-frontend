@@ -49,6 +49,10 @@ object InProgressCompleted extends CommonDetail {
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
   }
 
+  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("You’ll continue to receive repayments by cheque until we verify your bank account details.") shouldBe result
+  }
+
   def checktabs(implicit wd: WebDriver): Assertion = {
 
     idPresent("completed-exist") shouldBe true

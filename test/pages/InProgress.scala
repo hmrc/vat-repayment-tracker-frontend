@@ -35,6 +35,10 @@ object InProgress extends CommonDetail {
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
   }
 
+  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion = {
+    containsText("You’ll continue to receive repayments by cheque until we verify your bank account details.") shouldBe result
+  }
+
   def uniqueToPage(implicit wd: WebDriver): Assertion = {
     readTitle shouldBe "We are processing your VAT repayments - Business tax account - GOV.UK"
     readMainMessage shouldBe "We are processing your VAT repayments"
