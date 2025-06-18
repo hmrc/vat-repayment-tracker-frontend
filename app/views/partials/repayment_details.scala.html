@@ -48,20 +48,24 @@
 }
 
 @if((addressExists && !showBankDetails)) {
-<h2 class="govuk-heading-l" >@Messages("repayment_details.repayment_details")</h2>
-<p class="govuk-body">@{
-    if (inflightBankDetails)
-    Messages(
-    "repayment_details.added_bank_details",
-    if(message.lang.code == "en") {date.getOrElse("")}
-    else if(message.lang.code == "cy") {welshDate.getOrElse("")}
-    )
-    }</p>
-<p class="govuk-body govuk-!-margin-bottom-3" >@Messages("repayment_details.send_cheque")</p>
-<p id="address" class="govuk-body govuk-!-margin-bottom-3" >@Html(address.getOrElse(""))</p>
-<p class="govuk-body govuk-!-margin-bottom-3">@if(!inflightBankDetails) {
-    @Messages("repayment_details.faster_payment") <a class="govuk-link"  href='@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"))' id="call-bac">@Messages("repayment_details.repayment_bank_account")</a>
-    }</p>
-<p class="govuk-body"><a class="govuk-link"  href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
+    <h2 class="govuk-heading-l" >@Messages("repayment_details.repayment_details")</h2>
+
+    @if(inflightBankDetails) {
+        <p class="govuk-body">@Messages("repayment_details.added_bank_details",
+            if (message.lang.code == "en") { date.getOrElse("") }
+            else if(message.lang.code == "cy") { welshDate.getOrElse("") })
+        </p>
+    }
+
+    <p class="govuk-body govuk-!-margin-bottom-3" >@Messages("repayment_details.send_cheque")</p>
+    <p id="address" class="govuk-body govuk-!-margin-bottom-3" >@Html(address.getOrElse(""))</p>
+    <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link"  href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
+
+    @if(!inflightBankDetails) {
+        <h2 id="main-message" class="govuk-heading-xl govuk-!-margin-bottom-6">@Messages("repayment_details.add_bank_details.title")</h1>
+        <p class="govuk-body">@Messages("repayment_details.add_bank_details.p1")</p>
+        <p class="govuk-body">@Messages("repayment_details.add_bank_details.p2")</p>
+        <a id="add-bank-details" class="govuk-button" href="@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"))">@Messages("repayment_details.add_bank_details.button")</a>
+    }
 }
 

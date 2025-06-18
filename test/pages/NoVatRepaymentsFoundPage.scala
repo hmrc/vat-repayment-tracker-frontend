@@ -24,7 +24,10 @@ object NoVatRepaymentsFoundPage extends CommonPage {
   val path = "/vat-repayment-tracker/show-vrt"
 
   def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
-    containsText("For faster payment next time") shouldBe result
+    containsText("Add your bank account for future repayments") shouldBe result
+    containsText("The quickest way to receive a repayment is straight into your bank account.") shouldBe result
+    containsText("Add your bank account details for any future repayments.") shouldBe result
+    containsText("Add bank details") shouldBe result
   }
 
   def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion = {

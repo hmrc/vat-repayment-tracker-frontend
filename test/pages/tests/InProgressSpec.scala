@@ -131,7 +131,7 @@ class InProgressSpec extends BrowserSpec {
   "10. click clickManageAccount" in {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, useBankDetails = false, singleRepayment = false)
-    InProgress.clickCallBac
+    InProgress.clickAddBankDetails
     AuditWireMockResponses.bacWasAudited(details)
   }
 
