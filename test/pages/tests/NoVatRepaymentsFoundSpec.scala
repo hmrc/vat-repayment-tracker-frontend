@@ -48,6 +48,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     login()
     goToViaPath(path)
 
+    NoVatRepaymentsFoundPage.containsNewBankDetailsText(false)
     NoVatRepaymentsFoundPage.containsBAC(result = true)
     NoVatRepaymentsFoundPage.containsBankDetails(result = false)
     NoVatRepaymentsFoundPage.containsBankWarning(result = false)
@@ -64,6 +65,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     login()
     goToViaPath(path)
 
+    NoVatRepaymentsFoundPage.containsNewBankDetailsText(true)
     NoVatRepaymentsFoundPage.containsBAC(result = false)
     NoVatRepaymentsFoundPage.containsBankDetails(result = false)
     NoVatRepaymentsFoundPage.containsBankWarning(result = false)
@@ -80,6 +82,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     login()
     goToViaPath(path)
 
+    NoVatRepaymentsFoundPage.containsNewBankDetailsText(false)
     NoVatRepaymentsFoundPage.containsBAC(result = false)
     NoVatRepaymentsFoundPage.containsBankDetails(result = true)
     NoVatRepaymentsFoundPage.containsBankWarning(result = false)
@@ -96,6 +99,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     login()
     goToViaPath(path)
 
+    NoVatRepaymentsFoundPage.containsNewBankDetailsText(false)
     NoVatRepaymentsFoundPage.containsBAC(result = false)
     NoVatRepaymentsFoundPage.containsBankDetails(result = true)
     NoVatRepaymentsFoundPage.containsBankWarning(result = true)

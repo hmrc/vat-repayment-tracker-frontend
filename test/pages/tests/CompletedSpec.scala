@@ -61,6 +61,7 @@ class CompletedSpec extends BrowserSpec {
 
   "2. User has no bank details set up and no bank details in flight" in {
     setup(useBankDetails = false)
+    Completed.containsNewBankDetailsText(false)
     Completed.containsBAC(result = true)
     Completed.containsBankDetails(result = false)
     Completed.containsBankWarning(result = false)
@@ -70,6 +71,7 @@ class CompletedSpec extends BrowserSpec {
 
   "3. User has no bank details set up and bank details in flight" in {
     setup(useBankDetails = false, inflight = true)
+    Completed.containsNewBankDetailsText(true)
     Completed.containsBAC(result = false)
     Completed.containsBankDetails(result = false)
     Completed.containsBankWarning(result = false)
@@ -78,6 +80,7 @@ class CompletedSpec extends BrowserSpec {
   }
   "4. User has bank details set up and no bank details in flight" in {
     setup()
+    Completed.containsNewBankDetailsText(false)
     Completed.containsBAC(result = false)
     Completed.containsBankDetails(result = true)
     Completed.containsBankWarning(result = false)
@@ -87,6 +90,7 @@ class CompletedSpec extends BrowserSpec {
 
   "5. User has bank details set up and bank details in flight" in {
     setup(inflight = true)
+    Completed.containsNewBankDetailsText(false)
     Completed.containsBAC(result = false)
     Completed.containsBankDetails(result = true)
     Completed.containsBankWarning(result = true)

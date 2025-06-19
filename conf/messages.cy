@@ -30,7 +30,7 @@ no_vat_repayments_classic.no_returns_line4 = os ydym wedi’ch talu’n ddiwedda
 vat_repayments_classic.scala.title = Eich ad-daliadau TAW
 vat_repayments_classic.scala.title.returns_line1 = Daeth y Ffurflen TAW i law ar:
 vat_repayments_classic.scala.title.returns_line2 = Fel arfer, byddwn yn eich ad-dalu cyn pen 30 diwrnod ar ôl cael eich Ffurflen TAW.
-vat_repayments_classic.scala.title.returns_line3 = " Nid oes angen i chi gysylltu â ni cyn hyn."
+vat_repayments_classic.scala.title.returns_line3 = Nid oes angen i chi gysylltu â ni cyn hyn.
 vat_repayments_classic.scala.title.returns_line4 = Ni fydd eich ad-daliad yn dangos ar y dudalen hon unwaith iddo gael ei gwblhau a’i gymeradwyo. Gall gymryd hyd at wythnos i chi gael yr ad-daliad ar ôl iddo gael ei gymeradwyo.
 
 
@@ -52,6 +52,7 @@ multiple_repayment_details.view_progress_accounting_period = Bwrw golwg dros gyn
 repayment_details.repayment_bank_details = Eich manylion banc ar gyfer ad-daliadau
 repayment_details.in_flight = Rydych wedi diweddaru manylion eich cyfrif banc yn ddiweddar. Bydd y diweddariadau hyn yn ymddangos yn eich cyfrif treth erbyn {0}, ond mae’n bosibl y byddant yn ymddangos yn gynt.
 repayment_details.currently_paid_bank_transfer = Rydych yn cael eich talu drwy drosglwyddiad banc ar hyn o bryd, a hynny i’r cyfrif canlynol:
+repayment_details.added_bank_details = Byddwch yn parhau i gael ad-daliadau drwy siec hyd nes y byddwn wedi gwirio manylion eich cyfrif banc. Byddwn yn gwirio manylion eich cyfrif banc erbyn {0}, neu’n gynt.
 repayment_details.name_on_account = Yr enw sydd ar y cyfrif:
 repayment_details.sort_code = Cod didoli:
 repayment_details.account_number = Rhif y cyfrif:
