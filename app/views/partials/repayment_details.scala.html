@@ -62,7 +62,7 @@
     <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link"  href=@{viewConfig.updateCorrespondenceAddress}>@Messages("repayment_details.update_business_address")</a></p>
 
     @if(!inflightBankDetails) {
-        <h2 id="main-message" class="govuk-heading-xl govuk-!-margin-bottom-6">@Messages("repayment_details.add_bank_details.title")</h1>
+        <h2 id="main-message" class="govuk-heading-l govuk-!-margin-bottom-6">@Messages("repayment_details.add_bank_details.title")</h1>
         <p class="govuk-body">@Messages("repayment_details.add_bank_details.p1")</p>
         <p class="govuk-body">@Messages("repayment_details.add_bank_details.p2")</p>
         <a id="add-bank-details" class="govuk-button" href="@routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("show-vrt"))">@Messages("repayment_details.add_bank_details.button")</a>
