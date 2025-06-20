@@ -60,9 +60,12 @@ repayment_details.account_number = Account number:
 repayment_details.manage_repayment = Manage your repayment bank account
 repayment_details.repayment_details = Your repayment details
 repayment_details.send_cheque = We''ll send your cheque to:
-repayment_details.faster_payment = For faster payment next time
-repayment_details.repayment_bank_account = add a repayment bank account
 repayment_details.update_business_address = Update your business address
+
+repayment_details.add_bank_details.title = Add your bank account for future repayments
+repayment_details.add_bank_details.p1 = The quickest way to receive a repayment is straight into your bank account.
+repayment_details.add_bank_details.p2 = Add your bank account details for any future repayments.
+repayment_details.add_bank_details.button = Add bank details
 
 timeout_dialog_script = "XXXX"
 

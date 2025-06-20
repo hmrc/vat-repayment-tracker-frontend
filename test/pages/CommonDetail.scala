@@ -31,6 +31,8 @@ trait CommonDetail extends CommonPage {
 
   def clickCallBac(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
 
+  def clickAddBankDetails(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("add-bank-details")).click())
+
   def clickInProgress(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())
 
   def clickCompleted(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())

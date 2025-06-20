@@ -59,12 +59,14 @@ repayment_details.account_number = Rhif y cyfrif:
 repayment_details.manage_repayment = Rheoli’ch cyfrif banc ar gyfer ad-daliadau
 repayment_details.repayment_details = Eich manylion ar gyfer ad-daliadau
 repayment_details.send_cheque = Byddwn yn anfon eich siec i:
-repayment_details.faster_payment = I gael eich talu’n fwy cyflym y tro nesaf
-repayment_details.repayment_bank_account = ychwanegu cyfrif banc ar gyfer ad-daliadau
 repayment_details.update_business_address = Diweddaru cyfeiriad eich busnes
 
 repayment_details.h2 = Eich manylion ar gyfer ad-daliadau
 
+repayment_details.add_bank_details.title = Ychwanegu eich manylion cyfrif banc ar gyfer ad-daliadau yn y dyfodol
+repayment_details.add_bank_details.p1 = Y ffordd gyflymaf i gael ad-daliad TAW yw syth i’ch cyfrif banc.
+repayment_details.add_bank_details.p2 = Ychwanegwch eich manylion cyfrif banc ar gyfer ad-daliadau yn y dyfodol.
+repayment_details.add_bank_details.button = Ychwanegu manylion banc
 
 delete_answers.signed_you_out = Er eich diogelwch, gwnaethom eich allgofnodi
 delete_answers.did_not_save_answers = Ni wnaethom gadw’ch atebion.
@@ -195,7 +197,7 @@ view_progress_formatter.checking_amount = Gwirio’r swm
 view_progress_formatter.we_received_your_return = Mae’ch Ffurflen TAW wedi dod i law ac rydym yn awr yn gwirio swm yr ad-daliad sydd arnom i chi.
 view_progress_formatter.amount_you_claimed = Y swm a hawliwyd gennych
 view_progress_formatter.repayment_being_processed = Mae’ch ad-daliad yn cael ei brosesu
-view_progress_formatter.estimated_repayment_date_passed = Mae’r dyddiad ad-dalu amcangyfrifiedig wedi mynd heibio 
+view_progress_formatter.estimated_repayment_date_passed = Mae’r dyddiad ad-dalu amcangyfrifiedig wedi mynd heibio
 view_progress_formatter.do_not_need_anything = Does dim angen i chi wneud dim byd ar hyn o bryd. Rydym yn gweithio ar eich ad-dalu cyn gynted â phosibl. Byddwn yn cysylltu â chi gydag unrhyw wybodaeth bellach ynglŷn â’r oedi.
 view_progress_formatter.repayment_delayed = Mae oedi i’ch ad-daliad
 view_progress_formatter.sending_for_further_checks = Anfon am wiriadau pellach
