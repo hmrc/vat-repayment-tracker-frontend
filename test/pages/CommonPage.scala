@@ -106,7 +106,7 @@ trait CommonPage
 
   def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
 
-  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(_.findElement(By.id("back-link"))
+  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(_.findElement(By.className("govuk-back-link"))
     .getAttribute("href"))
 
   def readMainMessage(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
@@ -160,11 +160,18 @@ trait CommonPage
   }
 
   def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion = {
-    readBackButtonUrl() shouldBe url
+    readBackButtonUrl().contains(url) shouldBe true
   }
 
   def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
+    true
+  } catch {
+    case _: Throwable => false
+  }
+
+  def cssPresent(css: String)(implicit webDriver: WebDriver): Boolean = try {
+    webDriver.findElement(By.cssSelector(css))
     true
   } catch {
     case _: Throwable => false

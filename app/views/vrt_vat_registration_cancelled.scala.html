@@ -16,13 +16,13 @@
 
 @import config.ViewConfig
 
-@this(mainTemplate: views.html.main_template, viewConfig: ViewConfig)
+@this(mainTemplate: views.html.main_template)
 
 @()(implicit request: Request[_], message: Messages)
 
 
 
-@mainTemplate(title = message("vrt_vat_registration_cancelled.title"), timeoutDialog = false, backButtonUrl = Some(Call("GET", viewConfig.viewVatAccount))) {
+@mainTemplate(title = message("vrt_vat_registration_cancelled.title"), timeoutDialog = false, hasBackLink = true) {
 
 <div class="govuk-grid-row govuk-!-padding-bottom-1">
         <div class="govuk-grid-column-two-thirds govuk-!-padding-bottom-3">
