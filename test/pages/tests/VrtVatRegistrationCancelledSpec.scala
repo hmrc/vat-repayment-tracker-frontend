@@ -56,7 +56,7 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     VrtVatRegistrationCancelledPage.clickOnEnglishLink()
     VrtVatRegistrationCancelledPage.assertPageIsDisplayed()
     VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed()
-    VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo("/vat-repayment-tracker/vrt-vat-registration-cancelled")
+    VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo("#")
   }
 
 }
