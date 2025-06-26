@@ -24,6 +24,8 @@ object ViewRepaymentAccount extends CommonPage {
   def assertPageIsDisplayed(heading: String)(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""/vat-repayment-tracker/view-repayment-account"""
 
+    cssPresent(".govuk-back-link") shouldBe true
+
     if (heading === "Mae’r manylion cyfrif banc ar gyfer eich ad-daliadau TAW yn cael eu diweddaru") {
       readTitle shouldBe s"""$heading - Cyfrif treth busnes - GOV.UK"""
     } else {
