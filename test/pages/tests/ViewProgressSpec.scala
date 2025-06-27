@@ -53,6 +53,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, CLAIM_QUERIED, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE, REPAYMENT_APPROVED))
     ViewProgress.checkMainMessage("Your repayment is being processed")
     ViewProgress.backExists()
+    ViewProgress.assertBackButtonRedirectsTo("#")
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
