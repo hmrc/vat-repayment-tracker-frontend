@@ -160,7 +160,6 @@ trait CommonPage
   }
 
   def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion = {
-    println("back url is " + readBackButtonUrl())
     readBackButtonUrl().endsWith(url) shouldBe true
   }
 
