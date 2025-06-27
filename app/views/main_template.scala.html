@@ -14,8 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{BackLink, Text}
-
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Text, BackLink}
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.Header
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
@@ -43,7 +42,7 @@
         scriptElem: Option[Html] = None,
         navTitle: String = "heading_bta",
         fullWidth: Boolean = true,
-        backButtonUrl: Option[play.api.mvc.Call] = None
+        hasBackLink: Boolean = false,
 )(
         mainContent: Html)(implicit messages: play.api.i18n.Messages, request: RequestHeader)
 
@@ -68,9 +67,7 @@
 
 @beforeContentBlock = {
 @hmrcLanguageSelectHelper()
-@backButtonUrl.map{ call =>
-    @govukBackLink(BackLink(href = call.url, attributes = Map("id" -> "back-link"), content = Text(messages("back"))))
-}
+@if(hasBackLink){@govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)}
 }
 
 @contentBlock = {

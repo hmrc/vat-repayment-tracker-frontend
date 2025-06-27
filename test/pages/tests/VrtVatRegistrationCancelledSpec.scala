@@ -56,7 +56,7 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     VrtVatRegistrationCancelledPage.clickOnEnglishLink()
     VrtVatRegistrationCancelledPage.assertPageIsDisplayed()
     VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed()
-    VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo(viewConfig.viewVatAccount)
+    VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo("#")
   }
 
 }
