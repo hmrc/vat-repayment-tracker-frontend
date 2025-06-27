@@ -160,7 +160,7 @@ trait CommonPage
   }
 
   def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion = {
-    readBackButtonUrl().endsWith(url) shouldBe true
+    readBackButtonUrl() shouldBe url
   }
 
   def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
