@@ -319,24 +319,14 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
-    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = false)
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
-    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = false)
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
-      ProgressTimelineItem(
-        "Repayment complete",
-        formattedTodayString,
-        List(
-          "We sent an adjusted payment of £6.56 to your repayment bank account:",
-          "Name: Account holder",
-          "Account number: ****2222",
-          "Sort code: 66 77 88."
-        )
-      ),
       ProgressTimelineItem(
         "Repayment amount changed",
         formattedTodayString,
@@ -400,24 +390,14 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkAmount("£6.56")
     ViewProgress.checkEstimatedRepeaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
-    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
+    ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = false)
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
-    ViewProgress.checkMainMessage("Your repayment is complete")
+    ViewProgress.checkMainMessage("Your repayment has been approved")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = false)
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
-      ProgressTimelineItem(
-        "Repayment complete",
-        formattedTodayString,
-        List(
-          "We sent an adjusted payment of £6.56 to your repayment bank account:",
-          "Name: Account holder",
-          "Account number: ****2222",
-          "Sort code: 66 77 88."
-        )
-      ),
       ProgressTimelineItem(
         "Repayment amount changed",
         formattedTodayString,
@@ -454,6 +434,36 @@ class ViewProgressSpec extends BrowserSpec {
         "01 Mar 2018",
         List("We received your VAT payment.")
       ),
+      ProgressTimelineItem(
+        "You now owe HMRC",
+        formattedTodayString,
+        List(
+          "We calculated that the original amount of £5.56 you claimed was incorrect. You now owe HMRC £6.56. We sent " +
+            "you a letter with the reason for this change."
+        )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        formattedTodayString,
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
+  "id: 8, ADJUSMENT_TO_TAX_DUE AND Debit Charge Exists AND no clearing date" in {
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_noClearingDate, status2 = ADJUSMENT_TO_TAX_DUE)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£6.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(ADJUSMENT_TO_TAX_DUE, INITIAL))
+    ViewProgress.checkStatusExists(List(ADJUSMENT_TO_TAX_DUE), completed = false)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, REPAYMENT_ADJUSTED))
+    ViewProgress.checkMainMessage("You need to make a VAT payment")
+    ViewProgress.payUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
       ProgressTimelineItem(
         "You now owe HMRC",
         formattedTodayString,
@@ -537,6 +547,33 @@ class ViewProgressSpec extends BrowserSpec {
             "letter explaining why we changed your amount.",
           "If you do not receive a letter in the next few days, check your VAT payments history."
         )
+      ),
+      ProgressTimelineItem(
+        "Checking amount",
+        formattedTodayString,
+        List("We received your return and are now checking the repayment amount we owe you.")
+      )
+    )
+  }
+
+  "id: 9, REPAYMENT_APPROVED AND Credit Charge Exists AND no clearing date" in {
+    setup(rdsp      = 2, periodKey = PeriodKey("18AG"), ft = ft_noClearingDate, status2 = REPAYMENT_APPROVED)
+    InProgress.clickViewProgress()
+    ViewProgress.checkAmount("£5.56")
+    ViewProgress.checkEstimatedRepeaymentDateNotPresent
+    ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED, INITIAL))
+    ViewProgress.checkStatusExists(List(REPAYMENT_APPROVED), completed = false)
+    ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
+    ViewProgress.checkMainMessage("Your repayment has been approved")
+    ViewProgress.payUrl(expectedValue = false)
+    ViewProgress.historyUrl(expectedValue = false)
+    ViewProgress.assertWebchatLinkPresent()
+
+    ViewProgress.getProgressTimelineItems shouldBe List(
+      ProgressTimelineItem(
+        "Repayment approved",
+        formattedTodayString,
+        List("This will reach your repayment bank account in 3 workings days.")
       ),
       ProgressTimelineItem(
         "Checking amount",

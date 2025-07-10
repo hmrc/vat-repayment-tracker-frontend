@@ -115,14 +115,24 @@ class ViewProgressFormatter @Inject() (
         .sortBy(s => (s.repaymentDetailsData.sorted, s.repaymentDetailsData.lastUpdateReceivedDate))
         .map (m => computeWhatsHappenedSoFar(estRepaymentDate, m, bankDetailsExist, bankDetailsOption))
 
-    val completedCreditRows: List[WhatsHappendSoFar] = if (returnCreditChargeExists)
-      vrd.filter(f => f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
-        .map (m => computeWhatsHappenedSoFarCompleteCreditCharge(m, bankDetailsExist, addressDetails, bankDetailsOption, transaction))
-    else List()
+    val (completedCreditRows, completedDebitRows): (List[WhatsHappendSoFar], List[WhatsHappendSoFar]) =
+      desFormatter.getClearingDate(transaction) match {
+        case None =>
+          List.empty -> List.empty
 
-    val completedDebitRows: List[WhatsHappendSoFar] = if (returnDebitChargeExists) vrd.filter(f => f.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE)
-      .map (m => computeWhatsHappenedSoFarCompleteDebitCharge(m, transaction))
-    else List()
+        case Some(clearingDate) =>
+          val creditRows =
+            if (returnCreditChargeExists) vrd.filter(f => f.repaymentDetailsData.riskingStatus == REPAYMENT_ADJUSTED || f.repaymentDetailsData.riskingStatus == REPAYMENT_APPROVED)
+              .map (computeWhatsHappenedSoFarCompleteCreditCharge(_, bankDetailsExist, addressDetails, bankDetailsOption, clearingDate))
+            else List.empty
+
+          val debitRows =
+            if (returnDebitChargeExists) vrd.filter(_.repaymentDetailsData.riskingStatus == ADJUSMENT_TO_TAX_DUE)
+              .map (computeWhatsHappenedSoFarCompleteDebitCharge(_, clearingDate))
+            else List.empty
+
+          creditRows -> debitRows
+      }
 
     nonCompleteRows.prependList(completedCreditRows ::: completedDebitRows)
   }
@@ -233,13 +243,13 @@ class ViewProgressFormatter @Inject() (
                                                             bankDetailsExist:       Boolean,
                                                             addressDetails:         Option[String],
                                                             bankDetailsOption:      Option[BankDetails],
-                                                            transaction:            Option[Transaction])(implicit messages: Messages): WhatsHappendSoFar =
+                                                            clearingDate:           LocalDate)(implicit messages: Messages): WhatsHappendSoFar =
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
 
       case REPAYMENT_ADJUSTED =>
         //id:7
         WhatsHappendSoFar(REPAYMENT_ADJUSTED,
-                          desFormatter.getClearingDate(transaction).getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          clearingDate,
                           Messages("view_progress_formatter.repayment_complete"),
           if (bankDetailsExist) {
             bankDetailsOption match {
@@ -254,7 +264,7 @@ class ViewProgressFormatter @Inject() (
       case REPAYMENT_APPROVED =>
         //id: 9
         WhatsHappendSoFar(REPAYMENT_APPROVED,
-                          desFormatter.getClearingDate(transaction).getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          clearingDate,
                           Messages("view_progress_formatter.repayment_complete"),
           if (bankDetailsExist) {
             bankDetailsOption match {
@@ -269,12 +279,14 @@ class ViewProgressFormatter @Inject() (
         throw new RuntimeException(s"Illegal state reached: building completed repayment view for $status")
     }
 
-  private def computeWhatsHappenedSoFarCompleteDebitCharge(vrtRepaymentDetailData: VrtRepaymentDetailData, transaction: Option[Transaction])(implicit messages: Messages): WhatsHappendSoFar =
+  private def computeWhatsHappenedSoFarCompleteDebitCharge(vrtRepaymentDetailData: VrtRepaymentDetailData,
+                                                           clearingDate:           LocalDate
+  )(implicit messages: Messages): WhatsHappendSoFar =
     vrtRepaymentDetailData.repaymentDetailsData.riskingStatus match {
       case ADJUSMENT_TO_TAX_DUE =>
         //id:8 -- to complete
         WhatsHappendSoFar(ADJUSMENT_TO_TAX_DUE,
-                          desFormatter.getClearingDate(transaction).getOrElse(vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate),
+                          clearingDate,
                           Messages("view_progress_formatter.repayment_complete"),
                           Messages("view_progress_formatter.received_your_vat_payment"),
                           Messages("view_progress_formatter.amount_you_paid"),
