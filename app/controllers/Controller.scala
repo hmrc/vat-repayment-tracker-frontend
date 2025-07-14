@@ -100,7 +100,6 @@ class Controller @Inject() (
             customerData <- customerDataF
             repaymentDetails <- repaymentDetailsF
             financialData <- financialDataF
-
             allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData)
             engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
             _ <- auditor.auditEngagement("showVrt", engmtType, Some(request.typedVrn.vrn))

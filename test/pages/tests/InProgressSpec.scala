@@ -194,6 +194,24 @@ class InProgressSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
+  "18. Status = REPAYMENT_ADJUSTED and no clearing date" in {
+    setup(status1 = RiskingStatus.REPAYMENT_ADJUSTED, ft = ft_404)
+    InProgress.uniqueToPage
+    InProgress.checktabs
+  }
+
+  "19. Status = ADJUSTMENT_TO_TAX_DUE and no clearing date" in {
+    setup(status1 = RiskingStatus.ADJUSMENT_TO_TAX_DUE, ft = ft_404)
+    InProgress.uniqueToPage
+    InProgress.checktabs
+  }
+
+  "20. Status = REPAYMENT_APPROVED and no clearing date" in {
+    setup(status1 = RiskingStatus.REPAYMENT_APPROVED, ft = ft_404)
+    InProgress.uniqueToPage
+    InProgress.checktabs
+  }
+
   private def setup(
       useBankDetails:     Boolean       = true,
       partialBankDetails: Boolean       = false,

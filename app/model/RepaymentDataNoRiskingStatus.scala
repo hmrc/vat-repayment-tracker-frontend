@@ -22,4 +22,6 @@ final case class RepaymentDataNoRiskingStatus(
     period:             String,
     amount:             BigDecimal,
     returnCreationDate: LocalDate,
-    periodKey:          String)
+    periodKey:          String,
+    clearingDate:       Option[LocalDate]
+)

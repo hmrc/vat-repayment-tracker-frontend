@@ -23,6 +23,8 @@ import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
 import model.des._
 import play.api.libs.json.{JsValue, Json}
 
+import java.time.format.DateTimeFormatter
+
 object DesData {
 
   private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None)
@@ -133,7 +135,10 @@ object DesData {
   )
 
   //language=JSON
-  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: RiskingStatus, status2: RiskingStatus): JsValue = Json.parse(
+  def repaymentDetails2DifferentPeriods(date:    String,
+                                        date2:   String,
+                                        status1: RiskingStatus,
+                                        status2: RiskingStatus): JsValue = Json.parse(
     s"""[
           {
              "returnCreationDate": "$date",
@@ -158,12 +163,12 @@ object DesData {
       ]""".stripMargin
   )
 
-  //language=JSON
-  def repaymentDetailSingleCompleted: JsValue = Json.parse(
+  def repaymentDetailSingleCompleted(lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): JsValue = Json.parse(
+    //language=JSON
     s"""[{
         "returnCreationDate": "2001-01-01",
         "sentForRiskingDate": "2001-01-01",
-        "lastUpdateReceivedDate": "2001-01-01",
+        "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
         "periodKey": "18AG",
         "riskingStatus": "ADJUSMENT_TO_TAX_DUE",
         "vatToPay_BOX5": 6.56,
@@ -172,8 +177,8 @@ object DesData {
       }]""".stripMargin
   )
 
-  //language=JSON
   def repaymentDetailsMultipleInProgress: JsValue = Json.parse(
+    //language=JSON
     s"""[
         {
           "returnCreationDate": "2001-01-01",
@@ -218,13 +223,13 @@ object DesData {
     ]""".stripMargin
   )
 
-  //language=JSON
-  def repaymentDetailsMultipleCompleted(): JsValue = Json.parse(
+  def repaymentDetailsMultipleCompleted(lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): JsValue = Json.parse(
+    //language=JSON
     s"""[
           {
             "returnCreationDate": "2001-01-01",
             "sentForRiskingDate": "2001-01-01",
-            "lastUpdateReceivedDate": "2001-01-01",
+            "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
             "periodKey": "18AA",
             "riskingStatus": "REPAYMENT_ADJUSTED",
             "vatToPay_BOX5": 6.56,
@@ -234,7 +239,7 @@ object DesData {
           {
             "returnCreationDate": "2001-01-01",
             "sentForRiskingDate": "2001-01-01",
-            "lastUpdateReceivedDate": "2001-01-01",
+            "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
             "periodKey": "18AD",
             "riskingStatus": "REPAYMENT_ADJUSTED",
             "vatToPay_BOX5": 6.56,
@@ -244,7 +249,7 @@ object DesData {
           {
              "returnCreationDate": "2001-01-01",
              "sentForRiskingDate": "2001-01-01",
-             "lastUpdateReceivedDate": "2001-01-01",
+             "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
              "periodKey": "18AG",
              "riskingStatus": "ADJUSMENT_TO_TAX_DUE",
              "vatToPay_BOX5": 6.56,
@@ -254,7 +259,7 @@ object DesData {
           {
              "returnCreationDate": "2001-01-01",
              "sentForRiskingDate": "2001-01-01",
-             "lastUpdateReceivedDate": "2001-01-01",
+             "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
              "periodKey": "18AJ",
              "riskingStatus": "REPAYMENT_APPROVED",
              "vatToPay_BOX5": 6.56,
@@ -262,25 +267,25 @@ object DesData {
              "originalPostingAmount": 5.56
           },
           {
-                 "returnCreationDate": "2001-01-01",
-                 "sentForRiskingDate": "2001-01-01",
-                 "lastUpdateReceivedDate": "2001-01-01",
-                 "periodKey": "18AJ",
-                 "riskingStatus": "INITIAL",
-                 "vatToPay_BOX5": 6.56,
-                 "supplementDelayDays": 1,
-                 "originalPostingAmount": 5.56
+             "returnCreationDate": "2001-01-01",
+             "sentForRiskingDate": "2001-01-01",
+             "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
+             "periodKey": "18AJ",
+             "riskingStatus": "INITIAL",
+             "vatToPay_BOX5": 6.56,
+             "supplementDelayDays": 1,
+             "originalPostingAmount": 5.56
            }
         ]""".stripMargin
   )
 
   //language=JSON
-  def repaymentDetails3Inprogree1Completed(): JsValue = Json.parse(
+  def repaymentDetails3Inprogree1Completed(lastUpdateReceivedDate: LocalDate = LocalDate.of(2000, 1, 1)): JsValue = Json.parse(
     s"""[
         {
             "returnCreationDate": "2001-01-01",
             "sentForRiskingDate": "2001-01-01",
-            "lastUpdateReceivedDate": "2001-01-01",
+            "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
             "periodKey": "18AA",
             "riskingStatus": "INITIAL",
             "vatToPay_BOX5": 6.56,
@@ -290,7 +295,7 @@ object DesData {
         {
           "returnCreationDate": "2001-01-01",
           "sentForRiskingDate": "2001-01-01",
-          "lastUpdateReceivedDate": "2001-01-01",
+          "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
           "periodKey": "18AD",
           "riskingStatus": "SENT_FOR_RISKING",
           "vatToPay_BOX5": 6.56,
@@ -300,7 +305,7 @@ object DesData {
         {
           "returnCreationDate": "2001-01-01",
           "sentForRiskingDate": "2001-01-01",
-          "lastUpdateReceivedDate": "2001-01-01",
+          "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
           "periodKey": "18AG",
           "riskingStatus": "CLAIM_QUERIED",
           "vatToPay_BOX5": 6.56,
@@ -310,7 +315,7 @@ object DesData {
         {
            "returnCreationDate": "2001-01-01",
            "sentForRiskingDate": "2001-01-01",
-           "lastUpdateReceivedDate": "2001-01-01",
+           "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
            "periodKey": "18AJ",
            "riskingStatus": "REPAYMENT_APPROVED",
            "vatToPay_BOX5": 6.56,
@@ -1297,45 +1302,52 @@ object DesData {
       ]""".stripMargin
   )
 
-  // language=JSON
-  def financialDataSingleCredit(vrn: Vrn): JsValue =
+  def financialDataSingleCredit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue = {
+    val financialTransactions = periodKeys.map{ period =>
+      // language=JSON
+      s"""{
+        |
+        |  "chargeType": "VAT Return Credit Charge",
+        |  "mainType": "VAT PA Default Interest",
+        |  "periodKey": "$period",
+        |  "periodKeyDescription": "March 2018",
+        |  "taxPeriodFrom": "2018-03-01",
+        |  "taxPeriodTo": "2018-03-31",
+        |  "businessPartner": "0100113120",
+        |  "contractAccountCategory": "33",
+        |  "contractAccount": "091700000405",
+        |  "contractObjectType": "ZVAT",
+        |  "contractObject": "00000180000000000165",
+        |  "sapDocumentNumber": "003360001206",
+        |  "sapDocumentNumberItem": "0002",
+        |  "chargeReference": "XV002616013469",
+        |  "mainTransaction": "4708",
+        |  "subTransaction": "1175",
+        |  "originalAmount": 6.56,
+        |  "outstandingAmount": 6.56,
+        |  "items": [
+        |      {
+        |          "subItem": "000",
+        |          "dueDate": "2018-08-24",
+        |          "amount": 6.56,
+        |          "clearingDate": "2018-03-01"
+        |      }
+        |  ]
+        |
+        |}
+        |""".stripMargin
+    }
+
+    // language=JSON
     Json.parse(s"""
          {
            "idType": "VRN",
            "idNumber": "${vrn.value}",
            "regimeType": "VATC",
            "processingDate": "2019-08-20T10:44:05Z",
-           "financialTransactions": [
-               {
-                   "chargeType": "VAT Return Credit Charge",
-                   "mainType": "VAT PA Default Interest",
-                   "periodKey": "18AG",
-                   "periodKeyDescription": "March 2018",
-                   "taxPeriodFrom": "2018-03-01",
-                   "taxPeriodTo": "2018-03-31",
-                   "businessPartner": "0100113120",
-                   "contractAccountCategory": "33",
-                   "contractAccount": "091700000405",
-                   "contractObjectType": "ZVAT",
-                   "contractObject": "00000180000000000165",
-                   "sapDocumentNumber": "003360001206",
-                   "sapDocumentNumberItem": "0002",
-                   "chargeReference": "XV002616013469",
-                   "mainTransaction": "4708",
-                   "subTransaction": "1175",
-                   "originalAmount": 6.56,
-                   "outstandingAmount": 6.56,
-                   "items": [
-                       {
-                           "subItem": "000",
-                           "dueDate": "2018-08-24",
-                           "amount": 6.56,
-                           "clearingDate": "2018-03-01"
-                       }
-                   ]
-               }
-           ]
+           "financialTransactions": [ ${financialTransactions.mkString(",\n")} ]
        }""".stripMargin)
+  }
 
   def financialDataEmptyItemsArray(vrn: Vrn): JsValue =
     Json.parse(
@@ -1459,45 +1471,49 @@ object DesData {
            ]
        }""".stripMargin)
 
-  // language=JSON
-  def financialDataSingleDebit(vrn: Vrn): JsValue =
+  def financialDataSingleDebit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue = {
+    val financialTransactions = periodKeys.map{ period =>
+      // language=JSON
+      s"""{
+        |  "chargeType": "VAT Return Debit Charge",
+        |  "mainType": "VAT PA Default Interest",
+        |  "periodKey": "$period",
+        |  "periodKeyDescription": "March 2018",
+        |  "taxPeriodFrom": "2018-03-01",
+        |  "taxPeriodTo": "2018-03-31",
+        |  "businessPartner": "0100113120",
+        |  "contractAccountCategory": "33",
+        |  "contractAccount": "091700000405",
+        |  "contractObjectType": "ZVAT",
+        |  "contractObject": "00000180000000000165",
+        |  "sapDocumentNumber": "003360001206",
+        |  "sapDocumentNumberItem": "0002",
+        |  "chargeReference": "XV002616013469",
+        |  "mainTransaction": "4708",
+        |  "subTransaction": "1175",
+        |  "originalAmount": 6.56,
+        |  "outstandingAmount": 6.56,
+        |  "items": [
+        |      {
+        |          "subItem": "000",
+        |          "dueDate": "2018-08-24",
+        |          "amount": 6.56,
+        |          "clearingDate": "2018-03-01"
+        |      }
+        |  ]
+        |}""".stripMargin
+    }
+
+    // language=JSON
     Json.parse(s"""
        {
          "idType": "VRN",
          "idNumber": "${vrn.value}",
          "regimeType": "VATC",
          "processingDate": "2019-08-20T10:44:05Z",
-         "financialTransactions": [
-             {
-                 "chargeType": "VAT Return Debit Charge",
-                 "mainType": "VAT PA Default Interest",
-                 "periodKey": "18AG",
-                 "periodKeyDescription": "March 2018",
-                 "taxPeriodFrom": "2018-03-01",
-                 "taxPeriodTo": "2018-03-31",
-                 "businessPartner": "0100113120",
-                 "contractAccountCategory": "33",
-                 "contractAccount": "091700000405",
-                 "contractObjectType": "ZVAT",
-                 "contractObject": "00000180000000000165",
-                 "sapDocumentNumber": "003360001206",
-                 "sapDocumentNumberItem": "0002",
-                 "chargeReference": "XV002616013469",
-                 "mainTransaction": "4708",
-                 "subTransaction": "1175",
-                 "originalAmount": 6.56,
-                 "outstandingAmount": 6.56,
-                 "items": [
-                     {
-                         "subItem": "000",
-                         "dueDate": "2018-08-24",
-                         "amount": 6.56,
-                         "clearingDate": "2018-03-01"
-                     }
-                 ]
-             }
-         ]
+         "financialTransactions": [ ${financialTransactions.mkString(",\n")}  ]
      }""".stripMargin)
+  }
 
 }
 

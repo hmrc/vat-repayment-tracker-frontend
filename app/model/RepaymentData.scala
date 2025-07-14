@@ -24,4 +24,6 @@ final case class RepaymentData(
     amount:             BigDecimal,
     returnCreationDate: LocalDate,
     riskingStatus:      RiskingStatus,
-    periodKey:          String)
+    periodKey:          String,
+    clearingDate:       Option[LocalDate]
+)

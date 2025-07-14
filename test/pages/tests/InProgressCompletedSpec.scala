@@ -52,7 +52,7 @@ class InProgressCompletedSpec extends BrowserSpec {
     AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
 
   "1. user is authorised and financial data found" in {
-    setup()
+    setup(ft                      = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
     InProgress.uniqueToPage
     InProgressCompleted.checktabs
     InProgressCompleted.breadCrumbsExists
@@ -99,7 +99,7 @@ class InProgressCompletedSpec extends BrowserSpec {
   }
 
   "6. click completed link" in {
-    setup()
+    setup(ft                      = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
     InProgress.clickCompleted
     Completed.uniqueToPage
     InProgressCompleted.checktabs
@@ -107,16 +107,7 @@ class InProgressCompletedSpec extends BrowserSpec {
     expectEngagementStatusAudited()
   }
 
-  "7. click completed link inpast but not completed" in {
-    setup(inPast = true)
-    InProgress.clickCompleted
-    Completed.uniqueToPage
-    InProgressCompleted.checktabs
-
-    expectEngagementStatusAudited()
-  }
-
-  "8. click completed link inpast completed" in {
+  "7. click completed link inpast completed" in {
     setup(inPast = true, ft = ft_debit)
     InProgressCompleted.checktabsInPast
     InProgress.completedLink
@@ -125,11 +116,12 @@ class InProgressCompletedSpec extends BrowserSpec {
   }
 
   private def setup(
-      useBankDetails:     Boolean = true,
-      partialBankDetails: Boolean = false,
-      ft:                 Int     = ft_404,
-      inPast:             Boolean = false,
-      inflight:           Boolean = false): Unit =
+      useBankDetails:          Boolean     = true,
+      partialBankDetails:      Boolean     = false,
+      ft:                      Int         = ft_404,
+      inPast:                  Boolean     = false,
+      inflight:                Boolean     = false,
+      financialDataPeriodKeys: Seq[String] = Seq("18AG")): Unit =
     {
       VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuditWireMockResponses.auditIsAvailable
@@ -149,14 +141,20 @@ class InProgressCompletedSpec extends BrowserSpec {
       }
 
       if (inPast)
-        PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(LocalDate.now().toString, LocalDate.now().minusDays(70).toString, INITIAL, ADJUSMENT_TO_TAX_DUE, vrn)
+        PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(
+          LocalDate.now().toString,
+          LocalDate.now().minusDays(70).toString,
+          INITIAL,
+          ADJUSMENT_TO_TAX_DUE,
+          vrn
+        )
       else
-        PaymentsOrchestratorStub.repaymentDetails3Inprogree1Completed(vrn)
+        PaymentsOrchestratorStub.repaymentDetails3Inprogree1Completed(vrn, LocalDate.now())
 
       ft match {
         case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
-        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn, financialDataPeriodKeys)
+        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn, financialDataPeriodKeys)
         case other       => throw new IllegalArgumentException(s"no ft match for $other")
       }
 

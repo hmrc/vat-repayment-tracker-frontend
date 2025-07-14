@@ -21,6 +21,8 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.des.RiskingStatus
 import model.{PeriodKey, Vrn}
 
+import java.time.LocalDate
+
 object PaymentsOrchestratorStub extends TestHelper {
 
   def ddOk(vrn: Vrn): StubMapping =
@@ -35,11 +37,11 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(404)
         .withBody(errorResponse(s"""/payments-orchestrator/des/dd-data/vrn/${vrn.value}""").toString())))
 
-  def financialsOkCredit(vrn: Vrn): StubMapping =
+  def financialsOkCredit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
-        .withBody(DesData.financialDataSingleCredit(vrn: Vrn).toString())))
+        .withBody(DesData.financialDataSingleCredit(vrn, periodKeys).toString())))
 
   def financialsOkCreditNoClearingDate(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
@@ -59,11 +61,11 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.financialDataEmptyItemsArray(vrn: Vrn).toString())))
 
-  def financialsOkDebit(vrn: Vrn): StubMapping =
+  def financialsOkDebit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/financial-data/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
-        .withBody(DesData.financialDataSingleDebit(vrn: Vrn).toString())))
+        .withBody(DesData.financialDataSingleDebit(vrn, periodKeys).toString())))
 
   def customerDataOkWithBankDetails(vrn: Vrn, partial: Boolean = false): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/customer-data/vrn/${vrn.value}"""))
@@ -141,11 +143,11 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.repaymentDetails4(date, status1, status2, status3).toString())))
 
-  def repaymentDetailSingleCompleted(vrn: Vrn): StubMapping =
+  def repaymentDetailSingleCompleted(vrn: Vrn, lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
-        .withBody(DesData.repaymentDetailSingleCompleted.toString())))
+        .withBody(DesData.repaymentDetailSingleCompleted(lastUpdateReceivedDate).toString())))
 
   def repaymentDetailsMultipleInProgress(vrn: Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
@@ -153,19 +155,23 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.repaymentDetailsMultipleInProgress.toString())))
 
-  def repaymentDetailsMultipleCompleted(vrn: Vrn): StubMapping =
+  def repaymentDetailsMultipleCompleted(vrn: Vrn, lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
-        .withBody(DesData.repaymentDetailsMultipleCompleted().toString())))
+        .withBody(DesData.repaymentDetailsMultipleCompleted(lastUpdateReceivedDate).toString())))
 
-  def repaymentDetails3Inprogree1Completed(vrn: Vrn): StubMapping =
+  def repaymentDetails3Inprogree1Completed(vrn: Vrn, lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
-        .withBody(DesData.repaymentDetails3Inprogree1Completed().toString())))
+        .withBody(DesData.repaymentDetails3Inprogree1Completed(lastUpdateReceivedDate).toString())))
 
-  def repaymentDetails2DifferentPeriods(date: String, date2: String, status1: RiskingStatus, status2: RiskingStatus, vrn: Vrn): StubMapping =
+  def repaymentDetails2DifferentPeriods(date:    String,
+                                        date2:   String,
+                                        status1: RiskingStatus,
+                                        status2: RiskingStatus,
+                                        vrn:     Vrn): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
