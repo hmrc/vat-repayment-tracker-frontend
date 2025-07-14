@@ -18,9 +18,10 @@ package pages.tests
 
 import model.des.RiskingStatus
 import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL}
-import java.time.LocalDate
 
+import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
+import org.openqa.selenium.By
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.{Seconds, Span}
 import pages.{InProgress, NonMtdUser}
@@ -192,6 +193,37 @@ class InProgressSpec extends BrowserSpec {
     InProgress.containsBankWarning(result = true)
 
     expectEngagementStatusAudited()
+  }
+
+  "18. Status = REPAYMENT_ADJUSTED and no clearing date" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    // check that we don't get two rows in the in progress table for the initial and repayment adjusted statuses
+    PaymentsOrchestratorStub.repaymentDetailS2(vrn, LocalDate.now().toString, RiskingStatus.INITIAL, RiskingStatus.REPAYMENT_ADJUSTED)
+
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
+    goToViaPath(path)
+
+    InProgress.uniqueToPage
+    InProgress.checktabs
+
+    val table = webDriver.findElement(By.cssSelector("table.govuk-table"))
+    val tableBodyRows = table.findElements(By.cssSelector("tbody.govuk-table__body > tr.govuk-table__row"))
+    tableBodyRows.size() shouldBe 1
+  }
+
+  "19. Status = ADJUSTMENT_TO_TAX_DUE and no clearing date" in {
+    setup(status1 = RiskingStatus.ADJUSMENT_TO_TAX_DUE, ft = ft_404)
+    InProgress.uniqueToPage
+    InProgress.checktabs
+  }
+
+  "20. Status = REPAYMENT_APPROVED and no clearing date" in {
+    setup(status1 = RiskingStatus.REPAYMENT_APPROVED, ft = ft_404)
+    InProgress.uniqueToPage
+    InProgress.checktabs
   }
 
   private def setup(

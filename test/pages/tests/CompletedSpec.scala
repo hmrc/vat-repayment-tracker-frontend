@@ -36,6 +36,8 @@ import model.{EnrolmentKeys, Vrn}
 import pages._
 import support._
 
+import java.time.LocalDate
+
 class CompletedSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
@@ -114,7 +116,7 @@ class CompletedSpec extends BrowserSpec {
   }
 
   "8. multiple completed " in {
-    setup(partialBankDetails = true, singleRepayment = false)
+    setup(partialBankDetails      = true, singleRepayment = false, financialDataPeriodKeys = Seq("18AA", "18AD", "18AG", "18AJ"))
     Completed.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true, period = "1 January to 31 January 2018")
 
     Completed.readRowForPeriod("18AA") shouldBe Seq(
@@ -146,16 +148,19 @@ class CompletedSpec extends BrowserSpec {
   }
 
   private def setup(
-      useBankDetails:     Boolean = true,
-      partialBankDetails: Boolean = false,
-      singleRepayment:    Boolean = true,
-      ft:                 Int     = ft_404,
-      inflight:           Boolean = false): Unit =
+      useBankDetails:          Boolean     = true,
+      partialBankDetails:      Boolean     = false,
+      singleRepayment:         Boolean     = true,
+      ft:                      Int         = ft_debit,
+      inflight:                Boolean     = false,
+      financialDataPeriodKeys: Seq[String] = Seq("18AG")
+  ): Unit =
     {
       VatRepaymentTrackerBackendWireMockResponses.storeOk()
       AuditWireMockResponses.auditIsAvailable
 
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString, vrn, EnrolmentKeys.mtdVatEnrolmentKey)
+
       if (useBankDetails) {
         if (partialBankDetails)
           PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
@@ -171,14 +176,14 @@ class CompletedSpec extends BrowserSpec {
       }
 
       if (singleRepayment)
-        PaymentsOrchestratorStub.repaymentDetailSingleCompleted(vrn)
+        PaymentsOrchestratorStub.repaymentDetailSingleCompleted(vrn, LocalDate.now())
       else
-        PaymentsOrchestratorStub.repaymentDetailsMultipleCompleted(vrn)
+        PaymentsOrchestratorStub.repaymentDetailsMultipleCompleted(vrn, LocalDate.now())
 
       ft match {
         case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
-        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn, financialDataPeriodKeys)
+        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn, financialDataPeriodKeys)
         case other       => throw new IllegalArgumentException(s"no ft match for $other")
       }
 
