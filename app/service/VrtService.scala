@@ -50,10 +50,11 @@ class VrtService @Inject() (
         } yield logger.debug(s"cached vat repayment data for vrn : $vrn")
 
         val data = getRepaymentData(rd, financialData)
+        val completeExistsWithoutClearingDate = data.exists(r => r.riskingStatus.complete && r.clearingDate.isEmpty)
 
         // use distinct as we don't want duplicate rows for the same period with different risking status.  Risking status is relevant for view progress but not the tabbed screens.
         val currentData: List[RepaymentDataNoRiskingStatus] = data.filter(
-          r => r.riskingStatus.inProgress || (r.riskingStatus.complete && r.clearingDate.isEmpty)
+          r => (r.riskingStatus.inProgress && !completeExistsWithoutClearingDate) || (r.riskingStatus.complete && r.clearingDate.isEmpty)
         ).map(m => RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey, m.clearingDate)).toList.distinct
 
         val completed: List[RepaymentDataNoRiskingStatus] = data.filter(
