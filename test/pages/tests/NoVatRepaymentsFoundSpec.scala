@@ -16,7 +16,10 @@
 
 package pages.tests
 
-import model.{EnrolmentKeys, Vrn}
+import java.time.LocalDate
+
+import model.des.RiskingStatus.REPAYMENT_APPROVED
+import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.NoVatRepaymentsFoundPage
 import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, PaymentsOrchestratorStub}
 
@@ -105,5 +108,23 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     NoVatRepaymentsFoundPage.containsBankWarning(result = true)
 
     AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+  }
+
+  "6. user has payment over 9 months old" in {
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    PaymentsOrchestratorStub.financialsNotFound(vrn)
+    PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn,
+                                               LocalDate.now().minusMonths(9).minusDays(1).toString,
+                                               REPAYMENT_APPROVED,
+                                               PeriodKey("18AG")
+    )
+    login()
+    goToViaPath(path)
+    NoVatRepaymentsFoundPage.assertPageIsDisplayed()
+
+    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+
   }
 }

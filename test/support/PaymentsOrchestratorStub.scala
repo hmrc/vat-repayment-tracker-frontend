@@ -149,11 +149,11 @@ object PaymentsOrchestratorStub extends TestHelper {
         .withStatus(200)
         .withBody(DesData.repaymentDetailSingleCompleted(lastUpdateReceivedDate).toString())))
 
-  def repaymentDetailsMultipleInProgress(vrn: Vrn): StubMapping =
+  def repaymentDetailsMultipleInProgress(vrn: Vrn, date: String): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
       .willReturn(aResponse()
         .withStatus(200)
-        .withBody(DesData.repaymentDetailsMultipleInProgress.toString())))
+        .withBody(DesData.repaymentDetailsMultipleInProgress(date).toString())))
 
   def repaymentDetailsMultipleCompleted(vrn: Vrn, lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): StubMapping =
     stubFor(get(urlEqualTo(s"""/payments-orchestrator/des/repayment-details/vrn/${vrn.value}"""))
