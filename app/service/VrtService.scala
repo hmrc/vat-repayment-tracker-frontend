@@ -100,8 +100,13 @@ class VrtService @Inject() (
   }
 
   private def outDatedPredicate(repaymentDetailData: RepaymentDetailData, financialData: Option[FinancialData]): Boolean = {
-    repaymentDetailData.lastUpdateReceivedDate.getOrElse(LocalDate.now()).isBefore(LocalDate.now().minusDays(60)) && (
-      desFormatter.getReturnDebitChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey)) || desFormatter.getReturnCreditChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey))
+    val lastUpdateReceivedDate = repaymentDetailData.lastUpdateReceivedDate.getOrElse(LocalDate.now())
+
+    // if in-progress must be within 9 months and if completed must be within 60 days
+    lastUpdateReceivedDate.isBefore(LocalDate.now().minusMonths(9)) || (
+      lastUpdateReceivedDate.isBefore(LocalDate.now().minusDays(60)) && (
+        desFormatter.getReturnDebitChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey)) || desFormatter.getReturnCreditChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey))
+      )
     )
   }
 

@@ -177,13 +177,13 @@ object DesData {
       }]""".stripMargin
   )
 
-  def repaymentDetailsMultipleInProgress: JsValue = Json.parse(
+  def repaymentDetailsMultipleInProgress(date: String): JsValue = Json.parse(
     //language=JSON
     s"""[
         {
-          "returnCreationDate": "2001-01-01",
-          "sentForRiskingDate": "2001-01-01",
-          "lastUpdateReceivedDate": "2001-01-01",
+          "returnCreationDate": "$date",
+          "sentForRiskingDate": "$date",
+          "lastUpdateReceivedDate": "$date",
           "periodKey": "18AA",
           "riskingStatus": "INITIAL",
           "vatToPay_BOX5": 6.56,
@@ -191,9 +191,9 @@ object DesData {
           "originalPostingAmount": 5.56
         },
         {
-          "returnCreationDate": "2001-01-01",
-          "sentForRiskingDate": "2001-01-01",
-          "lastUpdateReceivedDate": "2001-01-01",
+          "returnCreationDate": "$date",
+          "sentForRiskingDate": "$date",
+          "lastUpdateReceivedDate": "$date",
           "periodKey": "18AD",
           "riskingStatus": "INITIAL",
           "vatToPay_BOX5": 6.56,
@@ -201,9 +201,9 @@ object DesData {
           "originalPostingAmount": 5.56
       },
       {
-         "returnCreationDate": "2001-01-01",
-         "sentForRiskingDate": "2001-01-01",
-         "lastUpdateReceivedDate": "2001-01-01",
+         "returnCreationDate": "$date",
+         "sentForRiskingDate": "$date",
+         "lastUpdateReceivedDate": "$date",
          "periodKey": "18AG",
          "riskingStatus": "SENT_FOR_RISKING",
          "vatToPay_BOX5": 6.56,
@@ -211,9 +211,9 @@ object DesData {
          "originalPostingAmount": 5.56
        },
       {
-        "returnCreationDate": "2001-01-01",
-        "sentForRiskingDate": "2001-01-01",
-        "lastUpdateReceivedDate": "2001-01-01",
+        "returnCreationDate": "$date",
+        "sentForRiskingDate": "$date",
+        "lastUpdateReceivedDate": "$date",
         "periodKey": "18AJ",
         "riskingStatus": "CLAIM_QUERIED",
         "vatToPay_BOX5": 6.56,

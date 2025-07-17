@@ -16,10 +16,11 @@
 
 package pages.tests
 
+import java.time.LocalDate
+
+import formaters.CommonFormatter.formatDate
 import model.des.RiskingStatus
 import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL}
-
-import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import org.openqa.selenium.By
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
@@ -37,10 +38,11 @@ class InProgressSpec extends BrowserSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  val details: Map[String, String] = Map(
-    ("inprogress_0", "returnCreationDate: 01 Jan 2001, periodKey: 18AA, amount: 5.56"),
-    ("inprogress_1", "returnCreationDate: 01 Jan 2001, periodKey: 18AD, amount: 5.56"),
-    ("inprogress_2", "returnCreationDate: 01 Jan 2001, periodKey: 18AJ, amount: 5.56"),
+  def details(date: String): Map[String, String] = Map(
+    ("inprogress_0", s"returnCreationDate: $date, periodKey: 18AA, amount: 5.56"),
+    ("inprogress_1", s"returnCreationDate: $date, periodKey: 18AD, amount: 5.56"),
+    ("inprogress_2", s"returnCreationDate: $date, periodKey: 18AG, amount: 5.56"),
+    ("inprogress_3", s"returnCreationDate: $date, periodKey: 18AJ, amount: 5.56"),
     ("vrn", s"${vrn.value}")
   )
 
@@ -133,7 +135,7 @@ class InProgressSpec extends BrowserSpec {
     BankAccountCocWireMockResponses.bankOk
     setup(ft              = ft_debit, useBankDetails = false, singleRepayment = false)
     InProgress.clickAddBankDetails
-    AuditWireMockResponses.bacWasAudited(details)
+    AuditWireMockResponses.bacWasAudited(details(formatDate(LocalDate.now())))
   }
 
   "11. click view repayment account then clickManageAccount" in {
@@ -141,7 +143,7 @@ class InProgressSpec extends BrowserSpec {
     setup(ft              = ft_debit, singleRepayment = false)
     InProgress.clickManageAccount
     InProgress.clickCallBac
-    AuditWireMockResponses.bacWasAudited(details)
+    AuditWireMockResponses.bacWasAudited(details(formatDate(LocalDate.now())))
   }
 
   "12. display Submit VAT Return CTA if repayments are suspended" in {
@@ -255,7 +257,7 @@ class InProgressSpec extends BrowserSpec {
     if (singleRepayment)
       PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
     else
-      PaymentsOrchestratorStub.repaymentDetailsMultipleInProgress(vrn)
+      PaymentsOrchestratorStub.repaymentDetailsMultipleInProgress(vrn, LocalDate.now().toString)
 
     ft match {
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
