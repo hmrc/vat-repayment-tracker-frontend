@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import formaters.CommonFormatter.formatDate
 import model.des.RiskingStatus
-import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL}
+import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL, REPAYMENT_APPROVED}
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import org.openqa.selenium.By
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
@@ -228,14 +228,22 @@ class InProgressSpec extends BrowserSpec {
     InProgress.checktabs
   }
 
+  "21. Multiple payments with different period keys: Status = CLAIM_QUERIED & Status = REPAYMENT_APPROVED with no clearing date" in {
+    setup(singleRepayment     = false, ft = ft_404, differentPeriodKeys = true)
+    InProgress.uniqueToPage
+    InProgress.checktabs
+    InProgress.countRows(2)
+  }
+
   private def setup(
-      useBankDetails:     Boolean       = true,
-      partialBankDetails: Boolean       = false,
-      singleRepayment:    Boolean       = true,
-      ft:                 Int           = ft_404,
-      status1:            RiskingStatus = INITIAL,
-      enrolmentIn:        String        = EnrolmentKeys.mtdVatEnrolmentKey,
-      inflight:           Boolean       = false
+      useBankDetails:      Boolean       = true,
+      partialBankDetails:  Boolean       = false,
+      singleRepayment:     Boolean       = true,
+      ft:                  Int           = ft_404,
+      status1:             RiskingStatus = INITIAL,
+      enrolmentIn:         String        = EnrolmentKeys.mtdVatEnrolmentKey,
+      inflight:            Boolean       = false,
+      differentPeriodKeys: Boolean       = false
   ): Unit = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
@@ -256,8 +264,14 @@ class InProgressSpec extends BrowserSpec {
 
     if (singleRepayment)
       PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
-    else
+    else if (!singleRepayment && !differentPeriodKeys)
       PaymentsOrchestratorStub.repaymentDetailsMultipleInProgress(vrn, LocalDate.now().toString)
+    else if (!singleRepayment && differentPeriodKeys)
+      PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(LocalDate.now().toString,
+                                                                 LocalDate.now().minusDays(20).toString,
+                                                                 CLAIM_QUERIED,
+                                                                 REPAYMENT_APPROVED,
+                                                                 vrn)
 
     ft match {
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
