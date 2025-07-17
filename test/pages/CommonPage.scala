@@ -143,6 +143,10 @@ trait CommonPage
     probing(_.getPageSource.contains(text))
   }
 
+  def cssCount(css: String)(implicit driver: WebDriver): Int = {
+    probing(_.findElements(By.cssSelector(css))).size()
+  }
+
   def readMain()(implicit webDriver: WebDriver): String = xpath("""//*[@id="content"]""").element.text
 
   def assertContentMatchesExpectedLines(expectedLines: List[String])(implicit wd: WebDriver): Unit = {

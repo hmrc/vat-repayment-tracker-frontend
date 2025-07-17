@@ -81,4 +81,8 @@ object InProgress extends CommonDetail {
     idPresent("inprogress-none") shouldBe false
   }
 
+  def countRows(count: Int)(implicit wd: WebDriver): Assertion = {
+    cssCount(".govuk-table__body > .govuk-table__row") shouldBe count
+  }
+
 }
