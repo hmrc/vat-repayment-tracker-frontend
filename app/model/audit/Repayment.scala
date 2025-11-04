@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+package model.audit
 
-import org.openqa.selenium.WebDriver
-import org.scalatest.Assertion
+import play.api.libs.json.{Json, OFormat}
 
-object NonMtdUser extends CommonPage {
+final case class Repayment(
+    returnCreationDate:     String,
+    sentForRiskingDate:     Option[String],
+    lastUpdateReceivedDate: Option[String],
+    periodKey:              String,
+    riskingStatus:          String,
+    originalPostingAmount:  BigDecimal
+)
 
-  def assertPageIsDisplayed(implicit wd: WebDriver): Assertion = {
-    readMainMessage shouldBe "You cannot access this service"
-
-  }
+object Repayment {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
+  implicit val format: OFormat[Repayment] = Json.format[Repayment]
 }

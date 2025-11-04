@@ -101,8 +101,7 @@ class Controller @Inject() (
             repaymentDetails <- repaymentDetailsF
             financialData <- financialDataF
             allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData)
-            engmtType = showResultsFormatter.computeEngmt(allRepaymentData)
-            _ <- auditor.auditEngagement("showVrt", engmtType, Some(request.typedVrn.vrn))
+            _ <- auditor.auditViewRepaymentStatus("showVrt", request.typedVrn.vrn, repaymentDetails, customerData.exists(_.approvedInformationExists))
           } yield {
             val inFlight = desFormatter.bankDetailsInFlight(customerData)
             if (inFlight) {

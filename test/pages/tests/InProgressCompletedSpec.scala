@@ -16,22 +16,6 @@
 
 package pages.tests
 
-/*
- * Copyright 2019 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, INITIAL}
 
 import java.time.LocalDate
@@ -48,8 +32,8 @@ class InProgressCompletedSpec extends BrowserSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  def expectEngagementStatusAudited() =
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
+  def expectEngagementStatusAudited(): Unit =
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value)
 
   "1. user is authorised and financial data found" in {
     setup(ft                      = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
@@ -61,7 +45,7 @@ class InProgressCompletedSpec extends BrowserSpec {
   }
   "2. User has no bank details set up and no bank details in flight" in {
     setup(useBankDetails = false)
-    InProgressCompleted.containsNewBankDetailsText(false)
+    InProgressCompleted.containsNewBankDetailsText(result = false)
     InProgressCompleted.containsBAC(result = true)
     InProgressCompleted.containsBankDetails(result = false)
     InProgressCompleted.containsBankWarning(result = false)
@@ -71,7 +55,7 @@ class InProgressCompletedSpec extends BrowserSpec {
 
   "3. User has no bank details set up and bank details in flight" in {
     setup(useBankDetails = false, inflight = true)
-    InProgressCompleted.containsNewBankDetailsText(true)
+    InProgressCompleted.containsNewBankDetailsText(result = true)
     InProgressCompleted.containsBAC(result = false)
     InProgressCompleted.containsBankDetails(result = false)
     InProgressCompleted.containsBankWarning(result = false)
@@ -80,7 +64,7 @@ class InProgressCompletedSpec extends BrowserSpec {
   }
   "4. User has bank details set up and no bank details in flight" in {
     setup()
-    InProgressCompleted.containsNewBankDetailsText(false)
+    InProgressCompleted.containsNewBankDetailsText(result = false)
     InProgressCompleted.containsBAC(result = false)
     InProgressCompleted.containsBankDetails(result = true)
     InProgressCompleted.containsBankWarning(result = false)
@@ -90,7 +74,7 @@ class InProgressCompletedSpec extends BrowserSpec {
 
   "5. User has bank details set up and bank details in flight" in {
     setup(inflight = true)
-    InProgressCompleted.containsNewBankDetailsText(false)
+    InProgressCompleted.containsNewBankDetailsText(result = false)
     InProgressCompleted.containsBAC(result = false)
     InProgressCompleted.containsBankDetails(result = true)
     InProgressCompleted.containsBankWarning(result = true)

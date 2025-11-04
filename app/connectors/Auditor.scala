@@ -17,16 +17,19 @@
 package connectors
 
 import formaters.CommonFormatter
+import model.audit.{Repayment, ViewRepaymentStatusAuditDetail}
+import model.des.RepaymentDetailData
 
 import javax.inject.{Inject, Singleton}
 import model.{RepaymentDataNoRiskingStatus, Vrn}
 import play.api.Logger
+import play.api.libs.json.Json
 import play.api.mvc.Request
 import req.RequestSupport
 import req.RequestSupport._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
-import uk.gov.hmrc.play.audit.model.DataEvent
+import uk.gov.hmrc.play.audit.model.{DataEvent, ExtendedDataEvent}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -54,16 +57,40 @@ class Auditor @Inject() (auditConnector: AuditConnector)(implicit ec: ExecutionC
   }
 
   def auditEngagement(transactionName: String, engmtType: String, vrn: Option[Vrn])(implicit request: Request[_]): Future[AuditResult] = {
-    val auditTypeIn = "EngagementStatus"
-
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
-      auditType   = auditTypeIn,
+      auditType   = "EngagementStatus",
       tags        = Auditor.auditTags(request, transactionName),
       detail      = Auditor.engagementDetail(engmtType) ++ vrn.map(identifierDetails).getOrElse(Map.empty)
     )
 
     auditConnector.sendEvent(event)
+  }
+
+  def auditViewRepaymentStatus(transactionName: String, vrn: Vrn, repaymentDetails: Option[Seq[RepaymentDetailData]], hasBankDetails: Boolean)(implicit request: Request[_]): Future[AuditResult] = {
+    val repayments: Seq[Repayment] = repaymentDetails.fold(Seq.empty[Repayment])(_.map { repayment =>
+      Repayment(
+        returnCreationDate     = repayment.returnCreationDate.toString,
+        sentForRiskingDate     = repayment.sentForRiskingDate.map(_.toString),
+        lastUpdateReceivedDate = repayment.lastUpdateReceivedDate.map(_.toString),
+        periodKey              = repayment.periodKey,
+        riskingStatus          = repayment.riskingStatus.entryName,
+        originalPostingAmount  = repayment.originalPostingAmount
+      )
+    })
+
+    val detail = ViewRepaymentStatusAuditDetail(
+      vrn            = vrn.value, hasBankDetails = hasBankDetails, repayments = repayments
+    )
+
+    val event = ExtendedDataEvent(
+      auditSource = "vat-repayment-tracker-frontend",
+      auditType   = "ViewRepaymentStatus",
+      tags        = Auditor.auditTags(request, transactionName),
+      detail      = Json.toJson(detail)
+    )
+
+    auditConnector.sendExtendedEvent(event)
   }
 
   private def identifierDetails(vrn: Vrn): Map[String, String] = Map("vrn" -> vrn.value)
@@ -107,6 +134,4 @@ object Auditor {
       "engmtType" -> engmtType
     )
   }
-
 }
-

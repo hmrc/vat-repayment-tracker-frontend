@@ -46,8 +46,8 @@ class InProgressSpec extends BrowserSpec {
     ("vrn", s"${vrn.value}")
   )
 
-  def expectEngagementStatusAudited() =
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
+  def expectEngagementStatusAudited(): Unit =
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value)
 
   "1. user is authorised and financial data found" in {
     setup()

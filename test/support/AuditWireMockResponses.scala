@@ -18,6 +18,7 @@ package support
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import model.audit.Repayment
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 
@@ -68,6 +69,28 @@ object AuditWireMockResponses extends Matchers {
     details foreach { e =>
       (jsBody \ "detail" \ e._1).as[String] shouldBe e._2
     }
+  }
+
+  def viewRepaymentStatusAudited(transactionName: String, vrn: String, hasBankDetails: Boolean = true, noRepaymentsFound: Boolean = false): Unit = {
+    verify(postRequestedFor(urlEqualTo("/write/audit")))
+
+    val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
+    val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains(transactionName))
+    mayPaymentAuditEvent shouldBe defined
+    val jsBody = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
+
+    (jsBody \ "auditType").as[String] shouldBe "ViewRepaymentStatus"
+    (jsBody \ "tags" \ "transactionName").as[String] shouldBe transactionName
+    (jsBody \ "detail" \ "vrn").as[String] shouldBe vrn
+    (jsBody \ "detail" \ "hasBankDetails").as[Boolean] shouldBe hasBankDetails
+
+    if (noRepaymentsFound) {
+      (jsBody \ "detail" \ "repayments").as[List[Repayment]] shouldBe empty
+    } else {
+      (jsBody \ "detail" \ "repayments").as[List[Repayment]] should not be empty
+    }
+
+    ()
   }
 
 }
