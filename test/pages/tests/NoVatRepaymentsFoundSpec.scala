@@ -38,8 +38,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed()
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
-
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = true)
   }
 
   "2. User has no bank details set up and no bank details in flight" in {
@@ -56,7 +55,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     NoVatRepaymentsFoundPage.containsBankDetails(result = false)
     NoVatRepaymentsFoundPage.containsBankWarning(result = false)
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = true)
   }
 
   "3. User has no bank details set up and bank details in flight" in {
@@ -73,7 +72,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     NoVatRepaymentsFoundPage.containsBankDetails(result = false)
     NoVatRepaymentsFoundPage.containsBankWarning(result = false)
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = true)
   }
 
   "4. User has bank details set up and no bank details in flight" in {
@@ -90,7 +89,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     NoVatRepaymentsFoundPage.containsBankDetails(result = true)
     NoVatRepaymentsFoundPage.containsBankWarning(result = false)
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = true)
   }
 
   "5. User has bank details set up and bank details in flight" in {
@@ -107,7 +106,7 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     NoVatRepaymentsFoundPage.containsBankDetails(result = true)
     NoVatRepaymentsFoundPage.containsBankWarning(result = true)
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = true)
   }
 
   "6. user has payment over 9 months old" in {
@@ -124,7 +123,6 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed()
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
-
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = false)
   }
 }

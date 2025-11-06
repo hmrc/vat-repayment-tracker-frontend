@@ -16,22 +16,6 @@
 
 package pages.tests
 
-/*
- * Copyright 2019 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import model.{EnrolmentKeys, Vrn}
 import pages._
 import support._
@@ -47,8 +31,8 @@ class CompletedSpec extends BrowserSpec {
   val ft_credit: Int = 2
   val ft_debit: Int = 3
 
-  def expectEngagementStatusAudited() =
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "one_in_progress_multiple_delayed"))
+  def expectViewRepaymentStatusAudited(): Unit =
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value)
 
   "1. user is authorised and financial data found" in {
     setup()
@@ -58,46 +42,47 @@ class CompletedSpec extends BrowserSpec {
     Completed.breadCrumbsExists
     Completed.containsBAC(result = false)
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "2. User has no bank details set up and no bank details in flight" in {
     setup(useBankDetails = false)
-    Completed.containsNewBankDetailsText(false)
+    Completed.containsNewBankDetailsText(result = false)
     Completed.containsBAC(result = true)
     Completed.containsBankDetails(result = false)
     Completed.containsBankWarning(result = false)
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "3. User has no bank details set up and bank details in flight" in {
     setup(useBankDetails = false, inflight = true)
-    Completed.containsNewBankDetailsText(true)
+    Completed.containsNewBankDetailsText(result = true)
     Completed.containsBAC(result = false)
     Completed.containsBankDetails(result = false)
     Completed.containsBankWarning(result = false)
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
+
   "4. User has bank details set up and no bank details in flight" in {
     setup()
-    Completed.containsNewBankDetailsText(false)
+    Completed.containsNewBankDetailsText(result = false)
     Completed.containsBAC(result = false)
     Completed.containsBankDetails(result = true)
     Completed.containsBankWarning(result = false)
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "5. User has bank details set up and bank details in flight" in {
     setup(inflight = true)
-    Completed.containsNewBankDetailsText(false)
+    Completed.containsNewBankDetailsText(result = false)
     Completed.containsBAC(result = false)
     Completed.containsBankDetails(result = true)
     Completed.containsBankWarning(result = true)
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "6. user is authorised and financial data found but partial" in {
@@ -105,14 +90,14 @@ class CompletedSpec extends BrowserSpec {
     Completed.assertPageIsDisplayed(amount         = "£6.56", partialAccount = true)
     Completed.uniqueToPage
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "7. click in completed link" in {
     setup()
     Completed.viewProgressLink
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "8. multiple completed " in {
@@ -135,7 +120,7 @@ class CompletedSpec extends BrowserSpec {
     Completed.uniqueToPage
     Completed.viewProgressLink
 
-    expectEngagementStatusAudited()
+    expectViewRepaymentStatusAudited()
   }
 
   "9. check audit" in {
@@ -144,7 +129,6 @@ class CompletedSpec extends BrowserSpec {
     InProgress.clickManageAccount
     InProgress.clickCallBac
     AuditWireMockResponses.bacWasAuditedNoDetails()
-
   }
 
   private def setup(
