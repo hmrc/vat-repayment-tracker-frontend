@@ -18,9 +18,11 @@
 @import model._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import config.ViewConfig
+@import play.twirl.api.HtmlFormat
 
 @this(
  mainTemplate: views.html.main_template,
+ govukSummaryList: GovukSummaryList,
  govukWarningText: GovukWarningText,
  govukButton: GovukButton,
  viewConfig: ViewConfig
@@ -41,58 +43,81 @@
 
 @mainTemplate(title = title, hasBackLink = true) {
  <div class="govuk-grid-row govuk-!-padding-bottom-2">
-  <div class="govuk-grid-column-two-thirds">
-   <h1 id="main-message" class="govuk-heading-xl">@title</h1>
+    <div class="govuk-grid-column-two-thirds">
+        <h1 id="main-message" class="govuk-heading-xl">@title</h1>
 
-   @if(inFlight) {
-    @govukWarningText(WarningText(content = Text(Messages(
-      "view_repayment_account.warning", if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")}
-    ))))
-   }
+    @if(inFlight) {
+        @govukWarningText(WarningText(content = Text(Messages(
+          "view_repayment_account.warning", if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")}
+        ))))
+    }
 
-   @bankDetailsOption.map{bankDetails =>
+    @bankDetailsOption.map { bankDetails =>
 
-   <dl class="summary-list summary-list--undivided">
-    <div class="summary-list__row" id="acc-name">
-     <dt class="govuk-body summary-list__key govuk-!-font-weight-bold">
-      @Messages("view_repayment_account.name_on_account")
-     </dt>
-     <dd class="govuk-body summary-list__value">
-      @{bankDetails.accountHolderName}
-     </dd>
-    </div>
-    <div class="summary-list__row" id="acc-sort-code">
-     <dt class="govuk-body summary-list__key govuk-!-font-weight-bold">
-      @Messages("view_repayment_account.sort_code")
-     </dt>
-     <dd class="govuk-body summary-list__value">
-      @{bankDetails.formatSortCode}
-     </dd>
-    </div>
-    <div class="summary-list__row" id="acc-number">
-     <dt class="govuk-body summary-list__key govuk-!-font-weight-bold">
-      @Messages("view_repayment_account.account_number")
-     </dt>
-     <dd class="govuk-body summary-list__value">
-      @{bankDetails.obscureBankAccountNumber}
-     </dd>
-    </div>
-   </dl>
-   <a class="govuk-link govuk-!-font-size-19" href='@routes.BankAccountCocController.startBankAccountCocJourney(returnPage)' id="call-bac">@{
-     if (!inFlight) Messages("view_repayment_account.change_account_details")
-     else Messages("")
+       @govukSummaryList(SummaryList(
+           card = Some(Card(
+               title = Some(CardTitle(Text(Messages("view_repayment_account.repayment_account_details")),
+                   classes = "govuk-card__header__text"))
+           )),
+           rows = Seq(
+               SummaryListRow(
+                   classes = "govuk-summary-list__row",
+                   key = Key(
+                       content = HtmlContent(Html(Messages("view_repayment_account.name_on_account"))),
+                       classes = "govuk-summary-list__key"
+                   ),
+                   value = Value(
+                       content = HtmlContent(Html(s"""<span id="acc-name">${HtmlFormat.escape(bankDetails.accountHolderName.fold("")(identity))}</span>"""))
+                   )
+               ),
+               SummaryListRow(
+                   classes = "govuk-summary-list__row",
+                   key = Key(
+                       content = HtmlContent(Html(Messages("view_repayment_account.sort_code"))),
+                       classes = "govuk-summary-list__key"
+                   ),
+                   value = Value(
+                       content = HtmlContent(Html(s"""<span id="acc-sort-code">${HtmlFormat.escape(bankDetails.formatSortCode)}</span>"""))
+                   )
+               ),
+               SummaryListRow(
+                   classes = "govuk-summary-list__row",
+                   key = Key(
+                       content = HtmlContent(Html(Messages("view_repayment_account.account_number"))),
+                       classes = "govuk-summary-list__key"
+                   ),
+                   value = Value(
+                       content = HtmlContent(Html(s"""<span id="acc-number">${HtmlFormat.escape(bankDetails.obscureBankAccountNumber)}</span>"""))
+                   )
+               ),
+               SummaryListRow(
+                   classes = "govuk-summary-list__row",
+                   key = Key(
+                       content = HtmlContent(Html(Messages("view_repayment_account.building_society_number"))),
+                       classes = "govuk-summary-list__key"
+                   ),
+                   value = Value(
+                       content = HtmlContent(Html(s"""<span id="building-society-number">${HtmlFormat.escape(bankDetails.buildingSocietyNumber.fold("")(identity))}</span>"""))
+                   )
+               )
+           )
+        )
+       )
+    }
+    <a class="govuk-link govuk-!-font-size-19" href='@routes.BankAccountCocController.startBankAccountCocJourney(returnPage)' id="call-bac">@{
+       if (!inFlight) Messages("view_repayment_account.change_account_details")
+       else Messages("")
     }</a>
 
-   @if(inFlight) {
-    @govukButton(Button(
-     content = Text(Messages("view_repayment_account.return_to_vat")),
-     href = Some(viewConfig.viewVatAccount),
-     id = Some("return-to-vat")
-    ))
-   }
+    @if(inFlight) {
+       @govukButton(Button(
+           content = Text(Messages("view_repayment_account.return_to_vat")),
+           href = Some(viewConfig.viewVatAccount),
+           id = Some("return-to-vat")
+       ))
+    }
 
-  </div>
+    </div>
  </div>
-}
 
 }

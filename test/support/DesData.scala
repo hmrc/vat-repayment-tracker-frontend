@@ -27,8 +27,8 @@ import java.time.format.DateTimeFormatter
 
 object DesData {
 
-  private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None)
-  private val inFlightBankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), Some(FormInformation(Some("01-01-2000"))))
+  private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None, None)
+  private val inFlightBankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None, Some(FormInformation(Some("01-01-2000"))))
   private val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
   private val ppob: PPOB = PPOB(Some(address))
   private val customerDetails: CustomerDetails = CustomerDetails(Some(true), Some(false))
@@ -597,7 +597,8 @@ object DesData {
              "bankDetails": {
                  "accountHolderName": "Account holder",
                  "bankAccountNumber": "11112222",
-                 "sortCode": "667788"
+                 "sortCode": "667788",
+                 "buildingSocietyNumber":"12345678"
              },
              "businessActivities": {
                  "primaryMainCode": "10410",
@@ -709,7 +710,8 @@ object DesData {
                      },
                      "accountHolderName": "Account holder",
                      "bankAccountNumber": "11112222",
-                     "sortCode": "667788"
+                     "sortCode": "667788",
+                     "buildingSocietyNumber":"12345678"
                  },
                  "mandationStatus": {
                      "formInformation": {
@@ -764,7 +766,8 @@ object DesData {
             "bankDetails": {
                  "accountHolderName": "Account holder",
                  "bankAccountNumber": "11112222",
-                 "sortCode": "667788"
+                 "sortCode": "667788",
+                 "buildingSocietyNumber":"12345678"
              },
              "businessActivities": {
                  "primaryMainCode": "10410",

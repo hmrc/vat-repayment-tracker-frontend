@@ -119,6 +119,8 @@ trait CommonPage
 
   def readAccNumber(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
+  def readBuildingSocietyNumber(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("building-society-number")).getText)
+
   def readTitle(implicit webDriver: WebDriver): String = webDriver.getTitle
 
   def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion = {

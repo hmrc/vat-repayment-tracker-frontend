@@ -138,9 +138,11 @@ view_progress.repayment.AskHMRC = Gofyn i CThEF (yn agor tab newydd)
 view_repayment_account.title = Caiff eich ad-daliadau TAW eu hanfon i’r cyfrif hwn
 view_repayment_account.title.inFlight = Mae’r manylion cyfrif banc ar gyfer eich ad-daliadau TAW yn cael eu diweddaru
 view_repayment_account.warning = Bydd y manylion banc sydd wedi’u diweddaru yn ymddangos yn eich cyfrif treth erbyn {0}, ond mae’n bosibl y byddant yn ymddangos yn gynt.
-view_repayment_account.name_on_account = Yr enw sydd ar y cyfrif:
-view_repayment_account.sort_code = Cod didoli:
-view_repayment_account.account_number = Rhif y cyfrif:
+view_repayment_account.repayment_account_details = Manylion y cyfrif ar gyfer ad-daliadau
+view_repayment_account.name_on_account = Yr enw sydd ar y cyfrif
+view_repayment_account.sort_code = Cod didoli
+view_repayment_account.account_number = Rhif y cyfrif
+view_repayment_account.building_society_number = Rhif rôl y gymdeithas adeiladu
 view_repayment_account.change_account_details = Newid manylion cyfrif
 view_repayment_account.return_to_vat = Yn ôl i’r cyfrif TAW
 

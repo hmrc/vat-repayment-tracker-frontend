@@ -43,6 +43,7 @@ object ViewRepaymentAccount extends CommonPage {
     readAccName should include("Account holder")
     readAccNumber should include ("****2222")
     readAccSortCode should include ("66 77 88")
+    readBuildingSocietyNumber should include ("12345678")
   }
 
 }

@@ -146,6 +146,7 @@ class Controller @Inject() (
       for {
         customerData <- customerDataF
       } yield {
+        println("Customer Data: " + customerData.toString)
         val inFlight = desFormatter.bankDetailsInFlight(customerData)
         val bankDetails = desFormatter.getBankDetails(customerData)
         if (inFlight) {
