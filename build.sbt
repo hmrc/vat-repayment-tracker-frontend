@@ -1,7 +1,7 @@
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 val appName = "vat-repayment-tracker-frontend"
-val scalaV = "2.13.16"
+val scalaV = "2.13.18"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))

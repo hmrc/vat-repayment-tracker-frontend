@@ -6,7 +6,7 @@ import sbt.{Def, *}
 object SbtUpdatesSettings {
 
   lazy val sbtUpdatesSettings: Seq[Def.Setting[?]] = Seq(
-    dependencyUpdatesFailBuild := false,
+    dependencyUpdatesFailBuild := true,
     (Compile / compile) := ((Compile / compile) dependsOn dependencyUpdates).value,
     dependencyUpdatesFilter -= moduleFilter("org.scala-lang"),
     dependencyUpdatesFilter -= moduleFilter("org.playframework"),
