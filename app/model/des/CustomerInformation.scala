@@ -162,10 +162,11 @@ object Address {
 }
 
 final case class BankDetails(
-    accountHolderName: Option[String],
-    bankAccountNumber: Option[String],
-    sortCode:          Option[String],
-    formInformation:   Option[FormInformation]
+    accountHolderName:     Option[String],
+    bankAccountNumber:     Option[String],
+    sortCode:              Option[String],
+    buildingSocietyNumber: Option[String],
+    formInformation:       Option[FormInformation]
 ) {
 
   val detailsExist: Boolean =

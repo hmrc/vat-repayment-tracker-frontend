@@ -129,7 +129,7 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
       ddDetails <- ddDetailsOption.headOption
     } yield ddDetails
 
-    ddDetail.map(detail => BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode), None))
+    ddDetail.map(detail => BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode), None, None))
 
   }
 
