@@ -79,7 +79,17 @@ class VrtService @Inject() (
           .toList
           .distinct
 
-        val hasSuspendedPayment = data.exists(_.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED)
+        val latestUpdateForEachPayment = data
+          .groupBy(_.periodKey)
+          .map { case (_, lst) =>
+            lst
+              .sortBy(s => (s.sorted, s.lastUpdateReceivedDate))
+              .head
+          }
+
+        // Used only to determine when to display repayment suspended warning on show-vrt
+        val hasSuspendedPayment =
+          latestUpdateForEachPayment.exists(_.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED)
 
         // if something is completed, remove from the current list
         AllRepaymentData(
@@ -115,6 +125,7 @@ class VrtService @Inject() (
         ) rd.originalPostingAmount
         else rd.vatToPay_BOX5,
         rd.returnCreationDate,
+        rd.lastUpdateReceivedDate,
         rd.riskingStatus,
         rd.periodKey,
         clearingDate
