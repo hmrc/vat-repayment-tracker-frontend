@@ -20,10 +20,10 @@ import model.des.RiskingStatus
 import java.time.LocalDate
 
 final case class RepaymentData(
-    period:             String,
-    amount:             BigDecimal,
-    returnCreationDate: LocalDate,
-    riskingStatus:      RiskingStatus,
-    periodKey:          String,
-    clearingDate:       Option[LocalDate]
+  period:             String,
+  amount:             BigDecimal,
+  returnCreationDate: LocalDate,
+  riskingStatus:      RiskingStatus,
+  periodKey:          String,
+  clearingDate:       Option[LocalDate]
 )

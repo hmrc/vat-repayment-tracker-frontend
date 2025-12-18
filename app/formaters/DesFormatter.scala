@@ -28,25 +28,25 @@ import java.time.LocalDate
 @Singleton
 class DesFormatter @Inject() (addressFormater: AddressFormatter) {
 
-  def addMissingStatus(vrd: NonEmptyList[VrtRepaymentDetailData]): NonEmptyList[VrtRepaymentDetailData] = {
-
+  def addMissingStatus(vrd: NonEmptyList[VrtRepaymentDetailData]): NonEmptyList[VrtRepaymentDetailData] =
     if (vrd.exists(f => f.repaymentDetailsData.riskingStatus == INITIAL))
       vrd
     else {
-      val rdd: RepaymentDetailData = vrd.head.repaymentDetailsData.copy(
-        riskingStatus          = INITIAL,
+      val rdd: RepaymentDetailData                       = vrd.head.repaymentDetailsData.copy(
+        riskingStatus = INITIAL,
         lastUpdateReceivedDate = Some(vrd.head.repaymentDetailsData.returnCreationDate)
       )
       val vrtRepaymentDetailData: VrtRepaymentDetailData = vrd.head.copy(repaymentDetailsData = rdd)
       vrtRepaymentDetailData :: vrd
     }
-  }
 
   def getReturnDebitChargeExists(financialData: Option[FinancialData], periodKey: PeriodKey): Boolean = {
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnDebitCharge, periodKey))
+    } yield fdAllOption.financialTransactions.filter(f =>
+      financialTransactionsPredicate(f, ChargeType.vatReturnDebitCharge, periodKey)
+    )
 
     transactionIterable match {
       case Some(x) => if (x.nonEmpty) true else false
@@ -58,7 +58,9 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
 
     val transactionIterable = for {
       fdAllOption <- financialData
-    } yield fdAllOption.financialTransactions.filter(f => financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey))
+    } yield fdAllOption.financialTransactions.filter(f =>
+      financialTransactionsPredicate(f, ChargeType.vatReturnCreditCharge, periodKey)
+    )
 
     transactionIterable match {
       case Some(x) => if (x.nonEmpty) true else false
@@ -77,18 +79,23 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
     }
   }
 
-  def getClearingDate(transaction: Option[Transaction]): Option[LocalDate] = {
+  def getClearingDate(transaction: Option[Transaction]): Option[LocalDate] =
     transaction.flatMap {
-      _.items.flatMap {
-        items =>
-          items.map(_.clearingDate).collect {
-            case Some(date) => date
-          }.maxOption
+      _.items.flatMap { items =>
+        items
+          .map(_.clearingDate)
+          .collect { case Some(date) =>
+            date
+          }
+          .maxOption
       }
     }
-  }
 
-  private def financialTransactionsPredicate(transaction: Transaction, chargeType: String, periodKey: PeriodKey): Boolean =
+  private def financialTransactionsPredicate(
+    transaction: Transaction,
+    chargeType:  String,
+    periodKey:   PeriodKey
+  ): Boolean =
     transaction.periodKey.getOrElse("ZZ") == periodKey.value && transaction.chargeType == chargeType
 
   def getBankDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
@@ -102,19 +109,17 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
 
   }
 
-  def getBankDetails(customerData: Option[CustomerInformation]): Option[BankDetails] = {
-
+  def getBankDetails(customerData: Option[CustomerInformation]): Option[BankDetails] =
     for {
       cd <- customerData
       ai <- cd.approvedInformation
       bd <- ai.bankDetails
     } yield bd
-  }
 
   def getAddressDetailsExist(customerData: Option[CustomerInformation]): Boolean = {
     val addressExists = for {
-      cd <- customerData
-      ai <- cd.approvedInformation
+      cd   <- customerData
+      ai   <- cd.approvedInformation
       ppob <- ai.PPOB
     } yield ppob.addressExists
 
@@ -124,28 +129,28 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
   def getDDData(directDebitData: Option[DirectDebitData]): Option[BankDetails] = {
 
     val ddDetail: Option[DirectDebitDetails] = for {
-      dd <- directDebitData
+      dd              <- directDebitData
       ddDetailsOption <- dd.directDebitDetails
-      ddDetails <- ddDetailsOption.headOption
+      ddDetails       <- ddDetailsOption.headOption
     } yield ddDetails
 
-    ddDetail.map(detail => BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode), None, None))
+    ddDetail.map(detail =>
+      BankDetails(Some(detail.accountHolderName), Some(detail.accountNumber), Some(detail.sortCode), None, None)
+    )
 
   }
 
-  def getAddressDetails(customerData: Option[CustomerInformation]): Option[String] = {
+  def getAddressDetails(customerData: Option[CustomerInformation]): Option[String] =
     for {
-      cd <- customerData
-      ai <- cd.approvedInformation
+      cd   <- customerData
+      ai   <- cd.approvedInformation
       ppob <- ai.PPOB
-      ad <- ppob.address
+      ad   <- ppob.address
     } yield addressFormater.getFormattedAddressMtd(ad)
-
-  }
 
   def bankDetailsInFlight(customerData: Option[CustomerInformation]): Boolean = {
     val optBankDetails = for {
-      cd <- customerData
+      cd          <- customerData
       bankDetails <- cd.bankDetailsChangeIndicatorExists
     } yield bankDetails
 
@@ -155,11 +160,10 @@ class DesFormatter @Inject() (addressFormater: AddressFormatter) {
     }
   }
 
-  def getInFlightDate(customerData: Option[CustomerInformation]): Option[String] = {
+  def getInFlightDate(customerData: Option[CustomerInformation]): Option[String] =
     for {
-      cd <- customerData
+      cd           <- customerData
       dateReceived <- cd.inFlightDate
     } yield dateReceived
-  }
 
 }

@@ -25,14 +25,9 @@ import play.api.mvc.{Action, _}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PayApiController @Inject() (
-    cc:              ControllerComponents,
-    actions:         Actions,
-    payApiConnector: PayApiConnector)(
-    implicit
-    ec: ExecutionContext)
-
-  extends FrontendBaseController(cc) {
+class PayApiController @Inject() (cc: ControllerComponents, actions: Actions, payApiConnector: PayApiConnector)(implicit
+  ec: ExecutionContext
+) extends FrontendBaseController(cc) {
 
   private val logger = Logger(this.getClass)
 

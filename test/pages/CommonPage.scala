@@ -29,13 +29,12 @@ import support.RichMatchers
 import scala.collection.immutable.List
 import scala.util.Random
 
-trait CommonPage
-  extends WebBrowser
-  with RichMatchers {
+trait CommonPage extends WebBrowser with RichMatchers {
 
   private val logger = Logger(this.getClass)
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(Span(1, Seconds)), scaled(Span(200, Millis)))
+  override implicit val patienceConfig: PatienceConfig =
+    PatienceConfig(scaled(Span(1, Seconds)), scaled(Span(200, Millis)))
 
   def assertTechnicalErrorDisplayed(path: String)(implicit webDriver: WebDriver): Assertion = probing { _ =>
     currentPath shouldBe path
@@ -53,19 +52,23 @@ trait CommonPage
 
   def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
-  def clickOnEnglishLink()(implicit driver: WebDriver): Unit = probing(_.findElement(By.partialLinkText("English")).click())
+  def clickOnEnglishLink()(implicit driver: WebDriver): Unit = probing(
+    _.findElement(By.partialLinkText("English")).click()
+  )
 
-  def clickOnWelshLink()(implicit driver: WebDriver): Unit = probing(_.findElement(By.partialLinkText("Cymraeg")).click())
+  def clickOnWelshLink()(implicit driver: WebDriver): Unit = probing(
+    _.findElement(By.partialLinkText("Cymraeg")).click()
+  )
 
   def clickViewProgress()(implicit driver: WebDriver): Unit =
-    probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[4]/a")).click())
+    probing(
+      _.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[4]/a"))
+        .click()
+    )
 
-  /**
-   * Probing tries to run `probingF` until until it succeeds. If it doesn't it:
-   * reports what was the page source
-   * and dumps page screenshot
-   * and fails assertion
-   */
+  /** Probing tries to run `probingF` until until it succeeds. If it doesn't it: reports what was the page source and
+    * dumps page screenshot and fails assertion
+    */
   def probing[A](probingF: WebDriver => A)(implicit driver: WebDriver): A = eventually(probingF(driver)).withClue {
     val maybeDumpedFile = takeADump()
     s"""
@@ -75,16 +78,16 @@ trait CommonPage
        |""".stripMargin
   }
 
-  /**
-   * If can it will dump PNG image showing current page in browser.
-   *
-   * @return some uri of the dumped file or none
-   */
+  /** If can it will dump PNG image showing current page in browser.
+    *
+    * @return
+    *   some uri of the dumped file or none
+    */
   def takeADump()(implicit driver: WebDriver): Option[String] = {
-    //original `capture to` relies on side effecting `targetDir`
-    //this is safer implementation
+    // original `capture to` relies on side effecting `targetDir`
+    // this is safer implementation
     val targetDir = "target/ittests-screenshots"
-    val fileName = {
+    val fileName  = {
       val addon = List.fill(5)(Random.nextPrintableChar()).mkString
       s"${this.getClass.getSimpleName}-$addon.png"
     }
@@ -92,13 +95,14 @@ trait CommonPage
       case takesScreenshot: TakesScreenshot =>
         val tmpFile = takesScreenshot.getScreenshotAs(OutputType.FILE)
         val outFile = new java.io.File(targetDir, fileName)
-        new FileOutputStream(outFile)
-          .getChannel
+        new FileOutputStream(outFile).getChannel
           .transferFrom(
-            new FileInputStream(tmpFile).getChannel, 0, Long.MaxValue
+            new FileInputStream(tmpFile).getChannel,
+            0,
+            Long.MaxValue
           )
         Some(outFile.toURI.toString)
-      case _ =>
+      case _                                =>
         logger.warn(s"Could not take screen shot: $fileName")
         None
     }
@@ -106,12 +110,16 @@ trait CommonPage
 
   def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
 
-  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(_.findElement(By.className("govuk-back-link"))
-    .getDomAttribute("href"))
+  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(
+    _.findElement(By.className("govuk-back-link"))
+      .getDomAttribute("href")
+  )
 
   def readMainMessage(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
 
-  def readWarning(implicit webDriver: WebDriver): String = probing(_.findElement(By.className("govuk-warning-text__text")).getText)
+  def readWarning(implicit webDriver: WebDriver): String = probing(
+    _.findElement(By.className("govuk-warning-text__text")).getText
+  )
 
   def readAccName(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
 
@@ -119,35 +127,34 @@ trait CommonPage
 
   def readAccNumber(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
-  def readBuildingSocietyNumber(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("building-society-number")).getText)
+  def readBuildingSocietyNumber(implicit webDriver: WebDriver): String = probing(
+    _.findElement(By.id("building-society-number")).getText
+  )
 
   def readTitle(implicit webDriver: WebDriver): String = webDriver.getTitle
 
-  def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion = {
+  def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion =
     globalErrors shouldBe defined
-  }
 
   def globalErrors(implicit driver: WebDriver): Option[Element] = id("error-summary-display").findElement
 
-  def getByStringIdOption(id: String)(implicit driver: WebDriver): Option[String] = try {
+  def getByStringIdOption(id: String)(implicit driver: WebDriver): Option[String] = try
     Some(driver.findElement(By.id(id)).getText)
-  } catch {
+  catch {
     case _: org.openqa.selenium.NoSuchElementException => None
   }
 
-  def getTextByCss(css: String)(implicit driver: WebDriver): Option[String] = try {
+  def getTextByCss(css: String)(implicit driver: WebDriver): Option[String] = try
     Some(driver.findElement(By.cssSelector(css)).getText)
-  } catch {
+  catch {
     case _: org.openqa.selenium.NoSuchElementException => None
   }
 
-  def containsText(text: String)(implicit driver: WebDriver): Boolean = {
+  def containsText(text: String)(implicit driver: WebDriver): Boolean =
     probing(_.getPageSource.contains(text))
-  }
 
-  def cssCount(css: String)(implicit driver: WebDriver): Int = {
+  def cssCount(css: String)(implicit driver: WebDriver): Int =
     probing(_.findElements(By.cssSelector(css))).size()
-  }
 
   def readMain()(implicit webDriver: WebDriver): String = xpath("""//*[@id="content"]""").element.text
 
@@ -160,14 +167,14 @@ trait CommonPage
     }
   }
 
-  def hasTextHyperLinkedTo(text: String, link: String)(implicit webDriver: WebDriver): Assertion = {
-    probing(_.findElement(By.partialLinkText(text))
-      .getAttribute("href")) shouldBe link
-  }
+  def hasTextHyperLinkedTo(text: String, link: String)(implicit webDriver: WebDriver): Assertion =
+    probing(
+      _.findElement(By.partialLinkText(text))
+        .getAttribute("href")
+    ) shouldBe link
 
-  def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion = {
+  def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion =
     readBackButtonUrl() shouldBe url
-  }
 
   def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
@@ -189,17 +196,19 @@ trait CommonPage
   }
 
   implicit class StringOps(s: String) {
-    /**
-     * Transforms string so it's easier it to compare.
-     * It also replaces `unchecked`
-     *
-     */
+
+    /** Transforms string so it's easier it to compare. It also replaces `unchecked`
+      */
     def stripSpaces(): String = s
-      .replaceAll("unchecked", "") //when you run tests from intellij webdriver.getText adds extra 'unchecked' around selection
-      .replaceAll("[^\\S\\r\\n]+", " ") //replace many consecutive white-spaces (but not new lines) with one space
-      .replaceAll("[\r\n]+", "\n") //replace many consecutive new lines with one new line
-      .split("\n").map(_.trim) //trim each line
-      .filterNot(_ == "") //remove any empty lines
+      .replaceAll(
+        "unchecked",
+        ""
+      )                                 // when you run tests from intellij webdriver.getText adds extra 'unchecked' around selection
+      .replaceAll("[^\\S\\r\\n]+", " ") // replace many consecutive white-spaces (but not new lines) with one space
+      .replaceAll("[\r\n]+", "\n")      // replace many consecutive new lines with one new line
+      .split("\n")
+      .map(_.trim)                      // trim each line
+      .filterNot(_ == "")               // remove any empty lines
       .mkString("\n")
   }
 

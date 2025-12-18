@@ -30,17 +30,16 @@ object InProgress extends CommonDetail {
     containsText("Add bank details") shouldBe result
   }
 
-  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion =
     containsText("You have recently updated your bank account details.") shouldBe result
-  }
 
-  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion =
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
-  }
 
-  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion = {
-    containsText("You’ll continue to receive repayments by cheque until we verify your bank account details.") shouldBe result
-  }
+  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion =
+    containsText(
+      "You’ll continue to receive repayments by cheque until we verify your bank account details."
+    ) shouldBe result
 
   def uniqueToPage(implicit wd: WebDriver): Assertion = {
     readTitle shouldBe "We are processing your VAT repayments - Business tax account - GOV.UK"
@@ -48,7 +47,7 @@ object InProgress extends CommonDetail {
   }
 
   def noRepayments(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
-  def whenpay(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay")).getText)
+  def whenpay(implicit webDriver:      WebDriver): String = probing(_.findElement(By.id("whenpay")).getText)
   def whenpay_desc(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay-desc")).getText)
 
   def suspendedWarning(implicit webDriver: WebDriver): String = Try {
@@ -81,8 +80,7 @@ object InProgress extends CommonDetail {
     idPresent("inprogress-none") shouldBe false
   }
 
-  def countRows(count: Int)(implicit wd: WebDriver): Assertion = {
+  def countRows(count: Int)(implicit wd: WebDriver): Assertion =
     cssCount(".govuk-table__body > .govuk-table__row") shouldBe count
-  }
 
 }

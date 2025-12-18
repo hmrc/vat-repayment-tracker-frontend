@@ -27,7 +27,11 @@ class PayApiSpec extends ItSpec {
 
   "check call to pay-api" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PayApiWireMockResponses.payOk
     val response = payApiConnector.startJourney(10000, vrn).futureValue
     response.nextUrl shouldBe "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"

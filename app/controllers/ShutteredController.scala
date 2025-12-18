@@ -25,11 +25,10 @@ import scala.concurrent.Future
 
 @Singleton
 class ShutteredController @Inject() (
-    cc:   ControllerComponents,
-    view: views.html.shuttered
+  cc:   ControllerComponents,
+  view: views.html.shuttered
 )(implicit message: MessagesApi)
-
-  extends FrontendBaseController(cc) {
+    extends FrontendBaseController(cc) {
 
   private val logger = Logger(this.getClass)
 

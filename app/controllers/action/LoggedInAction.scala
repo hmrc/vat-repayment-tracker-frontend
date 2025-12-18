@@ -29,25 +29,29 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LoggedInAction @Inject() (
-    af:         AuthorisedFunctions,
-    viewConfig: ViewConfig,
-    cc:         MessagesControllerComponents)(implicit ec: ExecutionContext) extends ActionBuilder[LoggedInRequest, AnyContent] {
+class LoggedInAction @Inject() (af: AuthorisedFunctions, viewConfig: ViewConfig, cc: MessagesControllerComponents)(
+  implicit ec: ExecutionContext
+) extends ActionBuilder[LoggedInRequest, AnyContent] {
 
   private val logger = Logger(this.getClass)
 
   override def invokeBlock[A](request: Request[A], block: LoggedInRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    af.authorised().retrieve(Retrievals.allEnrolments) { enrolments =>
-      block(new LoggedInRequest(request, extractVrn(enrolments)))
-    }.recover {
-      case _: NoActiveSession =>
-        Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
-      case e: AuthorisationException =>
-        logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        Redirect(routes.Controller.nonMtdUser.url)
-    }
+    af.authorised()
+      .retrieve(Retrievals.allEnrolments) { enrolments =>
+        block(new LoggedInRequest(request, extractVrn(enrolments)))
+      }
+      .recover {
+        case _: NoActiveSession        =>
+          Redirect(
+            viewConfig.loginUrl,
+            Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online"))
+          )
+        case e: AuthorisationException =>
+          logger.debug(s"Unauthorised because of ${e.reason}, $e")
+          Redirect(routes.Controller.nonMtdUser.url)
+      }
   }
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser

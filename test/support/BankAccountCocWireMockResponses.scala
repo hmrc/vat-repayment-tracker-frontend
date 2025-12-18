@@ -23,15 +23,16 @@ object BankAccountCocWireMockResponses {
 
   val dummyNextUrl: String = "/dummy"
 
-  def bankOk: StubMapping = {
-    stubFor(post(urlEqualTo("/bank-account-coc/start-journey-of-change-bank-account"))
-      .willReturn(aResponse()
-        .withStatus(201)
-        .withBody(
-          s"""
+  def bankOk: StubMapping =
+    stubFor(
+      post(urlEqualTo("/bank-account-coc/start-journey-of-change-bank-account"))
+        .willReturn(
+          aResponse()
+            .withStatus(201)
+            .withBody(s"""
            {"nextUrl":"$dummyNextUrl"}
-       """.stripMargin)))
-
-  }
+       """.stripMargin)
+        )
+    )
 
 }

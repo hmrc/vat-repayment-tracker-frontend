@@ -51,4 +51,3 @@ object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
   }
 
 }
-

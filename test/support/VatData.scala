@@ -23,18 +23,20 @@ import model.vat.{CalendarData, CalendarPeriod, VatDesignatoryDetailsAddress}
 import play.api.libs.json.{JsValue, Json}
 
 object VatData {
-  val vrn: Vrn = Vrn("2345678890")
+  val vrn: Vrn             = Vrn("2345678890")
   val periodKey: PeriodKey = PeriodKey("18AG")
 
-  val calendarPeriod: CalendarPeriod = CalendarPeriod(LocalDate.parse("2016-04-01"), LocalDate.parse("2016-06-30"), None)
-  val previousPeriod1: CalendarPeriod = CalendarPeriod(LocalDate.parse("2016-01-01"), LocalDate.parse("2016-03-31"), Some(LocalDate.parse("2016-04-05")))
-  val previousPeriod2: CalendarPeriod = CalendarPeriod(LocalDate.parse("2015-10-01"), LocalDate.parse("2015-12-31"), Some(LocalDate.parse("2016-01-05")))
+  val calendarPeriod: CalendarPeriod  =
+    CalendarPeriod(LocalDate.parse("2016-04-01"), LocalDate.parse("2016-06-30"), None)
+  val previousPeriod1: CalendarPeriod =
+    CalendarPeriod(LocalDate.parse("2016-01-01"), LocalDate.parse("2016-03-31"), Some(LocalDate.parse("2016-04-05")))
+  val previousPeriod2: CalendarPeriod =
+    CalendarPeriod(LocalDate.parse("2015-10-01"), LocalDate.parse("2015-12-31"), Some(LocalDate.parse("2016-01-05")))
 
   val calendarData: CalendarData = CalendarData(Some(calendarPeriod), Seq(previousPeriod1, previousPeriod2))
 
-  //language=JSON
-  val calendarJson: JsValue = Json.parse(
-    s"""{
+  // language=JSON
+  val calendarJson: JsValue = Json.parse(s"""{
     "staggerCode": "0002",
     "directDebit": {
       "ddiEligibilityInd": true,
@@ -66,9 +68,8 @@ object VatData {
     ]
   }""".stripMargin)
 
-  //language=JSON
-  val calendarCurrentJson: JsValue = Json.parse(
-    s"""{
+  // language=JSON
+  val calendarCurrentJson: JsValue = Json.parse(s"""{
     "staggerCode": "0002",
     "directDebit": {
       "ddiEligibilityInd": true,
@@ -101,11 +102,11 @@ object VatData {
     ]
   }""".stripMargin)
 
-  val vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress = VatDesignatoryDetailsAddress("1 Johnson Close", Some("Stonesfield"), Some("Oxford"), None, None, "OX29 8PP")
+  val vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress =
+    VatDesignatoryDetailsAddress("1 Johnson Close", Some("Stonesfield"), Some("Oxford"), None, None, "OX29 8PP")
 
-  //language=JSON
-  val vatDesignatoryDetailsAddressJson: JsValue = Json.parse(
-    s"""
+  // language=JSON
+  val vatDesignatoryDetailsAddressJson: JsValue = Json.parse(s"""
   {
     "address":{
       "addressLine1":"1 Johnson Close",

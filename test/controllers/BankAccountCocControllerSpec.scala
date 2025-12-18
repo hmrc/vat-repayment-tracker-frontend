@@ -28,7 +28,11 @@ class BankAccountCocControllerSpec extends ItSpec {
 
   "GET /bank-account-coc/start-journey/manage-or-track" - {
     "authorised starts bank account change of circumstances journey" in {
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+      AuthWireMockResponses.authOkWithEnrolments(
+        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+        vrn = vrn,
+        enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+      )
       BankAccountCocWireMockResponses.bankOk
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       AuditWireMockResponses.auditIsAvailable

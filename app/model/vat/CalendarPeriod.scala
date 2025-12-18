@@ -20,10 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CalendarPeriod(periodStartDate:    LocalDate,
-                          periodEndDate:      LocalDate,
-                          returnReceivedDate: Option[LocalDate]
-)
+case class CalendarPeriod(periodStartDate: LocalDate, periodEndDate: LocalDate, returnReceivedDate: Option[LocalDate])
 
 object CalendarPeriod {
   implicit val formats: OFormat[CalendarPeriod] = Json.format[CalendarPeriod]

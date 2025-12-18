@@ -19,9 +19,9 @@ package model.audit
 import play.api.libs.json.{Json, OWrites}
 
 final case class ViewRepaymentStatusAuditDetail(
-    vrn:            String,
-    hasBankDetails: Boolean,
-    repayments:     Seq[Repayment]
+  vrn:            String,
+  hasBankDetails: Boolean,
+  repayments:     Seq[Repayment]
 )
 
 object ViewRepaymentStatusAuditDetail {

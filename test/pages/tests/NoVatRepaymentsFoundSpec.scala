@@ -26,11 +26,15 @@ import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, Paym
 class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path     = s"""/vat-repayment-tracker/show-vrt"""
 
   "1. user is authorised and no financial data found" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
@@ -43,7 +47,11 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   "2. User has no bank details set up and no bank details in flight" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
@@ -60,7 +68,11 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   "3. User has no bank details set up and bank details in flight" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
@@ -77,7 +89,11 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   "4. User has bank details set up and no bank details in flight" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
@@ -94,7 +110,11 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   "5. User has bank details set up and bank details in flight" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
     PaymentsOrchestratorStub.repaymentDetailsNotFound(vrn)
@@ -111,13 +131,18 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
 
   "6. user has payment over 9 months old" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    PaymentsOrchestratorStub.repaymentDetailS1(vrn,
-                                               LocalDate.now().minusMonths(9).minusDays(1).toString,
-                                               REPAYMENT_APPROVED,
-                                               PeriodKey("18AG")
+    PaymentsOrchestratorStub.repaymentDetailS1(
+      vrn,
+      LocalDate.now().minusMonths(9).minusDays(1).toString,
+      REPAYMENT_APPROVED,
+      PeriodKey("18AG")
     )
     login()
     goToViaPath(path)

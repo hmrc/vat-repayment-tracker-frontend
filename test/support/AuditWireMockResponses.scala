@@ -34,10 +34,10 @@ object AuditWireMockResponses extends Matchers {
   def bacWasAudited(details: Map[String, String]): Unit = {
 
     verify(postRequestedFor(urlEqualTo("/write/audit")))
-    val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
+    val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains("initiateChangeVATRepaymentBankAccount"))
     mayPaymentAuditEvent shouldBe defined
-    val jsBody = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
+    val jsBody               = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
 
     details foreach { e =>
       (jsBody \ "detail" \ e._1).as[String] shouldBe e._2
@@ -47,10 +47,10 @@ object AuditWireMockResponses extends Matchers {
 
   def bacWasAuditedNoDetails(): Unit = {
     verify(postRequestedFor(urlEqualTo("/write/audit")))
-    val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
+    val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains("initiateChangeVATRepaymentBankAccount"))
     mayPaymentAuditEvent shouldBe defined
-    val jsBody = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
+    val jsBody               = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
     (jsBody \ "detail").asOpt[String] shouldBe None
     ()
   }
@@ -58,10 +58,10 @@ object AuditWireMockResponses extends Matchers {
   def engagementStatusAudited(transactionName: String, details: Map[String, String]): Unit = {
     verify(postRequestedFor(urlEqualTo("/write/audit")))
 
-    val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
+    val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains(transactionName))
     mayPaymentAuditEvent shouldBe defined
-    val jsBody = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
+    val jsBody               = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
 
     (jsBody \ "auditType").as[String] shouldBe "EngagementStatus"
     (jsBody \ "tags" \ "transactionName").as[String] shouldBe transactionName
@@ -71,13 +71,18 @@ object AuditWireMockResponses extends Matchers {
     }
   }
 
-  def viewRepaymentStatusAudited(transactionName: String, vrn: String, hasBankDetails: Boolean = true, noRepaymentsFound: Boolean = false): Unit = {
+  def viewRepaymentStatusAudited(
+    transactionName:   String,
+    vrn:               String,
+    hasBankDetails:    Boolean = true,
+    noRepaymentsFound: Boolean = false
+  ): Unit = {
     verify(postRequestedFor(urlEqualTo("/write/audit")))
 
-    val auditWrites = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
+    val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains(transactionName))
     mayPaymentAuditEvent shouldBe defined
-    val jsBody = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
+    val jsBody               = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
 
     (jsBody \ "auditType").as[String] shouldBe "ViewRepaymentStatus"
     (jsBody \ "tags" \ "transactionName").as[String] shouldBe transactionName

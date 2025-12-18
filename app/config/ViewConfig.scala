@@ -21,58 +21,57 @@ import model.Vrn
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 case class ViewConfig(
-    appName:                       String,
-    authUrl:                       String,
-    frontendBaseUrl:               String,
-    loginUrl:                      String,
-    viewVatAccount:                String,
-    updateCorrespondenceAddress:   String,
-    feedbackBaseUrl:               String,
-    contactBaseUrl:                String,
-    paymentHistoryUrl:             String,
-    btaUrl:                        String,
-    signupUrl:                     String,
-    variationsUrlPrefix:           String,
-    accessibilityStatementBaseUrl: String,
-    accessibilityStatementPath:    String,
-    isShuttered:                   Boolean,
-    timeoutDialogTimeout:          Int,
-    timeoutDialogCountdown:        Int,
-    webchatUrl:                    String,
-    basGatewayBaseUrl:             String
+  appName:                       String,
+  authUrl:                       String,
+  frontendBaseUrl:               String,
+  loginUrl:                      String,
+  viewVatAccount:                String,
+  updateCorrespondenceAddress:   String,
+  feedbackBaseUrl:               String,
+  contactBaseUrl:                String,
+  paymentHistoryUrl:             String,
+  btaUrl:                        String,
+  signupUrl:                     String,
+  variationsUrlPrefix:           String,
+  accessibilityStatementBaseUrl: String,
+  accessibilityStatementPath:    String,
+  isShuttered:                   Boolean,
+  timeoutDialogTimeout:          Int,
+  timeoutDialogCountdown:        Int,
+  webchatUrl:                    String,
+  basGatewayBaseUrl:             String
 ) {
 
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
-  val feedbackUrl = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
-  val showResultsUrl = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
+  val feedbackUrl          = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
+  val showResultsUrl       = s"$frontendBaseUrl/vat-repayment-tracker/show-vrt"
 
-  def vatVariationsUrl(vrn: Vrn) = s"${variationsUrlPrefix}/vat-variations/org/${vrn.value}/introduction"
+  def vatVariationsUrl(vrn: Vrn) = s"$variationsUrlPrefix/vat-variations/org/${vrn.value}/introduction"
 
   def signOutWithRedirect(continueUrl: String): String =
     basGatewayBaseUrl + s"/bas-gateway/sign-out-without-state?continue=$frontendBaseUrl$continueUrl"
 
   @Inject
   def this(servicesConfig: ServicesConfig) = this(
-    appName                       = servicesConfig.getString("appName"),
-    authUrl                       = servicesConfig.baseUrl("auth"),
-    frontendBaseUrl               = servicesConfig.getString("urls.frontend-base"),
-    loginUrl                      = servicesConfig.getString("urls.login"),
-    viewVatAccount                = servicesConfig.getString("urls.view-vat-account"),
-    updateCorrespondenceAddress   = servicesConfig.getString("urls.update-correspondence-address"),
-    feedbackBaseUrl               = servicesConfig.getString("urls.feedback-base"),
-    contactBaseUrl                = servicesConfig.getString("urls.contact-frontend"),
-    paymentHistoryUrl             = servicesConfig.getString("urls.payments-history"),
-    btaUrl                        = servicesConfig.getString("urls.bta"),
-    signupUrl                     = servicesConfig.getString("urls.signup"),
-    variationsUrlPrefix           = servicesConfig.getString("urls.variationsUrlPrefix"),
-    isShuttered                   = servicesConfig.getBoolean("is-shuttered"),
-    timeoutDialogTimeout          = servicesConfig.getInt("timeout-dialog.timeout"),
-    timeoutDialogCountdown        = servicesConfig.getInt("timeout-dialog.countdown"),
+    appName = servicesConfig.getString("appName"),
+    authUrl = servicesConfig.baseUrl("auth"),
+    frontendBaseUrl = servicesConfig.getString("urls.frontend-base"),
+    loginUrl = servicesConfig.getString("urls.login"),
+    viewVatAccount = servicesConfig.getString("urls.view-vat-account"),
+    updateCorrespondenceAddress = servicesConfig.getString("urls.update-correspondence-address"),
+    feedbackBaseUrl = servicesConfig.getString("urls.feedback-base"),
+    contactBaseUrl = servicesConfig.getString("urls.contact-frontend"),
+    paymentHistoryUrl = servicesConfig.getString("urls.payments-history"),
+    btaUrl = servicesConfig.getString("urls.bta"),
+    signupUrl = servicesConfig.getString("urls.signup"),
+    variationsUrlPrefix = servicesConfig.getString("urls.variationsUrlPrefix"),
+    isShuttered = servicesConfig.getBoolean("is-shuttered"),
+    timeoutDialogTimeout = servicesConfig.getInt("timeout-dialog.timeout"),
+    timeoutDialogCountdown = servicesConfig.getInt("timeout-dialog.countdown"),
     accessibilityStatementBaseUrl = servicesConfig.getString("accessibility-statement-frontend.url"),
-    accessibilityStatementPath    = servicesConfig.getString("accessibility-statement-frontend.path"),
-    webchatUrl                    = servicesConfig.getString("urls.webchatUrl"),
-    basGatewayBaseUrl             = servicesConfig.baseUrl("bas-gateway-frontend")
-
+    accessibilityStatementPath = servicesConfig.getString("accessibility-statement-frontend.path"),
+    webchatUrl = servicesConfig.getString("urls.webchatUrl"),
+    basGatewayBaseUrl = servicesConfig.baseUrl("bas-gateway-frontend")
   )
 
 }

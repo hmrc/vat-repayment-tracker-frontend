@@ -55,11 +55,15 @@ class CustomerInformationSpec extends UnitSpec {
 
   "Deregistration data included" - {
     "to json" in {
-      Json.toJson(DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered) shouldBe DesData.approvedInformationDeregisteredJson
+      Json.toJson(
+        DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered
+      ) shouldBe DesData.approvedInformationDeregisteredJson
 
     }
     "from json" in {
-      DesData.approvedInformationDeregisteredJson.as[CustomerInformation] shouldBe DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered
+      DesData.approvedInformationDeregisteredJson.as[
+        CustomerInformation
+      ] shouldBe DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered
     }
   }
 
@@ -94,18 +98,15 @@ class CustomerInformationSpec extends UnitSpec {
 
   "Deregistration" - {
     "empty Deregistration data should NOT be deregistered" in {
-      DesData.approvedCustomerInformation
-        .isDeregistered shouldBe false
+      DesData.approvedCustomerInformation.isDeregistered shouldBe false
     }
 
     "Deregistration data with deregisteredReason should be deregistered" in {
-      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered
-        .isDeregistered shouldBe true
+      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregistered.isDeregistered shouldBe true
     }
 
     "Deregistration data with NO deregisteredReason should NOT be deregistered" in {
-      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregisteredNoReason
-        .isDeregistered shouldBe false
+      DesData.DeregisteredCustomerInformation.approvedCustomerInformationDeregisteredNoReason.isDeregistered shouldBe false
     }
   }
 }

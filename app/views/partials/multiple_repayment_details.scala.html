@@ -31,30 +31,30 @@
         @if(appender == "_inprogress") { @Messages("multiple_repayment_details.repayments_in_progress") } else { @Messages("multiple_repayment_details.completed_repayment_caption") }
     </caption>
     <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">@Messages("multiple_repayment_details.received_on")</th>
-      <th scope="col" class="govuk-table__header">@Messages("multiple_repayment_details.accounting_period")</th>
-      <th scope="col" class="govuk-table__header" >@Messages("multiple_repayment_details.amount_claimed")</th>
-        <th scope="col" class="govuk-table__header" ><p class="govuk-visually-hidden">Status</p></th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    @for(onePayment <- repayments) {
-    <tr class="govuk-table__row">
-        <td  class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
-      <td class="govuk-body">@onePayment.period</td>
-      <td class="govuk-body">£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
-        <td><a class="govuk-link" href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
-            @if(appender == "_completed"){
-            <span  aria-hidden="true">@Messages("multiple_repayment_details.view_history")</span>
-            <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.history_accounting_period") @onePayment.period</span>
-            } else{
-            <span  aria-hidden="true">@Messages("multiple_repayment_details.view_progress")</span>
-            <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.view_progress_accounting_period") @onePayment.period</span>
-            }
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">@Messages("multiple_repayment_details.received_on")</th>
+            <th scope="col" class="govuk-table__header">@Messages("multiple_repayment_details.accounting_period")</th>
+            <th scope="col" class="govuk-table__header" >@Messages("multiple_repayment_details.amount_claimed")</th>
+            <th scope="col" class="govuk-table__header" ><p class="govuk-visually-hidden">Status</p></th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @for(onePayment <- repayments) {
+            <tr class="govuk-table__row">
+                <td  class="add-bold">@{CommonFormatter.formatDate(onePayment.returnCreationDate)}</td>
+                <td class="govuk-body">@onePayment.period</td>
+                <td class="govuk-body">£@{CommonFormatter.formatAmount(onePayment.amount)}</td>
+                <td><a class="govuk-link" href='@routes.Controller.viewProgress(PeriodKey(onePayment.periodKey))' >
+                    @if(appender == "_completed"){
+                    <span  aria-hidden="true">@Messages("multiple_repayment_details.view_history")</span>
+                    <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.history_accounting_period") @onePayment.period</span>
+                    } else{
+                    <span  aria-hidden="true">@Messages("multiple_repayment_details.view_progress")</span>
+                    <span class="govuk-visually-hidden">@Messages("multiple_repayment_details.view_progress_accounting_period") @onePayment.period</span>
+                    }
 
-        </a></td>
-    </tr>
-    }
-  </tbody>
+                </a></td>
+            </tr>
+        }
+    </tbody>
 </table>

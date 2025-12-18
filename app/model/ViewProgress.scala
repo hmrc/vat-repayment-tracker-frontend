@@ -22,12 +22,14 @@ import model.des.RiskingStatus
 import java.time.LocalDate
 
 final case class ViewProgress(
-    amount:                 BigDecimal,
-    returnCreationDate:     LocalDate,
-    estimatedRepaymentDate: LocalDate,
-    period:                 String,
-    whatsHappenedSoFar:     NonEmptyList[WhatsHappendSoFar]) {
+  amount:                 BigDecimal,
+  returnCreationDate:     LocalDate,
+  estimatedRepaymentDate: LocalDate,
+  period:                 String,
+  whatsHappenedSoFar:     NonEmptyList[WhatsHappendSoFar]
+) {
 
   val isComplete: Boolean = whatsHappenedSoFar.exists(_.isComplete)
-  val repaymentSuspended: Boolean = whatsHappenedSoFar.exists(_.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED)
+
+  val repaymentSuspended: Boolean = whatsHappenedSoFar.head.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED
 }

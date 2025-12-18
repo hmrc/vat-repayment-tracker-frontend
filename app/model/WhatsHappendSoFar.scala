@@ -21,13 +21,13 @@ import model.des.RiskingStatus
 import java.time.LocalDate
 
 final case class WhatsHappendSoFar(
-    riskingStatus:     RiskingStatus,
-    date:              LocalDate,
-    title:             String,
-    description:       String,
-    amountDescription: String,
-    pageTitle:         String,
-    isComplete:        Boolean       = false
+  riskingStatus:     RiskingStatus,
+  date:              LocalDate,
+  title:             String,
+  description:       String,
+  amountDescription: String,
+  pageTitle:         String,
+  isComplete:        Boolean = false
 ) {
   val complete: String = if (isComplete) "_Y" else ""
 }

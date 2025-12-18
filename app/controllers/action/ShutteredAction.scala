@@ -25,9 +25,8 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ShutteredAction @Inject() (
-    viewConfig: ViewConfig,
-    cc:         MessagesControllerComponents) extends ActionBuilder[Request, AnyContent] {
+class ShutteredAction @Inject() (viewConfig: ViewConfig, cc: MessagesControllerComponents)
+    extends ActionBuilder[Request, AnyContent] {
 
   private val logger = Logger(this.getClass)
 

@@ -19,12 +19,12 @@ package model.audit
 import play.api.libs.json.{Json, OFormat}
 
 final case class Repayment(
-    returnCreationDate:     String,
-    sentForRiskingDate:     Option[String],
-    lastUpdateReceivedDate: Option[String],
-    periodKey:              String,
-    riskingStatus:          String,
-    originalPostingAmount:  BigDecimal
+  returnCreationDate:     String,
+  sentForRiskingDate:     Option[String],
+  lastUpdateReceivedDate: Option[String],
+  periodKey:              String,
+  riskingStatus:          String,
+  originalPostingAmount:  BigDecimal
 )
 
 object Repayment {

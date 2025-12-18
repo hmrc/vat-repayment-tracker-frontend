@@ -26,7 +26,7 @@ import support.{AuditWireMockResponses, AuthWireMockResponses, DeregisteredBehav
 import java.time.LocalDate
 
 class ControllerSpec extends ItSpec with DeregisteredBehaviour {
-  import support.VatData.{vrn, periodKey}
+  import support.VatData.{periodKey, vrn}
 
   val loginUrl: String = configMap("urls.login").toString
 
@@ -35,7 +35,11 @@ class ControllerSpec extends ItSpec with DeregisteredBehaviour {
   "GET /view-repayment-account" - {
     "authorised views repayment account" in {
       AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+      AuthWireMockResponses.authOkWithEnrolments(
+        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+        vrn = vrn,
+        enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+      )
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       val result = controller.viewRepaymentAccount(fakeRequest)
       status(result) shouldBe Status.OK
@@ -48,7 +52,11 @@ class ControllerSpec extends ItSpec with DeregisteredBehaviour {
   "GET /show-vrt" - {
     "authorised show vrt" in {
       AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+      AuthWireMockResponses.authOkWithEnrolments(
+        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+        vrn = vrn,
+        enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+      )
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
       VatRepaymentTrackerBackendWireMockResponses.storeOk()
@@ -58,7 +66,11 @@ class ControllerSpec extends ItSpec with DeregisteredBehaviour {
     }
     "authorised no-mtd, no vat repayments" in {
       AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatVarEnrolmentKey)
+      AuthWireMockResponses.authOkWithEnrolments(
+        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+        vrn = vrn,
+        enrolment = EnrolmentKeys.vatVarEnrolmentKey
+      )
       PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
       PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
       VatRepaymentTrackerBackendWireMockResponses.storeOk()

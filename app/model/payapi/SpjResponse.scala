@@ -19,8 +19,8 @@ package model.payapi
 import play.api.libs.json.{Json, OFormat}
 
 final case class SpjResponse(
-    journeyId: String,
-    nextUrl:   String
+  journeyId: String,
+  nextUrl:   String
 )
 
 object SpjResponse {

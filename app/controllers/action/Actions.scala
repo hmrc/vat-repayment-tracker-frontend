@@ -26,9 +26,10 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 
 class Actions @Inject() (
-    authoriseAction: AuthenticatedAction,
-    loggedInAction:  LoggedInAction,
-    shutteredAction: ShutteredAction)(implicit ec: ExecutionContext) {
+  authoriseAction: AuthenticatedAction,
+  loggedInAction:  LoggedInAction,
+  shutteredAction: ShutteredAction
+)(implicit ec: ExecutionContext) {
 
   private val logger = Logger(this.getClass)
 
@@ -36,24 +37,25 @@ class Actions @Inject() (
 
   val securedAction: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction
 
-  val securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = shutteredAction andThen authoriseAction andThen validateMtdVrn
+  val securedActionMtdVrnCheck: ActionBuilder[AuthenticatedRequest, AnyContent] =
+    shutteredAction andThen authoriseAction andThen validateMtdVrn
 
-  val securedActionMtdVrnCheckWithoutShutterCheck: ActionBuilder[AuthenticatedRequest, AnyContent] = authoriseAction andThen validateMtdVrn
+  val securedActionMtdVrnCheckWithoutShutterCheck: ActionBuilder[AuthenticatedRequest, AnyContent] =
+    authoriseAction andThen validateMtdVrn
 
   private def validateMtdVrn: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
     new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
 
-      override protected def refine[A](request: AuthenticatedRequest[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
-
+      override protected def refine[A](
+        request: AuthenticatedRequest[A]
+      ): Future[Either[Result, AuthenticatedRequest[A]]] =
         request.typedVrn match {
           case TypedVrn.MtdVrn(_) => Future.successful(Right(request))
-          case _ =>
+          case _                  =>
             logger.debug(s"User logged in with ${request.typedVrn.vrn.value}, this is non-mtd")
             if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
             Future.successful(Left(Redirect(routes.Controller.nonMtdUser.url)))
         }
-
-      }
 
       override protected def executionContext: ExecutionContext = ec
     }

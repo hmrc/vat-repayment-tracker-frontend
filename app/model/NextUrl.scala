@@ -23,4 +23,3 @@ case class NextUrl(nextUrl: String)
 object NextUrl {
   implicit val format: Format[NextUrl] = Json.format[NextUrl]
 }
-

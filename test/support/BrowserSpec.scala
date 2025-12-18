@@ -49,8 +49,8 @@ class BrowserSpec extends ItSpec {
   def goToViaPath(path: String): Unit =
     webDriver.navigate().to(s"$webdriverUrl$path")
 
-  lazy val cookieCrypto: SessionCookieCrypto = injector.instanceOf[SessionCookieCrypto]
-  lazy val cookieBaker: SessionCookieBaker = injector.instanceOf[SessionCookieBaker]
+  lazy val cookieCrypto: SessionCookieCrypto          = injector.instanceOf[SessionCookieCrypto]
+  lazy val cookieBaker: SessionCookieBaker            = injector.instanceOf[SessionCookieBaker]
   lazy val cookieHeaderEncoding: CookieHeaderEncoding = injector.instanceOf[CookieHeaderEncoding]
 
   protected def login(): Unit = {
@@ -59,17 +59,19 @@ class BrowserSpec extends ItSpec {
   }
 
   def logInResponse(
-      cookieCrypto: SessionCookieCrypto,
-      baker:        SessionCookieBaker
+    cookieCrypto: SessionCookieCrypto,
+    baker:        SessionCookieBaker
   ): StubMapping = {
-    //Implementation based on CookieCryptoFilter trait and auth-login-stub project
-    val session = Session(Map(
-      SessionKeys.authToken -> "Token"
-    ))
+    // Implementation based on CookieCryptoFilter trait and auth-login-stub project
+    val session = Session(
+      Map(
+        SessionKeys.authToken -> "Token"
+      )
+    )
 
     val rawCookie = baker.encodeAsCookie(session)
-    val crypted = cookieCrypto.crypto.encrypt(PlainText(rawCookie.value))
-    val cookie = rawCookie.copy(value = crypted.value)
+    val crypted   = cookieCrypto.crypto.encrypt(PlainText(rawCookie.value))
+    val cookie    = rawCookie.copy(value = crypted.value)
 
     val headerValue: String = cookieHeaderEncoding.encodeSetCookieHeader(List(cookie))
 

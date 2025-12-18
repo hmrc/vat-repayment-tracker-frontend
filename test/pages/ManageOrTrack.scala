@@ -24,34 +24,32 @@ object ManageOrTrack extends CommonPage {
   val path = "/vat-repayment-tracker/manage-or-track-vrt"
 
   def assertPageIsDisplayed(
-      ddDisplayed:     Boolean = false,
-      bankDisplayed:   Boolean = false,
-      noddDisplayed:   Boolean = false,
-      nobankDisplayed: Boolean = false,
-      isShuttered:     Boolean = false
-  )
-    (implicit wd: WebDriver): Assertion =
-    {
-      currentPath shouldBe s"""$path"""
+    ddDisplayed:     Boolean = false,
+    bankDisplayed:   Boolean = false,
+    noddDisplayed:   Boolean = false,
+    nobankDisplayed: Boolean = false,
+    isShuttered:     Boolean = false
+  )(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe s"""$path"""
 
-      if (isShuttered) {
-        readTitle shouldBe "Manage Direct Debit and repayment bank account - Business tax account - GOV.UK"
-        readMainMessage shouldBe "Manage Direct Debit and repayment bank account"
-      } else {
-        readTitle shouldBe "Manage Direct Debit and repayment bank account or track repayments - Business tax account - GOV.UK"
-        readMainMessage shouldBe "Manage Direct Debit and repayment bank account or track repayments"
-      }
-
-      if (ddDisplayed) dd shouldBe "Manage your Direct Debit"
-      if (bankDisplayed) bank shouldBe "Manage your repayment bank account"
-      if (!(isShuttered)) vrt shouldBe "Track your VAT repayments"
-
-      idPresent("dd-label") shouldBe ddDisplayed
-      idPresent("bank-label") shouldBe bankDisplayed
-      idPresent("nobank-label") shouldBe nobankDisplayed
-      idPresent("nodd-label") shouldBe noddDisplayed
-
+    if (isShuttered) {
+      readTitle shouldBe "Manage Direct Debit and repayment bank account - Business tax account - GOV.UK"
+      readMainMessage shouldBe "Manage Direct Debit and repayment bank account"
+    } else {
+      readTitle shouldBe "Manage Direct Debit and repayment bank account or track repayments - Business tax account - GOV.UK"
+      readMainMessage shouldBe "Manage Direct Debit and repayment bank account or track repayments"
     }
+
+    if (ddDisplayed) dd shouldBe "Manage your Direct Debit"
+    if (bankDisplayed) bank shouldBe "Manage your repayment bank account"
+    if (!isShuttered) vrt shouldBe "Track your VAT repayments"
+
+    idPresent("dd-label") shouldBe ddDisplayed
+    idPresent("bank-label") shouldBe bankDisplayed
+    idPresent("nobank-label") shouldBe nobankDisplayed
+    idPresent("nodd-label") shouldBe noddDisplayed
+
+  }
 
   def dd(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("dd-label")).getText)
 

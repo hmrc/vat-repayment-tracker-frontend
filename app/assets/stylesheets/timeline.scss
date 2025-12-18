@@ -5,8 +5,8 @@
 
     border-left: 3px solid $govuk-blue;
 
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
 
     &-event {
       @include _space(4, 'padding', 'left');
@@ -15,7 +15,7 @@
       list-style: none;
 
       &:last-child {
-        padding-bottom: 0;
+        padding-bottom: 0px;
       }
 
     }
@@ -27,7 +27,7 @@
           background-color: $govuk-blue;
           content: '';
           height: 3px;
-          left: 0;
+          left: 0px;
           top: .5em;
           position: absolute;
           width: map-get($govuk-spacing-points, 4) * 0.6;

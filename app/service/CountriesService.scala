@@ -280,7 +280,8 @@ class CountriesService {
     Country("ZW", "Zimbabwe")
   )
 
-  def getCountryName(countryCode: String): String = {
-    countries.find(f => f.countryCode == countryCode).fold(throw new RuntimeException(s"Unrecognised country code: $countryCode"))(_.countryName)
-  }
+  def getCountryName(countryCode: String): String =
+    countries
+      .find(f => f.countryCode == countryCode)
+      .fold(throw new RuntimeException(s"Unrecognised country code: $countryCode"))(_.countryName)
 }

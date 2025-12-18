@@ -39,55 +39,64 @@ class Auditor @Inject() (auditConnector: AuditConnector)(implicit ec: ExecutionC
   private val logger = Logger(this.getClass)
 
   def audit(
-      inProgress:      List[RepaymentDataNoRiskingStatus],
-      auditTypeIn:     String,
-      transactionName: String,
-      vrn:             Vrn
+    inProgress:      List[RepaymentDataNoRiskingStatus],
+    auditTypeIn:     String,
+    transactionName: String,
+    vrn:             Vrn
   )(implicit request: Request[_]): Future[AuditResult] = {
     logger.debug(s"About to audit ${RepaymentDataNoRiskingStatus.toString()}, $auditTypeIn, $transactionName")
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
-      auditType   = auditTypeIn,
-      tags        = Auditor.auditTags(request, transactionName),
-      detail      = convertToMap(inProgress) ++ identifierDetails(vrn)
+      auditType = auditTypeIn,
+      tags = Auditor.auditTags(request, transactionName),
+      detail = convertToMap(inProgress) ++ identifierDetails(vrn)
     )
 
     auditConnector.sendEvent(event)
 
   }
 
-  def auditEngagement(transactionName: String, engmtType: String, vrn: Option[Vrn])(implicit request: Request[_]): Future[AuditResult] = {
+  def auditEngagement(transactionName: String, engmtType: String, vrn: Option[Vrn])(implicit
+    request: Request[_]
+  ): Future[AuditResult] = {
     val event = DataEvent(
       auditSource = "vat-repayment-tracker-frontend",
-      auditType   = "EngagementStatus",
-      tags        = Auditor.auditTags(request, transactionName),
-      detail      = Auditor.engagementDetail(engmtType) ++ vrn.map(identifierDetails).getOrElse(Map.empty)
+      auditType = "EngagementStatus",
+      tags = Auditor.auditTags(request, transactionName),
+      detail = Auditor.engagementDetail(engmtType) ++ vrn.map(identifierDetails).getOrElse(Map.empty)
     )
 
     auditConnector.sendEvent(event)
   }
 
-  def auditViewRepaymentStatus(transactionName: String, vrn: Vrn, repaymentDetails: Option[Seq[RepaymentDetailData]], hasBankDetails: Boolean)(implicit request: Request[_]): Future[AuditResult] = {
+  def auditViewRepaymentStatus(
+    transactionName:  String,
+    vrn:              Vrn,
+    repaymentDetails: Option[Seq[RepaymentDetailData]],
+    hasBankDetails:   Boolean
+  )(implicit request: Request[_]): Future[AuditResult] = {
     val repayments: Seq[Repayment] = repaymentDetails.fold(Seq.empty[Repayment])(_.map { repayment =>
       Repayment(
-        returnCreationDate     = repayment.returnCreationDate.toString,
-        sentForRiskingDate     = repayment.sentForRiskingDate.map(_.toString),
+        returnCreationDate = repayment.returnCreationDate.toString,
+        sentForRiskingDate = repayment.sentForRiskingDate.map(_.toString),
         lastUpdateReceivedDate = repayment.lastUpdateReceivedDate.map(_.toString),
-        periodKey              = repayment.periodKey,
-        riskingStatus          = repayment.riskingStatus.entryName,
-        originalPostingAmount  = repayment.originalPostingAmount
+        periodKey = repayment.periodKey,
+        riskingStatus = repayment.riskingStatus.entryName,
+        originalPostingAmount = repayment.originalPostingAmount
       )
     })
 
     val detail = ViewRepaymentStatusAuditDetail(
-      vrn            = vrn.value, hasBankDetails = hasBankDetails, repayments = repayments
+      vrn = vrn.value,
+      hasBankDetails = hasBankDetails,
+      repayments = repayments
     )
 
     val event = ExtendedDataEvent(
       auditSource = "vat-repayment-tracker-frontend",
-      auditType   = "ViewRepaymentStatus",
-      tags        = Auditor.auditTags(request, transactionName),
-      detail      = Json.toJson(detail)
+      auditType = "ViewRepaymentStatus",
+      tags = Auditor.auditTags(request, transactionName),
+      detail = Json.toJson(detail)
     )
 
     auditConnector.sendExtendedEvent(event)
@@ -95,24 +104,22 @@ class Auditor @Inject() (auditConnector: AuditConnector)(implicit ec: ExecutionC
 
   private def identifierDetails(vrn: Vrn): Map[String, String] = Map("vrn" -> vrn.value)
 
-  private def convertToMap(inProgressList: List[RepaymentDataNoRiskingStatus]): Map[String, String] = {
-    inProgressList
-      .zipWithIndex
-      .map {
-        case (row, index) =>
-          val k = s"inprogress_$index"
-          val v = s"returnCreationDate: ${CommonFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${CommonFormatter.formatAmount(row.amount)}"
-          k -> v
-      }.toMap
-  }
+  private def convertToMap(inProgressList: List[RepaymentDataNoRiskingStatus]): Map[String, String] =
+    inProgressList.zipWithIndex.map { case (row, index) =>
+      val k = s"inprogress_$index"
+      val v =
+        s"returnCreationDate: ${CommonFormatter.formatDate(row.returnCreationDate)}, periodKey: ${row.periodKey}, amount: ${CommonFormatter
+            .formatAmount(row.amount)}"
+      k -> v
+    }.toMap
 }
 
 object Auditor {
 
   object `repayment-type` {
     val one_in_progress_multiple_delayed = "one_in_progress_multiple_delayed"
-    val none_in_progress = "none_in_progress"
-    val in_progress_classic = "in_progress_classic"
+    val none_in_progress                 = "none_in_progress"
+    val in_progress_classic              = "in_progress_classic"
   }
 
   def auditTags(request: Request[_], transactionName: String): Map[String, String] = {
@@ -120,18 +127,18 @@ object Auditor {
     val hc: HeaderCarrier = RequestSupport.hc(request)
     Map(
       "Akamai-Reputation" -> hc.akamaiReputation.map(_.value).getOrElse("-"),
-      "X-Request-ID" -> hc.requestId.map(_.value).getOrElse("-"),
-      "X-Session-ID" -> hc.sessionId.map(_.value).getOrElse("-"),
-      "clientIP" -> hc.trueClientIp.getOrElse("-"),
-      "clientPort" -> hc.trueClientPort.getOrElse("-"),
-      "deviceID" -> hc.deviceID.getOrElse("-"),
-      "path" -> request.path,
-      "transactionName" -> transactionName)
+      "X-Request-ID"      -> hc.requestId.map(_.value).getOrElse("-"),
+      "X-Session-ID"      -> hc.sessionId.map(_.value).getOrElse("-"),
+      "clientIP"          -> hc.trueClientIp.getOrElse("-"),
+      "clientPort"        -> hc.trueClientPort.getOrElse("-"),
+      "deviceID"          -> hc.deviceID.getOrElse("-"),
+      "path"              -> request.path,
+      "transactionName"   -> transactionName
+    )
   }
 
-  def engagementDetail(engmtType: String): Map[String, String] = {
+  def engagementDetail(engmtType: String): Map[String, String] =
     Map(
       "engmtType" -> engmtType
     )
-  }
 }

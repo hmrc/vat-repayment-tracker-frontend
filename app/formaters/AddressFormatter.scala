@@ -40,15 +40,12 @@ class AddressFormatter @Inject() (countriesService: CountriesService) {
 
   }
 
-  def getFormattedAddressNonMtd(address: VatDesignatoryDetailsAddress): String = {
-
+  def getFormattedAddressNonMtd(address: VatDesignatoryDetailsAddress): String =
     address.addressLine1 + lineReturn +
       address.addressLine2.fold("")(_ + lineReturn) +
       address.addressLine3.fold("")(_ + lineReturn) +
       address.addressLine4.fold("")(_ + lineReturn) +
       address.addressLine5.fold("")(_ + lineReturn) +
       address.postcode
-
-  }
 
 }

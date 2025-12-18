@@ -31,8 +31,8 @@ trait DeregisteredBehaviour { self: ItSpec =>
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
       wireMockBaseUrlAsString = wireMockBaseUrlAsString,
-      vrn                     = vrn,
-      enrolment               = EnrolmentKeys.mtdVatEnrolmentKey
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
     )
     PaymentsOrchestratorStub.customerDataOkDeregistered(vrn)
     val result = action(fakeRequest)

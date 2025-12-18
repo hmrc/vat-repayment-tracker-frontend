@@ -31,26 +31,27 @@ import scala.concurrent.{ExecutionContext, Future}
 
 //@Singleton
 class BankAccountCocConnector @Inject() (
-    servicesConfig: ServicesConfig,
-    httpClient:     HttpClientV2,
-    configuration:  Configuration)
-  (implicit ec: ExecutionContext) {
+  servicesConfig: ServicesConfig,
+  httpClient:     HttpClientV2,
+  configuration:  Configuration
+)(implicit ec: ExecutionContext) {
 
   import req.RequestSupport._
 
   private val logger = Logger(this.getClass)
 
   private val serviceUrl: String = servicesConfig.baseUrl("bank-account-coc")
-  private val viewUrl: String = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
-  private val bUrl: String = configuration.get[String]("urls.bank-back-url")
+  private val viewUrl: String    = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
+  private val bUrl: String       = configuration.get[String]("urls.bank-back-url")
 
   def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
 
-    val bkUrl: String = s"$bUrl${returnPage.value}"
+    val bkUrl: String                              = s"$bUrl${returnPage.value}"
     logger.debug(s"Using back url : $bkUrl")
-    val viewRepaymentRequest: ViewRepaymentRequest = ViewRepaymentRequest(vrn.value, isAgent = false, bkUrl, bkUrl, bkUrl)
+    val viewRepaymentRequest: ViewRepaymentRequest =
+      ViewRepaymentRequest(vrn.value, isAgent = false, bkUrl, bkUrl, bkUrl)
     logger.debug(s"Calling bank-account-coc start journey for vrn $vrn")
-    val startJourneyURL: String = s"$serviceUrl$viewUrl"
+    val startJourneyURL: String                    = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
     httpClient.post(url"$startJourneyURL").withBody(Json.toJson(viewRepaymentRequest)).execute[NextUrl]
 

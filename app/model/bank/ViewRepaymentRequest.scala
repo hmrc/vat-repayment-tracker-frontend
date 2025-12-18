@@ -18,12 +18,14 @@ package model.bank
 
 import play.api.libs.json.{Format, Json}
 
-final case class ViewRepaymentRequest(vrn:            String,
-                                      isAgent:        Boolean,
-                                      returnUrl:      String,
-                                      backUrl:        String,
-                                      convenienceUrl: String,
-                                      origin:         String  = "VRT")
+final case class ViewRepaymentRequest(
+  vrn:            String,
+  isAgent:        Boolean,
+  returnUrl:      String,
+  backUrl:        String,
+  convenienceUrl: String,
+  origin:         String = "VRT"
+)
 
 object ViewRepaymentRequest {
   implicit val format: Format[ViewRepaymentRequest] = Json.format[ViewRepaymentRequest]
