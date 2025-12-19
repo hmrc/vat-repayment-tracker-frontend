@@ -32,6 +32,21 @@ final case class RepaymentDetailData(
   originalPostingAmount:  BigDecimal
 ) {
 
+  @SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
+  def getAmountForDisplay(status: RiskingStatus): BigDecimal =
+    if (
+      Seq(
+        CLAIM_QUERIED,
+        REPAYMENT_APPROVED,
+        INITIAL,
+        SENT_FOR_RISKING
+      ).contains(status)
+    ) {
+      originalPostingAmount
+    } else {
+      vatToPay_BOX5
+    }
+
   // For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
   val sorted: Int =
     riskingStatus match {

@@ -116,19 +116,13 @@ class VrtService @Inject() (
       val clearingDate            = desFormatter.getClearingDate(transactionForPeriodKey)
 
       RepaymentData(
-        periodFormatter.formatPeriodKey(rd.periodKey),
-        if (
-          rd.riskingStatus == RiskingStatus.CLAIM_QUERIED
-          || rd.riskingStatus == RiskingStatus.REPAYMENT_APPROVED
-          || rd.riskingStatus == RiskingStatus.SENT_FOR_RISKING
-          || rd.riskingStatus == RiskingStatus.INITIAL
-        ) rd.originalPostingAmount
-        else rd.vatToPay_BOX5,
-        rd.returnCreationDate,
-        rd.lastUpdateReceivedDate,
-        rd.riskingStatus,
-        rd.periodKey,
-        clearingDate
+        period = periodFormatter.formatPeriodKey(rd.periodKey),
+        amount = rd.getAmountForDisplay(rd.riskingStatus),
+        returnCreationDate = rd.returnCreationDate,
+        lastUpdateReceivedDate = rd.lastUpdateReceivedDate,
+        riskingStatus = rd.riskingStatus,
+        periodKey = rd.periodKey,
+        clearingDate = clearingDate
       )
     }
 

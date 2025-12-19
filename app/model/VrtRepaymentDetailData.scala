@@ -18,7 +18,7 @@ package model
 
 import java.time.LocalDate
 
-import model.des.{RepaymentDetailData, RiskingStatus}
+import model.des.RepaymentDetailData
 import play.api.libs.json.{Json, OFormat}
 
 final case class VrtRepaymentDetailData(
@@ -26,22 +26,7 @@ final case class VrtRepaymentDetailData(
   creationDate:         LocalDate,
   vrn:                  Vrn,
   repaymentDetailsData: RepaymentDetailData
-) {
-  @SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
-  def getAmountForDisplay(riskingStatus: RiskingStatus): BigDecimal =
-    if (
-      Seq(
-        RiskingStatus.CLAIM_QUERIED,
-        RiskingStatus.REPAYMENT_APPROVED,
-        RiskingStatus.INITIAL,
-        RiskingStatus.SENT_FOR_RISKING
-      ).contains(riskingStatus)
-    ) {
-      repaymentDetailsData.originalPostingAmount
-    } else {
-      repaymentDetailsData.vatToPay_BOX5
-    }
-}
+)
 
 object VrtRepaymentDetailData {
   implicit val format: OFormat[VrtRepaymentDetailData] = Json.format[VrtRepaymentDetailData]

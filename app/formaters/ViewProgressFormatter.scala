@@ -20,7 +20,7 @@ import cats.data.NonEmptyList
 import cats.kernel.Order
 import config.ViewConfig
 import model._
-import model.des.RiskingStatus.{ADJUSMENT_TO_TAX_DUE, CLAIM_QUERIED, INITIAL, REPAYMENT_ADJUSTED, REPAYMENT_APPROVED, REPAYMENT_SUSPENDED, SENT_FOR_RISKING}
+import model.des.RiskingStatus._
 import model.des._
 import play.api.Logger
 import play.api.i18n.Messages
@@ -67,7 +67,7 @@ class ViewProgressFormatter @Inject() (
       latestUpdate.repaymentDetailsData.supplementDelayDays
     )
     val viewProgress: ViewProgress = ViewProgress(
-      amount = latestUpdate.getAmountForDisplay(latestRiskingStatus),
+      amount = latestUpdate.repaymentDetailsData.getAmountForDisplay(latestRiskingStatus),
       latestUpdate.repaymentDetailsData.returnCreationDate,
       estRepaymentDate,
       periodFormatter.formatPeriodKey(periodKey.value),
