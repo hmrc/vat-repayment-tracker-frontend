@@ -23,28 +23,28 @@ import scala.collection.immutable
 object RiskingStatus extends PlayEnum[RiskingStatus] {
   case object INITIAL extends RiskingStatus {
     val complete = false
-  } //S001
+  } // S001
 
   case object SENT_FOR_RISKING extends RiskingStatus {
     val complete = false
-  } //S002
+  } // S002
 
   case object CLAIM_QUERIED extends RiskingStatus {
     val complete = false
-  } //S003
+  } // S003
 
   case object REPAYMENT_ADJUSTED extends RiskingStatus {
     val complete = true
-  } //S004
+  } // S004
 
-  //This is spelt wrong in the DES schema !!!
+  // This is spelt wrong in the DES schema !!!
   case object ADJUSMENT_TO_TAX_DUE extends RiskingStatus {
     val complete = true
-  } //S005
+  } // S005
 
   case object REPAYMENT_APPROVED extends RiskingStatus {
     val complete = true
-  } //S006
+  } // S006
 
   case object REPAYMENT_SUSPENDED extends RiskingStatus {
     val complete = false

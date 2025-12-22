@@ -31,17 +31,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PayApiConnector @Inject() (
-    servicesConfig: ServicesConfig,
-    httpClient:     HttpClientV2,
-    configuration:  Configuration)
-  (implicit ec: ExecutionContext) {
+  servicesConfig: ServicesConfig,
+  httpClient:     HttpClientV2,
+  configuration:  Configuration
+)(implicit ec: ExecutionContext) {
 
   import req.RequestSupport._
 
   private val logger = Logger(this.getClass)
 
   private val serviceUrl: String = servicesConfig.baseUrl("pay-api")
-  private val viewUrl: String = configuration.get[String]("microservice.services.pay-api.sj-url")
+  private val viewUrl: String    = configuration.get[String]("microservice.services.pay-api.sj-url")
   private val payBackUrl: String = configuration.get[String]("urls.pay-back-url")
 
   def startJourney(amountInPence: Long, vrn: Vrn)(implicit request: Request[_]): Future[SpjResponse] = {
@@ -49,7 +49,7 @@ class PayApiConnector @Inject() (
     val journeyRequest: SpjRequestBtaVat = SpjRequestBtaVat(amountInPence, payBackUrl, payBackUrl, vrn)
     logger.debug(s"Using back url : $payBackUrl")
     logger.debug(s"Calling pay-api start journey for vrn $vrn")
-    val startJourneyURL: String = s"$serviceUrl$viewUrl"
+    val startJourneyURL: String          = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling pay-api start journey for vrn with url $startJourneyURL)")
     httpClient.post(url"$startJourneyURL").withBody(Json.toJson(journeyRequest)).execute[SpjResponse]
   }

@@ -1,13 +1,12 @@
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 val appName = "vat-repayment-tracker-frontend"
-val scalaV = "2.13.18"
-scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
+    scalaVersion := "2.13.18",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
     retrieveManaged := false,
@@ -15,7 +14,7 @@ lazy val microservice = Project(appName, file("."))
     (Compile / doc / sources) := Seq.empty
   )
   .settings(majorVersion := 1)
-  .settings(ScalariformSettings())
+  .settings(scalafmtOnCompile := true)
   .settings(ScoverageSettings())
   .settings(SbtUpdatesSettings.sbtUpdatesSettings)
   .settings(

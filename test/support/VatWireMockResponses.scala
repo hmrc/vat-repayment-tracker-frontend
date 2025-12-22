@@ -22,37 +22,43 @@ import model.Vrn
 
 object VatWireMockResponses {
 
-  def calendarOk(vrn: Vrn, isCurrent: Boolean = true): StubMapping = {
-    stubFor(get(urlEqualTo(s"/vat/${vrn.value}/calendar"))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          if (isCurrent) VatData.calendarCurrentJson.toString() else VatData.calendarJson.toString()
-        )))
+  def calendarOk(vrn: Vrn, isCurrent: Boolean = true): StubMapping =
+    stubFor(
+      get(urlEqualTo(s"/vat/${vrn.value}/calendar"))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(
+              if (isCurrent) VatData.calendarCurrentJson.toString() else VatData.calendarJson.toString()
+            )
+        )
+    )
 
-  }
+  def calendar404(vrn: Vrn): StubMapping =
+    stubFor(
+      get(urlEqualTo(s"/vat/${vrn.value}/calendar"))
+        .willReturn(
+          aResponse()
+            .withStatus(404)
+        )
+    )
 
-  def calendar404(vrn: Vrn): StubMapping = {
-    stubFor(get(urlEqualTo(s"/vat/${vrn.value}/calendar"))
-      .willReturn(aResponse()
-        .withStatus(404)
-      ))
-  }
+  def designatoryDetailsOk(vrn: Vrn): StubMapping =
+    stubFor(
+      get(urlEqualTo(s"/vat/${vrn.value}/designatoryDetails"))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(VatData.vatDesignatoryDetailsAddressJson.toString())
+        )
+    )
 
-  def designatoryDetailsOk(vrn: Vrn): StubMapping = {
-    stubFor(get(urlEqualTo(s"/vat/${vrn.value}/designatoryDetails"))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          VatData.vatDesignatoryDetailsAddressJson.toString())))
-
-  }
-
-  def designatoryDetails404(vrn: Vrn): StubMapping = {
-    stubFor(get(urlEqualTo(s"/vat/${vrn.value}/designatoryDetails"))
-      .willReturn(aResponse()
-        .withStatus(404)
-      ))
-  }
+  def designatoryDetails404(vrn: Vrn): StubMapping =
+    stubFor(
+      get(urlEqualTo(s"/vat/${vrn.value}/designatoryDetails"))
+        .willReturn(
+          aResponse()
+            .withStatus(404)
+        )
+    )
 }
-

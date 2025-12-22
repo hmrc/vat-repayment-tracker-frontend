@@ -35,15 +35,19 @@ object ViewRepaymentAccount extends CommonPage {
     readMainMessage shouldBe s"""$heading"""
 
     if (heading === "The bank account details for your VAT repayments are being updated") {
-      readWarning should include("The updated bank account details will appear in your tax account by 13 April 2019, but may appear sooner.")
+      readWarning should include(
+        "The updated bank account details will appear in your tax account by 13 April 2019, but may appear sooner."
+      )
     } else if (heading === "Mae’r manylion cyfrif banc ar gyfer eich ad-daliadau TAW yn cael eu diweddaru") {
-      readWarning should include("Bydd y manylion banc sydd wedi’u diweddaru yn ymddangos yn eich cyfrif treth erbyn 13 Ebrill 2019, ond mae’n bosibl y byddant yn ymddangos yn gynt.")
+      readWarning should include(
+        "Bydd y manylion banc sydd wedi’u diweddaru yn ymddangos yn eich cyfrif treth erbyn 13 Ebrill 2019, ond mae’n bosibl y byddant yn ymddangos yn gynt."
+      )
     }
 
     readAccName should include("Account holder")
-    readAccNumber should include ("****2222")
-    readAccSortCode should include ("66 77 88")
-    readBuildingSocietyNumber should include ("12345678")
+    readAccNumber should include("****2222")
+    readAccSortCode should include("66 77 88")
+    readBuildingSocietyNumber should include("12345678")
   }
 
 }

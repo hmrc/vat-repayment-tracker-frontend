@@ -18,12 +18,16 @@ package model
 
 import java.time.LocalDate
 
-import play.api.libs.json.{Json, OFormat}
 import model.des.RepaymentDetailData
+import play.api.libs.json.{Json, OFormat}
 
-final case class VrtRepaymentDetailData(_id: Option[String], creationDate: LocalDate, vrn: Vrn, repaymentDetailsData: RepaymentDetailData)
+final case class VrtRepaymentDetailData(
+  _id:                  Option[String],
+  creationDate:         LocalDate,
+  vrn:                  Vrn,
+  repaymentDetailsData: RepaymentDetailData
+)
 
 object VrtRepaymentDetailData {
   implicit val format: OFormat[VrtRepaymentDetailData] = Json.format[VrtRepaymentDetailData]
-
 }

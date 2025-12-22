@@ -11,9 +11,9 @@ h1, .heading-h1,
 h2, .heading-h2,
 h3,  .heading-h3,
 h4, h5, h6 {
-  margin: 0;
+  margin: 0px;
   font-weight: 700;
-  line-height: 1.04;
+  line-height: 1.04em;
 }
 h1, .heading-h1 { //govuk-heading-xl
   font-size: 32px;
@@ -34,7 +34,7 @@ h2, .heading-h2 { //govuk-heading-l
 h3, .heading-h3 { //govuk-heading-m
   font-size: 18px;
   margin-bottom: 15px;
-  line-height: 1.1;
+  line-height: 1.1em;
   @include break(desktop) {
     font-size: 20px;
     font-size: 24px;
@@ -45,10 +45,10 @@ p, .govuk-body {
   line-height: 1.25;
   font-weight: 400;
   margin-bottom: 15px;
-  margin-top: 0;
+  margin-top: 0px;
   @include break(desktop) {
     font-size: 19px;
-    line-height: 1.31579;
+    line-height: 1.31579em;
     margin-bottom: 20px;
   }
 }
@@ -78,22 +78,22 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 .centered-content {
-    margin: 0 15px;
+    margin: 0px 15px;
     max-width: 960px;
     @include break(tablet) {
-        margin: 0 30px;
+        margin: 0px 30px;
     }
     @include break(max) {
-        margin: 0 auto;
+        margin: 0px auto;
     }
 }
 .service-info {
     .logo { display: none; }
     .beta-banner {
-        padding: 10px 0;
+        padding: 10px 0px;
         border-bottom: 1px solid #b1b4b6;
         > p {
-            margin-bottom: 0;
+            margin-bottom: 0px;
         }
     }
 }
@@ -110,14 +110,14 @@ a,
   &:focus {
     color: $govuk-focus-text-colour;
     background-color: $govuk-focus-colour;
-    box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+    box-shadow: 0px -2px $govuk-focus-colour, 0px 4px $govuk-focus-text-colour;
     text-decoration: none;
     outline: 3px solid transparent;
   }
 }
 
 .multiple-choice [type=radio]:focus+label::before {
-    box-shadow: 0 0 0 4px $govuk-focus-colour;
+    box-shadow: 0px 0px 0px 4px $govuk-focus-colour;
 }
 
 
@@ -126,7 +126,7 @@ a,
 
   &-table {
     margin-bottom: 20px;
-    
+
     @include break(desktop) {
       margin-bottom: 30px;
     }
@@ -285,8 +285,8 @@ a,
 }
 
 .govuk-breadcrumbs__list {
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   list-style-type: none;
 }
 
@@ -314,18 +314,18 @@ a,
   left: -3.31px;
   width: 7px;
   height: 7px;
-  margin: auto 0;
+  margin: auto 0px;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
   border: solid;
-  border-width: 1px 1px 0 0;
+  border-width: 1px 1px 0px 0px;
   border-color: #6f777b;
 }
 
 .govuk-breadcrumbs__list-item:first-child {
-  margin-left: 0;
-  padding-left: 0;
+  margin-left: 0px;
+  padding-left: 0px;
 }
 
 .govuk-breadcrumbs__list-item:first-child:before {
@@ -370,9 +370,9 @@ a,
   font-size: 1rem;
   line-height: 1.25;
   color: #0b0c0c;
-  margin-top: 0;
+  margin-top: 0px;
   margin-bottom: 15px;
-  padding-left: 0;
+  padding-left: 0px;
   list-style-type: none;
 }
 

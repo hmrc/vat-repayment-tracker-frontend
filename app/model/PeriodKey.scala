@@ -25,7 +25,7 @@ final case class PeriodKey(value: String)
 
 object PeriodKey {
 
-  implicit val format: Format[PeriodKey] = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
+  implicit val format: Format[PeriodKey]          = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
   implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
 
 }

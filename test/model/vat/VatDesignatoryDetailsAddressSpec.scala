@@ -21,7 +21,8 @@ import support.{UnitSpec, VatData}
 class VatDesignatoryDetailsAddressSpec extends UnitSpec {
 
   "from json" in {
-    VatData.vatDesignatoryDetailsAddressJson.as[VatDesignatoryDetailsAddress] shouldBe VatData.vatDesignatoryDetailsAddress
+    VatData.vatDesignatoryDetailsAddressJson
+      .as[VatDesignatoryDetailsAddress] shouldBe VatData.vatDesignatoryDetailsAddress
   }
 
 }

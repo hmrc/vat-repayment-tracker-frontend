@@ -31,12 +31,12 @@ import support._
 class InProgressSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = "/vat-repayment-tracker/show-vrt"
+  val path     = "/vat-repayment-tracker/show-vrt"
 
   val periodKey: PeriodKey = PeriodKey("18AG")
-  val ft_404: Int = 1
-  val ft_credit: Int = 2
-  val ft_debit: Int = 3
+  val ft_404: Int          = 1
+  val ft_credit: Int       = 2
+  val ft_debit: Int        = 3
 
   def details(date: String): Map[String, String] = Map(
     ("inprogress_0", s"returnCreationDate: $date, periodKey: 18AA, amount: 5.56"),
@@ -71,7 +71,7 @@ class InProgressSpec extends BrowserSpec {
 
   "3. user is authorised and financial data found but partial" in {
     setup(partialBankDetails = true)
-    InProgress.assertPageIsDisplayed(amount         = "£0.00", partialAccount = true)
+    InProgress.assertPageIsDisplayed(amount = "£0.00", partialAccount = true)
     InProgress.uniqueToPage
 
     expectEngagementStatusAudited()
@@ -86,7 +86,7 @@ class InProgressSpec extends BrowserSpec {
 
   "5. user is authorised and address data found" in {
     setup(useBankDetails = false)
-    InProgress.assertPageIsDisplayed(checkBank    = false, checkAddress = true, amount = "£0.00")
+    InProgress.assertPageIsDisplayed(checkBank = false, checkAddress = true, amount = "£0.00")
     InProgress.uniqueToPage
 
     expectEngagementStatusAudited()
@@ -107,7 +107,11 @@ class InProgressSpec extends BrowserSpec {
 
   "7. check negative amount" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey, negativeAmt = true)
     PaymentsOrchestratorStub.financialsOkCredit(vrn)
@@ -133,14 +137,14 @@ class InProgressSpec extends BrowserSpec {
 
   "10. click clickManageAccount" in {
     BankAccountCocWireMockResponses.bankOk
-    setup(ft              = ft_debit, useBankDetails = false, singleRepayment = false)
+    setup(ft = ft_debit, useBankDetails = false, singleRepayment = false)
     InProgress.clickAddBankDetails
     AuditWireMockResponses.bacWasAudited(details(formatDate(LocalDate.now())))
   }
 
   "11. click view repayment account then clickManageAccount" in {
     BankAccountCocWireMockResponses.bankOk
-    setup(ft              = ft_debit, singleRepayment = false)
+    setup(ft = ft_debit, singleRepayment = false)
     InProgress.clickManageAccount
     InProgress.clickCallBac
     AuditWireMockResponses.bacWasAudited(details(formatDate(LocalDate.now())))
@@ -148,13 +152,13 @@ class InProgressSpec extends BrowserSpec {
 
   "12. display Submit VAT Return CTA if repayments are suspended" in {
     BankAccountCocWireMockResponses.bankOk
-    setup(ft      = ft_debit, status1 = RiskingStatus.REPAYMENT_SUSPENDED)
+    setup(ft = ft_debit, status1 = RiskingStatus.REPAYMENT_SUSPENDED)
     InProgress.containsSuspendedWarning(result = true)
   }
 
   "13. don't display Submit VAT Return CTA if no repayments suspended" in {
     BankAccountCocWireMockResponses.bankOk
-    setup(ft              = ft_debit, singleRepayment = false)
+    setup(ft = ft_debit, singleRepayment = false)
     InProgress.containsSuspendedWarning(result = false)
   }
 
@@ -199,10 +203,19 @@ class InProgressSpec extends BrowserSpec {
 
   "18. Status = REPAYMENT_ADJUSTED and no clearing date" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
     // check that we don't get two rows in the in progress table for the initial and repayment adjusted statuses
-    PaymentsOrchestratorStub.repaymentDetailS2(vrn, LocalDate.now().toString, RiskingStatus.INITIAL, RiskingStatus.REPAYMENT_ADJUSTED)
+    PaymentsOrchestratorStub.repaymentDetailS2(
+      vrn,
+      LocalDate.now().toString,
+      RiskingStatus.INITIAL,
+      RiskingStatus.REPAYMENT_ADJUSTED
+    )
 
     PaymentsOrchestratorStub.financialsNotFound(vrn)
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
@@ -211,7 +224,7 @@ class InProgressSpec extends BrowserSpec {
     InProgress.uniqueToPage
     InProgress.checktabs
 
-    val table = webDriver.findElement(By.cssSelector("table.govuk-table"))
+    val table         = webDriver.findElement(By.cssSelector("table.govuk-table"))
     val tableBodyRows = table.findElements(By.cssSelector("tbody.govuk-table__body > tr.govuk-table__row"))
     tableBodyRows.size() shouldBe 1
   }
@@ -229,25 +242,29 @@ class InProgressSpec extends BrowserSpec {
   }
 
   "21. Multiple payments with different period keys: Status = CLAIM_QUERIED & Status = REPAYMENT_APPROVED with no clearing date" in {
-    setup(singleRepayment     = false, ft = ft_404, differentPeriodKeys = true)
+    setup(singleRepayment = false, ft = ft_404, differentPeriodKeys = true)
     InProgress.uniqueToPage
     InProgress.checktabs
     InProgress.countRows(2)
   }
 
   private def setup(
-      useBankDetails:      Boolean       = true,
-      partialBankDetails:  Boolean       = false,
-      singleRepayment:     Boolean       = true,
-      ft:                  Int           = ft_404,
-      status1:             RiskingStatus = INITIAL,
-      enrolmentIn:         String        = EnrolmentKeys.mtdVatEnrolmentKey,
-      inflight:            Boolean       = false,
-      differentPeriodKeys: Boolean       = false
+    useBankDetails:      Boolean = true,
+    partialBankDetails:  Boolean = false,
+    singleRepayment:     Boolean = true,
+    ft:                  Int = ft_404,
+    status1:             RiskingStatus = INITIAL,
+    enrolmentIn:         String = EnrolmentKeys.mtdVatEnrolmentKey,
+    inflight:            Boolean = false,
+    differentPeriodKeys: Boolean = false
   ): Unit = {
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = enrolmentIn)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = enrolmentIn
+    )
     if (useBankDetails) {
       if (partialBankDetails)
         PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
@@ -267,11 +284,13 @@ class InProgressSpec extends BrowserSpec {
     else if (!singleRepayment && !differentPeriodKeys)
       PaymentsOrchestratorStub.repaymentDetailsMultipleInProgress(vrn, LocalDate.now().toString)
     else if (!singleRepayment && differentPeriodKeys)
-      PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(LocalDate.now().toString,
-                                                                 LocalDate.now().minusDays(20).toString,
-                                                                 CLAIM_QUERIED,
-                                                                 REPAYMENT_APPROVED,
-                                                                 vrn)
+      PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(
+        LocalDate.now().toString,
+        LocalDate.now().minusDays(20).toString,
+        CLAIM_QUERIED,
+        REPAYMENT_APPROVED,
+        vrn
+      )
 
     ft match {
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)

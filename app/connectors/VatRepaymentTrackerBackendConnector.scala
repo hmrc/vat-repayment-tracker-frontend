@@ -32,10 +32,9 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatRepaymentTrackerBackendConnector @Inject() (
-    servicesConfig: ServicesConfig,
-    httpClient:     HttpClientV2)
-  (implicit ec: ExecutionContext) {
+class VatRepaymentTrackerBackendConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClientV2)(implicit
+  ec: ExecutionContext
+) {
 
   private val serviceURL: String = servicesConfig.baseUrl("vat-repayment-tracker-backend")
 
@@ -51,9 +50,11 @@ class VatRepaymentTrackerBackendConnector @Inject() (
   }
 
   def find(vrn: Vrn, periodKey: PeriodKey)(implicit request: Request[_]): Future[List[VrtRepaymentDetailData]] = {
-    logger.debug(s"Calling vat-repayment-tracker-backend find with vrn :${vrn.value} and periodKey:  ${periodKey.value}")
+    logger.debug(
+      s"Calling vat-repayment-tracker-backend find with vrn :${vrn.value} and periodKey:  ${periodKey.value}"
+    )
 
-    val periodEncoded = UriEncoding.encodePathSegment(periodKey.value, SC.UTF_8)
+    val periodEncoded      = UriEncoding.encodePathSegment(periodKey.value, SC.UTF_8)
     val findRDDUrl: String = s"$serviceURL/vat-repayment-tracker-backend/find/vrn/${vrn.value}/$periodEncoded"
     logger.debug(s"""calling vat-repayment-tracker-backend find with url $findRDDUrl""")
 

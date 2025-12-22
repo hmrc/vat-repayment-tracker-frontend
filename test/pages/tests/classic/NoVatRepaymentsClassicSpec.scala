@@ -23,11 +23,15 @@ import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, VatW
 class NoVatRepaymentsClassicSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path     = s"""/vat-repayment-tracker/show-vrt"""
 
   "1. user is authorised and no vat repayments found" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.vatDecEnrolmentKey
+    )
     VatWireMockResponses.calendar404(vrn)
     VatWireMockResponses.designatoryDetailsOk(vrn)
     login()
@@ -35,7 +39,10 @@ class NoVatRepaymentsClassicSpec extends BrowserSpec {
     NoVatRepaymentsClassic.assertPageIsDisplayed()
     NoVatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress"))
+    AuditWireMockResponses.engagementStatusAudited(
+      "showVrt",
+      Map("vrn" -> vrn.value, "engmtType" -> "none_in_progress")
+    )
 
   }
 

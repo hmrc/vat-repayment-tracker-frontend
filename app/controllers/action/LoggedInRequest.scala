@@ -19,6 +19,5 @@ package controllers.action
 import model.TypedVrn
 import play.api.mvc.{Request, WrappedRequest}
 
-final class LoggedInRequest[A](val request:  Request[A],
-                               val typedVrn: Option[TypedVrn]
-) extends WrappedRequest[A](request)
+final class LoggedInRequest[A](val request: Request[A], val typedVrn: Option[TypedVrn])
+    extends WrappedRequest[A](request)

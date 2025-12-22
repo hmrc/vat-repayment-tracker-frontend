@@ -22,6 +22,6 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ViewsHelpers @Inject() (
-    //copied from uk.gov.hmrc.play.views.html.helpers
-    val form: FormWithCSRF
+  // copied from uk.gov.hmrc.play.views.html.helpers
+  val form: FormWithCSRF
 )

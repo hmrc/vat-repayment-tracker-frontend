@@ -26,17 +26,17 @@ import support._
 class InProgressCompletedSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = "/vat-repayment-tracker/show-vrt"
+  val path     = "/vat-repayment-tracker/show-vrt"
 
-  val ft_404: Int = 1
+  val ft_404: Int    = 1
   val ft_credit: Int = 2
-  val ft_debit: Int = 3
+  val ft_debit: Int  = 3
 
   def expectEngagementStatusAudited(): Unit =
     AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value)
 
   "1. user is authorised and financial data found" in {
-    setup(ft                      = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
+    setup(ft = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
     InProgress.uniqueToPage
     InProgressCompleted.checktabs
     InProgressCompleted.breadCrumbsExists
@@ -83,7 +83,7 @@ class InProgressCompletedSpec extends BrowserSpec {
   }
 
   "6. click completed link" in {
-    setup(ft                      = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
+    setup(ft = ft_debit, financialDataPeriodKeys = Seq("18AJ"))
     InProgress.clickCompleted
     Completed.uniqueToPage
     InProgressCompleted.checktabs
@@ -100,51 +100,54 @@ class InProgressCompletedSpec extends BrowserSpec {
   }
 
   private def setup(
-      useBankDetails:          Boolean     = true,
-      partialBankDetails:      Boolean     = false,
-      ft:                      Int         = ft_404,
-      inPast:                  Boolean     = false,
-      inflight:                Boolean     = false,
-      financialDataPeriodKeys: Seq[String] = Seq("18AG")): Unit =
-    {
-      VatRepaymentTrackerBackendWireMockResponses.storeOk()
-      AuditWireMockResponses.auditIsAvailable
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
-      if (useBankDetails) {
-        if (partialBankDetails)
-          PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
-        else if (inflight)
-          PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
-        else
-          PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-      } else {
-        if (inflight)
-          PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
-        else
-          PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-      }
-
-      if (inPast)
-        PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(
-          LocalDate.now().toString,
-          LocalDate.now().minusDays(70).toString,
-          INITIAL,
-          ADJUSMENT_TO_TAX_DUE,
-          vrn
-        )
+    useBankDetails:          Boolean = true,
+    partialBankDetails:      Boolean = false,
+    ft:                      Int = ft_404,
+    inPast:                  Boolean = false,
+    inflight:                Boolean = false,
+    financialDataPeriodKeys: Seq[String] = Seq("18AG")
+  ): Unit = {
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
+    AuditWireMockResponses.auditIsAvailable
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
+    if (useBankDetails) {
+      if (partialBankDetails)
+        PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
+      else if (inflight)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
       else
-        PaymentsOrchestratorStub.repaymentDetails3Inprogree1Completed(vrn, LocalDate.now())
-
-      ft match {
-        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn, financialDataPeriodKeys)
-        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn, financialDataPeriodKeys)
-        case other       => throw new IllegalArgumentException(s"no ft match for $other")
-      }
-
-      login()
-      goToViaPath(path)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    } else {
+      if (inflight)
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+      else
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
     }
 
-}
+    if (inPast)
+      PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(
+        LocalDate.now().toString,
+        LocalDate.now().minusDays(70).toString,
+        INITIAL,
+        ADJUSMENT_TO_TAX_DUE,
+        vrn
+      )
+    else
+      PaymentsOrchestratorStub.repaymentDetails3Inprogree1Completed(vrn, LocalDate.now())
 
+    ft match {
+      case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+      case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn, financialDataPeriodKeys)
+      case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn, financialDataPeriodKeys)
+      case other       => throw new IllegalArgumentException(s"no ft match for $other")
+    }
+
+    login()
+    goToViaPath(path)
+  }
+
+}

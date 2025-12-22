@@ -21,18 +21,17 @@ import support.TestHelper.ErrorResponse
 
 trait TestHelper {
 
-  def errorResponse(url: String) = {
+  def errorResponse(url: String) =
     Json.toJson(ErrorResponse(404, "URI not found", requested = Some(url)))
-  }
 
 }
 
 object TestHelper {
   case class ErrorResponse(
-      statusCode:  Int,
-      message:     String,
-      xStatusCode: Option[String] = None,
-      requested:   Option[String] = None
+    statusCode:  Int,
+    message:     String,
+    xStatusCode: Option[String] = None,
+    requested:   Option[String] = None
   )
 
   object ErrorResponse {

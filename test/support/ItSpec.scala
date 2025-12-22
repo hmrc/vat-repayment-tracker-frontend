@@ -38,16 +38,15 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import scala.annotation.unused
 import scala.concurrent.ExecutionContext
 
-/**
- * This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
- */
+/** This is common spec for every test case which brings all of useful routines we want to use in our scenarios.
+  */
 trait ItSpec
-  extends AnyFreeSpec
-  with RichMatchers
-  with BeforeAndAfterEach
-  with GuiceOneServerPerSuite
-  with WireMockSupport
-  with Matchers {
+    extends AnyFreeSpec
+    with RichMatchers
+    with BeforeAndAfterEach
+    with GuiceOneServerPerSuite
+    with WireMockSupport
+    with Matchers {
 
   lazy val frozenZonedDateTime: ZonedDateTime = {
     val formatter = DateTimeFormatter.ISO_DATE_TIME
@@ -56,10 +55,10 @@ trait ItSpec
 
   implicit lazy val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
-  lazy val servicesConfig: ServicesConfig = fakeApplication().injector.instanceOf[ServicesConfig]
-  lazy val config: Configuration = fakeApplication().injector.instanceOf[Configuration]
-  lazy val env: Environment = fakeApplication().injector.instanceOf[Environment]
-  def frozenTimeString: String = "2027-11-02T16:33:51.880"
+  lazy val servicesConfig: ServicesConfig    = fakeApplication().injector.instanceOf[ServicesConfig]
+  lazy val config: Configuration             = fakeApplication().injector.instanceOf[Configuration]
+  lazy val env: Environment                  = fakeApplication().injector.instanceOf[Environment]
+  def frozenTimeString: String               = "2027-11-02T16:33:51.880"
   lazy val overridingsModule: AbstractModule = new AbstractModule {
 
     override def configure(): Unit = ()
@@ -75,33 +74,31 @@ trait ItSpec
 
   val baseUrl: String = s"http://localhost:$WireMockSupport.port"
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(
-    timeout  = scaled(Span(3, Seconds)),
-    interval = scaled(Span(300, Millis)))
+  override implicit val patienceConfig: PatienceConfig =
+    PatienceConfig(timeout = scaled(Span(3, Seconds)), interval = scaled(Span(300, Millis)))
 
   implicit val emptyHC: HeaderCarrier = HeaderCarrier()
 
   def httpClient: HttpClientV2 = fakeApplication().injector.instanceOf[HttpClientV2]
 
-  override def fakeApplication(): Application = {
+  override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(configMap)
       .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
       .build()
-  }
 
   def configMap: Map[String, Any] = Map[String, Any](
-    "microservice.services.auth.port" -> WireMockSupport.port,
-    "microservice.services.payments-orchestrator.port" -> WireMockSupport.port,
-    "microservice.services.direct-debit-backend.port" -> WireMockSupport.port,
-    "microservice.services.bank-account-coc.port" -> WireMockSupport.port,
+    "microservice.services.auth.port"                          -> WireMockSupport.port,
+    "microservice.services.payments-orchestrator.port"         -> WireMockSupport.port,
+    "microservice.services.direct-debit-backend.port"          -> WireMockSupport.port,
+    "microservice.services.bank-account-coc.port"              -> WireMockSupport.port,
     "microservice.services.vat-repayment-tracker-backend.port" -> WireMockSupport.port,
-    "microservice.services.pay-api.port" -> WireMockSupport.port,
-    "auditing.consumer.baseUri.port" -> WireMockSupport.port,
-    "microservice.services.vat.port" -> WireMockSupport.port,
-    "urls.login" -> "http://localhost:11111/auth-login-stub/gg-sign-in",
-    "urls.frontend-base" -> "http://localhost:9863",
-    "auditing.enabled" -> true
+    "microservice.services.pay-api.port"                       -> WireMockSupport.port,
+    "auditing.consumer.baseUri.port"                           -> WireMockSupport.port,
+    "microservice.services.vat.port"                           -> WireMockSupport.port,
+    "urls.login"                                               -> "http://localhost:11111/auth-login-stub/gg-sign-in",
+    "urls.frontend-base"                                       -> "http://localhost:9863",
+    "auditing.enabled"                                         -> true
   )
 
   def injector: Injector = app.injector

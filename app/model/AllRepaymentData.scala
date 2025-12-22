@@ -17,7 +17,7 @@
 package model
 
 final case class AllRepaymentData(
-    hasSuspendedPayment:     Boolean,
-    inProgressRepaymentData: List[RepaymentDataNoRiskingStatus],
-    completedRepaymentData:  List[RepaymentDataNoRiskingStatus]
+  hasSuspendedPayment:     Boolean,
+  inProgressRepaymentData: List[RepaymentDataNoRiskingStatus],
+  completedRepaymentData:  List[RepaymentDataNoRiskingStatus]
 )

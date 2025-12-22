@@ -28,9 +28,9 @@ class PeriodFormatter {
   def formatPeriodKey(periodKey: String)(implicit messages: Messages): String = {
     if (periodKey.length != 4) throw new RuntimeException(s"Invalid length periodkey: $periodKey")
 
-    //starts at 0!
-    val char3 = periodKey.charAt(2)
-    val char4 = periodKey.charAt(3)
+    // starts at 0!
+    val char3   = periodKey.charAt(2)
+    val char4   = periodKey.charAt(3)
     val quarter = periodKey.takeRight(2)
 
     val year = periodKey.take(2)
@@ -49,7 +49,7 @@ class PeriodFormatter {
 
     logger.debug(s"Called formatPeriodKeyMonthly with $char4, $yearString")
 
-    val year = ("20" + yearString).toInt
+    val year                = ("20" + yearString).toInt
     val monthString: String = char4 match {
       case 'A' => Messages("month.january")
       case 'B' => if (isLeapYear(year)) Messages("month.february_leap") else Messages("month.february")
@@ -63,7 +63,7 @@ class PeriodFormatter {
       case 'J' => Messages("month.october")
       case 'K' => Messages("month.november")
       case 'L' => Messages("month.december")
-      case _ =>
+      case _   =>
         logger.warn(s"invalid periodKey for formatPeriodKeyMonthly, could not match month: $char4")
         ""
 
@@ -80,7 +80,8 @@ class PeriodFormatter {
 
     val monthString: String = quarter match {
       case "A4" => Messages("quarter.JanuaryQuarter")
-      case "B4" => if (isLeapYear(year)) Messages("quarter.FebruaryQuarter_leap") else Messages("quarter.FebruaryQuarter")
+      case "B4" =>
+        if (isLeapYear(year)) Messages("quarter.FebruaryQuarter_leap") else Messages("quarter.FebruaryQuarter")
       case "C1" => Messages("quarter.MarchQuarter")
       case "A1" => Messages("quarter.AprilQuarter")
       case "B1" => Messages("quarter.MayQuarter")
@@ -92,7 +93,7 @@ class PeriodFormatter {
       case "B3" => Messages("quarter.NovemberQuarter")
       case "C4" => Messages("quarter.DecemberQuarter")
     }
-    val returnStr = s"$monthString $year"
+    val returnStr           = s"$monthString $year"
     logger.debug(s"Translated to $returnStr")
     returnStr
 
@@ -102,10 +103,12 @@ class PeriodFormatter {
 
     logger.debug(s"Called formatPeriodKeyYearly with $char4, $year")
 
-    val yearString = if (char4 == 'A') s"20$year" else {
-      val nextyear = year.toInt + 1
-      s"20$nextyear"
-    }
+    val yearString          =
+      if (char4 == 'A') s"20$year"
+      else {
+        val nextyear = year.toInt + 1
+        s"20$nextyear"
+      }
     val monthString: String = char4 match {
       case 'A' => Messages("date.JanToDec")
       case 'B' => Messages("date.FebToJan")
@@ -119,17 +122,17 @@ class PeriodFormatter {
       case 'J' => Messages("date.OctToSep")
       case 'K' => Messages("date.NovToOct")
       case 'L' => Messages("date.DecToNov")
-      case _ =>
+      case _   =>
         logger.warn(s"invalid periodKey for formatPeriodKeyYearly, could not match month: $char4")
         ""
     }
-    val returnStr = s"$monthString $yearString"
+    val returnStr           = s"$monthString $yearString"
     logger.debug(s"Translated to $returnStr")
     returnStr
   }
 
-  val isLeapYear: Int => Boolean = (year: Int) => ((year % 4) == 0) && !(
-    ((year % 100) == 0) &&
-    !((year % 400) == 0))
+  val isLeapYear: Int => Boolean = (year: Int) =>
+    ((year % 4) == 0) && !(((year % 100) == 0) &&
+      !((year % 400) == 0))
 
 }

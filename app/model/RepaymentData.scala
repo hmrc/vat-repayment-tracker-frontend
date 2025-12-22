@@ -15,15 +15,28 @@
  */
 
 package model
+
 import model.des.RiskingStatus
+import model.des.RiskingStatus._
 
 import java.time.LocalDate
 
 final case class RepaymentData(
-    period:             String,
-    amount:             BigDecimal,
-    returnCreationDate: LocalDate,
-    riskingStatus:      RiskingStatus,
-    periodKey:          String,
-    clearingDate:       Option[LocalDate]
-)
+  period:                 String,
+  amount:                 BigDecimal,
+  returnCreationDate:     LocalDate,
+  lastUpdateReceivedDate: Option[LocalDate],
+  riskingStatus:          RiskingStatus,
+  periodKey:              String,
+  clearingDate:           Option[LocalDate]
+) {
+  // For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
+  val sorted: Int =
+    riskingStatus match {
+      case INITIAL                                                        => 5
+      case SENT_FOR_RISKING                                               => 4
+      case CLAIM_QUERIED                                                  => 3
+      case REPAYMENT_SUSPENDED                                            => 2
+      case REPAYMENT_ADJUSTED | ADJUSMENT_TO_TAX_DUE | REPAYMENT_APPROVED => 1
+    }
+}

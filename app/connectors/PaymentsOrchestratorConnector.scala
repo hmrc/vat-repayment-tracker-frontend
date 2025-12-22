@@ -30,16 +30,19 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentsOrchestratorConnector @Inject() (
-    servicesConfig: ServicesConfig,
-    httpClient:     HttpClientV2,
-    configuration:  Configuration)
-  (implicit ec: ExecutionContext) {
+  servicesConfig: ServicesConfig,
+  httpClient:     HttpClientV2,
+  configuration:  Configuration
+)(implicit ec: ExecutionContext) {
 
-  private val serviceURL: String = servicesConfig.baseUrl("payments-orchestrator")
-  private val financialsUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.financials-url")
-  private val customerUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.customer-url")
-  private val ddUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.dd-url")
-  private val repaymentDetailsUrl: String = configuration.get[String]("microservice.services.payments-orchestrator.repayment-details-url")
+  private val serviceURL: String          = servicesConfig.baseUrl("payments-orchestrator")
+  private val financialsUrl: String       =
+    configuration.get[String]("microservice.services.payments-orchestrator.financials-url")
+  private val customerUrl: String         =
+    configuration.get[String]("microservice.services.payments-orchestrator.customer-url")
+  private val ddUrl: String               = configuration.get[String]("microservice.services.payments-orchestrator.dd-url")
+  private val repaymentDetailsUrl: String =
+    configuration.get[String]("microservice.services.payments-orchestrator.repayment-details-url")
 
   import req.RequestSupport._
 

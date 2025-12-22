@@ -22,16 +22,15 @@ import play.api.mvc.{Request, RequestHeader}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
-/**
- * Repeating the pattern which was brought originally by play-framework
- * and putting some more data which can be derived from a request
- *
- * Use it to provide HeaderCarrier, Lang, or Messages
- */
+/** Repeating the pattern which was brought originally by play-framework and putting some more data which can be derived
+  * from a request
+  *
+  * Use it to provide HeaderCarrier, Lang, or Messages
+  */
 class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I18nSupport {
 
   implicit def hc[A](implicit request: Request[A]): HeaderCarrier = RequestSupport.hc
-  def lang(implicit messages: Messages): Lang = messages.lang
+  def lang(implicit messages:          Messages): Lang            = messages.lang
 }
 
 object RequestSupport {
@@ -40,10 +39,9 @@ object RequestSupport {
 
   def isLoggedIn(implicit request: RequestHeader): Boolean = request.session.get(SessionKeys.authToken).isDefined
 
-  /**
-   * This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code.
-   * If they refactor how hc is created our code will pick it up automatically.
-   */
+  /** This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code. If they
+    * refactor how hc is created our code will pick it up automatically.
+    */
   private object HcProvider extends FrontendHeaderCarrierProvider {
     def headerCarrier[A](implicit request: Request[A]): HeaderCarrier = hc(request)
   }

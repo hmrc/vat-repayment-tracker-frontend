@@ -19,10 +19,10 @@ package model.dd
 import play.api.libs.json.{Json, OFormat}
 
 final case class CreateVATJourneyRequest(
-    userId:     String,
-    userIdType: String = "VRN",
-    returnUrl:  String,
-    backUrl:    String
+  userId:     String,
+  userIdType: String = "VRN",
+  returnUrl:  String,
+  backUrl:    String
 )
 
 object CreateVATJourneyRequest {

@@ -21,9 +21,8 @@ import support.ItSpec
 
 class PeriodFormatterSpec extends ItSpec {
 
-  implicit val messagesProvider: MessagesProvider = {
+  implicit val messagesProvider: MessagesProvider =
     MessagesImpl(Lang.defaultLang, injector.instanceOf[MessagesApi])
-  }
 
   val periodFormatter: PeriodFormatter = injector.instanceOf[PeriodFormatter]
 
@@ -76,21 +75,18 @@ class PeriodFormatterSpec extends ItSpec {
   )
 
   monthly foreach (period =>
-
     s"$period monthly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
   )
 
   quarterly foreach (period =>
-
     s"$period quarterly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
   )
 
   yearly foreach (period =>
-
     s"$period yearly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }

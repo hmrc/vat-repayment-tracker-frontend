@@ -34,14 +34,14 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
 
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
 
-  val serviceBaseUrl = s"${configMap("urls.frontend-base")}/vat-repayment-tracker"
+  val serviceBaseUrl    = s"${configMap("urls.frontend-base")}/vat-repayment-tracker"
   val nonMtdUserPageUrl = "/vat-repayment-tracker/non-mtd-user"
 
   def testRadioButtonOptions(
-      doc:                         Document,
-      expectedRadioLabelsAndHints: List[(String, Option[String])]
+    doc:                         Document,
+    expectedRadioLabelsAndHints: List[(String, Option[String])]
   ): Unit = {
-    val radios = doc.select(".govuk-radios__item").iterator().asScala.toList
+    val radios         = doc.select(".govuk-radios__item").iterator().asScala.toList
     val labelsAndHints = radios.map(r =>
       r.select(".govuk-label").text() ->
         Option(r.select(".govuk-hint").text()).filter(_.nonEmpty)
@@ -57,7 +57,11 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
 
       "there are repayment bank details and dd details" in {
         AuditWireMockResponses.auditIsAvailable
-        AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+        AuthWireMockResponses.authOkWithEnrolments(
+          wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+          vrn = vrn,
+          enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+        )
         PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
         PaymentsOrchestratorStub.ddOk(vrn)
         VatRepaymentTrackerBackendWireMockResponses.storeOk()
@@ -70,16 +74,20 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 ** **"),
+            "Manage your Direct Debit"           -> Some("Account: ****2490, Sort code: 40 ** **"),
             "Manage your repayment bank account" -> Some("Account: ****2222, Sort code: 66 ** **"),
-            "Track your VAT repayments" -> Some("View what HMRC owe you")
+            "Track your VAT repayments"          -> Some("View what HMRC owe you")
           )
         )
       }
 
       "there are no dd details" in {
         AuditWireMockResponses.auditIsAvailable
-        AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+        AuthWireMockResponses.authOkWithEnrolments(
+          wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+          vrn = vrn,
+          enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+        )
         PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
         PaymentsOrchestratorStub.ddNotFound(vrn)
         VatRepaymentTrackerBackendWireMockResponses.storeOk()
@@ -92,16 +100,20 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Set up a Direct Debit" -> Some("HMRC will automatically collect your VAT Return payments when due"),
+            "Set up a Direct Debit"              -> Some("HMRC will automatically collect your VAT Return payments when due"),
             "Manage your repayment bank account" -> Some("Account: ****2222, Sort code: 66 ** **"),
-            "Track your VAT repayments" -> Some("View what HMRC owe you")
+            "Track your VAT repayments"          -> Some("View what HMRC owe you")
           )
         )
       }
 
       "there are no repayment bank details and there are no repayment bank details in-flight" in {
         AuditWireMockResponses.auditIsAvailable
-        AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+        AuthWireMockResponses.authOkWithEnrolments(
+          wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+          vrn = vrn,
+          enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+        )
         PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
         PaymentsOrchestratorStub.ddOk(vrn)
         VatRepaymentTrackerBackendWireMockResponses.storeOk()
@@ -114,16 +126,20 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 ** **"),
+            "Manage your Direct Debit"        -> Some("Account: ****2490, Sort code: 40 ** **"),
             "Set up a repayment bank account" -> Some("Tell HMRC where to pay your money"),
-            "Track your VAT repayments" -> Some("View what HMRC owe you")
+            "Track your VAT repayments"       -> Some("View what HMRC owe you")
           )
         )
       }
 
       "there are no repayment bank details but there are repayment bank details in-flight" in {
         AuditWireMockResponses.auditIsAvailable
-        AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+        AuthWireMockResponses.authOkWithEnrolments(
+          wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+          vrn = vrn,
+          enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+        )
         PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
         PaymentsOrchestratorStub.ddOk(vrn)
         VatRepaymentTrackerBackendWireMockResponses.storeOk()
@@ -136,7 +152,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
         testRadioButtonOptions(
           doc,
           List(
-            "Manage your Direct Debit" -> Some("Account: ****2490, Sort code: 40 ** **"),
+            "Manage your Direct Debit"  -> Some("Account: ****2490, Sort code: 40 ** **"),
             "Track your VAT repayments" -> Some("View what HMRC owe you")
           )
         )
@@ -152,16 +168,24 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
 
   "POST /vat-repayment-tracker/manager-or-track-vrt" - {
 
-      def performAction(formData: (String, String)*): Future[Result] = {
-        AuditWireMockResponses.auditIsAvailable
-        AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    def performAction(formData: (String, String)*): Future[Result] = {
+      AuditWireMockResponses.auditIsAvailable
+      AuthWireMockResponses.authOkWithEnrolments(
+        wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+        vrn = vrn,
+        enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+      )
 
-        controller.manageOrTrackSubmit(fakeRequest.withMethod(POST).withBody(AnyContentAsFormUrlEncoded(formData.toMap.map{ case (k, v) => k -> Seq(v) })))
-      }
+      controller.manageOrTrackSubmit(
+        fakeRequest
+          .withMethod(POST)
+          .withBody(AnyContentAsFormUrlEncoded(formData.toMap.map { case (k, v) => k -> Seq(v) }))
+      )
+    }
 
     "should show a form error if nothing has been submitted" in {
       val result = performAction()
-      val doc = Jsoup.parse(contentAsString(result))
+      val doc    = Jsoup.parse(contentAsString(result))
 
       val expectedErrorMessage = "Select whether to manage your accounts or track a VAT repayment"
       doc.select(".govuk-error-summary").select("a").text() shouldBe expectedErrorMessage

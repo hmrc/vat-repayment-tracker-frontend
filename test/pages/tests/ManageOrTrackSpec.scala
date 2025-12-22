@@ -25,22 +25,22 @@ import support._
 
 class ManageOrTrackSpec extends BrowserSpec {
 
-  val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/manage-or-track-vrt"""
+  val vrn: Vrn             = Vrn("234567890")
+  val path                 = s"""/vat-repayment-tracker/manage-or-track-vrt"""
   val periodKey: PeriodKey = PeriodKey("18AG")
 
-  val ft_404: Int = 1
+  val ft_404: Int    = 1
   val ft_credit: Int = 2
-  val ft_debit: Int = 3
+  val ft_debit: Int  = 3
 
   "1. user is authorised, bank dd option, manage bank option " in {
     setup()
-    ManageOrTrack.assertPageIsDisplayed(ddDisplayed   = true, bankDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(ddDisplayed = true, bankDisplayed = true)
   }
 
   "2. user is authorised, manage dd option " in {
     setup(useBankDetails = false)
-    ManageOrTrack.assertPageIsDisplayed(ddDisplayed     = true, nobankDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(ddDisplayed = true, nobankDisplayed = true)
   }
 
   "3. user is authorised, manage bank option " in {
@@ -51,7 +51,7 @@ class ManageOrTrackSpec extends BrowserSpec {
 
   "4. user is authorised, manage no bank or dd option " in {
     setup(useBankDetails = false, useDdDetails = false)
-    ManageOrTrack.assertPageIsDisplayed(noddDisplayed   = true, nobankDisplayed = true)
+    ManageOrTrack.assertPageIsDisplayed(noddDisplayed = true, nobankDisplayed = true)
   }
 
   "5. user is authorised, manage no bank or dd option but inflight bank " in {
@@ -90,47 +90,53 @@ class ManageOrTrackSpec extends BrowserSpec {
     ManageOrTrack.clickOnWelshLink()
     ManageOrTrack.clickBankLabel()
     ManageOrTrack.clickContinue()
-    ViewRepaymentAccount.assertPageIsDisplayed("Mae’r manylion cyfrif banc ar gyfer eich ad-daliadau TAW yn cael eu diweddaru")
+    ViewRepaymentAccount.assertPageIsDisplayed(
+      "Mae’r manylion cyfrif banc ar gyfer eich ad-daliadau TAW yn cael eu diweddaru"
+    )
   }
 
   private def setup(
-      useBankDetails: Boolean = true,
-      useDdDetails:   Boolean = true,
-      ft:             Int     = ft_404,
-      inflight:       Boolean = false): Unit =
-    {
-      AuditWireMockResponses.auditIsAvailable
-      VatRepaymentTrackerBackendWireMockResponses.storeOk()
-      AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    useBankDetails: Boolean = true,
+    useDdDetails:   Boolean = true,
+    ft:             Int = ft_404,
+    inflight:       Boolean = false
+  ): Unit = {
+    AuditWireMockResponses.auditIsAvailable
+    VatRepaymentTrackerBackendWireMockResponses.storeOk()
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
 
-      if (inflight) {
-        if (useBankDetails)
-          PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
-        else
-          PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
-      } else {
-        if (useBankDetails)
-          PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-        else
-          PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-      }
-      //Show dd radio button
-      if (useDdDetails)
-        PaymentsOrchestratorStub.ddOk(vrn)
+    if (inflight) {
+      if (useBankDetails)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
       else
-        PaymentsOrchestratorStub.ddNotFound(vrn)
-
-      PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
-
-      ft match {
-        case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
-        case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
-        case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
-        case other       => throw new IllegalArgumentException(s"no ft match for $other")
-      }
-
-      login()
-      goToViaPath(path)
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+    } else {
+      if (useBankDetails)
+        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+      else
+        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
     }
+    // Show dd radio button
+    if (useDdDetails)
+      PaymentsOrchestratorStub.ddOk(vrn)
+    else
+      PaymentsOrchestratorStub.ddNotFound(vrn)
+
+    PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
+
+    ft match {
+      case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
+      case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
+      case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
+      case other       => throw new IllegalArgumentException(s"no ft match for $other")
+    }
+
+    login()
+    goToViaPath(path)
+  }
 
 }

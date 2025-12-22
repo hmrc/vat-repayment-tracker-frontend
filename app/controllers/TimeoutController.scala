@@ -21,9 +21,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 @Singleton
-class TimeoutController @Inject() (delete_answers: views.html.session.delete_answers,
-                                   mcc:            MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class TimeoutController @Inject() (delete_answers: views.html.session.delete_answers, mcc: MessagesControllerComponents)
+    extends FrontendController(mcc) {
 
   val keepAliveSession: Action[AnyContent] = Action(NoContent)
 

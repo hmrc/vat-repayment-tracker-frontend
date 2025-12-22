@@ -20,10 +20,10 @@ import model.Vrn
 import play.api.libs.json.{Format, Json}
 
 final case class SpjRequestBtaVat(
-    amountInPence: Long,
-    returnUrl:     String,
-    backUrl:       String,
-    vrn:           Vrn
+  amountInPence: Long,
+  returnUrl:     String,
+  backUrl:       String,
+  vrn:           Vrn
 )
 
 object SpjRequestBtaVat {

@@ -38,43 +38,52 @@ trait CommonDetail extends CommonPage {
   def clickCompleted(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
 
   def assertPageIsDisplayed(
-      checkBank:      Boolean = true,
-      checkAddress:   Boolean = false,
-      amount:         String,
-      partialAccount: Boolean = false,
-      period:         String  = "1 July to 31 July 2018")
-    (implicit wd: WebDriver): Assertion =
-    {
-      currentPath shouldBe path
-      readAmount() shouldBe amount
-      if (checkBank) {
-        if (partialAccount)
-          readAccName shouldBe "Name on account:"
-        else
-          readAccName shouldBe "Name on account: Account holder"
+    checkBank:      Boolean = true,
+    checkAddress:   Boolean = false,
+    amount:         String,
+    partialAccount: Boolean = false,
+    period:         String = "1 July to 31 July 2018"
+  )(implicit wd: WebDriver): Assertion = {
+    currentPath shouldBe path
+    readAmount() shouldBe amount
+    if (checkBank) {
+      if (partialAccount)
+        readAccName shouldBe "Name on account:"
+      else
+        readAccName shouldBe "Name on account: Account holder"
 
-        readAccNumber shouldBe "Account number: ****2222"
-        readAccSortCode shouldBe "Sort code: 66 77 88"
-      }
-      if (checkAddress) {
-        readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
-      }
-      readPeriod() shouldBe period
-
+      readAccNumber shouldBe "Account number: ****2222"
+      readAccSortCode shouldBe "Sort code: 66 77 88"
     }
+    if (checkAddress) {
+      readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
+    }
+    readPeriod() shouldBe period
+
+  }
 
   def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
   def readAmount()(implicit webDriver: WebDriver): String =
-    probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[3]")).getText)
+    probing(
+      _.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[3]")).getText
+    )
 
-  def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(_.findElement(By.id(s"received-date$appender")).getText)
+  def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(
+    _.findElement(By.id(s"received-date$appender")).getText
+  )
 
-  def readPeriod()(implicit webDriver: WebDriver): String = probing(_.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section[1]/table/tbody/tr[1]/td[2]")).getText)
+  def readPeriod()(implicit webDriver: WebDriver): String = probing(
+    _.findElement(
+      By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section[1]/table/tbody/tr[1]/td[2]")
+    ).getText
+  )
 
   def readRowForPeriod(periodKey: String)(implicit webDriver: WebDriver): Seq[String] =
     probing(
-      _.findElement(By.cssSelector(s"""tr > td > a.govuk-link[href="/vat-repayment-tracker/view-progress/${periodKey}"]"""))
+      _.findElement(
+        By.cssSelector(s"""tr > td > a.govuk-link[href="/vat-repayment-tracker/view-progress/$periodKey"]""")
+      )
         .findElement(By.xpath("./../.."))
     ).findElements(By.cssSelector("td")).asScala.toSeq.map(_.getText)
 

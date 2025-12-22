@@ -23,11 +23,15 @@ import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, VatW
 class VatRepaymentsClassicSpec extends BrowserSpec {
 
   val vrn: Vrn = Vrn("234567890")
-  val path = s"""/vat-repayment-tracker/show-vrt"""
+  val path     = s"""/vat-repayment-tracker/show-vrt"""
 
   "1. user is authorised and vat repayments found (past period)" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.vatDecEnrolmentKey
+    )
     VatWireMockResponses.calendarOk(vrn, isCurrent = false)
     VatWireMockResponses.designatoryDetailsOk(vrn)
     login()
@@ -36,24 +40,38 @@ class VatRepaymentsClassicSpec extends BrowserSpec {
     VatRepaymentsClassic.readAddress shouldBe "1 Johnson Close\nStonesfield\nOxford\nOX29 8PP"
     VatRepaymentsClassic.readReceivedOnDate shouldBe "05 Apr 2016"
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "in_progress_classic"))
+    AuditWireMockResponses.engagementStatusAudited(
+      "showVrt",
+      Map("vrn" -> vrn.value, "engmtType" -> "in_progress_classic")
+    )
   }
 
   "2. user is authorised and vat repayments found (current period)" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.vatDecEnrolmentKey
+    )
     VatWireMockResponses.calendarOk(vrn)
     VatWireMockResponses.designatoryDetailsOk(vrn)
     login()
     goToViaPath(path)
     VatRepaymentsClassic.readReceivedOnDate shouldBe "05 Jul 2016"
 
-    AuditWireMockResponses.engagementStatusAudited("showVrt", Map("vrn" -> vrn.value, "engmtType" -> "in_progress_classic"))
+    AuditWireMockResponses.engagementStatusAudited(
+      "showVrt",
+      Map("vrn" -> vrn.value, "engmtType" -> "in_progress_classic")
+    )
   }
 
   "3. user is authorised and vat repayments found (current period), 404 when getting address data" in {
     AuditWireMockResponses.auditIsAvailable
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.vatDecEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.vatDecEnrolmentKey
+    )
     VatWireMockResponses.calendarOk(vrn)
     VatWireMockResponses.designatoryDetails404(vrn)
     login()

@@ -27,10 +27,7 @@ import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class VatConnector @Inject() (
-    servicesConfig: ServicesConfig,
-    httpClient:     HttpClientV2)
-  (implicit ec: ExecutionContext) {
+class VatConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
 
   lazy private val vatUrl: String = servicesConfig.baseUrl("vat")
 

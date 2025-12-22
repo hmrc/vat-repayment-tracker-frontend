@@ -25,8 +25,7 @@ class ShutteredSpec extends BrowserSpec {
   val vrn: Vrn = Vrn("234567890")
 
   override def configMap: Map[String, Any] =
-    super
-      .configMap
+    super.configMap
       .updated("is-shuttered", "true")
 
   "Check shuttered page is shown show-vrt" in {
@@ -57,10 +56,14 @@ class ShutteredSpec extends BrowserSpec {
     val path = s"""/vat-repayment-tracker/manage-or-track-vrt"""
     AuditWireMockResponses.auditIsAvailable
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
-    AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString = wireMockBaseUrlAsString, vrn = vrn, enrolment = EnrolmentKeys.mtdVatEnrolmentKey)
+    AuthWireMockResponses.authOkWithEnrolments(
+      wireMockBaseUrlAsString = wireMockBaseUrlAsString,
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
+    )
     login()
     goToViaPath(path)
-    ManageOrTrack.assertPageIsDisplayed(noddDisplayed   = true, nobankDisplayed = true, isShuttered = true)
+    ManageOrTrack.assertPageIsDisplayed(noddDisplayed = true, nobankDisplayed = true, isShuttered = true)
   }
 
 }

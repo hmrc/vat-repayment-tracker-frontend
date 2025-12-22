@@ -24,32 +24,39 @@ import model.Vrn
 object AuthWireMockResponses {
 
   val expectedDetail = "SessionRecordNotFound"
-  val oid: String = "556737e15500005500eaf68f"
+  val oid: String    = "556737e15500005500eaf68f"
 
   val headers: HttpHeaders = new HttpHeaders(
     new HttpHeader("WWW-Authenticate", s"""MDTP detail="$expectedDetail"""")
-  // new HttpHeader("Failing-Enrolment", "SA")
+    // new HttpHeader("Failing-Enrolment", "SA")
   )
 
-  def authLoginStubOk: StubMapping = {
-    stubFor(get(urlMatching("/auth-login-stub/gg-sign-in/*"))
-      .willReturn(aResponse()
-        .withStatus(200)))
-  }
+  def authLoginStubOk: StubMapping =
+    stubFor(
+      get(urlMatching("/auth-login-stub/gg-sign-in/*"))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+        )
+    )
 
-  def authFailed: StubMapping = {
-    stubFor(post(urlEqualTo("/auth/authorise"))
-      .willReturn(aResponse()
-        .withStatus(401)
-        .withHeaders(headers)))
-  }
+  def authFailed: StubMapping =
+    stubFor(
+      post(urlEqualTo("/auth/authorise"))
+        .willReturn(
+          aResponse()
+            .withStatus(401)
+            .withHeaders(headers)
+        )
+    )
 
-  def authOkNoEnrolments(wireMockBaseUrlAsString: String): StubMapping = {
-    stubFor(post(urlEqualTo("/auth/authorise"))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          s"""
+  def authOkNoEnrolments(wireMockBaseUrlAsString: String): StubMapping =
+    stubFor(
+      post(urlEqualTo("/auth/authorise"))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(s"""
              {
                "new-session":"/auth/oid/$oid/session",
                "enrolments":"/auth/oid/$oid/enrolments",
@@ -70,16 +77,17 @@ object AuthWireMockResponses {
                "groupIdentifier": "groupId",
                "allEnrolments": []
              }
-       """.stripMargin)))
+       """.stripMargin)
+        )
+    )
 
-  }
-
-  def authOkWithEnrolments(wireMockBaseUrlAsString: String, vrn: Vrn, enrolment: String): StubMapping = {
-    stubFor(post(urlEqualTo("/auth/authorise"))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          s"""
+  def authOkWithEnrolments(wireMockBaseUrlAsString: String, vrn: Vrn, enrolment: String): StubMapping =
+    stubFor(
+      post(urlEqualTo("/auth/authorise"))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(s"""
              {
                "new-session":"/auth/oid/$oid/session",
                "enrolments":"/auth/oid/$oid/enrolments",
@@ -111,8 +119,8 @@ object AuthWireMockResponses {
                         }
                       ]
              }
-       """.stripMargin)))
-
-  }
+       """.stripMargin)
+        )
+    )
 
 }

@@ -27,19 +27,36 @@ import java.time.format.DateTimeFormatter
 
 object DesData {
 
-  private val bankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None, None)
-  private val inFlightBankDetails: BankDetails = BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None, Some(FormInformation(Some("01-01-2000"))))
-  private val address: Address = Address(Some("VAT PPOB Line1"), Some("VAT PPOB Line2"), Some("VAT PPOB Line3"), Some("VAT PPOB Line4"), Some("TF3 4ER"), Some("GB"))
-  private val ppob: PPOB = PPOB(Some(address))
-  private val customerDetails: CustomerDetails = CustomerDetails(Some(true), Some(false))
-  private val approvedInformation: ApprovedInformation = ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
-  private val changeIndicators: ChangeIndicators = ChangeIndicators(Some(true), Some(false))
-  private val inFlightChanges: InFlightChanges = InFlightChanges(Some(inFlightBankDetails))
-  private val inFlightInformation: InFlightInformation = InFlightInformation(Some(changeIndicators), Some(inFlightChanges))
-  private val items: Seq[Item] = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
-  private val transaction: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
-  private val itemsNoClearingDate: Seq[Item] = Seq(Item(None))
-  private val transactionNoClearingDate: Transaction = Transaction("VAT Return Credit Charge", Option("18AC"), Option(itemsNoClearingDate))
+  private val bankDetails: BankDetails                 =
+    BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None, None)
+  private val inFlightBankDetails: BankDetails         = BankDetails(
+    Some("Account holder"),
+    Some("11112222"),
+    Some("667788"),
+    None,
+    Some(FormInformation(Some("01-01-2000")))
+  )
+  private val address: Address                         = Address(
+    Some("VAT PPOB Line1"),
+    Some("VAT PPOB Line2"),
+    Some("VAT PPOB Line3"),
+    Some("VAT PPOB Line4"),
+    Some("TF3 4ER"),
+    Some("GB")
+  )
+  private val ppob: PPOB                               = PPOB(Some(address))
+  private val customerDetails: CustomerDetails         = CustomerDetails(Some(true), Some(false))
+  private val approvedInformation: ApprovedInformation =
+    ApprovedInformation(Some(customerDetails), Some(bankDetails), Some(ppob))
+  private val changeIndicators: ChangeIndicators       = ChangeIndicators(Some(true), Some(false))
+  private val inFlightChanges: InFlightChanges         = InFlightChanges(Some(inFlightBankDetails))
+  private val inFlightInformation: InFlightInformation =
+    InFlightInformation(Some(changeIndicators), Some(inFlightChanges))
+  private val items: Seq[Item]                         = Seq(Item(Some(LocalDate.parse("2001-01-01"))))
+  private val transaction: Transaction                 = Transaction("VAT Return Credit Charge", Option("18AC"), Option(items))
+  private val itemsNoClearingDate: Seq[Item]           = Seq(Item(None))
+  private val transactionNoClearingDate: Transaction   =
+    Transaction("VAT Return Credit Charge", Option("18AC"), Option(itemsNoClearingDate))
 
   private val repaymentDetail: RepaymentDetailData = RepaymentDetailData(
     LocalDate.parse("2001-01-01"),
@@ -55,29 +72,35 @@ object DesData {
   private val vrn: Vrn = Vrn("2345678891")
 
   val approvedCustomerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation), None)
-  val customerInformation: CustomerInformation = CustomerInformation(Some(approvedInformation), Some(inFlightInformation))
-  val financialData: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
-  val financialDataNoClearingDate: FinancialData = FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transactionNoClearingDate))
-  val directDebitData: DirectDebitData = DirectDebitData(Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490"))))
-  val vrtRepaymentDetailData: VrtRepaymentDetailData = VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
+  val customerInformation: CustomerInformation         =
+    CustomerInformation(Some(approvedInformation), Some(inFlightInformation))
+  val financialData: FinancialData                     =
+    FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transaction))
+  val financialDataNoClearingDate: FinancialData       =
+    FinancialData("VRN", "2345678890", "VATC", "2019-08-20T10:44:05Z", Seq(transactionNoClearingDate))
+  val directDebitData: DirectDebitData                 = DirectDebitData(
+    Some(List(DirectDebitDetails("Tester Surname", "404784", "70872490")))
+  )
+  val vrtRepaymentDetailData: VrtRepaymentDetailData   =
+    VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
 
   object DeregistrationData {
     val deregistrationData: Deregistration = Deregistration(
-      deregistrationReason     = Some("0001"),
+      deregistrationReason = Some("0001"),
       effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
-      lastReturnDueDate        = Some(LocalDate.parse("2001-01-01"))
+      lastReturnDueDate = Some(LocalDate.parse("2001-01-01"))
     )
 
     val deregistrationDataNoReason: Deregistration = Deregistration(
-      deregistrationReason     = None,
+      deregistrationReason = None,
       effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
-      lastReturnDueDate        = Some(LocalDate.parse("2001-01-01"))
+      lastReturnDueDate = Some(LocalDate.parse("2001-01-01"))
     )
 
     val deregistrationDataBlankReason: Deregistration = Deregistration(
-      deregistrationReason     = Some(""),
+      deregistrationReason = Some(""),
       effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
-      lastReturnDueDate        = Some(LocalDate.parse("2001-01-01"))
+      lastReturnDueDate = Some(LocalDate.parse("2001-01-01"))
     )
   }
 
@@ -98,7 +121,7 @@ object DesData {
     )
   }
 
-  //language=JSON
+  // language=JSON
   val vrtRepaymentDetailDataJson: JsValue = Json.parse(
     s"""{
         "creationDate": "${LocalDate.now()}",
@@ -118,7 +141,7 @@ object DesData {
 
   val repaymentsDetail: Seq[RepaymentDetailData] = Seq(repaymentDetail)
 
-  //language=JSON
+  // language=JSON
   val repaymentDetailJson: JsValue = Json.parse(
     s"""[
           {
@@ -134,11 +157,13 @@ object DesData {
         ]""".stripMargin
   )
 
-  //language=JSON
-  def repaymentDetails2DifferentPeriods(date:    String,
-                                        date2:   String,
-                                        status1: RiskingStatus,
-                                        status2: RiskingStatus): JsValue = Json.parse(
+  // language=JSON
+  def repaymentDetails2DifferentPeriods(
+    date:    String,
+    date2:   String,
+    status1: RiskingStatus,
+    status2: RiskingStatus
+  ): JsValue = Json.parse(
     s"""[
           {
              "returnCreationDate": "$date",
@@ -163,9 +188,10 @@ object DesData {
       ]""".stripMargin
   )
 
-  def repaymentDetailSingleCompleted(lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): JsValue = Json.parse(
-    //language=JSON
-    s"""[{
+  def repaymentDetailSingleCompleted(lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): JsValue =
+    Json.parse(
+      // language=JSON
+      s"""[{
         "returnCreationDate": "2001-01-01",
         "sentForRiskingDate": "2001-01-01",
         "lastUpdateReceivedDate": "${lastUpdateReceivedDate.format(DateTimeFormatter.ISO_DATE)}",
@@ -175,10 +201,10 @@ object DesData {
         "supplementDelayDays": 1,
         "originalPostingAmount": 5.56
       }]""".stripMargin
-  )
+    )
 
   def repaymentDetailsMultipleInProgress(date: String): JsValue = Json.parse(
-    //language=JSON
+    // language=JSON
     s"""[
         {
           "returnCreationDate": "$date",
@@ -223,9 +249,10 @@ object DesData {
     ]""".stripMargin
   )
 
-  def repaymentDetailsMultipleCompleted(lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): JsValue = Json.parse(
-    //language=JSON
-    s"""[
+  def repaymentDetailsMultipleCompleted(lastUpdateReceivedDate: LocalDate = LocalDate.of(2001, 1, 1)): JsValue =
+    Json.parse(
+      // language=JSON
+      s"""[
           {
             "returnCreationDate": "2001-01-01",
             "sentForRiskingDate": "2001-01-01",
@@ -277,11 +304,12 @@ object DesData {
              "originalPostingAmount": 5.56
            }
         ]""".stripMargin
-  )
+    )
 
-  //language=JSON
-  def repaymentDetails3Inprogree1Completed(lastUpdateReceivedDate: LocalDate = LocalDate.of(2000, 1, 1)): JsValue = Json.parse(
-    s"""[
+  // language=JSON
+  def repaymentDetails3Inprogree1Completed(lastUpdateReceivedDate: LocalDate = LocalDate.of(2000, 1, 1)): JsValue =
+    Json.parse(
+      s"""[
         {
             "returnCreationDate": "2001-01-01",
             "sentForRiskingDate": "2001-01-01",
@@ -323,7 +351,7 @@ object DesData {
            "originalPostingAmount": 5.56
           }
         ]""".stripMargin
-  )
+    )
 
   def repaymentDetailsWithSuspended(): JsValue = Json.parse(
     s"""[
@@ -350,9 +378,8 @@ object DesData {
         ]""".stripMargin
   )
 
-  //language=JSON
-  val directDebitDataJson: JsValue = Json.parse(
-    s"""{
+  // language=JSON
+  val directDebitDataJson: JsValue = Json.parse(s"""{
           "directDebitDetails": [
             {
               "accountHolderName": "Tester Surname",
@@ -362,9 +389,8 @@ object DesData {
           ]
         }""".stripMargin)
 
-  //language=JSON
-  val approvedInformationJson: JsValue = Json.parse(
-    s"""{
+  // language=JSON
+  val approvedInformationJson: JsValue = Json.parse(s"""{
             "approvedInformation":{
               "customerDetails": {
                 "welshIndicator": true,
@@ -388,8 +414,7 @@ object DesData {
             }
         }""".stripMargin)
 
-  val approvedInformationDeregisteredJson: JsValue = Json.parse(
-    s"""
+  val approvedInformationDeregisteredJson: JsValue = Json.parse(s"""
        {
           "approvedInformation":{
              "customerDetails": {
@@ -419,7 +444,7 @@ object DesData {
           }
        }""".stripMargin)
 
-  //language=JSON
+  // language=JSON
   val financialDataJson: JsValue = Json.parse(
     s"""
        {
@@ -463,8 +488,7 @@ object DesData {
   )
 
   // language=JSON
-  val customerDataOkWithPartialBankDetails: JsValue = Json.parse(
-    s"""
+  val customerDataOkWithPartialBankDetails: JsValue = Json.parse(s"""
       {
          "approvedInformation": {
              "customerDetails": {
@@ -557,8 +581,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  def customerDataOk(isPartial: Boolean = false): JsValue = Json.parse(
-    s"""
+  def customerDataOk(isPartial: Boolean = false): JsValue = Json.parse(s"""
      {
          "approvedInformation": {
              "customerDetails": {
@@ -635,8 +658,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val customerDataOkWithoutBankDetails: JsValue = Json.parse(
-    s"""
+  val customerDataOkWithoutBankDetails: JsValue = Json.parse(s"""
      {
          "approvedInformation": {
              "customerDetails": {
@@ -726,8 +748,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val customerDataOkWithBankDetailsInflight: JsValue = Json.parse(
-    s"""
+  val customerDataOkWithBankDetailsInflight: JsValue = Json.parse(s"""
      {
          "approvedInformation": {
              "customerDetails": {
@@ -822,8 +843,7 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val customerDataOkWithoutBankDetailsInflight: JsValue = Json.parse(
-    s"""
+  val customerDataOkWithoutBankDetailsInflight: JsValue = Json.parse(s"""
      {
          "approvedInformation": {
              "customerDetails": {
@@ -911,8 +931,7 @@ object DesData {
      }
        """.stripMargin)
 
-  val customerDataOkDeregistered: JsValue = Json.parse(
-    s"""{
+  val customerDataOkDeregistered: JsValue = Json.parse(s"""{
             "approvedInformation":{
               "deregistration":{
                 "deregistrationReason": "0001",
@@ -923,8 +942,7 @@ object DesData {
         }""".stripMargin)
 
   // language=JSON
-  def ddOk: JsValue = Json.parse(
-    s"""
+  def ddOk: JsValue = Json.parse(s"""
        {
            "directDebitMandateFound": true,
            "directDebitDetails": [
@@ -941,12 +959,11 @@ object DesData {
        """.stripMargin)
 
   // language=JSON
-  val ddOkNoMandate: JsValue = Json.parse(
-    s"""{
+  val ddOkNoMandate: JsValue = Json.parse(s"""{
           "directDebitMandateFound": false
         }""".stripMargin)
 
-  //language=JSON
+  // language=JSON
   def storedRepaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey): JsValue = Json.parse(
     s"""[
              {
@@ -967,7 +984,7 @@ object DesData {
          ]""".stripMargin
   )
 
-  //language=JSON
+  // language=JSON
   def storedRepaymentDetails2(date: String, status1: RiskingStatus, status2: RiskingStatus): JsValue = Json.parse(
     s"""[
              {
@@ -1003,8 +1020,13 @@ object DesData {
           ]""".stripMargin
   )
 
-  //language=JSON
-  def storedRepaymentDetails3(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
+  // language=JSON
+  def storedRepaymentDetails3(
+    date:    String,
+    status1: RiskingStatus,
+    status2: RiskingStatus,
+    status3: RiskingStatus
+  ): JsValue = Json.parse(
     s"""[
              {
                "_id":"5db1c9826b00005f47616c61",
@@ -1054,7 +1076,14 @@ object DesData {
         ]""".stripMargin
   )
 
-  def storedRepaymentDetails3(date1: String, status1: RiskingStatus, date2: String, status2: RiskingStatus, date3: String, status3: RiskingStatus): JsValue = Json.parse(
+  def storedRepaymentDetails3(
+    date1:   String,
+    status1: RiskingStatus,
+    date2:   String,
+    status2: RiskingStatus,
+    date3:   String,
+    status3: RiskingStatus
+  ): JsValue = Json.parse(
     s"""[
                {
                  "_id":"5db1c9826b00005f47616c61",
@@ -1104,8 +1133,14 @@ object DesData {
           ]""".stripMargin
   )
 
-  //language=JSON
-  def storedRepaymentDetails4(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
+  // language=JSON
+  def storedRepaymentDetails4(
+    date:    String,
+    status1: RiskingStatus,
+    status2: RiskingStatus,
+    status3: RiskingStatus,
+    status4: RiskingStatus
+  ): JsValue = Json.parse(
     s"""[
              {
                "_id":"5db1c9826b00005f47616c61",
@@ -1144,9 +1179,24 @@ object DesData {
                "repaymentDetailsData":{
                  "returnCreationDate":"$date",
                  "sentForRiskingDate":"$date",
-                 "lastUpdateReceivedDate":"2019-10-24",
+                 "lastUpdateReceivedDate":"$date",
                  "periodKey":"18AC",
                  "riskingStatus":"$status3",
+                 "vatToPay_BOX5":6.56,
+                 "supplementDelayDays":6,
+                 "originalPostingAmount":5.56
+               }
+             },
+             {
+               "_id":"5db1c9826b00005f47616c63",
+               "creationDate":"$date",
+               "vrn":"101747008",
+               "repaymentDetailsData":{
+                 "returnCreationDate":"$date",
+                 "sentForRiskingDate":"$date",
+                 "lastUpdateReceivedDate":"$date",
+                 "periodKey":"18AC",
+                 "riskingStatus":"$status4",
                  "vatToPay_BOX5":6.56,
                  "supplementDelayDays":6,
                  "originalPostingAmount":5.56
@@ -1155,9 +1205,10 @@ object DesData {
         ]""".stripMargin
   )
 
-  //language=JSON
-  def repaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey, negativeAmt: Boolean): JsValue = Json.parse(
-    s"""[
+  // language=JSON
+  def repaymentDetails1(date: String, status1: RiskingStatus, periodKey: PeriodKey, negativeAmt: Boolean): JsValue =
+    Json.parse(
+      s"""[
           {
             "returnCreationDate": "$date",
             "sentForRiskingDate": "$date",
@@ -1169,9 +1220,9 @@ object DesData {
             "originalPostingAmount": 0
         }
       ]""".stripMargin
-  )
+    )
 
-  //language=JSON
+  // language=JSON
   def repaymentDetails2(date: String, status1: RiskingStatus, status2: RiskingStatus): JsValue = Json.parse(
     s"""[
          {
@@ -1197,9 +1248,10 @@ object DesData {
     ]""".stripMargin
   )
 
-  //language=JSON
-  def repaymentDetails3(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
-    s"""[
+  // language=JSON
+  def repaymentDetails3(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue =
+    Json.parse(
+      s"""[
           {
              "returnCreationDate": "$date",
              "sentForRiskingDate": "$date",
@@ -1231,10 +1283,17 @@ object DesData {
              "originalPostingAmount": 5.56
          }
       ]""".stripMargin
-  )
+    )
 
-  //language=JSON
-  def repaymentDetails3(date1: String, status1: RiskingStatus, date2: String, status2: RiskingStatus, date3: String, status3: RiskingStatus): JsValue = Json.parse(
+  // language=JSON
+  def repaymentDetails3(
+    date1:   String,
+    status1: RiskingStatus,
+    date2:   String,
+    status2: RiskingStatus,
+    date3:   String,
+    status3: RiskingStatus
+  ): JsValue = Json.parse(
     s"""[
           {
              "returnCreationDate": "$date1",
@@ -1269,9 +1328,16 @@ object DesData {
       ]""".stripMargin
   )
 
-  //language=JSON
-  def repaymentDetails4(date: String, status1: RiskingStatus, status2: RiskingStatus, status3: RiskingStatus): JsValue = Json.parse(
-    s"""[
+  // language=JSON
+  def repaymentDetails4(
+    date:    String,
+    status1: RiskingStatus,
+    status2: RiskingStatus,
+    status3: RiskingStatus,
+    status4: RiskingStatus
+  ): JsValue =
+    Json.parse(
+      s"""[
           {
              "returnCreationDate": "$date",
              "sentForRiskingDate": "$date",
@@ -1301,12 +1367,22 @@ object DesData {
              "vatToPay_BOX5": 6.56,
              "supplementDelayDays": 6,
              "originalPostingAmount": 5.56
+         },
+         {
+             "returnCreationDate": "$date",
+             "sentForRiskingDate": "$date",
+             "lastUpdateReceivedDate": "$date",
+             "periodKey": "18AG",
+             "riskingStatus": "$status4",
+             "vatToPay_BOX5": 6.56,
+             "supplementDelayDays": 6,
+             "originalPostingAmount": 5.56
          }
       ]""".stripMargin
-  )
+    )
 
   def financialDataSingleCredit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue = {
-    val financialTransactions = periodKeys.map{ period =>
+    val financialTransactions = periodKeys.map { period =>
       // language=JSON
       s"""{
         |
@@ -1353,8 +1429,7 @@ object DesData {
   }
 
   def financialDataEmptyItemsArray(vrn: Vrn): JsValue =
-    Json.parse(
-      s"""
+    Json.parse(s"""
          {
            "idType": "VRN",
            "idNumber": "${vrn.value}",
@@ -1390,8 +1465,7 @@ object DesData {
        }""".stripMargin)
 
   def financialDataSeveralDates(vrn: Vrn): JsValue =
-    Json.parse(
-      s"""
+    Json.parse(s"""
          {
            "idType": "VRN",
            "idNumber": "${vrn.value}",
@@ -1436,8 +1510,7 @@ object DesData {
        }""".stripMargin)
 
   def financialDataSingleCreditNoClearingDate(vrn: Vrn): JsValue =
-    Json.parse(
-      s"""
+    Json.parse(s"""
          {
            "idType": "VRN",
            "idNumber": "${vrn.value}",
@@ -1475,7 +1548,7 @@ object DesData {
        }""".stripMargin)
 
   def financialDataSingleDebit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue = {
-    val financialTransactions = periodKeys.map{ period =>
+    val financialTransactions = periodKeys.map { period =>
       // language=JSON
       s"""{
         |  "chargeType": "VAT Return Debit Charge",
@@ -1519,4 +1592,3 @@ object DesData {
   }
 
 }
-

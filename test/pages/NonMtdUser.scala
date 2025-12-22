@@ -21,8 +21,7 @@ import org.scalatest.Assertion
 
 object NonMtdUser extends CommonPage {
 
-  def assertPageIsDisplayed(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed(implicit wd: WebDriver): Assertion =
     readMainMessage shouldBe "You cannot access this service"
 
-  }
 }

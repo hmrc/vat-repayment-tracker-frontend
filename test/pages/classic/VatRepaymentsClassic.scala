@@ -40,4 +40,3 @@ object VatRepaymentsClassic extends CommonPage {
   def readReceivedOnDate(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("receivedOn")).getText)
 
 }
-

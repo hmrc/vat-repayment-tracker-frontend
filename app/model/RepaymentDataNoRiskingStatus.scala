@@ -19,9 +19,9 @@ package model
 import java.time.LocalDate
 
 final case class RepaymentDataNoRiskingStatus(
-    period:             String,
-    amount:             BigDecimal,
-    returnCreationDate: LocalDate,
-    periodKey:          String,
-    clearingDate:       Option[LocalDate]
+  period:             String,
+  amount:             BigDecimal,
+  returnCreationDate: LocalDate,
+  periodKey:          String,
+  clearingDate:       Option[LocalDate]
 )

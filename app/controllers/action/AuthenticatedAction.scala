@@ -34,14 +34,16 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthenticatedAction @Inject() (
-    af:           AuthorisedFunctions,
-    viewConfig:   ViewConfig,
-    cc:           MessagesControllerComponents,
-    orchestrator: PaymentsOrchestratorConnector)(implicit ec: ExecutionContext) extends ActionBuilder[AuthenticatedRequest, AnyContent] {
+  af:           AuthorisedFunctions,
+  viewConfig:   ViewConfig,
+  cc:           MessagesControllerComponents,
+  orchestrator: PaymentsOrchestratorConnector
+)(implicit ec: ExecutionContext)
+    extends ActionBuilder[AuthenticatedRequest, AnyContent] {
 
   private val logger = Logger(this.getClass)
 
-  private def isPartial(customer: Option[CustomerInformation]): Boolean = {
+  private def isPartial(customer: Option[CustomerInformation]): Boolean =
     if (viewConfig.isShuttered) false
     else {
       customer match {
@@ -49,31 +51,35 @@ class AuthenticatedAction @Inject() (
         case None    => false
       }
     }
-  }
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    implicit val r: Request[A] = request
+    implicit val r: Request[A]     = request
 
-    af.authorised().retrieve(Retrievals.allEnrolments) { enrolments =>
-      val typedVrn: TypedVrn = extractVrn(enrolments).getOrElse(throw InsufficientEnrolments())
+    af.authorised()
+      .retrieve(Retrievals.allEnrolments) { enrolments =>
+        val typedVrn: TypedVrn = extractVrn(enrolments).getOrElse(throw InsufficientEnrolments())
 
-      orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
-        if (customer.exists(_.isDeregistered)) {
-          logger.debug(s"Unauthorised because VAT registration cancelled")
-          Future(Redirect(routes.Controller.deregistered.url))
-        } else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
-          block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
-        } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+        orchestrator.getCustomerData(typedVrn.vrn).flatMap { customer =>
+          if (customer.exists(_.isDeregistered)) {
+            logger.debug(s"Unauthorised because VAT registration cancelled")
+            Future(Redirect(routes.Controller.deregistered.url))
+          } else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
+            block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
+          } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
+        }
+
       }
-
-    }.recover {
-      case _: NoActiveSession =>
-        Redirect(viewConfig.loginUrl, Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online")))
-      case e: AuthorisationException =>
-        logger.debug(s"Unauthorised because of ${e.reason}, $e")
-        Redirect(routes.Controller.nonMtdUser.url)
-    }
+      .recover {
+        case _: NoActiveSession        =>
+          Redirect(
+            viewConfig.loginUrl,
+            Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online"))
+          )
+        case e: AuthorisationException =>
+          logger.debug(s"Unauthorised because of ${e.reason}, $e")
+          Redirect(routes.Controller.nonMtdUser.url)
+      }
   }
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser

@@ -22,16 +22,15 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
 
-/**
- * Vat Registration Number (Vrn)
- */
+/** Vat Registration Number (Vrn)
+  */
 final case class Vrn(value: String)
 
 object Vrn {
 
-  implicit val format: Format[Vrn] = implicitly[Format[String]].inmap(Vrn(_), _.value)
+  implicit val format: Format[Vrn]          = implicitly[Format[String]].inmap(Vrn(_), _.value)
   implicit val vrnBinder: PathBindable[Vrn] = valueClassBinder(_.value)
-  val validVrnKeys: List[String] = List("VRN", "VATRegNo")
+  val validVrnKeys: List[String]            = List("VRN", "VATRegNo")
 
   def validVrnKey(vrnKey: String): Boolean = validVrnKeys.contains(vrnKey)
 
@@ -53,4 +52,3 @@ object TypedVrn {
   final case class MtdVrn(vrn: Vrn) extends TypedVrn
 
 }
-

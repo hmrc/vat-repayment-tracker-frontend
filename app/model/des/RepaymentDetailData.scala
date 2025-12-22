@@ -16,33 +16,48 @@
 
 package model.des
 
-import model.des.RiskingStatus.{CLAIM_QUERIED, INITIAL, SENT_FOR_RISKING}
+import model.des.RiskingStatus._
 
 import java.time.LocalDate
 import play.api.libs.json.{Json, OFormat}
 
 final case class RepaymentDetailData(
-    returnCreationDate:     LocalDate,
-    sentForRiskingDate:     Option[LocalDate],
-    lastUpdateReceivedDate: Option[LocalDate],
-    periodKey:              String,
-    riskingStatus:          RiskingStatus,
-    vatToPay_BOX5:          BigDecimal,
-    supplementDelayDays:    Option[Int],
-    originalPostingAmount:  BigDecimal
+  returnCreationDate:     LocalDate,
+  sentForRiskingDate:     Option[LocalDate],
+  lastUpdateReceivedDate: Option[LocalDate],
+  periodKey:              String,
+  riskingStatus:          RiskingStatus,
+  vatToPay_BOX5:          BigDecimal,
+  supplementDelayDays:    Option[Int],
+  originalPostingAmount:  BigDecimal
 ) {
-  //For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
-  val sorted: Int = {
-    riskingStatus match {
-      case INITIAL          => 3
-      case SENT_FOR_RISKING => 2
-      case CLAIM_QUERIED    => 2
-      case _                => 1
+
+  @SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
+  def getAmountForDisplay(status: RiskingStatus): BigDecimal =
+    if (
+      Seq(
+        CLAIM_QUERIED,
+        REPAYMENT_APPROVED,
+        INITIAL,
+        SENT_FOR_RISKING
+      ).contains(status)
+    ) {
+      originalPostingAmount
+    } else {
+      vatToPay_BOX5
     }
-  }
+
+  // For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
+  val sorted: Int =
+    riskingStatus match {
+      case INITIAL                                                        => 5
+      case SENT_FOR_RISKING                                               => 4
+      case CLAIM_QUERIED                                                  => 3
+      case REPAYMENT_SUSPENDED                                            => 2
+      case REPAYMENT_ADJUSTED | ADJUSMENT_TO_TAX_DUE | REPAYMENT_APPROVED => 1
+    }
 }
 
 object RepaymentDetailData {
   implicit val format: OFormat[RepaymentDetailData] = Json.format[RepaymentDetailData]
 }
-

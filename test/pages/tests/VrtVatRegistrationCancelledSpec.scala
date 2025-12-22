@@ -41,8 +41,8 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
       wireMockBaseUrlAsString = wireMockBaseUrlAsString,
-      vrn                     = vrn,
-      enrolment               = EnrolmentKeys.mtdVatEnrolmentKey
+      vrn = vrn,
+      enrolment = EnrolmentKeys.mtdVatEnrolmentKey
     )
     PaymentsOrchestratorStub.customerDataOkDeregistered(vrn)
     login()

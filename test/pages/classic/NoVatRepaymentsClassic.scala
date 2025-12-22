@@ -32,4 +32,3 @@ object NoVatRepaymentsClassic extends CommonPage {
   def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
 }
-

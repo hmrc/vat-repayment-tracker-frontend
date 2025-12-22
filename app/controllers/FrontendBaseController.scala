@@ -20,8 +20,7 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 
-abstract class FrontendBaseController(cc: ControllerComponents)
-  extends BaseControllerHelpers {
+abstract class FrontendBaseController(cc: ControllerComponents) extends BaseControllerHelpers {
 
   override val controllerComponents: ControllerComponents = cc
 

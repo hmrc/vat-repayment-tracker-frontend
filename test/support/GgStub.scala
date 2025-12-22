@@ -23,19 +23,22 @@ import org.scalatest.matchers.should.Matchers
 
 object GgStub extends Matchers {
 
-  def signInPage(port: Int, vrn: Vrn): StubMapping = {
+  def signInPage(port: Int, vrn: Vrn): StubMapping =
     stubFor(
       get(urlPathEqualTo(signInPath))
-        .withQueryParam("continue", equalTo(
-          s"""http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
-        ))
+        .withQueryParam(
+          "continue",
+          equalTo(
+            s"""http://localhost:$port/vat-repayment-tracker-frontend/show-results/vrn/${vrn.value}"""
+          )
+        )
         .withQueryParam("origin", equalTo(s"""pay-online"""))
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody(
-              singInPageSource)))
-  }
+            .withBody(singInPageSource)
+        )
+    )
 
   val singInPageSource = s"""
 <html>
@@ -45,7 +48,6 @@ object GgStub extends Matchers {
   </body>
 </html>
     """
-  val signInPath = "/auth-login-stub/gg-sign-in"
+  val signInPath       = "/auth-login-stub/gg-sign-in"
 
 }
-

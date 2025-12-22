@@ -25,7 +25,7 @@ final case class ReturnPage(value: String)
 
 object ReturnPage {
 
-  implicit val format: Format[ReturnPage] = implicitly[Format[String]].inmap(ReturnPage(_), _.value)
+  implicit val format: Format[ReturnPage]         = implicitly[Format[String]].inmap(ReturnPage(_), _.value)
   implicit val rpBinder: PathBindable[ReturnPage] = valueClassBinder(_.value)
 
 }

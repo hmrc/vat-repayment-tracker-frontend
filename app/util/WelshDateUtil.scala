@@ -22,26 +22,30 @@ import scala.util.Try
 
 object WelshDateUtil {
   private val months: Map[String, String] = Map(
-    "January" -> "Ionawr",
-    "February" -> "Chwefror",
-    "March" -> "Mawrth",
-    "April" -> "Ebrill",
-    "May" -> "Mai",
-    "June" -> "Mehefin",
-    "July" -> "Gorffennaf",
-    "August" -> "Awst",
+    "January"   -> "Ionawr",
+    "February"  -> "Chwefror",
+    "March"     -> "Mawrth",
+    "April"     -> "Ebrill",
+    "May"       -> "Mai",
+    "June"      -> "Mehefin",
+    "July"      -> "Gorffennaf",
+    "August"    -> "Awst",
     "September" -> "Medi",
-    "October" -> "Hydref",
-    "November" -> "Tachwedd",
-    "December" -> "Rhagfyr"
+    "October"   -> "Hydref",
+    "November"  -> "Tachwedd",
+    "December"  -> "Rhagfyr"
   )
 
   implicit class StringOps(date: String) {
     def welshMonth: String = {
-        def updateString(d: String, m: Map[String, String]) = {
-          val monthToChange: Map[String, String] = m.filter(_._1 === d.replace("am", "").replace("pm", "").filter(_.isLetter))
-          d.replace(monthToChange.headOption.fold(d)(_._1), monthToChange(d.replace("am", "").replace("pm", "").filter(_.isLetter)))
-        }
+      def updateString(d: String, m: Map[String, String]) = {
+        val monthToChange: Map[String, String] =
+          m.filter(_._1 === d.replace("am", "").replace("pm", "").filter(_.isLetter))
+        d.replace(
+          monthToChange.headOption.fold(d)(_._1),
+          monthToChange(d.replace("am", "").replace("pm", "").filter(_.isLetter))
+        )
+      }
       Try(updateString(date, months)).getOrElse(date)
     }
   }

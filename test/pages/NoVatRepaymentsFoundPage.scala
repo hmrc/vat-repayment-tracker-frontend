@@ -30,17 +30,16 @@ object NoVatRepaymentsFoundPage extends CommonPage {
     containsText("Add bank details") shouldBe result
   }
 
-  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion =
     containsText("You have recently updated your bank account details.") shouldBe result
-  }
 
-  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion =
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
-  }
 
-  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion = {
-    containsText("You’ll continue to receive repayments by cheque until we verify your bank account details.") shouldBe result
-  }
+  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion =
+    containsText(
+      "You’ll continue to receive repayments by cheque until we verify your bank account details."
+    ) shouldBe result
 
   def assertPageIsDisplayed()(implicit wd: WebDriver): Assertion = {
     currentPath shouldBe s"""$path"""

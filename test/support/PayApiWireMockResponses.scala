@@ -27,31 +27,35 @@ object PayApiWireMockResponses {
   val nextUrl = "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"
 
   def payOk: StubMapping =
-    stubFor(post(urlEqualTo(expectedStartJourneyUrl))
-      .willReturn(aResponse()
-        .withStatus(200)
-        .withBody(
-          s"""
+    stubFor(
+      post(urlEqualTo(expectedStartJourneyUrl))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(s"""
           |{
           |  "journeyId": "TestJourneyId-44f9-ad7f-01e1d3d8f151",
           |  "nextUrl": "$nextUrl"
           |}
-    """.stripMargin)))
+    """.stripMargin)
+        )
+    )
 
   def verifyStartJourneyCalled(expectedRequest: SpjRequestBtaVat) =
     verify(
       exactly(1),
       postRequestedFor(urlEqualTo(expectedStartJourneyUrl))
-        .withRequestBody(equalToJson(
-          s"""{
+        .withRequestBody(
+          equalToJson(
+            s"""{
             |  "amountInPence": ${expectedRequest.amountInPence.toString},
             |  "returnUrl": "${expectedRequest.returnUrl}",
             |  "backUrl": "${expectedRequest.backUrl}",
             |  "vrn": "${expectedRequest.vrn.value}"
             |}
             |""".stripMargin
-        ))
+          )
+        )
     )
 
 }
-

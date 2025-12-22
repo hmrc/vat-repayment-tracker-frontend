@@ -59,45 +59,50 @@ object ViewProgress extends CommonPage {
     ()
   }
 
-  def checkAmount(amount: String)(implicit webDriver: WebDriver): Assertion = probing(_.findElement(By.id(s"amount")).getText) shouldBe amount
+  def checkAmount(amount: String)(implicit webDriver: WebDriver): Assertion =
+    probing(_.findElement(By.id(s"amount")).getText) shouldBe amount
 
-  def checkEstimatedRepaymentDate(daysAdded: Int)(implicit webDriver: WebDriver): Assertion = probing(_.findElement(By.id(s"repay-date")).getText) shouldBe
-    formatDate(LocalDate.now().plusDays(30 + daysAdded))
+  def checkEstimatedRepaymentDate(daysAdded: Int)(implicit webDriver: WebDriver): Assertion =
+    probing(_.findElement(By.id(s"repay-date")).getText) shouldBe
+      formatDate(LocalDate.now().plusDays(30 + daysAdded))
 
-  def checkEstimatedRepeaymentDateNotPresent(implicit webDriver: WebDriver): Assertion = idPresent("repay-date") shouldBe false
+  def checkEstimatedRepaymentDateNotPresent(implicit webDriver: WebDriver): Assertion =
+    idPresent("repay-date") shouldBe false
 
-  def checkStatusExists(statusList: List[RiskingStatus], completed: Boolean = false)(implicit webDriver: WebDriver): Unit = {
+  def checkStatusExists(statusList: List[RiskingStatus], completed: Boolean = false)(implicit
+    webDriver: WebDriver
+  ): Unit = {
     val completedFrag = if (completed) "_Y" else ""
 
-    statusList foreach (e =>
-      idPresent(s"${e}${completedFrag}_timeline") shouldBe true
-    )
+    statusList foreach (e => idPresent(s"$e${completedFrag}_timeline") shouldBe true)
 
   }
 
-  def checkStatusNotPresent(statusList: List[RiskingStatus], completed: Boolean = false)(implicit webDriver: WebDriver): Unit = {
+  def checkStatusNotPresent(statusList: List[RiskingStatus], completed: Boolean = false)(implicit
+    webDriver: WebDriver
+  ): Unit = {
     val completedFrag = if (completed) "_Y" else ""
 
-    statusList foreach (e =>
-      idPresent(s"${e}${completedFrag}_timeline") shouldBe false
-    )
+    statusList foreach (e => idPresent(s"$e${completedFrag}_timeline") shouldBe false)
 
   }
 
-  def checkMainMessage(mainMessage: String)(implicit webDriver: WebDriver): Assertion = readMainMessage shouldBe mainMessage
+  def checkMainMessage(mainMessage: String)(implicit webDriver: WebDriver): Assertion =
+    readMainMessage shouldBe mainMessage
 
   def backExists()(implicit driver: WebDriver): Assertion = cssPresent(".govuk-back-link") shouldBe true
 
-  def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("history-url") shouldBe expectedValue
+  def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion =
+    idPresent("history-url") shouldBe expectedValue
 
-  def payUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion = idPresent("pay-url") shouldBe expectedValue
+  def payUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion =
+    idPresent("pay-url") shouldBe expectedValue
 
-  def assertWebchatLinkPresent()(implicit wd: WebDriver): Assertion = {
+  def assertWebchatLinkPresent()(implicit wd: WebDriver): Assertion =
     hasTextHyperLinkedTo(
       "Ask HMRC (opens in new tab)",
       "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
     )
-  }
 
   def getProgressTimelineItems(implicit wd: WebDriver): List[ProgressTimelineItem] = {
     val events = wd.findElements(By.cssSelector(".hmrc-timeline-event")).asScala.toList
@@ -107,7 +112,6 @@ object ViewProgress extends CommonPage {
         event.findElement(By.cssSelector(".hmrc-timeline-event-meta")).getText,
         event.findElements(By.cssSelector(".govuk-body:not(.hmrc-timeline-event-meta)")).asScala.toList.map(_.getText)
       )
-
     )
 
   }

@@ -31,28 +31,29 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DirectDebitBackendConnector @Inject() (
-    servicesConfig: ServicesConfig,
-    httpClient:     HttpClientV2,
-    configuration:  Configuration)
-  (implicit ec: ExecutionContext) {
+  servicesConfig: ServicesConfig,
+  httpClient:     HttpClientV2,
+  configuration:  Configuration
+)(implicit ec: ExecutionContext) {
 
   import req.RequestSupport._
 
   private val logger = Logger(this.getClass)
 
   private val serviceUrl: String = servicesConfig.baseUrl("direct-debit-backend")
-  private val sjUrl: String = configuration.get[String]("microservice.services.direct-debit-backend.sj-url")
-  private val rUrl: String = configuration.get[String]("microservice.services.direct-debit-backend.return-url")
-  private val bUrl: String = configuration.get[String]("urls.dd-back-url")
+  private val sjUrl: String      = configuration.get[String]("microservice.services.direct-debit-backend.sj-url")
+  private val rUrl: String       = configuration.get[String]("microservice.services.direct-debit-backend.return-url")
+  private val bUrl: String       = configuration.get[String]("urls.dd-back-url")
 
   def startJourney(vrn: Vrn)(implicit request: Request[_]): Future[NextUrl] = {
     val bkUrl: String = s"$bUrl"
     logger.debug(s"Using return url : $rUrl")
     logger.debug(s"Using back url : $bkUrl")
 
-    val createVATJourneyRequest: CreateVATJourneyRequest = CreateVATJourneyRequest(userId    = vrn.value, returnUrl = rUrl, backUrl = bkUrl)
+    val createVATJourneyRequest: CreateVATJourneyRequest =
+      CreateVATJourneyRequest(userId = vrn.value, returnUrl = rUrl, backUrl = bkUrl)
     logger.debug(s"Calling direct-debit-backend start journey for vrn $vrn")
-    val startJourneyURL: String = s"$serviceUrl$sjUrl"
+    val startJourneyURL: String                          = s"$serviceUrl$sjUrl"
     logger.debug(s"Calling direct-debit-backend start journey for vrn with url $startJourneyURL)")
     httpClient.post(url"$startJourneyURL").withBody(Json.toJson(createVATJourneyRequest)).execute[NextUrl]
   }

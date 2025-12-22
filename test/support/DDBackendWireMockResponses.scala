@@ -28,24 +28,30 @@ object DDBackendWireMockResponses {
     "https://www.qa.tax.service.gov.uk/direct-debit/enter-bank-details/11f4e440-1db1-4138-9a66-cb73db12174e"
 
   def ddOk: StubMapping =
-    stubFor(post(urlEqualTo(startJourneyExpectedUrl))
-      .willReturn(aResponse()
-        .withStatus(201)
-        .withBody(s"""{"nextUrl":"$nextUrl"}""")))
+    stubFor(
+      post(urlEqualTo(startJourneyExpectedUrl))
+        .willReturn(
+          aResponse()
+            .withStatus(201)
+            .withBody(s"""{"nextUrl":"$nextUrl"}""")
+        )
+    )
 
   def verifyStartJourneyCalled(expectedRequest: CreateVATJourneyRequest) =
     verify(
       exactly(1),
       postRequestedFor(urlEqualTo(startJourneyExpectedUrl))
-        .withRequestBody(equalToJson(
-          s"""{
+        .withRequestBody(
+          equalToJson(
+            s"""{
              |  "userId": "${expectedRequest.userId}",
              |  "userIdType": "${expectedRequest.userIdType}",
              |  "returnUrl": "${expectedRequest.returnUrl}",
              |  "backUrl": "${expectedRequest.backUrl}"
              |}
              |""".stripMargin
-        ))
+          )
+        )
     )
 
 }
