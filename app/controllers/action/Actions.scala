@@ -41,7 +41,7 @@ class Actions @Inject() (
     shutteredAction andThen authoriseAction andThen validateMtdVrn
 
   val securedActionMtdVrnCheckWithoutShutterCheck: ActionBuilder[AuthenticatedRequest, AnyContent] =
-    authoriseAction andThen validateMtdVrn
+    authoriseAction.andThen(validateMtdVrn)
 
   private def validateMtdVrn: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
     new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {

@@ -53,7 +53,7 @@ object RiskingStatus extends PlayEnum[RiskingStatus] {
   override def values: immutable.IndexedSeq[RiskingStatus] = findValues
 }
 
-sealed trait RiskingStatus extends enumeratum.EnumEntry {
+sealed trait RiskingStatus extends enumeratum.EnumEntry derives CanEqual {
   val complete: Boolean
   def inProgress: Boolean = !complete
 }

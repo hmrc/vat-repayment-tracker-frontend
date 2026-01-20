@@ -21,7 +21,9 @@ import model.{NextUrl, ReturnPage, Vrn}
 import play.api.libs.json.Json
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.writeableOf_JsValue
+
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -36,7 +38,7 @@ class BankAccountCocConnector @Inject() (
   configuration:  Configuration
 )(implicit ec: ExecutionContext) {
 
-  import req.RequestSupport._
+  import req.RequestSupport.*
 
   private val logger = Logger(this.getClass)
 
@@ -44,7 +46,7 @@ class BankAccountCocConnector @Inject() (
   private val viewUrl: String    = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
   private val bUrl: String       = configuration.get[String]("urls.bank-back-url")
 
-  def startJourney(vrn: Vrn, returnPage: ReturnPage)(implicit request: Request[_]): Future[NextUrl] = {
+  def startJourney(vrn: Vrn, returnPage: ReturnPage)(using request: Request[?]): Future[NextUrl] = {
 
     val bkUrl: String                              = s"$bUrl${returnPage.value}"
     logger.debug(s"Using back url : $bkUrl")

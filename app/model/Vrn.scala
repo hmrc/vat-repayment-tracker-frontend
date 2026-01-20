@@ -28,13 +28,14 @@ final case class Vrn(value: String)
 
 object Vrn {
 
-  implicit val format: Format[Vrn]          = implicitly[Format[String]].inmap(Vrn(_), _.value)
-  implicit val vrnBinder: PathBindable[Vrn] = valueClassBinder(_.value)
-  val validVrnKeys: List[String]            = List("VRN", "VATRegNo")
+  given format: Format[Vrn]          = implicitly[Format[String]].inmap(Vrn(_), _.value)
+  given vrnBinder: PathBindable[Vrn] = valueClassBinder(_.value)
+
+  private val validVrnKeys: List[String] = List("VRN", "VATRegNo")
 
   def validVrnKey(vrnKey: String): Boolean = validVrnKeys.contains(vrnKey)
 
-  def isMtdEnroled(typedVrn: TypedVrn): Boolean = typedVrn match {
+  def isMtdEnrolled(typedVrn: TypedVrn): Boolean = typedVrn match {
     case _: MtdVrn => true
     case _         => false
   }

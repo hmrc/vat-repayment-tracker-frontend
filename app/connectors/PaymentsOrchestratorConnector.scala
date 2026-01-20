@@ -48,28 +48,28 @@ class PaymentsOrchestratorConnector @Inject() (
 
   private val logger = Logger(this.getClass)
 
-  def getFinancialData(vrn: Vrn)(implicit request: Request[_]): Future[Option[FinancialData]] = {
+  def getFinancialData(vrn: Vrn)(implicit request: Request[?]): Future[Option[FinancialData]] = {
     logger.debug(s"Calling payments orchestrator for des api 1166 for vrn $vrn")
     val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1166 with url $getFinancialURL""")
     httpClient.get(url"$getFinancialURL").execute[Option[FinancialData]]
   }
 
-  def getCustomerData(vrn: Vrn)(implicit request: Request[_]): Future[Option[CustomerInformation]] = {
+  def getCustomerData(vrn: Vrn)(implicit request: Request[?]): Future[Option[CustomerInformation]] = {
     logger.debug(s"Calling payments orchestrator for des api 1363 for vrn $vrn")
     val getCustomerURL: String = s"$serviceURL$customerUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1363 with url $getCustomerURL""")
     httpClient.get(url"$getCustomerURL").execute[Option[CustomerInformation]]
   }
 
-  def getDDData(vrn: Vrn)(implicit request: Request[_]): Future[Option[DirectDebitData]] = {
+  def getDDData(vrn: Vrn)(implicit request: Request[?]): Future[Option[DirectDebitData]] = {
     logger.debug(s"Calling payments orchestrator for des api 1396 for vrn $vrn")
     val getDDURL: String = s"$serviceURL$ddUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1396 with url $getDDURL""")
     httpClient.get(url"$getDDURL").execute[Option[DirectDebitData]]
   }
 
-  def getRepaymentsDetails(vrn: Vrn)(implicit request: Request[_]): Future[Option[Seq[RepaymentDetailData]]] = {
+  def getRepaymentsDetails(vrn: Vrn)(implicit request: Request[?]): Future[Option[Seq[RepaymentDetailData]]] = {
     logger.debug(s"Calling payments orchestrator for des api 1533 for vrn $vrn")
     val getRDURL: String = s"$serviceURL$repaymentDetailsUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1533 with url $getRDURL""")

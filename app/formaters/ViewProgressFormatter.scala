@@ -47,7 +47,7 @@ class ViewProgressFormatter @Inject() (
     customerData:  Option[CustomerInformation],
     financialData: Option[FinancialData]
   )(implicit
-    request:       Request[_],
+    request:       Request[?],
     messages:      Messages
   ): Result = {
 

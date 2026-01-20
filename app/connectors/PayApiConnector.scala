@@ -19,6 +19,7 @@ package connectors
 import model.Vrn
 import model.payapi.{SpjRequestBtaVat, SpjResponse}
 import play.api.libs.json.Json
+import play.api.libs.ws.writeableOf_JsValue
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -38,13 +39,13 @@ class PayApiConnector @Inject() (
 
   import req.RequestSupport._
 
-  private val logger = Logger(this.getClass)
+  private val logger = Logger(this.getClass())
 
   private val serviceUrl: String = servicesConfig.baseUrl("pay-api")
   private val viewUrl: String    = configuration.get[String]("microservice.services.pay-api.sj-url")
   private val payBackUrl: String = configuration.get[String]("urls.pay-back-url")
 
-  def startJourney(amountInPence: Long, vrn: Vrn)(implicit request: Request[_]): Future[SpjResponse] = {
+  def startJourney(amountInPence: Long, vrn: Vrn)(implicit request: Request[?]): Future[SpjResponse] = {
 
     val journeyRequest: SpjRequestBtaVat = SpjRequestBtaVat(amountInPence, payBackUrl, payBackUrl, vrn)
     logger.debug(s"Using back url : $payBackUrl")

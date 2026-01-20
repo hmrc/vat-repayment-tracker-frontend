@@ -42,21 +42,24 @@ class ManageOrTrackController @Inject() (
   actions:                     Actions,
   viewConfig:                  ViewConfig,
   directDebitBackendConnector: DirectDebitBackendConnector
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController(cc) {
 
-  val manageOrTrackVrt: Action[AnyContent] =
-    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
+  val manageOrTrackVrt: Action[AnyContent] = actions.securedActionMtdVrnCheckWithoutShutterCheck.async {
+    (request: AuthenticatedRequest[AnyContent]) =>
+      given AuthenticatedRequest[AnyContent] = request
       import requestSupport._
       if (viewConfig.isShuttered)
         manageOrTrackViewShuttered(manageOrTrackForm.fill(ManageOrTrack(None)))
       else
         manageOrTrackView(request.typedVrn.vrn, manageOrTrackForm.fill(ManageOrTrack(None)))
-    }
+  }
 
   val manageOrTrackSubmit: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
-    implicit request: AuthenticatedRequest[_] =>
-      import requestSupport._
+    (request: AuthenticatedRequest[?]) =>
+      given AuthenticatedRequest[?] = request
+      import requestSupport.*
+
       manageOrTrackForm
         .bindFromRequest()
         .fold(
@@ -66,14 +69,16 @@ class ManageOrTrackController @Inject() (
               case Some(choice) =>
                 choice match {
                   case ManageOrTrackOptions.vrt.value =>
-                    Redirect(routes.Controller.showVrt)
+                    toFutureResult(Redirect(routes.Controller.showVrt))
 
                   case ManageOrTrackOptions.bank.value =>
-                    Redirect(routes.Controller.viewRepaymentAccount)
+                    toFutureResult(Redirect(routes.Controller.viewRepaymentAccount))
 
                   case ManageOrTrackOptions.nobank.value =>
-                    Redirect(
-                      routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("manage-or-track-vrt"))
+                    toFutureResult(
+                      Redirect(
+                        routes.BankAccountCocController.startBankAccountCocJourney(ReturnPage("manage-or-track-vrt"))
+                      )
                     )
 
                   case ManageOrTrackOptions.nodd.value =>
@@ -103,11 +108,13 @@ class ManageOrTrackController @Inject() (
 
   private def manageOrTrackViewShuttered(
     form: Form[ManageOrTrack]
-  )(implicit messages: Messages, request: Request[_]): Future[Result] =
+  )(implicit messages: Messages, request: Request[?]): Future[Result] = {
+    import requestSupport.*
     Ok(manage_or_track(None, None, form, inflightBankDetails = false))
+  }
 
   private def manageOrTrackView(vrn: Vrn, form: Form[ManageOrTrack])(implicit
-    request:  Request[_],
+    request:  Request[?],
     messages: Messages
   ): Future[Result] =
     for {
@@ -123,7 +130,7 @@ class ManageOrTrackController @Inject() (
     Form(
       mapping(
         "manage" -> optional(text).verifying(Messages("manage_or_track_controller.choose_an_option"), _.nonEmpty)
-      )(ManageOrTrack.apply)(ManageOrTrack.unapply)
+      )(ManageOrTrack.apply)(m => Some(m.choice))
     )
 
 }

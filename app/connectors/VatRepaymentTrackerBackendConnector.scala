@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
 import play.api.Logger
 import play.api.libs.json.Json
+import play.api.libs.ws.writeableOf_JsValue
 import play.api.mvc.Request
 import play.utils.UriEncoding
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -42,14 +43,14 @@ class VatRepaymentTrackerBackendConnector @Inject() (servicesConfig: ServicesCon
 
   import req.RequestSupport._
 
-  def store(vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[_]): Future[HttpResponse] = {
+  def store(vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[?]): Future[HttpResponse] = {
     val storeVRDDUrl: String = s"$serviceURL/vat-repayment-tracker-backend/store"
     logger.debug(s"""calling vat-repayment-tracker-backend find with url $storeVRDDUrl""")
     logger.debug(s"storing: ${vrtRepaymentDetailData.toString}")
     httpClient.post(url"$storeVRDDUrl").withBody(Json.toJson(vrtRepaymentDetailData)).execute[HttpResponse]
   }
 
-  def find(vrn: Vrn, periodKey: PeriodKey)(implicit request: Request[_]): Future[List[VrtRepaymentDetailData]] = {
+  def find(vrn: Vrn, periodKey: PeriodKey)(implicit request: Request[?]): Future[List[VrtRepaymentDetailData]] = {
     logger.debug(
       s"Calling vat-repayment-tracker-backend find with vrn :${vrn.value} and periodKey:  ${periodKey.value}"
     )

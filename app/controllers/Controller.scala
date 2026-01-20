@@ -72,7 +72,7 @@ class Controller @Inject() (
     Redirect(viewConfig.feedbackUrlForLogout)
   }
 
-  val showVrt: Action[AnyContent] = actions.securedAction.async { implicit request: AuthenticatedRequest[_] =>
+  val showVrt: Action[AnyContent] = actions.securedAction.async { implicit request: AuthenticatedRequest[?] =>
     logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
     request.typedVrn match {
 
@@ -125,7 +125,7 @@ class Controller @Inject() (
   }
 
   def viewProgress(periodKey: PeriodKey): Action[AnyContent] =
-    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[?] =>
       val customerDataF     = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
       val financialDataF    = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
       val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
@@ -155,7 +155,7 @@ class Controller @Inject() (
     }
 
   val viewRepaymentAccount: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
-    implicit request: AuthenticatedRequest[_] =>
+    implicit request: AuthenticatedRequest[?] =>
       val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
 
       for {

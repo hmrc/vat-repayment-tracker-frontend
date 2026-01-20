@@ -42,7 +42,7 @@ class VrtService @Inject() (
     vrn:              Vrn,
     financialData:    Option[FinancialData],
     maybePeriodKey:   Option[PeriodKey] = None
-  )(implicit request: Request[_], messages: Messages): AllRepaymentData =
+  )(implicit request: Request[?], messages: Messages): AllRepaymentData =
     repaymentDetails match {
       case Some(rd) =>
         val vrd = maybePeriodKey
@@ -96,7 +96,7 @@ class VrtService @Inject() (
           hasSuspendedPayment,
           currentData.filterNot(current =>
             completed.exists(comp =>
-              current.periodKey == comp.periodKey && current.returnCreationDate == comp.returnCreationDate
+              current.periodKey == comp.periodKey && current.returnCreationDate.isEqual(comp.returnCreationDate)
             )
           ),
           completed

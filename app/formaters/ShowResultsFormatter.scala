@@ -44,7 +44,7 @@ class ShowResultsFormatter @Inject() (
     vrn:                          Vrn,
     calendarData:                 Option[CalendarData],
     vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress
-  )(implicit request: Request[_], message: Messages): Result = {
+  )(implicit request: Request[?], message: Messages): Result = {
 
     val address = addressFormatter.getFormattedAddressNonMtd(vatDesignatoryDetailsAddress)
 
@@ -71,7 +71,7 @@ class ShowResultsFormatter @Inject() (
     vrn:              Vrn,
     date:             Option[String],
     welshDate:        Option[String]
-  )(implicit request: Request[_], message: Messages): Result = {
+  )(implicit request: Request[?], message: Messages): Result = {
 
     val bankDetailsExist    = desFormatter.getBankDetailsExist(customerData)
     val bankDetails         = desFormatter.getBankDetails(customerData)

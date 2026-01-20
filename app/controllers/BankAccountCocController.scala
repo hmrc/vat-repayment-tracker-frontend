@@ -43,7 +43,7 @@ class BankAccountCocController @Inject() (
   private val logger = Logger(this.getClass)
 
   def startBankAccountCocJourney(returnPage: ReturnPage): Action[AnyContent] =
-    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
+    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[?] =>
       import requestSupport._
 
       logger.debug("startBankAccountCocJourney... trying to audit")

@@ -38,7 +38,7 @@
         inflightBankDetails: Boolean
 )(
         implicit
-        request: Request[_],
+        request: Request[?],
         messages: Messages
 )
 
@@ -159,12 +159,12 @@
         @{ddDetailsOption.map(manageDDRadioOption)}
 
         <!-- No DD -->
-        @{if(ddDetailsOption.isEmpty) setUpDDRadioOption}
+        @{if(ddDetailsOption.isEmpty) then setUpDDRadioOption}
 
         @{bankDetailsOption.map(manageRepaymentAccountRadioOption)}
 
         <!-- No Bank -->
-       @{if(bankDetailsOption.isEmpty && !inflightBankDetails) setUpRepaymentAccountRadioOption}
+       @{if(bankDetailsOption.isEmpty && !inflightBankDetails) then setUpRepaymentAccountRadioOption}
 
        @{if (!viewConfig.isShuttered) trackRepaymentsRadioOptions}
       </div>

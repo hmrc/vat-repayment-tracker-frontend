@@ -39,7 +39,7 @@
   inFlightBankDetails: Boolean,
   date: Option[String],
   welshDate: Option[String]
-)(implicit request: Request[_], messages: Messages)
+)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(title = Messages("inprogress_completed.title")) {
 

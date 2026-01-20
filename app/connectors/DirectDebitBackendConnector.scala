@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import model.dd.CreateVATJourneyRequest
 import model.{NextUrl, Vrn}
 import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -45,7 +46,7 @@ class DirectDebitBackendConnector @Inject() (
   private val rUrl: String       = configuration.get[String]("microservice.services.direct-debit-backend.return-url")
   private val bUrl: String       = configuration.get[String]("urls.dd-back-url")
 
-  def startJourney(vrn: Vrn)(implicit request: Request[_]): Future[NextUrl] = {
+  def startJourney(vrn: Vrn)(implicit request: Request[?]): Future[NextUrl] = {
     val bkUrl: String = s"$bUrl"
     logger.debug(s"Using return url : $rUrl")
     logger.debug(s"Using back url : $bkUrl")

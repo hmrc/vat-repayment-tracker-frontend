@@ -37,7 +37,7 @@
   addressExists: Boolean,
   inflightBankDetails: Boolean,
   date: Option[String],
-  welshDate: Option[String])(implicit request: Request[_], messages: Messages)
+  welshDate: Option[String])(implicit request: Request[?], messages: Messages)
 
 
 @mainTemplate(title = Messages("inprogress.title")) {

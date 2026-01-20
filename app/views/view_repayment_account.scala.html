@@ -34,7 +34,7 @@
   returnPage : ReturnPage,
   date: Option[String],
   welshDate: Option[String]
-)(implicit request: Request[_], messages: Messages)
+)(implicit request: Request[?], messages: Messages)
 
 @title = @{
   if (inFlight) Messages("view_repayment_account.title.inFlight")

@@ -32,7 +32,7 @@ class PayApiController @Inject() (cc: ControllerComponents, actions: Actions, pa
   private val logger = Logger(this.getClass)
 
   def startPaymentsJourney(amountInPence: Long): Action[AnyContent] =
-    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
+    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[?] =>
       for {
         response <- payApiConnector.startJourney(amountInPence, request.typedVrn.vrn)
       } yield {

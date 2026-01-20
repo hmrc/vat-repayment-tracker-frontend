@@ -64,7 +64,7 @@ class AuthenticatedAction @Inject() (
           if (customer.exists(_.isDeregistered)) {
             logger.debug(s"Unauthorised because VAT registration cancelled")
             Future(Redirect(routes.Controller.deregistered.url))
-          } else if (Vrn.isMtdEnroled(typedVrn) && isPartial(customer)) {
+          } else if (Vrn.isMtdEnrolled(typedVrn) && isPartial(customer)) {
             block(new AuthenticatedRequest(request, enrolments, ClassicVrn(typedVrn.vrn), true))
           } else block(new AuthenticatedRequest(request, enrolments, typedVrn, false))
         }
