@@ -21,9 +21,9 @@ import model.{TypedVrn, Vrn}
 import model.TypedVrn.{ClassicVrn, MtdVrn}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-package object action {
+package object action:
 
-  def extractVrn(enrolments: Enrolments): Option[TypedVrn] = {
+  def extractVrn(enrolments: Enrolments): Option[TypedVrn] =
     val mtd = enrolments.enrolments.collectFirst {
       case Enrolment(key, identifiers, _, _) if key == mtdVatEnrolmentKey =>
         identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => MtdVrn(Vrn(vrn)) }
@@ -34,12 +34,7 @@ package object action {
         identifiers.collectFirst { case EnrolmentIdentifier(k, vrn) if Vrn.validVrnKey(k) => ClassicVrn(Vrn(vrn)) }
     }.flatten
 
-    (mtd, nonMtd) match {
-      case (Some(mdt), None)    => Some(mdt)
-      case (None, Some(nonMdt)) => Some(nonMdt)
-      case (Some(mdt), Some(_)) => Some(mdt)
+    (mtd, nonMtd) match
+      case (Some(mtd), _)       => Some(mtd)
+      case (None, Some(nonMtd)) => Some(nonMtd)
       case _                    => None
-    }
-  }
-
-}

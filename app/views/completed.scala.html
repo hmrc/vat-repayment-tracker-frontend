@@ -15,7 +15,7 @@
  *@
 
 @import config.ViewConfig
-@import model.des._
+@import model.des.*
 @import model.RepaymentDataNoRiskingStatus
 @import model.Vrn
 
@@ -37,7 +37,7 @@ bread_crumbs: views.html.partials.bread_crumbs
   inflightBankDetails: Boolean,
   date: Option[String],
   welshDate: Option[String]
-)(implicit request: Request[_], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @mainTemplate(title = Messages("completed.title")) {
 

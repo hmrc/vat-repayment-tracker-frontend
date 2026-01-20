@@ -16,11 +16,11 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.dd.CreateVATJourneyRequest
 
-object DDBackendWireMockResponses {
+object DDBackendWireMockResponses:
 
   private val startJourneyExpectedUrl = "/direct-debit-backend/vc/vat/journey/start"
 
@@ -37,7 +37,7 @@ object DDBackendWireMockResponses {
         )
     )
 
-  def verifyStartJourneyCalled(expectedRequest: CreateVATJourneyRequest) =
+  def verifyStartJourneyCalled(expectedRequest: CreateVATJourneyRequest): Unit =
     verify(
       exactly(1),
       postRequestedFor(urlEqualTo(startJourneyExpectedUrl))
@@ -53,5 +53,3 @@ object DDBackendWireMockResponses {
           )
         )
     )
-
-}

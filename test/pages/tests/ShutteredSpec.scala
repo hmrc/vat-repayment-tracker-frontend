@@ -18,9 +18,9 @@ package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
 import pages.{ManageOrTrack, Shuttered}
-import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, VatRepaymentTrackerBackendWireMockResponses}
+import support.*
 
-class ShutteredSpec extends BrowserSpec {
+class ShutteredSpec extends BrowserSpec:
 
   val vrn: Vrn = Vrn("234567890")
 
@@ -65,5 +65,3 @@ class ShutteredSpec extends BrowserSpec {
     goToViaPath(path)
     ManageOrTrack.assertPageIsDisplayed(noddDisplayed = true, nobankDisplayed = true, isShuttered = true)
   }
-
-}

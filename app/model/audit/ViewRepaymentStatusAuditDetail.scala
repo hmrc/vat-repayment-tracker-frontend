@@ -24,7 +24,6 @@ final case class ViewRepaymentStatusAuditDetail(
   repayments:     Seq[Repayment]
 )
 
-object ViewRepaymentStatusAuditDetail {
+object ViewRepaymentStatusAuditDetail:
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  implicit val writes: OWrites[ViewRepaymentStatusAuditDetail] = Json.writes[ViewRepaymentStatusAuditDetail]
-}
+  given OWrites[ViewRepaymentStatusAuditDetail] = Json.writes[ViewRepaymentStatusAuditDetail]

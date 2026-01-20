@@ -27,7 +27,6 @@ final case class Repayment(
   originalPostingAmount:  BigDecimal
 )
 
-object Repayment {
+object Repayment:
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  implicit val format: OFormat[Repayment] = Json.format[Repayment]
-}
+  given OFormat[Repayment] = Json.format[Repayment]

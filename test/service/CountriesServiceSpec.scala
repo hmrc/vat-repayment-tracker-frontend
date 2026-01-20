@@ -18,7 +18,7 @@ package service
 
 import support.ItSpec
 
-class CountriesServiceSpec extends ItSpec {
+class CountriesServiceSpec extends ItSpec:
 
   val countryService: CountriesService = injector.instanceOf[CountriesService]
   "countryService" - {
@@ -286,4 +286,3 @@ class CountriesServiceSpec extends ItSpec {
 
     }
   }
-}

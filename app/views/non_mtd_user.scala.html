@@ -21,7 +21,7 @@
   viewConfig: ViewConfig
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(using request: Request[?], messages: Messages)
 
 @mainTemplate(title = Messages("non_mtd_user.title"), timeoutDialog = false) {
     <div class="govuk-grid-row" data-gtag="repayment-type:none_in_progress">

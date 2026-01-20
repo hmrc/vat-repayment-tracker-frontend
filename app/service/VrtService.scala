@@ -21,7 +21,6 @@ import play.api.Logger
 import play.api.mvc.Request
 import formaters.{DesFormatter, PeriodFormatter}
 import model._
-import model.des.RiskingStatus
 import model.des._
 import play.api.i18n.Messages
 
@@ -33,7 +32,7 @@ class VrtService @Inject() (
   vatRepaymentTrackerBackendConnector: VatRepaymentTrackerBackendConnector,
   periodFormatter:                     PeriodFormatter,
   desFormatter:                        DesFormatter
-) {
+):
 
   private val logger = Logger(this.getClass)
 
@@ -42,8 +41,8 @@ class VrtService @Inject() (
     vrn:              Vrn,
     financialData:    Option[FinancialData],
     maybePeriodKey:   Option[PeriodKey] = None
-  )(implicit request: Request[_], messages: Messages): AllRepaymentData =
-    repaymentDetails match {
+  )(using Request[?], Messages): AllRepaymentData =
+    repaymentDetails match
       case Some(rd) =>
         val vrd = maybePeriodKey
           .fold(rd) { periodKey =>
@@ -51,24 +50,23 @@ class VrtService @Inject() (
           }
           .map(VrtRepaymentDetailData(None, LocalDate.now(), vrn, _))
 
-        for {
+        for
           v <- vrd
           _  = vatRepaymentTrackerBackendConnector.store(v)
-        } yield logger.debug(s"cached vat repayment data for vrn : $vrn")
+        yield logger.debug(s"cached vat repayment data for vrn : $vrn")
 
         val data: Seq[RepaymentData] = getRepaymentData(rd, financialData)
 
-        def completeExistsWithoutClearingDate(periodKey: String) =
+        def completeExistsWithoutClearingDate(periodKey: String): Boolean =
           data.exists(r => r.periodKey == periodKey && r.riskingStatus.complete && r.clearingDate.isEmpty)
 
         // use distinct as we don't want duplicate rows for the same period with different risking status.
         // Risking status is relevant for view progress but not the tabbed screens.
         val currentData: List[RepaymentDataNoRiskingStatus] = data
-          .filter(r =>
-            (r.riskingStatus.inProgress && !completeExistsWithoutClearingDate(
+          .filter: r =>
+            r.riskingStatus.inProgress && !completeExistsWithoutClearingDate(
               r.periodKey
-            )) || (r.riskingStatus.complete && r.clearingDate.isEmpty)
-          )
+            ) || (r.riskingStatus.complete && r.clearingDate.isEmpty)
           .map(m => RepaymentDataNoRiskingStatus(m.period, m.amount, m.returnCreationDate, m.periodKey, m.clearingDate))
           .toList
           .distinct
@@ -82,9 +80,7 @@ class VrtService @Inject() (
         val latestUpdateForEachPayment = data
           .groupBy(_.periodKey)
           .map { case (_, lst) =>
-            lst
-              .sortBy(s => (s.sorted, s.lastUpdateReceivedDate))
-              .head
+            lst.minBy(s => (s.sorted, s.lastUpdateReceivedDate))
           }
 
         // Used only to determine when to display repayment suspended warning on show-vrt
@@ -96,22 +92,21 @@ class VrtService @Inject() (
           hasSuspendedPayment,
           currentData.filterNot(current =>
             completed.exists(comp =>
-              current.periodKey == comp.periodKey && current.returnCreationDate == comp.returnCreationDate
+              current.periodKey == comp.periodKey && current.returnCreationDate.isEqual(comp.returnCreationDate)
             )
           ),
           completed
         )
       case None     => dealWithNoData
-    }
 
   private def getRepaymentData(
     repaymentDetails: Seq[RepaymentDetailData],
     financialData:    Option[FinancialData]
-  )(implicit messages: Messages): Seq[RepaymentData] =
-    for {
+  )(using Messages): Seq[RepaymentData] =
+    for
       rd <- repaymentDetails
       if !outDatedPredicate(rd, financialData)
-    } yield {
+    yield
       val transactionForPeriodKey = desFormatter.getTransactionWithPeriodKey(financialData, PeriodKey(rd.periodKey))
       val clearingDate            = desFormatter.getClearingDate(transactionForPeriodKey)
 
@@ -124,12 +119,11 @@ class VrtService @Inject() (
         periodKey = rd.periodKey,
         clearingDate = clearingDate
       )
-    }
 
   private def outDatedPredicate(
     repaymentDetailData: RepaymentDetailData,
     financialData:       Option[FinancialData]
-  ): Boolean = {
+  ): Boolean =
     val lastUpdateReceivedDate = repaymentDetailData.lastUpdateReceivedDate.getOrElse(LocalDate.now())
 
     // if in-progress must be within 9 months and if completed must be within 60 days
@@ -141,7 +135,6 @@ class VrtService @Inject() (
         ) || desFormatter.getReturnCreditChargeExists(financialData, PeriodKey(repaymentDetailData.periodKey))
       )
     )
-  }
 
   private def dealWithNoData: AllRepaymentData =
     AllRepaymentData(
@@ -149,5 +142,3 @@ class VrtService @Inject() (
       List[RepaymentDataNoRiskingStatus](),
       List[RepaymentDataNoRiskingStatus]()
     )
-
-}

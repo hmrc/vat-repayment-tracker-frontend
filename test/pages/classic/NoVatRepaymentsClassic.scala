@@ -19,16 +19,13 @@ package pages.classic
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 import pages.CommonPage
-object NoVatRepaymentsClassic extends CommonPage {
+object NoVatRepaymentsClassic extends CommonPage:
 
   val path = "/vat-repayment-tracker/show-vrt"
 
-  def assertPageIsDisplayed()(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed()(using WebDriver): Assertion =
     currentPath shouldBe s"""$path"""
     readTitle shouldBe "No VAT repayments in progress - Business tax account - GOV.UK"
     readMainMessage shouldBe "No VAT repayments in progress"
-  }
 
-  def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
-
-}
+  def readAddress(using WebDriver): String = probing(_.findElement(By.id("address")).getText)

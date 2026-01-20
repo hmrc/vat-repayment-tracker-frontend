@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package model
+package support
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.JsValue
+import play.api.mvc.Session
 
-case class NextUrl(nextUrl: String)
+import scala.CanEqual.derived
 
-object NextUrl:
-  given Format[NextUrl] = Json.format[NextUrl]
+object Givens:
+  given canEqualJsValue: CanEqual[JsValue, JsValue] = derived
+
+  given canEqualSession: CanEqual[Session, Session] = derived

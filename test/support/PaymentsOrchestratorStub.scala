@@ -16,14 +16,14 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.des.RiskingStatus
 import model.{PeriodKey, Vrn}
 
 import java.time.LocalDate
 
-object PaymentsOrchestratorStub extends TestHelper {
+object PaymentsOrchestratorStub extends TestHelper:
 
   def ddOk(vrn: Vrn): StubMapping =
     stubFor(
@@ -316,4 +316,3 @@ object PaymentsOrchestratorStub extends TestHelper {
             .withBody(DesData.repaymentDetails2DifferentPeriods(date, date2, status1, status2).toString())
         )
     )
-}

@@ -16,20 +16,18 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.http.{HttpHeader, HttpHeaders}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.Vrn
 
-object AuthWireMockResponses {
+object AuthWireMockResponses:
 
   val expectedDetail = "SessionRecordNotFound"
   val oid: String    = "556737e15500005500eaf68f"
 
-  val headers: HttpHeaders = new HttpHeaders(
+  val headers: HttpHeaders = new HttpHeaders:
     new HttpHeader("WWW-Authenticate", s"""MDTP detail="$expectedDetail"""")
-    // new HttpHeader("Failing-Enrolment", "SA")
-  )
 
   def authLoginStubOk: StubMapping =
     stubFor(
@@ -122,5 +120,3 @@ object AuthWireMockResponses {
        """.stripMargin)
         )
     )
-
-}

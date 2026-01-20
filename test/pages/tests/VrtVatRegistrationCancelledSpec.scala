@@ -16,13 +16,13 @@
 
 package pages.tests
 
-import model.Language.Welsh
+import model.Language.{English, Welsh}
 import model.{EnrolmentKeys, Vrn}
 import org.scalatest.Assertion
 import pages.VrtVatRegistrationCancelledPage
 import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, PaymentsOrchestratorStub}
 
-class VrtVatRegistrationCancelledSpec extends BrowserSpec {
+class VrtVatRegistrationCancelledSpec extends BrowserSpec:
 
   val vrn: Vrn = Vrn("234567890")
 
@@ -37,7 +37,7 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     }
   }
 
-  private def testSetup(path: String): Unit = {
+  private def testSetup(path: String): Unit =
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
       wireMockBaseUrlAsString = wireMockBaseUrlAsString,
@@ -47,16 +47,12 @@ class VrtVatRegistrationCancelledSpec extends BrowserSpec {
     PaymentsOrchestratorStub.customerDataOkDeregistered(vrn)
     login()
     goToViaPath(path)
-  }
 
-  private def testPage(): Assertion = {
+  private def testPage(): Assertion =
     VrtVatRegistrationCancelledPage.clickOnWelshLink()
     VrtVatRegistrationCancelledPage.assertPageIsDisplayed(Welsh)
     VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed(Welsh)
     VrtVatRegistrationCancelledPage.clickOnEnglishLink()
-    VrtVatRegistrationCancelledPage.assertPageIsDisplayed()
+    VrtVatRegistrationCancelledPage.assertPageIsDisplayed(English)
     VrtVatRegistrationCancelledPage.assertHyperLinkedTextDisplayed()
     VrtVatRegistrationCancelledPage.assertBackButtonRedirectsTo("#")
-  }
-
-}

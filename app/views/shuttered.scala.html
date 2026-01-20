@@ -16,7 +16,7 @@
 
 @this(mainTemplate: views.html.main_template)
 
-@()(implicit request: Request[_], message: Messages)
+@()(using request: Request[?], message: Messages)
 
 
 

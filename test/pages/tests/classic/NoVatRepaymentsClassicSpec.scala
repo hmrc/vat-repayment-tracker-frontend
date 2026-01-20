@@ -20,7 +20,7 @@ import model.{EnrolmentKeys, Vrn}
 import pages.classic.NoVatRepaymentsClassic
 import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, VatWireMockResponses}
 
-class NoVatRepaymentsClassicSpec extends BrowserSpec {
+class NoVatRepaymentsClassicSpec extends BrowserSpec:
 
   val vrn: Vrn = Vrn("234567890")
   val path     = s"""/vat-repayment-tracker/show-vrt"""
@@ -45,5 +45,3 @@ class NoVatRepaymentsClassicSpec extends BrowserSpec {
     )
 
   }
-
-}

@@ -19,9 +19,6 @@ package pages
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
-object NonMtdUser extends CommonPage {
-
-  def assertPageIsDisplayed(implicit wd: WebDriver): Assertion =
+object NonMtdUser extends CommonPage:
+  def assertPageIsDisplayed(using WebDriver): Assertion =
     readMainMessage shouldBe "You cannot access this service"
-
-}

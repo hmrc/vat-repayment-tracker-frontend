@@ -20,42 +20,37 @@ import com.google.inject.Inject
 import config.ViewConfig
 import controllers.routes
 import play.api.Logger
-import play.api.mvc.Results._
-import play.api.mvc._
+import play.api.mvc.Results.*
+import play.api.mvc.*
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, NoActiveSession}
+import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions, Enrolments, NoActiveSession}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LoggedInAction @Inject() (af: AuthorisedFunctions, viewConfig: ViewConfig, cc: MessagesControllerComponents)(
-  implicit ec: ExecutionContext
-) extends ActionBuilder[LoggedInRequest, AnyContent] {
+class LoggedInAction @Inject() (af: AuthorisedFunctions, viewConfig: ViewConfig, cc: MessagesControllerComponents)(using
+  ExecutionContext
+) extends ActionBuilder[LoggedInRequest, AnyContent]:
 
   private val logger = Logger(this.getClass)
 
-  override def invokeBlock[A](request: Request[A], block: LoggedInRequest[A] => Future[Result]): Future[Result] = {
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+  override def invokeBlock[A](request: Request[A], block: LoggedInRequest[A] => Future[Result]): Future[Result] =
+    given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     af.authorised()
-      .retrieve(Retrievals.allEnrolments) { enrolments =>
+      .retrieve(Retrievals.allEnrolments): (enrolments: Enrolments) =>
         block(new LoggedInRequest(request, extractVrn(enrolments)))
-      }
-      .recover {
-        case _: NoActiveSession        =>
-          Redirect(
-            viewConfig.loginUrl,
-            Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online"))
-          )
-        case e: AuthorisationException =>
-          logger.debug(s"Unauthorised because of ${e.reason}, $e")
-          Redirect(routes.Controller.nonMtdUser.url)
-      }
-  }
+      .recover:
+      case _: NoActiveSession        =>
+        Redirect(
+          viewConfig.loginUrl,
+          Map("continue" -> Seq(viewConfig.frontendBaseUrl + request.uri), "origin" -> Seq("pay-online"))
+        )
+      case e: AuthorisationException =>
+        logger.debug(s"Unauthorised because of ${e.reason}, $e")
+        Redirect(routes.Controller.nonMtdUser.url)
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def executionContext: ExecutionContext = cc.executionContext
-
-}

@@ -27,6 +27,5 @@ final case class ViewRepaymentRequest(
   origin:         String = "VRT"
 )
 
-object ViewRepaymentRequest {
-  implicit val format: Format[ViewRepaymentRequest] = Json.format[ViewRepaymentRequest]
-}
+object ViewRepaymentRequest:
+  given Format[ViewRepaymentRequest] = Json.format[ViewRepaymentRequest]

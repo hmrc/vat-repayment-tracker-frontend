@@ -16,38 +16,11 @@
 
 package model
 
-import enumeratum._
-
-import scala.collection.immutable
-
 case class ManageOrTrack(choice: Option[String])
 
-sealed abstract class ManageOrTrackOption extends EnumEntry {
-  val value: String
-}
-
-object ManageOrTrackOptions extends Enum[ManageOrTrackOption] {
-
-  override def values: immutable.IndexedSeq[ManageOrTrackOption] = findValues
-
-  case object vrt extends ManageOrTrackOption {
-    override val value: String = "vrt"
-  }
-
-  case object bank extends ManageOrTrackOption {
-    override val value: String = "bank"
-  }
-
-  case object dd extends ManageOrTrackOption {
-    override val value: String = "dd"
-  }
-
-  case object nodd extends ManageOrTrackOption {
-    override val value: String = "nodd"
-  }
-
-  case object nobank extends ManageOrTrackOption {
-    override val value: String = "nobank"
-  }
-
-}
+enum ManageOrTrackOption(val value: String):
+  case vrt    extends ManageOrTrackOption("vrt")
+  case bank   extends ManageOrTrackOption("bank")
+  case dd     extends ManageOrTrackOption("dd")
+  case nodd   extends ManageOrTrackOption("nodd")
+  case nobank extends ManageOrTrackOption("nobank")

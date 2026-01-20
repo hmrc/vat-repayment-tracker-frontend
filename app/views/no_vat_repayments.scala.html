@@ -32,8 +32,8 @@
   inflightBankDetails: Boolean,
   date: Option[String],
   welshDate: Option[String])(
-  implicit
-  request: Request[_],
+  using
+  request: Request[?],
   messages: Messages
 )
 

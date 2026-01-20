@@ -28,6 +28,5 @@ final case class WhatsHappendSoFar(
   amountDescription: String,
   pageTitle:         String,
   isComplete:        Boolean = false
-) {
-  val complete: String = if (isComplete) "_Y" else ""
-}
+):
+  val complete: String = if isComplete then "_Y" else ""

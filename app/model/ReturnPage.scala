@@ -17,15 +17,12 @@
 package model
 
 import controllers.ValueClassBinder.valueClassBinder
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
 
 final case class ReturnPage(value: String)
 
-object ReturnPage {
-
-  implicit val format: Format[ReturnPage]         = implicitly[Format[String]].inmap(ReturnPage(_), _.value)
-  implicit val rpBinder: PathBindable[ReturnPage] = valueClassBinder(_.value)
-
-}
+object ReturnPage:
+  given Format[ReturnPage]       = implicitly[Format[String]].inmap(ReturnPage(_), _.value)
+  given PathBindable[ReturnPage] = valueClassBinder(_.value)

@@ -16,12 +16,12 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.Vrn
 import org.scalatest.matchers.should.Matchers
 
-object GgStub extends Matchers {
+object GgStub extends Matchers:
 
   def signInPage(port: Int, vrn: Vrn): StubMapping =
     stubFor(
@@ -49,5 +49,3 @@ object GgStub extends Matchers {
 </html>
     """
   val signInPath       = "/auth-login-stub/gg-sign-in"
-
-}

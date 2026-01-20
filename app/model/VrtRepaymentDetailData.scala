@@ -26,8 +26,7 @@ final case class VrtRepaymentDetailData(
   creationDate:         LocalDate,
   vrn:                  Vrn,
   repaymentDetailsData: RepaymentDetailData
-)
+) derives CanEqual
 
-object VrtRepaymentDetailData {
-  implicit val format: OFormat[VrtRepaymentDetailData] = Json.format[VrtRepaymentDetailData]
-}
+object VrtRepaymentDetailData:
+  given OFormat[VrtRepaymentDetailData] = Json.format[VrtRepaymentDetailData]

@@ -22,23 +22,21 @@ import model.vat.VatDesignatoryDetailsAddress
 import service.CountriesService
 
 @Singleton
-class AddressFormatter @Inject() (countriesService: CountriesService) {
+class AddressFormatter @Inject() (countriesService: CountriesService):
 
   val lineReturn = "<br>"
 
-  def getFormattedAddressMtd(address: Address): String = {
+  def getFormattedAddressMtd(address: Address): String =
 
-    val countryName: String = address.countryCode match {
+    val countryName: String = address.countryCode match
       case Some(code) => if (code == "GB") "" else if (code == "GBR") "" else countriesService.getCountryName(code)
       case None       => ""
-    }
+
     address.line1.fold("")(_ + lineReturn) +
       address.line2.fold("")(_ + lineReturn) +
       address.line3.fold("")(_ + lineReturn) +
       address.line4.fold("")(_ + lineReturn) +
       address.postCode.fold("")(_ + lineReturn) + countryName
-
-  }
 
   def getFormattedAddressNonMtd(address: VatDesignatoryDetailsAddress): String =
     address.addressLine1 + lineReturn +
@@ -47,5 +45,3 @@ class AddressFormatter @Inject() (countriesService: CountriesService) {
       address.addressLine4.fold("")(_ + lineReturn) +
       address.addressLine5.fold("")(_ + lineReturn) +
       address.postcode
-
-}

@@ -20,16 +20,16 @@ import model.dd.CreateVATJourneyRequest
 import model.{EnrolmentKeys, ReturnPage}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import support.{AuditWireMockResponses, AuthWireMockResponses, DDBackendWireMockResponses, DeregisteredBehaviour, ItSpec, PaymentsOrchestratorStub, VatRepaymentTrackerBackendWireMockResponses}
+import support.*
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.test.Helpers.status
 
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters.IteratorHasAsScala
 
-class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
+class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour:
   import support.VatData.vrn
 
   val controller: ManageOrTrackController = injector.instanceOf[ManageOrTrackController]
@@ -40,7 +40,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
   def testRadioButtonOptions(
     doc:                         Document,
     expectedRadioLabelsAndHints: List[(String, Option[String])]
-  ): Unit = {
+  ): Unit =
     val radios         = doc.select(".govuk-radios__item").iterator().asScala.toList
     val labelsAndHints = radios.map(r =>
       r.select(".govuk-label").text() ->
@@ -49,7 +49,6 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
 
     labelsAndHints shouldBe expectedRadioLabelsAndHints
     ()
-  }
 
   "GET /vat-repayment-tracker/manage-or-track-vrt" - {
 
@@ -168,7 +167,7 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
 
   "POST /vat-repayment-tracker/manager-or-track-vrt" - {
 
-    def performAction(formData: (String, String)*): Future[Result] = {
+    def performAction(formData: (String, String)*): Future[Result] =
       AuditWireMockResponses.auditIsAvailable
       AuthWireMockResponses.authOkWithEnrolments(
         wireMockBaseUrlAsString = wireMockBaseUrlAsString,
@@ -181,7 +180,6 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
           .withMethod(POST)
           .withBody(AnyContentAsFormUrlEncoded(formData.toMap.map { case (k, v) => k -> Seq(v) }))
       )
-    }
 
     "should show a form error if nothing has been submitted" in {
       val result = performAction()
@@ -252,7 +250,4 @@ class ManageOrTrackControllerSpec extends ItSpec with DeregisteredBehaviour {
 
       an[IllegalArgumentException] shouldBe thrownBy(await(result))
     }
-
   }
-
-}

@@ -20,7 +20,7 @@ import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
 import model.Vrn
 import support.{AuditWireMockResponses, ItSpec, VatData, VatWireMockResponses}
 
-class VatConnectorSpec extends ItSpec {
+class VatConnectorSpec extends ItSpec:
 
   val vrn: Vrn = Vrn("2345678890")
 
@@ -30,20 +30,18 @@ class VatConnectorSpec extends ItSpec {
     VatWireMockResponses.calendarOk(vrn, isCurrent = false)
     AuditWireMockResponses.auditIsAvailable
     val result: Option[CalendarData] = vatConnector.calendar(vrn).futureValue
-    result match {
+    result match
       case Some(x) => x shouldBe VatData.calendarData
       case None    => "expected a calendar" shouldBe "got None "
-    }
   }
 
   "Get Calendar 404" in {
     VatWireMockResponses.calendar404(vrn)
     AuditWireMockResponses.auditIsAvailable
     val result: Option[CalendarData] = vatConnector.calendar(vrn).futureValue
-    result match {
+    result match
       case Some(x) => s"expected None got ${x.toString}"
       case None    => "None" shouldBe "None"
-    }
 
   }
 
@@ -59,7 +57,4 @@ class VatConnectorSpec extends ItSpec {
     AuditWireMockResponses.auditIsAvailable
     val result: Throwable = vatConnector.designatoryDetails(vrn).failed.futureValue
     result.getMessage should include("returned 404")
-
   }
-
-}

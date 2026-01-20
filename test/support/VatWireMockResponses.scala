@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor,
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.Vrn
 
-object VatWireMockResponses {
+object VatWireMockResponses:
 
   def calendarOk(vrn: Vrn, isCurrent: Boolean = true): StubMapping =
     stubFor(
@@ -61,4 +61,3 @@ object VatWireMockResponses {
             .withStatus(404)
         )
     )
-}

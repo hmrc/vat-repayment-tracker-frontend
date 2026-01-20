@@ -17,7 +17,7 @@
 @import config.ViewConfig
 @import model.ManageOrTrack
 @import model.des._
-@import model.ManageOrTrackOptions
+@import model.ManageOrTrackOption
 @import java.time.LocalDate
 @import uk.gov.hmrc.hmrcfrontend.views.Implicits.RichErrorSummary
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorSummary
@@ -38,7 +38,7 @@
         inflightBankDetails: Boolean
 )(
         implicit
-        request: Request[_],
+        request: Request[?],
         messages: Messages
 )
 
@@ -57,8 +57,8 @@
     views.html.partials.radio_option(
         form("manage"),
         "manage",
-        ManageOrTrackOptions.dd.toString,
-        ManageOrTrackOptions.dd.toString,
+        ManageOrTrackOption.dd.toString,
+        ManageOrTrackOption.dd.toString,
         Messages("manage_or_track.manage_direct_debit"),
         Some(Messages("manage_or_track.account_sortcode", ddDetails.obscureBankAccountNumber, obfuscateSortCode(ddDetails.sortCode))),
         None
@@ -69,8 +69,8 @@
     views.html.partials.radio_option(
         form("manage"),
         "manage",
-        ManageOrTrackOptions.nodd.toString,
-        ManageOrTrackOptions.nodd.toString,
+        ManageOrTrackOption.nodd.toString,
+        ManageOrTrackOption.nodd.toString,
         Messages("manage_or_track.set_up_direct_debit"),
         Some(Messages("manage_or_track.hmrc_automatically")),
         None
@@ -81,8 +81,8 @@
     views.html.partials.radio_option(
         form("manage"),
         "manage",
-        ManageOrTrackOptions.bank.toString,
-        ManageOrTrackOptions.bank.toString,
+        ManageOrTrackOption.bank.toString,
+        ManageOrTrackOption.bank.toString,
         Messages("manage_or_track.manage_repayment_bank_account"),
         Some(Messages("manage_or_track.account_sortcode", bankDetails.obscureBankAccountNumber, obfuscateSortCode(bankDetails.sortCode))),
         None
@@ -93,8 +93,8 @@
     views.html.partials.radio_option(
         form("manage"),
         "manage",
-        ManageOrTrackOptions.nobank.toString,
-        ManageOrTrackOptions.nobank.toString,
+        ManageOrTrackOption.nobank.toString,
+        ManageOrTrackOption.nobank.toString,
         Messages("manage_or_track.set_up_repayment_bank_account"),
         Some(Messages("manage_or_track.tell_pay_money")),
         None
@@ -105,8 +105,8 @@
     views.html.partials.radio_option(
         form("manage"),
         "manage",
-        ManageOrTrackOptions.vrt.toString,
-        ManageOrTrackOptions.vrt.toString,
+        ManageOrTrackOption.vrt.toString,
+        ManageOrTrackOption.vrt.toString,
         Messages("manage_or_track.track_vat_repayments"),
         Some(Messages("manage_or_track.view_hmrc_owe_you")),
         None
@@ -159,14 +159,14 @@
         @{ddDetailsOption.map(manageDDRadioOption)}
 
         <!-- No DD -->
-        @{if(ddDetailsOption.isEmpty) setUpDDRadioOption}
+        @if(ddDetailsOption.isEmpty) {@setUpDDRadioOption}
 
         @{bankDetailsOption.map(manageRepaymentAccountRadioOption)}
 
         <!-- No Bank -->
-       @{if(bankDetailsOption.isEmpty && !inflightBankDetails) setUpRepaymentAccountRadioOption}
+       @if(bankDetailsOption.isEmpty && !inflightBankDetails) {@setUpRepaymentAccountRadioOption}
 
-       @{if (!viewConfig.isShuttered) trackRepaymentsRadioOptions}
+       @if(!viewConfig.isShuttered) {@trackRepaymentsRadioOptions}
       </div>
      </fieldset>
     </div>

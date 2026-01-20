@@ -25,6 +25,5 @@ final case class CreateVATJourneyRequest(
   backUrl:    String
 )
 
-object CreateVATJourneyRequest {
-  implicit val format: OFormat[CreateVATJourneyRequest] = Json.format[CreateVATJourneyRequest]
-}
+object CreateVATJourneyRequest:
+  given OFormat[CreateVATJourneyRequest] = Json.format[CreateVATJourneyRequest]

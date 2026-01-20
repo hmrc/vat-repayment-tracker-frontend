@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package model
+package util
 
-import play.api.libs.json.{Format, Json}
+import support.ItSpec
+import util.WelshDateUtil.*
 
-case class NextUrl(nextUrl: String)
-
-object NextUrl:
-  given Format[NextUrl] = Json.format[NextUrl]
+class WelshDateUtilSpec extends ItSpec:
+  "welsh date" - {
+    "should be translated properly" in {
+      "13 April 2019".welshMonth shouldBe "13 Ebrill 2019"
+    }
+  }

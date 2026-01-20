@@ -17,17 +17,17 @@
 package pages.tests
 
 import model.des.RiskingStatus
-import model.des.RiskingStatus._
+import model.des.RiskingStatus.*
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.ViewProgress.ProgressTimelineItem
 import pages.{InProgress, ViewProgress}
-import support._
+import support.*
 
 import java.time.format.DateTimeFormatter
 
-class ViewProgressSpec extends BrowserSpec {
+class ViewProgressSpec extends BrowserSpec:
 
   val vrn: Vrn                   = Vrn("234567890")
   val path                       = "/vat-repayment-tracker/show-vrt"
@@ -38,11 +38,11 @@ class ViewProgressSpec extends BrowserSpec {
   val `ft_twoClearingDates`: Int = 5
   val `ft_emptyItemsArray`: Int  = 6
 
-  val today = LocalDate.now()
+  val today: LocalDate = LocalDate.now()
 
-  def formatDayShortMonthYear(d: LocalDate) = d.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+  def formatDayShortMonthYear(d: LocalDate): String = d.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 
-  val formattedTodayString = formatDayShortMonthYear(today)
+  val formattedTodayString: String = formatDayShortMonthYear(today)
 
   "id: 1 click view progress basic" in {
     setup(rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
@@ -190,7 +190,7 @@ class ViewProgressSpec extends BrowserSpec {
     )
   }
 
-  "id: 5, ADJUSMENT_TO_TAX_DUE" in {
+  "id: 5, ADJUSTMENT_TO_TAX_DUE" in {
     setup(rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = ADJUSMENT_TO_TAX_DUE)
     InProgress.clickViewProgress()
     ViewProgress.checkAmount("£6.56")
@@ -257,7 +257,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -292,13 +292,14 @@ class ViewProgressSpec extends BrowserSpec {
     setup(rdsp = 2, periodKey = PeriodKey("18AG"), ft = `ft_twoClearingDates`, status2 = REPAYMENT_ADJUSTED)
     InProgress.clickViewProgress()
     ViewProgress.checkAmount("£6.56")
+    println(webDriver.getPageSource)
     ViewProgress.checkEstimatedRepaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -370,7 +371,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -441,7 +442,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, REPAYMENT_ADJUSTED))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -475,7 +476,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusExists(List(ADJUSMENT_TO_TAX_DUE), completed = false)
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, REPAYMENT_ADJUSTED))
     ViewProgress.checkMainMessage("You need to make a VAT payment")
-    ViewProgress.payUrl(expectedValue = true)
+    ViewProgress.payUrl(expectedValue = true) // <-
     ViewProgress.historyUrl(expectedValue = false)
     ViewProgress.assertWebchatLinkPresent()
 
@@ -506,7 +507,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -543,7 +544,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -609,7 +610,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -728,7 +729,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkActionRequired(result = false)
 
     ViewProgress.amount.isDefined shouldBe true
-    ViewProgress.estimatedDate.isDefined shouldBe true
+    ViewProgress.estimatedDate.isDefined shouldBe true // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -805,7 +806,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -918,7 +919,7 @@ class ViewProgressSpec extends BrowserSpec {
     periodKey:        PeriodKey,
     ft:               Int,
     periodKeyBackend: PeriodKey = PeriodKey("18AG")
-  ): Unit = {
+  ): Unit =
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
@@ -926,13 +927,12 @@ class ViewProgressSpec extends BrowserSpec {
       vrn = vrn,
       enrolment = EnrolmentKeys.mtdVatEnrolmentKey
     )
-    if (useBankDetails) {
-      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    } else {
-      PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-    }
-    val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
-    rdsp match {
+    if useBankDetails then PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    else PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
+
+    val date = if inPast then LocalDate.now().minusDays(50).toString else LocalDate.now().toString
+
+    rdsp match
       case 1 =>
         PaymentsOrchestratorStub.repaymentDetailS1(vrn, date, status1, periodKey)
         VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date, status1, periodKeyBackend)
@@ -953,9 +953,8 @@ class ViewProgressSpec extends BrowserSpec {
           status4,
           periodKey
         )
-    }
 
-    ft match {
+    ft match
       case `ft_404`              => PaymentsOrchestratorStub.financialsNotFound(vrn)
       case `ft_credit`           => PaymentsOrchestratorStub.financialsOkCredit(vrn)
       case `ft_noClearingDate`   => PaymentsOrchestratorStub.financialsOkCreditNoClearingDate(vrn)
@@ -963,9 +962,6 @@ class ViewProgressSpec extends BrowserSpec {
       case `ft_emptyItemsArray`  => PaymentsOrchestratorStub.financialsOkCreditEmptyItemsArray(vrn)
       case `ft_debit`            => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       case other                 => throw new IllegalArgumentException(s"no ft match for $other")
-    }
 
     login()
     goToViaPath(path)
-  }
-}

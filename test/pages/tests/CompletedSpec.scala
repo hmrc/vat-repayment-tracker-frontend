@@ -17,12 +17,12 @@
 package pages.tests
 
 import model.{EnrolmentKeys, Vrn}
-import pages._
-import support._
+import pages.*
+import support.*
 
 import java.time.LocalDate
 
-class CompletedSpec extends BrowserSpec {
+class CompletedSpec extends BrowserSpec:
 
   val vrn: Vrn = Vrn("234567890")
   val path     = "/vat-repayment-tracker/show-vrt"
@@ -154,40 +154,27 @@ class CompletedSpec extends BrowserSpec {
     ft:                      Int = ft_debit,
     inflight:                Boolean = false,
     financialDataPeriodKeys: Seq[String] = Seq("18AG")
-  ): Unit = {
+  ): Unit =
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
 
     AuthWireMockResponses.authOkWithEnrolments(wireMockBaseUrlAsString, vrn, EnrolmentKeys.mtdVatEnrolmentKey)
 
-    if (useBankDetails) {
-      if (partialBankDetails)
-        PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
-      else if (inflight)
-        PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
-      else
-        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    } else {
-      if (inflight)
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
-      else
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-    }
+    if useBankDetails then
+      if partialBankDetails then PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
+      else if inflight then PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
+      else PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    else if inflight then PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+    else PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
 
-    if (singleRepayment)
-      PaymentsOrchestratorStub.repaymentDetailSingleCompleted(vrn, LocalDate.now())
-    else
-      PaymentsOrchestratorStub.repaymentDetailsMultipleCompleted(vrn, LocalDate.now())
+    if singleRepayment then PaymentsOrchestratorStub.repaymentDetailSingleCompleted(vrn, LocalDate.now())
+    else PaymentsOrchestratorStub.repaymentDetailsMultipleCompleted(vrn, LocalDate.now())
 
-    ft match {
+    ft match
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
       case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn, financialDataPeriodKeys)
       case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn, financialDataPeriodKeys)
       case other       => throw new IllegalArgumentException(s"no ft match for $other")
-    }
 
     login()
     goToViaPath(path)
-  }
-
-}

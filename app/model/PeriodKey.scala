@@ -17,15 +17,12 @@
 package model
 
 import controllers.ValueClassBinder.valueClassBinder
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
 
 final case class PeriodKey(value: String)
 
-object PeriodKey {
-
-  implicit val format: Format[PeriodKey]          = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
-  implicit val vrnBinder: PathBindable[PeriodKey] = valueClassBinder(_.value)
-
-}
+object PeriodKey:
+  given Format[PeriodKey]       = implicitly[Format[String]].inmap(PeriodKey(_), _.value)
+  given PathBindable[PeriodKey] = valueClassBinder(_.value)

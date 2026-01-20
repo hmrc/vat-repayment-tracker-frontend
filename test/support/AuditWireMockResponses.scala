@@ -16,22 +16,21 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.audit.Repayment
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
-object AuditWireMockResponses extends Matchers {
+object AuditWireMockResponses extends Matchers:
 
-  def auditIsAvailable: StubMapping = {
+  def auditIsAvailable: StubMapping =
     stubFor(post(urlEqualTo("/write/audit")).willReturn(aResponse().withStatus(204)))
     stubFor(post(urlEqualTo("/write/audit/merged")).willReturn(aResponse().withStatus(204)))
-  }
 
-  def bacWasAudited(details: Map[String, String]): Unit = {
+  def bacWasAudited(details: Map[String, String]): Unit =
 
     verify(postRequestedFor(urlEqualTo("/write/audit")))
     val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
@@ -39,23 +38,19 @@ object AuditWireMockResponses extends Matchers {
     mayPaymentAuditEvent shouldBe defined
     val jsBody               = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
 
-    details foreach { e =>
+    details.foreach { e =>
       (jsBody \ "detail" \ e._1).as[String] shouldBe e._2
     }
 
-  }
-
-  def bacWasAuditedNoDetails(): Unit = {
+  def bacWasAuditedNoDetails(): Unit =
     verify(postRequestedFor(urlEqualTo("/write/audit")))
     val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
     val mayPaymentAuditEvent = auditWrites.find(_.getBodyAsString.contains("initiateChangeVATRepaymentBankAccount"))
     mayPaymentAuditEvent shouldBe defined
     val jsBody               = Json.parse(mayPaymentAuditEvent.get.getBodyAsString)
     (jsBody \ "detail").asOpt[String] shouldBe None
-    ()
-  }
 
-  def engagementStatusAudited(transactionName: String, details: Map[String, String]): Unit = {
+  def engagementStatusAudited(transactionName: String, details: Map[String, String]): Unit =
     verify(postRequestedFor(urlEqualTo("/write/audit")))
 
     val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
@@ -66,17 +61,16 @@ object AuditWireMockResponses extends Matchers {
     (jsBody \ "auditType").as[String] shouldBe "EngagementStatus"
     (jsBody \ "tags" \ "transactionName").as[String] shouldBe transactionName
 
-    details foreach { e =>
+    details.foreach { e =>
       (jsBody \ "detail" \ e._1).as[String] shouldBe e._2
     }
-  }
 
   def viewRepaymentStatusAudited(
     transactionName:   String,
     vrn:               String,
     hasBankDetails:    Boolean = true,
     noRepaymentsFound: Boolean = false
-  ): Unit = {
+  ): Unit =
     verify(postRequestedFor(urlEqualTo("/write/audit")))
 
     val auditWrites          = findAll(postRequestedFor(urlEqualTo("/write/audit"))).asScala.toList
@@ -89,13 +83,5 @@ object AuditWireMockResponses extends Matchers {
     (jsBody \ "detail" \ "vrn").as[String] shouldBe vrn
     (jsBody \ "detail" \ "hasBankDetails").as[Boolean] shouldBe hasBankDetails
 
-    if (noRepaymentsFound) {
-      (jsBody \ "detail" \ "repayments").as[List[Repayment]] shouldBe empty
-    } else {
-      (jsBody \ "detail" \ "repayments").as[List[Repayment]] should not be empty
-    }
-
-    ()
-  }
-
-}
+    if noRepaymentsFound then (jsBody \ "detail" \ "repayments").as[List[Repayment]] shouldBe empty
+    else (jsBody \ "detail" \ "repayments").as[List[Repayment]] should not be empty

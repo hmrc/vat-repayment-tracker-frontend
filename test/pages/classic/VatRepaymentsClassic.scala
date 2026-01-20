@@ -20,23 +20,19 @@ import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 import pages.CommonPage
 
-object VatRepaymentsClassic extends CommonPage {
+object VatRepaymentsClassic extends CommonPage:
 
   val path = "/vat-repayment-tracker/show-vrt"
 
-  def assertPageIsDisplayed()(implicit wd: WebDriver): Assertion = {
+  def assertPageIsDisplayed()(using WebDriver): Assertion =
     currentPath shouldBe path
     readTitle shouldBe "Your VAT repayments - Business tax account - GOV.UK"
     readMainMessage shouldBe "Your VAT repayments"
-  }
 
-  def afterAddress404AssertPageIsDisplayed()(implicit wd: WebDriver): Assertion = {
+  def afterAddress404AssertPageIsDisplayed()(using WebDriver): Assertion =
     currentPath shouldBe path
     readTitle shouldBe "Sorry, there is a problem with the service - Business tax account - GOV.UK"
-  }
 
-  def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
+  def readAddress(using WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readReceivedOnDate(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("receivedOn")).getText)
-
-}
+  def readReceivedOnDate(using WebDriver): String = probing(_.findElement(By.id("receivedOn")).getText)

@@ -16,13 +16,13 @@
 
 package controllers
 
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import model.EnrolmentKeys
 import model.payapi.SpjRequestBtaVat
 import support.VatData.vrn
-import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, PayApiWireMockResponses}
+import support.*
 
-class PayApiControllerSpec extends ItSpec {
+class PayApiControllerSpec extends ItSpec:
 
   lazy val controller = injector.instanceOf[PayApiController]
 
@@ -53,5 +53,3 @@ class PayApiControllerSpec extends ItSpec {
     }
 
   }
-
-}

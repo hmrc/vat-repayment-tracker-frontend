@@ -15,8 +15,8 @@
  *@
 
 @import config.ViewConfig
-@import model.des._
-@import model._
+@import model.des.*
+@import model.*
 
 @this(govukWarningText: GovukWarningText, viewConfig: ViewConfig)
 
@@ -28,7 +28,7 @@
   inFlightBankDetails: Boolean,
   date: Option[String],
   welshDate: Option[String]
-)(implicit message: Messages)
+)(using message: Messages)
 
 
 @if(showBankDetails) {

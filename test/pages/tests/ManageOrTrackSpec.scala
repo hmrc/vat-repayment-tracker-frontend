@@ -21,9 +21,9 @@ import model.des.RiskingStatus.INITIAL
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.{InProgress, ManageOrTrack, ViewRepaymentAccount}
-import support._
+import support.*
 
-class ManageOrTrackSpec extends BrowserSpec {
+class ManageOrTrackSpec extends BrowserSpec:
 
   val vrn: Vrn             = Vrn("234567890")
   val path                 = s"""/vat-repayment-tracker/manage-or-track-vrt"""
@@ -100,7 +100,7 @@ class ManageOrTrackSpec extends BrowserSpec {
     useDdDetails:   Boolean = true,
     ft:             Int = ft_404,
     inflight:       Boolean = false
-  ): Unit = {
+  ): Unit =
     AuditWireMockResponses.auditIsAvailable
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuthWireMockResponses.authOkWithEnrolments(
@@ -109,34 +109,22 @@ class ManageOrTrackSpec extends BrowserSpec {
       enrolment = EnrolmentKeys.mtdVatEnrolmentKey
     )
 
-    if (inflight) {
-      if (useBankDetails)
-        PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
-      else
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
-    } else {
-      if (useBankDetails)
-        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-      else
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-    }
+    if inflight then
+      if useBankDetails then PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
+      else PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+    else if useBankDetails then PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    else PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
     // Show dd radio button
-    if (useDdDetails)
-      PaymentsOrchestratorStub.ddOk(vrn)
-    else
-      PaymentsOrchestratorStub.ddNotFound(vrn)
+    if useDdDetails then PaymentsOrchestratorStub.ddOk(vrn)
+    else PaymentsOrchestratorStub.ddNotFound(vrn)
 
     PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, INITIAL, periodKey)
 
-    ft match {
+    ft match
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
       case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
       case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       case other       => throw new IllegalArgumentException(s"no ft match for $other")
-    }
 
     login()
     goToViaPath(path)
-  }
-
-}

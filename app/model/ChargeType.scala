@@ -16,9 +16,6 @@
 
 package model
 
-object ChargeType {
-
+object ChargeType:
   val vatReturnDebitCharge  = "VAT Return Debit Charge"
   val vatReturnCreditCharge = "VAT Return Credit Charge"
-
-}

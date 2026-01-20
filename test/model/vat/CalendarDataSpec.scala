@@ -18,7 +18,7 @@ package model.vat
 
 import support.{UnitSpec, VatData}
 
-class CalendarDataSpec extends UnitSpec {
+class CalendarDataSpec extends UnitSpec:
 
   "from json" in {
     VatData.calendarJson.as[CalendarData] shouldBe VatData.calendarData
@@ -27,5 +27,3 @@ class CalendarDataSpec extends UnitSpec {
   "returns with received date " in {
     VatData.calendarData.countReturns shouldBe 2
   }
-
-}
