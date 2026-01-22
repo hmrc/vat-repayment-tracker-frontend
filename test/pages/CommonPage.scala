@@ -26,7 +26,6 @@ import org.scalatestplus.selenium.WebBrowser
 import play.api.Logger
 import support.RichMatchers
 
-import scala.collection.immutable.List
 import scala.util.Random
 
 trait CommonPage extends WebBrowser with RichMatchers {
@@ -134,7 +133,7 @@ trait CommonPage extends WebBrowser with RichMatchers {
   def readTitle(implicit webDriver: WebDriver): String = webDriver.getTitle
 
   def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion =
-    globalErrors shouldBe defined
+    assert(globalErrors.isDefined)
 
   def globalErrors(implicit driver: WebDriver): Option[Element] = id("error-summary-display").findElement
 

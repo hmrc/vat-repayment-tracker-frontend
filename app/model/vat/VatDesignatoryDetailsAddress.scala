@@ -26,7 +26,7 @@ final case class VatDesignatoryDetailsAddress(
   addressLine4: Option[String] = None,
   addressLine5: Option[String] = None,
   postcode:     String
-)
+) derives CanEqual
 
 object VatDesignatoryDetailsAddress {
 

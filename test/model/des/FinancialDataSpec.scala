@@ -18,6 +18,7 @@ package model.des
 
 import play.api.libs.json.Json
 import support.{DesData, UnitSpec}
+import support.Givens.canEqualJsValue
 
 class FinancialDataSpec extends UnitSpec {
 

@@ -23,7 +23,7 @@ import java.time.LocalDate
 final case class CustomerInformation(
   approvedInformation: Option[ApprovedInformation],
   inFlightInformation: Option[InFlightInformation]
-) {
+) derives CanEqual {
   val approvedInformationExists: Boolean = approvedInformation.isDefined
   val inFlightInformationExists: Boolean = inFlightInformation.isDefined
 

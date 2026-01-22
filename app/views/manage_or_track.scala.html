@@ -159,14 +159,14 @@
         @{ddDetailsOption.map(manageDDRadioOption)}
 
         <!-- No DD -->
-        @{if(ddDetailsOption.isEmpty) then setUpDDRadioOption}
+        @if(ddDetailsOption.isEmpty) {@setUpDDRadioOption}
 
         @{bankDetailsOption.map(manageRepaymentAccountRadioOption)}
 
         <!-- No Bank -->
-       @{if(bankDetailsOption.isEmpty && !inflightBankDetails) then setUpRepaymentAccountRadioOption}
+       @if(bankDetailsOption.isEmpty && !inflightBankDetails) {@setUpRepaymentAccountRadioOption}
 
-       @{if (!viewConfig.isShuttered) trackRepaymentsRadioOptions}
+       @if(!viewConfig.isShuttered) {@trackRepaymentsRadioOptions}
       </div>
      </fieldset>
     </div>

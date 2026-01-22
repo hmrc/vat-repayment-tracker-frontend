@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package model.des
+package util
 
-import play.api.libs.json.Json
-import support.{DesData, UnitSpec}
-import support.Givens.canEqualJsValue
+import support.ItSpec
+import util.WelshDateUtil.StringOps
 
-class DirectDebitDataSpec extends UnitSpec {
-
-  "to json" in {
-    Json.toJson(DesData.directDebitData) shouldBe DesData.directDebitDataJson
-  }
-
-  "from json" in {
-    DesData.directDebitDataJson.as[DirectDebitData] shouldBe DesData.directDebitData
+class WelshDateUtilSpec extends ItSpec {
+  "welsh date" - {
+    "should be translated properly" in {
+      "13 April 2019".welshMonth shouldBe "13 Ebrill 2019"
+    }
   }
 }

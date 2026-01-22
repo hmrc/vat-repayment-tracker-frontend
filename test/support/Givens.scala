@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package model.des
+package support
 
-import play.api.libs.json.Json
-import support.{DesData, UnitSpec}
-import support.Givens.canEqualJsValue
+import pages.ViewProgress.ProgressTimelineItem
+import play.api.libs.json.JsValue
+import play.api.mvc.Session
 
-class DirectDebitDataSpec extends UnitSpec {
+import scala.CanEqual.derived
 
-  "to json" in {
-    Json.toJson(DesData.directDebitData) shouldBe DesData.directDebitDataJson
-  }
+object Givens:
+  given canEqualJsValue: CanEqual[JsValue, JsValue] = derived
 
-  "from json" in {
-    DesData.directDebitDataJson.as[DirectDebitData] shouldBe DesData.directDebitData
-  }
-}
+  given canEqualSession: CanEqual[Session, Session] = derived

@@ -29,7 +29,7 @@ final case class FinancialData(
   regimeType:            String,
   processingDate:        String,
   financialTransactions: Seq[Transaction]
-)
+) derives CanEqual
 
 object FinancialData {
   implicit val format: OFormat[FinancialData] = Json.format[FinancialData]

@@ -30,7 +30,7 @@ final case class RepaymentDetailData(
   vatToPay_BOX5:          BigDecimal,
   supplementDelayDays:    Option[Int],
   originalPostingAmount:  BigDecimal
-) {
+) derives CanEqual {
 
   @SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
   def getAmountForDisplay(status: RiskingStatus): BigDecimal =

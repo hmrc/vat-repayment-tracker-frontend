@@ -16,7 +16,7 @@
 
 package model
 
-sealed trait Language
+sealed trait Language derives CanEqual
 
 object Language {
 

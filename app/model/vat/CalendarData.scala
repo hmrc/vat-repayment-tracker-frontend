@@ -25,7 +25,7 @@ import play.api.libs.json.{Json, OFormat}
 case class CalendarData(
   currentPeriod:   Option[CalendarPeriod],
   previousPeriods: Seq[CalendarPeriod]
-) {
+) derives CanEqual {
   def countReturns: Int =
     currentPeriod.count(_.returnReceivedDate.isDefined) + previousPeriods.count(_.returnReceivedDate.isDefined)
 

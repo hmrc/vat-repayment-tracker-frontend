@@ -38,7 +38,7 @@ class ViewProgressSpec extends BrowserSpec {
   val `ft_twoClearingDates`: Int = 5
   val `ft_emptyItemsArray`: Int  = 6
 
-  val today = LocalDate.now()
+  val today: LocalDate = LocalDate.now()
 
   def formatDayShortMonthYear(d: LocalDate) = d.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 

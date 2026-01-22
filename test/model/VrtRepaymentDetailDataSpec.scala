@@ -18,6 +18,7 @@ package model
 
 import play.api.libs.json.Json
 import support.{DesData, UnitSpec}
+import support.Givens.canEqualJsValue
 
 class VrtRepaymentDetailDataSpec extends UnitSpec {
 

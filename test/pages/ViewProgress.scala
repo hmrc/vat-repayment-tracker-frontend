@@ -27,7 +27,7 @@ import scala.util.Try
 
 object ViewProgress extends CommonPage {
 
-  final case class ProgressTimelineItem(heading: String, date: String, paragraphs: List[String])
+  final case class ProgressTimelineItem(heading: String, date: String, paragraphs: List[String]) derives CanEqual
 
   def amount(implicit webDriver: WebDriver): Option[String] = Try {
     probing(_.findElement(By.id(s"amount")).getText)
