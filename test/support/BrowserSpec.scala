@@ -35,6 +35,7 @@ class CustomHtmlUnitDriver extends HtmlUnitDriver {
     modifiedClient.getOptions.setThrowExceptionOnScriptError(false)
     modifiedClient.getOptions.setRedirectEnabled(true)
     modifiedClient.getOptions.setJavaScriptEnabled(false)
+    modifiedClient.getOptions.setCssEnabled(false) // needed to silence warnings
     modifiedClient
   }
 }

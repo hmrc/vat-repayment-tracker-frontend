@@ -96,5 +96,5 @@
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(scripts),
     footerBlock = Some(hmrcStandardFooter()),
-    mainContentLayout = (if (!fullWidth) Some(twoThirdsMainContent.apply _) else None)
+    mainContentLayout = (if (!fullWidth) Some(twoThirdsMainContent.apply) else None)
 )(contentBlock)

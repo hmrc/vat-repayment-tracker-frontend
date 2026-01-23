@@ -37,6 +37,6 @@ object VatDesignatoryDetailsAddress {
       (JsPath \ "address" \ "addressLine4").readNullable[String] and
       (JsPath \ "address" \ "addressLine5").readNullable[String] and
       (JsPath \ "address" \ "postcode").read[String]
-  )(VatDesignatoryDetailsAddress.apply _)
+  )(VatDesignatoryDetailsAddress.apply)
 
 }

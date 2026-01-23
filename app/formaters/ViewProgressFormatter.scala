@@ -37,7 +37,7 @@ class ViewProgressFormatter @Inject() (
   periodFormatter: PeriodFormatter
 ) extends Results {
 
-  implicit val localDateOrdering: Order[LocalDate] = Order.fromOrdering(Ordering.fromLessThan(_ isAfter _))
+  implicit val localDateOrdering: Order[LocalDate] = Order.fromOrdering(Ordering.fromLessThan(_.isAfter(_)))
 
   private val logger = Logger(this.getClass)
 
@@ -101,12 +101,12 @@ class ViewProgressFormatter @Inject() (
     Ok(
       view_progress(
         viewProgress,
-        showEstimatedRepaymentDate(vrd),
-        viewProgress.whatsHappenedSoFar.head.amountDescription,
-        viewProgress.whatsHappenedSoFar.head.pageTitle,
-        viewProgress.whatsHappenedSoFar.head.isComplete,
-        showPayUrl(viewProgress.whatsHappenedSoFar.head),
-        (viewProgress.amount * 100).longValue
+        showEstimatedRepaymentDate = showEstimatedRepaymentDate(vrd),
+        amountDescription = viewProgress.whatsHappenedSoFar.head.amountDescription,
+        pageTitle = viewProgress.whatsHappenedSoFar.head.pageTitle,
+        showHistoryUrl = viewProgress.whatsHappenedSoFar.head.isComplete,
+        showPayUrl = showPayUrl(viewProgress.whatsHappenedSoFar.head),
+        amountInPence = (viewProgress.amount * 100).longValue
       )
     )
   }
@@ -197,7 +197,7 @@ class ViewProgressFormatter @Inject() (
           vrtRepaymentDetailData.repaymentDetailsData.returnCreationDate
         )
 
-        if (estRepaymentDate isBefore LocalDate.now())
+        if (estRepaymentDate.isBefore(LocalDate.now()))
           // id:4
           WhatsHappendSoFar(
             CLAIM_QUERIED,
@@ -225,7 +225,7 @@ class ViewProgressFormatter @Inject() (
           )
         )
 
-        if (estRepaymentDate isBefore LocalDate.now())
+        if (estRepaymentDate.isBefore(LocalDate.now()))
           // id:4
           WhatsHappendSoFar(
             SENT_FOR_RISKING,

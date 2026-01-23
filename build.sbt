@@ -35,17 +35,7 @@ lazy val microservice = Project(appName, file("."))
       "model.des._"
     ))
   .settings(
-    scalacOptions ++= Seq(
-      "-Wvalue-discard",
-      "-deprecation",
-      "-feature",
-      "-unchecked",
-      "-language:implicitConversions",
-      "-language:strictEquality",
-      // required in place of silencer plugin
-      "-Wconf:msg=unused-imports&src=html/.*:s",
-      "-Wconf:src=routes/.*:s"
-    )
+    scalacOptions ++= ScalaCompilerFlags.scalaCompilerOptions
   )
   .settings(
     TwirlKeys.templateImports ++= Seq(

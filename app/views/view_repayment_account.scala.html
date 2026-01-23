@@ -45,12 +45,12 @@
  <div class="govuk-grid-row govuk-!-padding-bottom-2">
     <div class="govuk-grid-column-two-thirds">
         <h1 id="main-message" class="govuk-heading-xl">@title</h1>
-
-    @if(inFlight) {
-        @govukWarningText(WarningText(content = Text(Messages(
-          "view_repayment_account.warning", if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")}
-        ))))
-    }
+        @if(inFlight) {
+            @govukWarningText(WarningText(content = Text(Messages(
+              "view_repayment_account.warning",
+              if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")} else ""
+            ))))
+        }
 
     @bankDetailsOption.map { bankDetails =>
 

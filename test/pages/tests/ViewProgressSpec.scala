@@ -190,7 +190,7 @@ class ViewProgressSpec extends BrowserSpec {
     )
   }
 
-  "id: 5, ADJUSMENT_TO_TAX_DUE" in {
+  "id: 5, ADJUSTMENT_TO_TAX_DUE" in {
     setup(rdsp = 2, periodKey = PeriodKey("18AG"), ft = ft_404, status2 = ADJUSMENT_TO_TAX_DUE)
     InProgress.clickViewProgress()
     ViewProgress.checkAmount("£6.56")
@@ -257,7 +257,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -292,13 +292,14 @@ class ViewProgressSpec extends BrowserSpec {
     setup(rdsp = 2, periodKey = PeriodKey("18AG"), ft = `ft_twoClearingDates`, status2 = REPAYMENT_ADJUSTED)
     InProgress.clickViewProgress()
     ViewProgress.checkAmount("£6.56")
+    println(webDriver.getPageSource)
     ViewProgress.checkEstimatedRepaymentDateNotPresent
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED, INITIAL))
     ViewProgress.checkStatusExists(List(REPAYMENT_ADJUSTED), completed = true)
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -370,7 +371,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -441,7 +442,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, REPAYMENT_ADJUSTED))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -475,7 +476,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusExists(List(ADJUSMENT_TO_TAX_DUE), completed = false)
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_APPROVED, REPAYMENT_ADJUSTED))
     ViewProgress.checkMainMessage("You need to make a VAT payment")
-    ViewProgress.payUrl(expectedValue = true)
+    ViewProgress.payUrl(expectedValue = true) // <-
     ViewProgress.historyUrl(expectedValue = false)
     ViewProgress.assertWebchatLinkPresent()
 
@@ -506,7 +507,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -543,7 +544,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(CLAIM_QUERIED, SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -609,7 +610,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -728,7 +729,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkActionRequired(result = false)
 
     ViewProgress.amount.isDefined shouldBe true
-    ViewProgress.estimatedDate.isDefined shouldBe true
+    ViewProgress.estimatedDate.isDefined shouldBe true // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(
@@ -805,7 +806,7 @@ class ViewProgressSpec extends BrowserSpec {
     ViewProgress.checkStatusNotPresent(List(SENT_FOR_RISKING, REPAYMENT_ADJUSTED, ADJUSMENT_TO_TAX_DUE))
     ViewProgress.checkMainMessage("Your repayment is complete")
     ViewProgress.payUrl(expectedValue = false)
-    ViewProgress.historyUrl(expectedValue = true)
+    ViewProgress.historyUrl(expectedValue = true) // <-
     ViewProgress.assertWebchatLinkPresent()
 
     ViewProgress.getProgressTimelineItems shouldBe List(

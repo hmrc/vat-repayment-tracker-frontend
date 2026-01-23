@@ -25,7 +25,7 @@
 )
 
 <div class="govuk-radios__item" @attributes.fold(Html("")){ attributes => @attributes }>
-<input id="@id" class="govuk-radios__input" type="radio" name="@name" value="@value" aria-describedby="@id-hint" @{if(field.value.contains(value)) "checked"}>
+<input id="@id" class="govuk-radios__input" type="radio" name="@name" value="@value" aria-describedby="@id-hint" @if(field.value.contains(value)) {"checked"} else "">
 <label class="govuk-label govuk-radios__label" for="@id" id="@id-label">
     @text
 

@@ -43,6 +43,6 @@ object ValueClassBinder:
       parse = JsString(_).as[A],
       fromAtoString,
       { case (key: String, _: Exception) =>
-        s"Cannot parse param $key as ${summon[Tag[A]].toString}" // ?????
+        s"Cannot parse param $key as ${summon[Tag[A]].tag.toString}"
       }
     )

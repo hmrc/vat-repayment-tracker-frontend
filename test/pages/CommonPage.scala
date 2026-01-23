@@ -65,8 +65,8 @@ trait CommonPage extends WebBrowser with RichMatchers {
         .click()
     )
 
-  /** Probing tries to run `probingF` until until it succeeds. If it doesn't it: reports what was the page source and
-    * dumps page screenshot and fails assertion
+  /** Probing tries to run `probingF` until it succeeds. If it doesn't it: reports what was the page source and dumps
+    * page screenshot and fails assertion
     */
   def probing[A](probingF: WebDriver => A)(implicit driver: WebDriver): A = eventually(probingF(driver)).withClue {
     val maybeDumpedFile = takeADump()

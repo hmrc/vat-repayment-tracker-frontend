@@ -21,7 +21,6 @@ import play.api.Logger
 import play.api.mvc.Request
 import formaters.{DesFormatter, PeriodFormatter}
 import model._
-import model.des.RiskingStatus
 import model.des._
 import play.api.i18n.Messages
 
