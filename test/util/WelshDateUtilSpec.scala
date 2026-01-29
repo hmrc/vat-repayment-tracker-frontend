@@ -19,10 +19,9 @@ package util
 import support.ItSpec
 import util.WelshDateUtil.*
 
-class WelshDateUtilSpec extends ItSpec {
+class WelshDateUtilSpec extends ItSpec:
   "welsh date" - {
     "should be translated properly" in {
       "13 April 2019".welshMonth shouldBe "13 Ebrill 2019"
     }
   }
-}

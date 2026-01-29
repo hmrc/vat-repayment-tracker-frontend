@@ -16,7 +16,7 @@
 
 package support
 
-import java.time._
+import java.time.*
 import java.time.format.DateTimeFormatter
 import com.google.inject.{AbstractModule, Provides}
 
@@ -46,38 +46,35 @@ trait ItSpec
     with BeforeAndAfterEach
     with GuiceOneServerPerSuite
     with WireMockSupport
-    with Matchers {
+    with Matchers:
 
-  lazy val frozenZonedDateTime: ZonedDateTime = {
+  lazy val frozenZonedDateTime: ZonedDateTime =
     val formatter = DateTimeFormatter.ISO_DATE_TIME
     LocalDateTime.parse("2018-11-02T16:28:55.185", formatter).atZone(ZoneId.of("Europe/London"))
-  }
 
-  implicit lazy val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  given ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   lazy val servicesConfig: ServicesConfig    = fakeApplication().injector.instanceOf[ServicesConfig]
   lazy val config: Configuration             = fakeApplication().injector.instanceOf[Configuration]
   lazy val env: Environment                  = fakeApplication().injector.instanceOf[Environment]
   def frozenTimeString: String               = "2027-11-02T16:33:51.880"
-  lazy val overridingsModule: AbstractModule = new AbstractModule {
+  lazy val overridingsModule: AbstractModule = new AbstractModule:
 
     override def configure(): Unit = ()
 
     @Provides
     @Singleton
     @unused
-    def clock: Clock = {
+    def clock: Clock =
       val fixedInstant = LocalDateTime.parse(frozenTimeString).toInstant(ZoneOffset.UTC)
       Clock.fixed(fixedInstant, ZoneId.systemDefault)
-    }
-  }
 
   val baseUrl: String = s"http://localhost:$WireMockSupport.port"
 
-  override implicit val patienceConfig: PatienceConfig =
+  given PatienceConfig =
     PatienceConfig(timeout = scaled(Span(3, Seconds)), interval = scaled(Span(300, Millis)))
 
-  implicit val emptyHC: HeaderCarrier = HeaderCarrier()
+  given HeaderCarrier = HeaderCarrier()
 
   def httpClient: HttpClientV2 = fakeApplication().injector.instanceOf[HttpClientV2]
 
@@ -107,6 +104,4 @@ trait ItSpec
     FakeRequest().withSession(SessionKeys.authToken -> "authToken")
   )
 
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-
-}
+  given FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

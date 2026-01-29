@@ -19,7 +19,7 @@ package connectors
 import model.{ReturnPage, Vrn}
 import support.{AuditWireMockResponses, BankAccountCocWireMockResponses, ItSpec}
 
-class BankAccountCocConnectorSpec extends ItSpec {
+class BankAccountCocConnectorSpec extends ItSpec:
   val vrn: Vrn = Vrn("2345678890")
 
   val bankAccountCocConnector: BankAccountCocConnector = injector.instanceOf[BankAccountCocConnector]
@@ -30,5 +30,3 @@ class BankAccountCocConnectorSpec extends ItSpec {
     val result = bankAccountCocConnector.startJourney(vrn, ReturnPage("manage-or-track-vrt")).futureValue
     result.nextUrl shouldBe BankAccountCocWireMockResponses.dummyNextUrl
   }
-
-}

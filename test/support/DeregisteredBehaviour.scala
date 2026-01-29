@@ -22,11 +22,11 @@ import play.api.http.Status
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.Helpers.*
 
-trait DeregisteredBehaviour { self: ItSpec =>
+trait DeregisteredBehaviour extends ItSpec:
 
   val vrtVatRegistrationCancelledUrl: String = "/vrt-vat-registration-cancelled"
 
-  def assertDeregisteredRedirectedIn(action: Action[AnyContent], vrn: Vrn): Assertion = {
+  def assertDeregisteredRedirectedIn(action: Action[AnyContent], vrn: Vrn): Assertion =
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
       wireMockBaseUrlAsString = wireMockBaseUrlAsString,
@@ -37,5 +37,3 @@ trait DeregisteredBehaviour { self: ItSpec =>
     val result = action(fakeRequest)
     status(result) shouldBe Status.SEE_OTHER
     redirectLocation(result).getOrElse("None found") should include(vrtVatRegistrationCancelledUrl)
-  }
-}

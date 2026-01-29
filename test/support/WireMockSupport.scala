@@ -21,13 +21,13 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
 
-trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
+trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach:
   self: Suite =>
 
-  implicit val wireMockServer: WireMockServer = new WireMockServer(
+  given wireMockServer: WireMockServer = new WireMockServer(
     WireMockConfiguration.wireMockConfig().port(WireMockSupport.port)
   )
-  val wireMockHost                            = "localhost"
+  val wireMockHost                     = "localhost"
 
   val wireMockBaseUrlAsString = s"http://$wireMockHost:$WireMockSupport.port"
 
@@ -39,8 +39,5 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
 
   override protected def afterAll(): Unit = wireMockServer.stop()
 
-}
-
-object WireMockSupport {
+object WireMockSupport:
   val port: Int = 11111
-}

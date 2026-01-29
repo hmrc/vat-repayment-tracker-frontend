@@ -17,17 +17,17 @@
 package pages.tests
 
 import model.des.RiskingStatus
-import model.des.RiskingStatus._
+import model.des.RiskingStatus.*
 
 import java.time.LocalDate
 import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.ViewProgress.ProgressTimelineItem
 import pages.{InProgress, ViewProgress}
-import support._
+import support.*
 
 import java.time.format.DateTimeFormatter
 
-class ViewProgressSpec extends BrowserSpec {
+class ViewProgressSpec extends BrowserSpec:
 
   val vrn: Vrn                   = Vrn("234567890")
   val path                       = "/vat-repayment-tracker/show-vrt"
@@ -40,9 +40,9 @@ class ViewProgressSpec extends BrowserSpec {
 
   val today: LocalDate = LocalDate.now()
 
-  def formatDayShortMonthYear(d: LocalDate) = d.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+  def formatDayShortMonthYear(d: LocalDate): String = d.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 
-  val formattedTodayString = formatDayShortMonthYear(today)
+  val formattedTodayString: String = formatDayShortMonthYear(today)
 
   "id: 1 click view progress basic" in {
     setup(rdsp = 1, periodKey = PeriodKey("18AG"), ft = ft_404)
@@ -919,7 +919,7 @@ class ViewProgressSpec extends BrowserSpec {
     periodKey:        PeriodKey,
     ft:               Int,
     periodKeyBackend: PeriodKey = PeriodKey("18AG")
-  ): Unit = {
+  ): Unit =
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
@@ -927,13 +927,12 @@ class ViewProgressSpec extends BrowserSpec {
       vrn = vrn,
       enrolment = EnrolmentKeys.mtdVatEnrolmentKey
     )
-    if (useBankDetails) {
-      PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    } else {
-      PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-    }
-    val date = if (inPast) LocalDate.now().minusDays(50).toString else LocalDate.now().toString
-    rdsp match {
+    if useBankDetails then PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    else PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
+
+    val date = if inPast then LocalDate.now().minusDays(50).toString else LocalDate.now().toString
+
+    rdsp match
       case 1 =>
         PaymentsOrchestratorStub.repaymentDetailS1(vrn, date, status1, periodKey)
         VatRepaymentTrackerBackendWireMockResponses.repaymentDetailS1(vrn, date, status1, periodKeyBackend)
@@ -954,9 +953,8 @@ class ViewProgressSpec extends BrowserSpec {
           status4,
           periodKey
         )
-    }
 
-    ft match {
+    ft match
       case `ft_404`              => PaymentsOrchestratorStub.financialsNotFound(vrn)
       case `ft_credit`           => PaymentsOrchestratorStub.financialsOkCredit(vrn)
       case `ft_noClearingDate`   => PaymentsOrchestratorStub.financialsOkCreditNoClearingDate(vrn)
@@ -964,9 +962,6 @@ class ViewProgressSpec extends BrowserSpec {
       case `ft_emptyItemsArray`  => PaymentsOrchestratorStub.financialsOkCreditEmptyItemsArray(vrn)
       case `ft_debit`            => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       case other                 => throw new IllegalArgumentException(s"no ft match for $other")
-    }
 
     login()
     goToViaPath(path)
-  }
-}

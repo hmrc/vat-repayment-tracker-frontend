@@ -25,95 +25,73 @@ import org.scalatest.Assertion
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.Try
 
-object ViewProgress extends CommonPage {
+object ViewProgress extends CommonPage:
 
   final case class ProgressTimelineItem(heading: String, date: String, paragraphs: List[String]) derives CanEqual
 
-  def amount(implicit webDriver: WebDriver): Option[String] = Try {
+  def amount(using WebDriver): Option[String] = Try {
     probing(_.findElement(By.id(s"amount")).getText)
   }.toOption
 
-  def estimatedDate(implicit webDriver: WebDriver): Option[String] = Try {
+  def estimatedDate(using WebDriver): Option[String] = Try {
     probing(_.findElement(By.id(s"repay-date")).getText)
   }.toOption
 
-  def actionRequired()(implicit webDriver: WebDriver): String = Try {
+  def actionRequired()(using WebDriver): String = Try {
     probing(_.findElement(By.id(s"repayment-suspended-action-required")).getText)
   }.getOrElse("")
 
-  def checkActionRequired(result: Boolean)(implicit webDriver: WebDriver): Unit = {
+  def checkActionRequired(result: Boolean)(using WebDriver): Unit =
     val div = actionRequired()
 
-    div.contains {
-      "Action required"
-    } shouldBe result
+    div.contains("Action required") shouldBe result
 
-    div.contains {
-      "Submit VAT return"
-    } shouldBe result
+    div.contains("Submit VAT return") shouldBe result
 
-    div.contains {
-      "Submit your return"
-    } shouldBe result
+    div.contains("Submit your return") shouldBe result
 
-    ()
-  }
-
-  def checkAmount(amount: String)(implicit webDriver: WebDriver): Assertion =
+  def checkAmount(amount: String)(using WebDriver): Assertion =
     probing(_.findElement(By.id(s"amount")).getText) shouldBe amount
 
-  def checkEstimatedRepaymentDate(daysAdded: Int)(implicit webDriver: WebDriver): Assertion =
+  def checkEstimatedRepaymentDate(daysAdded: Int)(using WebDriver): Assertion =
     probing(_.findElement(By.id(s"repay-date")).getText) shouldBe
       formatDate(LocalDate.now().plusDays(30 + daysAdded))
 
-  def checkEstimatedRepaymentDateNotPresent(implicit webDriver: WebDriver): Assertion =
+  def checkEstimatedRepaymentDateNotPresent(using WebDriver): Assertion =
     idPresent("repay-date") shouldBe false
 
-  def checkStatusExists(statusList: List[RiskingStatus], completed: Boolean = false)(implicit
-    webDriver: WebDriver
-  ): Unit = {
-    val completedFrag = if (completed) "_Y" else ""
+  def checkStatusExists(statusList: List[RiskingStatus], completed: Boolean = false)(using WebDriver): Unit =
+    val completedFrag = if completed then "_Y" else ""
 
     statusList foreach (e => idPresent(s"$e${completedFrag}_timeline") shouldBe true)
 
-  }
-
-  def checkStatusNotPresent(statusList: List[RiskingStatus], completed: Boolean = false)(implicit
-    webDriver: WebDriver
-  ): Unit = {
-    val completedFrag = if (completed) "_Y" else ""
+  def checkStatusNotPresent(statusList: List[RiskingStatus], completed: Boolean = false)(using WebDriver): Unit =
+    val completedFrag = if completed then "_Y" else ""
 
     statusList foreach (e => idPresent(s"$e${completedFrag}_timeline") shouldBe false)
 
-  }
-
-  def checkMainMessage(mainMessage: String)(implicit webDriver: WebDriver): Assertion =
+  def checkMainMessage(mainMessage: String)(using WebDriver): Assertion =
     readMainMessage shouldBe mainMessage
 
-  def backExists()(implicit driver: WebDriver): Assertion = cssPresent(".govuk-back-link") shouldBe true
+  def backExists()(using WebDriver): Assertion = cssPresent(".govuk-back-link") shouldBe true
 
-  def historyUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion =
+  def historyUrl(expectedValue: Boolean)(using WebDriver): Assertion =
     idPresent("history-url") shouldBe expectedValue
 
-  def payUrl(expectedValue: Boolean)(implicit driver: WebDriver): Assertion =
+  def payUrl(expectedValue: Boolean)(using WebDriver): Assertion =
     idPresent("pay-url") shouldBe expectedValue
 
-  def assertWebchatLinkPresent()(implicit wd: WebDriver): Assertion =
+  def assertWebchatLinkPresent()(using WebDriver): Assertion =
     hasTextHyperLinkedTo(
       "Ask HMRC (opens in new tab)",
       "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
     )
 
-  def getProgressTimelineItems(implicit wd: WebDriver): List[ProgressTimelineItem] = {
-    val events = wd.findElements(By.cssSelector(".hmrc-timeline-event")).asScala.toList
-    events.map(event =>
+  def getProgressTimelineItems(using webDriver: WebDriver): List[ProgressTimelineItem] =
+    val events = webDriver.findElements(By.cssSelector(".hmrc-timeline-event")).asScala.toList
+    events.map: event =>
       ProgressTimelineItem(
         event.findElement(By.cssSelector(".hmrc-timeline-event-title")).getText,
         event.findElement(By.cssSelector(".hmrc-timeline-event-meta")).getText,
         event.findElements(By.cssSelector(".govuk-body:not(.hmrc-timeline-event-meta)")).asScala.toList.map(_.getText)
       )
-    )
-
-  }
-
-}

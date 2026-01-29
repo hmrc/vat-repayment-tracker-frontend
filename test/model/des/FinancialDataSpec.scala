@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.{DesData, UnitSpec}
 import support.Givens.canEqualJsValue
 
-class FinancialDataSpec extends UnitSpec {
+class FinancialDataSpec extends UnitSpec:
 
   "to json" in {
     Json.toJson(DesData.financialData) shouldBe DesData.financialDataJson
@@ -37,4 +37,3 @@ class FinancialDataSpec extends UnitSpec {
   "from json with no clearing date" in {
     DesData.financialDataNoClearingDateJson.as[FinancialData] shouldBe DesData.financialDataNoClearingDate
   }
-}

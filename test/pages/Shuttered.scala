@@ -19,11 +19,8 @@ package pages
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
-object Shuttered extends CommonPage {
+object Shuttered extends CommonPage:
 
-  def uniqueToPage(implicit wd: WebDriver): Assertion = {
+  def uniqueToPage(using WebDriver): Assertion =
     readTitle shouldBe "This service is shuttered - Business tax account - GOV.UK"
     readMainMessage shouldBe "This service is shuttered"
-  }
-
-}

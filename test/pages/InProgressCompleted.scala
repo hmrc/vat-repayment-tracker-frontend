@@ -19,42 +19,35 @@ package pages
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
-object InProgressCompleted extends CommonDetail {
+object InProgressCompleted extends CommonDetail:
 
-  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBAC(result: Boolean)(using WebDriver): Assertion =
     containsText("Add your bank account for future repayments") shouldBe result
     containsText("The quickest way to receive a repayment is straight into your bank account.") shouldBe result
     containsText("Add your bank account details for any future repayments.") shouldBe result
     containsText("Add bank details") shouldBe result
-  }
 
-  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsBankWarning(result: Boolean)(using WebDriver): Assertion =
     containsText("You have recently updated your bank account details.") shouldBe result
 
-  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsBankDetails(result: Boolean)(using WebDriver): Assertion =
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
 
-  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsNewBankDetailsText(result: Boolean)(using WebDriver): Assertion =
     containsText(
       "You’ll continue to receive repayments by cheque until we verify your bank account details."
     ) shouldBe result
 
-  def checktabs(implicit wd: WebDriver): Assertion = {
+  def checktabs(using WebDriver): Assertion =
 
     idPresent("completed-exist") shouldBe true
     idPresent("inprogress-exist") shouldBe true
     idPresent("completed-none") shouldBe false
     idPresent("inprogress-none") shouldBe false
 
-  }
-
-  def checktabsInPast(implicit wd: WebDriver): Assertion = {
+  def checktabsInPast(using WebDriver): Assertion =
 
     idPresent("completed-exist") shouldBe false
     idPresent("inprogress-exist") shouldBe true
     idPresent("completed-none") shouldBe true
     idPresent("inprogress-none") shouldBe false
-
-  }
-
-}

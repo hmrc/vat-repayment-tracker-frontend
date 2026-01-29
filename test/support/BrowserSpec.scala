@@ -28,8 +28,8 @@ import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
 
-class CustomHtmlUnitDriver extends HtmlUnitDriver {
-  override def modifyWebClient(client: WebClient): WebClient = {
+class CustomHtmlUnitDriver extends HtmlUnitDriver:
+  override def modifyWebClient(client: WebClient): WebClient =
 
     val modifiedClient: WebClient = super.modifyWebClient(client)
     modifiedClient.getOptions.setThrowExceptionOnScriptError(false)
@@ -37,10 +37,8 @@ class CustomHtmlUnitDriver extends HtmlUnitDriver {
     modifiedClient.getOptions.setJavaScriptEnabled(false)
     modifiedClient.getOptions.setCssEnabled(false) // needed to silence warnings
     modifiedClient
-  }
-}
 
-class BrowserSpec extends ItSpec {
+class BrowserSpec extends ItSpec:
   lazy val viewConfig: ViewConfig = fakeApplication().injector.instanceOf[ViewConfig]
 
   protected implicit val webDriver: WebDriver = new CustomHtmlUnitDriver
@@ -62,7 +60,7 @@ class BrowserSpec extends ItSpec {
   def logInResponse(
     cookieCrypto: SessionCookieCrypto,
     baker:        SessionCookieBaker
-  ): StubMapping = {
+  ): StubMapping =
     // Implementation based on CookieCryptoFilter trait and auth-login-stub project
     val session = Session(
       Map(
@@ -85,7 +83,4 @@ class BrowserSpec extends ItSpec {
             .withHeader(HeaderNames.SET_COOKIE, headerValue)
         )
     )
-  }
-
-  val loginPath = "/login"
-}
+  val loginPath               = "/login"

@@ -18,10 +18,10 @@ package controllers
 
 import model.{EnrolmentKeys, ReturnPage}
 import play.api.http.Status
-import play.api.test.Helpers._
-import support._
+import play.api.test.Helpers.*
+import support.*
 
-class BankAccountCocControllerSpec extends ItSpec {
+class BankAccountCocControllerSpec extends ItSpec:
   import support.VatData.vrn
 
   val controller: BankAccountCocController = injector.instanceOf[BankAccountCocController]
@@ -42,5 +42,3 @@ class BankAccountCocControllerSpec extends ItSpec {
 
     }
   }
-
-}

@@ -26,9 +26,9 @@ import org.openqa.selenium.By
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.{Seconds, Span}
 import pages.{InProgress, NonMtdUser}
-import support._
+import support.*
 
-class InProgressSpec extends BrowserSpec {
+class InProgressSpec extends BrowserSpec:
 
   val vrn: Vrn = Vrn("234567890")
   val path     = "/vat-repayment-tracker/show-vrt"
@@ -257,7 +257,7 @@ class InProgressSpec extends BrowserSpec {
     enrolmentIn:         String = EnrolmentKeys.mtdVatEnrolmentKey,
     inflight:            Boolean = false,
     differentPeriodKeys: Boolean = false
-  ): Unit = {
+  ): Unit =
     VatRepaymentTrackerBackendWireMockResponses.storeOk()
     AuditWireMockResponses.auditIsAvailable
     AuthWireMockResponses.authOkWithEnrolments(
@@ -265,25 +265,18 @@ class InProgressSpec extends BrowserSpec {
       vrn = vrn,
       enrolment = enrolmentIn
     )
-    if (useBankDetails) {
-      if (partialBankDetails)
-        PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
-      else if (inflight)
-        PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
-      else
-        PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
-    } else {
-      if (inflight)
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
-      else
-        PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
-    }
+    if useBankDetails then
+      if partialBankDetails then PaymentsOrchestratorStub.customerDataOkWithPartialBankDetails(vrn)
+      else if inflight then PaymentsOrchestratorStub.customerDataOkWithBankDetailsInflight(vrn)
+      else PaymentsOrchestratorStub.customerDataOkWithBankDetails(vrn)
+    else if inflight then PaymentsOrchestratorStub.customerDataOkWithoutBankDetailsInflight(vrn)
+    else PaymentsOrchestratorStub.customerDataOkWithoutBankDetails(vrn)
 
-    if (singleRepayment)
+    if singleRepayment then
       PaymentsOrchestratorStub.repaymentDetailS1(vrn, LocalDate.now().toString, status1, periodKey)
-    else if (!singleRepayment && !differentPeriodKeys)
+    else if !singleRepayment && !differentPeriodKeys then
       PaymentsOrchestratorStub.repaymentDetailsMultipleInProgress(vrn, LocalDate.now().toString)
-    else if (!singleRepayment && differentPeriodKeys)
+    else if !singleRepayment && differentPeriodKeys then
       PaymentsOrchestratorStub.repaymentDetails2DifferentPeriods(
         LocalDate.now().toString,
         LocalDate.now().minusDays(20).toString,
@@ -292,15 +285,10 @@ class InProgressSpec extends BrowserSpec {
         vrn
       )
 
-    ft match {
+    ft match
       case `ft_404`    => PaymentsOrchestratorStub.financialsNotFound(vrn)
       case `ft_credit` => PaymentsOrchestratorStub.financialsOkCredit(vrn)
       case `ft_debit`  => PaymentsOrchestratorStub.financialsOkDebit(vrn)
       case other       => throw new IllegalArgumentException(s"no ft match for $other")
-    }
-
     login()
     goToViaPath(path)
-  }
-
-}

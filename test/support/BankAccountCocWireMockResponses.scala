@@ -16,10 +16,10 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
-object BankAccountCocWireMockResponses {
+object BankAccountCocWireMockResponses:
 
   val dummyNextUrl: String = "/dummy"
 
@@ -34,5 +34,3 @@ object BankAccountCocWireMockResponses {
        """.stripMargin)
         )
     )
-
-}

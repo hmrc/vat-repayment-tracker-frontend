@@ -28,38 +28,36 @@ import support.RichMatchers
 
 import scala.util.Random
 
-trait CommonPage extends WebBrowser with RichMatchers {
+trait CommonPage extends WebBrowser with RichMatchers:
 
   private val logger = Logger(this.getClass)
 
-  override implicit val patienceConfig: PatienceConfig =
-    PatienceConfig(scaled(Span(1, Seconds)), scaled(Span(200, Millis)))
+  given PatienceConfig = PatienceConfig(scaled(Span(1, Seconds)), scaled(Span(200, Millis)))
 
-  def assertTechnicalErrorDisplayed(path: String)(implicit webDriver: WebDriver): Assertion = probing { _ =>
+  def assertTechnicalErrorDisplayed(path: String)(using WebDriver): Assertion = probing { _ =>
     currentPath shouldBe path
     pageTitle shouldBe "Sorry, we are experiencing technical difficulties - 500"
   }
 
-  def currentPath(implicit driver: WebDriver): String = {
-    val url = new java.net.URL(driver.getCurrentUrl)
+  def currentPath(using webDriver: WebDriver): String =
+    val url = new java.net.URL(webDriver.getCurrentUrl)
     url.getPath
-  }
 
-  def clickFinish()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("finish")).click())
+  def clickFinish()(using WebDriver): Unit = probing(_.findElement(By.id("finish")).click())
 
-  def getPageHeader(implicit driver: WebDriver): String = probing(_.findElement(By.className("heading-large")).getText)
+  def getPageHeader(using WebDriver): String = probing(_.findElement(By.className("heading-large")).getText)
 
-  def clickContinue()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("next")).click())
+  def clickContinue()(using WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
-  def clickOnEnglishLink()(implicit driver: WebDriver): Unit = probing(
+  def clickOnEnglishLink()(using WebDriver): Unit = probing(
     _.findElement(By.partialLinkText("English")).click()
   )
 
-  def clickOnWelshLink()(implicit driver: WebDriver): Unit = probing(
+  def clickOnWelshLink()(using WebDriver): Unit = probing(
     _.findElement(By.partialLinkText("Cymraeg")).click()
   )
 
-  def clickViewProgress()(implicit driver: WebDriver): Unit =
+  def clickViewProgress()(using WebDriver): Unit =
     probing(
       _.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[4]/a"))
         .click()
@@ -68,12 +66,12 @@ trait CommonPage extends WebBrowser with RichMatchers {
   /** Probing tries to run `probingF` until it succeeds. If it doesn't it: reports what was the page source and dumps
     * page screenshot and fails assertion
     */
-  def probing[A](probingF: WebDriver => A)(implicit driver: WebDriver): A = eventually(probingF(driver)).withClue {
+  def probing[A](probingF: WebDriver => A)(using webDriver: WebDriver): A = eventually(probingF(webDriver)).withClue {
     val maybeDumpedFile = takeADump()
     s"""
        |${maybeDumpedFile.map(uri => s"Screenshot recorded in $uri").getOrElse("Sorry, no screenshot recorded")}
        |page source was:
-       |${driver.getPageSource}
+       |${webDriver.getPageSource}
        |""".stripMargin
   }
 
@@ -82,15 +80,14 @@ trait CommonPage extends WebBrowser with RichMatchers {
     * @return
     *   some uri of the dumped file or none
     */
-  def takeADump()(implicit driver: WebDriver): Option[String] = {
+  def takeADump()(using webDriver: WebDriver): Option[String] =
     // original `capture to` relies on side effecting `targetDir`
     // this is safer implementation
     val targetDir = "target/ittests-screenshots"
-    val fileName  = {
+    val fileName  =
       val addon = List.fill(5)(Random.nextPrintableChar()).mkString
       s"${this.getClass.getSimpleName}-$addon.png"
-    }
-    driver match {
+    webDriver match
       case takesScreenshot: TakesScreenshot =>
         val tmpFile = takesScreenshot.getScreenshotAs(OutputType.FILE)
         val outFile = new java.io.File(targetDir, fileName)
@@ -104,98 +101,92 @@ trait CommonPage extends WebBrowser with RichMatchers {
       case _                                =>
         logger.warn(s"Could not take screen shot: $fileName")
         None
-    }
-  }
 
-  def clickBack()(implicit driver: WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
+  def clickBack()(using WebDriver): Unit = probing(_.findElement(By.className("link-back")).click())
 
-  def readBackButtonUrl()(implicit driver: WebDriver): String = probing(
+  def readBackButtonUrl()(using WebDriver): String = probing(
     _.findElement(By.className("govuk-back-link"))
       .getDomAttribute("href")
   )
 
-  def readMainMessage(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
+  def readMainMessage(using WebDriver): String = probing(_.findElement(By.id("main-message")).getText)
 
-  def readWarning(implicit webDriver: WebDriver): String = probing(
+  def readWarning(using WebDriver): String = probing(
     _.findElement(By.className("govuk-warning-text__text")).getText
   )
 
-  def readAccName(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
+  def readAccName(using WebDriver): String = probing(_.findElement(By.id("acc-name")).getText)
 
-  def readAccSortCode(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)
+  def readAccSortCode(using WebDriver): String = probing(_.findElement(By.id("acc-sort-code")).getText)
 
-  def readAccNumber(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
+  def readAccNumber(using WebDriver): String = probing(_.findElement(By.id("acc-number")).getText)
 
-  def readBuildingSocietyNumber(implicit webDriver: WebDriver): String = probing(
+  def readBuildingSocietyNumber(using WebDriver): String = probing(
     _.findElement(By.id("building-society-number")).getText
   )
 
-  def readTitle(implicit webDriver: WebDriver): String = webDriver.getTitle
+  def readTitle(using webDriver: WebDriver): String = webDriver.getTitle
 
-  def assertErrorSummaryIsShown()(implicit webDriver: WebDriver): Assertion =
+  def assertErrorSummaryIsShown()(using WebDriver): Assertion =
     assert(globalErrors.isDefined)
 
-  def globalErrors(implicit driver: WebDriver): Option[Element] = id("error-summary-display").findElement
+  def globalErrors(using WebDriver): Option[Element] = id("error-summary-display").findElement
 
-  def getByStringIdOption(id: String)(implicit driver: WebDriver): Option[String] = try
-    Some(driver.findElement(By.id(id)).getText)
+  def getByStringIdOption(id: String)(using webDriver: WebDriver): Option[String] = try
+    Some(webDriver.findElement(By.id(id)).getText)
   catch {
     case _: org.openqa.selenium.NoSuchElementException => None
   }
 
-  def getTextByCss(css: String)(implicit driver: WebDriver): Option[String] = try
-    Some(driver.findElement(By.cssSelector(css)).getText)
+  def getTextByCss(css: String)(using webDriver: WebDriver): Option[String] = try
+    Some(webDriver.findElement(By.cssSelector(css)).getText)
   catch {
     case _: org.openqa.selenium.NoSuchElementException => None
   }
 
-  def containsText(text: String)(implicit driver: WebDriver): Boolean =
+  def containsText(text: String)(using WebDriver): Boolean =
     probing(_.getPageSource.contains(text))
 
-  def cssCount(css: String)(implicit driver: WebDriver): Int =
+  def cssCount(css: String)(using WebDriver): Int =
     probing(_.findElements(By.cssSelector(css))).size()
 
-  def readMain()(implicit webDriver: WebDriver): String = xpath("""//*[@id="content"]""").element.text
+  def readMain()(using WebDriver): String = xpath("""//*[@id="content"]""").element.text
 
-  def assertContentMatchesExpectedLines(expectedLines: List[String])(implicit wd: WebDriver): Unit = {
+  def assertContentMatchesExpectedLines(expectedLines: List[String])(using WebDriver): Unit =
     val content = readMain().stripSpaces().replaceAll("\n", " ")
-    expectedLines.foreach { expectedLine =>
+    expectedLines.foreach: expectedLine =>
       withClue(s"\nThe page content should include '$expectedLine'") {
         content should include(expectedLine)
       }
-    }
-  }
 
-  def hasTextHyperLinkedTo(text: String, link: String)(implicit webDriver: WebDriver): Assertion =
+  def hasTextHyperLinkedTo(text: String, link: String)(using WebDriver): Assertion =
     probing(
       _.findElement(By.partialLinkText(text))
         .getAttribute("href")
     ) shouldBe link
 
-  def assertBackButtonRedirectsTo(url: String)(implicit wd: WebDriver): Assertion =
+  def assertBackButtonRedirectsTo(url: String)(using WebDriver): Assertion =
     readBackButtonUrl() shouldBe url
 
-  def idPresent(id: String)(implicit webDriver: WebDriver): Boolean = try {
+  def idPresent(id: String)(using webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.id(id))
     true
   } catch {
     case _: Throwable => false
   }
 
-  def cssPresent(css: String)(implicit webDriver: WebDriver): Boolean = try {
+  def cssPresent(css: String)(using webDriver: WebDriver): Boolean = try {
     webDriver.findElement(By.cssSelector(css))
     true
   } catch {
     case _: Throwable => false
   }
 
-  def formatDate(date: LocalDate): String = {
+  def formatDate(date: LocalDate): String =
     val pattern1 = DateTimeFormatter.ofPattern("dd MMM yyyy")
     date.format(pattern1)
-  }
 
-  implicit class StringOps(s: String) {
-
+  extension (s: String)
     /** Transforms string so it's easier it to compare. It also replaces `unchecked`
       */
     def stripSpaces(): String = s
@@ -209,6 +200,3 @@ trait CommonPage extends WebBrowser with RichMatchers {
       .map(_.trim)                      // trim each line
       .filterNot(_ == "")               // remove any empty lines
       .mkString("\n")
-  }
-
-}

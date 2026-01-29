@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.{DesData, UnitSpec}
 import support.Givens.canEqualJsValue
 
-class RepaymentDetailDataSpec extends UnitSpec {
+class RepaymentDetailDataSpec extends UnitSpec:
 
   "to json" in {
     Json.toJson(DesData.repaymentsDetail) shouldBe DesData.repaymentDetailJson
@@ -29,4 +29,3 @@ class RepaymentDetailDataSpec extends UnitSpec {
   "from json" in {
     DesData.repaymentDetailJson.as[Seq[RepaymentDetailData]] shouldBe DesData.repaymentsDetail
   }
-}
