@@ -16,8 +16,8 @@
 
 package model.vat
 
-import play.api.libs.json._
-import play.api.libs.functional.syntax._
+import play.api.libs.json.*
+import play.api.libs.functional.syntax.*
 
 final case class VatDesignatoryDetailsAddress(
   addressLine1: String,
@@ -28,9 +28,8 @@ final case class VatDesignatoryDetailsAddress(
   postcode:     String
 ) derives CanEqual
 
-object VatDesignatoryDetailsAddress {
-
-  implicit val reads: Reads[VatDesignatoryDetailsAddress] = (
+object VatDesignatoryDetailsAddress:
+  given Reads[VatDesignatoryDetailsAddress] = (
     (JsPath \ "address" \ "addressLine1").read[String] and
       (JsPath \ "address" \ "addressLine2").readNullable[String] and
       (JsPath \ "address" \ "addressLine3").readNullable[String] and
@@ -38,5 +37,3 @@ object VatDesignatoryDetailsAddress {
       (JsPath \ "address" \ "addressLine5").readNullable[String] and
       (JsPath \ "address" \ "postcode").read[String]
   )(VatDesignatoryDetailsAddress.apply)
-
-}

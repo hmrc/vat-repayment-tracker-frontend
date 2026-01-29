@@ -17,7 +17,7 @@
 package util
 
 import support.ItSpec
-import util.WelshDateUtil.StringOps
+import util.WelshDateUtil.*
 
 class WelshDateUtilSpec extends ItSpec {
   "welsh date" - {

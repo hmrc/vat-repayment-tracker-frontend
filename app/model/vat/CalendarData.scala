@@ -25,33 +25,26 @@ import play.api.libs.json.{Json, OFormat}
 case class CalendarData(
   currentPeriod:   Option[CalendarPeriod],
   previousPeriods: Seq[CalendarPeriod]
-) derives CanEqual {
+) derives CanEqual:
   def countReturns: Int =
     currentPeriod.count(_.returnReceivedDate.isDefined) + previousPeriods.count(_.returnReceivedDate.isDefined)
 
   def latestReceivedOnFormatted: String =
-    latestReceivedOn match {
+    latestReceivedOn match
       case Some(x) => CommonFormatter.formatDate(x)
       case None    => ""
-    }
 
   private def latestReceivedOn: Option[LocalDate] =
-    currentPeriod match {
+    currentPeriod match
       case Some(found) =>
-        found.returnReceivedDate match {
+        found.returnReceivedDate match
           case Some(rd) => Some(rd)
           case None     => mostRecentPreviousReceivedData
-        }
       case None        => mostRecentPreviousReceivedData
-    }
 
-  private def mostRecentPreviousReceivedData: Option[LocalDate] = {
-    implicit val localDateOrdering: Ordering[LocalDate] = Ordering.by(identity[ChronoLocalDate])
+  private def mostRecentPreviousReceivedData: Option[LocalDate] =
+    given Ordering[LocalDate] = Ordering.by(identity[ChronoLocalDate])
     previousPeriods.flatMap(_.returnReceivedDate).sorted.reverse.headOption
-  }
 
-}
-
-object CalendarData {
-  implicit val formats: OFormat[CalendarData] = Json.format[CalendarData]
-}
+object CalendarData:
+  given OFormat[CalendarData] = Json.format[CalendarData]

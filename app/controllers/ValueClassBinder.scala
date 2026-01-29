@@ -26,7 +26,7 @@ object ValueClassBinder:
     fromAtoString: A => String
   )(using stringBinder: PathBindable[String]): PathBindable[A] =
 
-    def parseString(str: String) =
+    def parseString(str: String): Either[String, A] =
       JsString(str).validate[A] match
         case JsSuccess(a, _) => Right(a)
         case JsError(error)  => Left(s"No valid value in path: $str. Error: $error")

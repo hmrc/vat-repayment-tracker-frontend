@@ -20,8 +20,7 @@ import model.{EnrolmentKeys, Vrn}
 import org.scalatest.Assertion
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent}
-import play.api.test.Helpers.{redirectLocation, status}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 trait DeregisteredBehaviour { self: ItSpec =>
 

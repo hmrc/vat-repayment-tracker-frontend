@@ -17,11 +17,10 @@
 @import play.api.mvc.RequestHeader
 
 @this(
-
   mainTemplate: views.html.main_template
 )
 
-@(message: String)(implicit request: RequestHeader, messages: Messages)
+@(message: String)(using request: RequestHeader, messages: Messages)
 
 
 

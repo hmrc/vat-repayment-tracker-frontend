@@ -36,7 +36,7 @@ class ShowResultsFormatter @Inject() (
   inprogress:           views.html.inprogress,
   desFormatter:         DesFormatter,
   addressFormatter:     AddressFormatter
-) extends Results {
+) extends Results:
 
   private val logger = Logger(this.getClass)
 
@@ -44,26 +44,23 @@ class ShowResultsFormatter @Inject() (
     vrn:                          Vrn,
     calendarData:                 Option[CalendarData],
     vatDesignatoryDetailsAddress: VatDesignatoryDetailsAddress
-  )(implicit request: Request[?], message: Messages): Result = {
+  )(implicit request: Request[?], message: Messages): Result =
 
     val address = addressFormatter.getFormattedAddressNonMtd(vatDesignatoryDetailsAddress)
 
-    calendarData match {
+    calendarData match
       case Some(data) =>
-        if (data.countReturns == 0) Ok(classic_none(vrn, address))
+        if data.countReturns == 0 then Ok(classic_none(vrn, address))
         else Ok(classic_some(vrn, data.latestReceivedOnFormatted, address))
       case None       => Ok(classic_none(vrn, address))
-    }
-  }
 
   def computeEngmtClassic(
     calendarData: Option[CalendarData]
   ): String =
-    calendarData match {
+    calendarData match
       case Some(data) =>
-        if (data.countReturns == 0) `repayment-type`.none_in_progress else `repayment-type`.in_progress_classic
+        if data.countReturns == 0 then `repayment-type`.none_in_progress else `repayment-type`.in_progress_classic
       case None       => `repayment-type`.none_in_progress
-    }
 
   def computeView(
     allRepaymentData: AllRepaymentData,
@@ -71,7 +68,7 @@ class ShowResultsFormatter @Inject() (
     vrn:              Vrn,
     date:             Option[String],
     welshDate:        Option[String]
-  )(implicit request: Request[?], message: Messages): Result = {
+  )(using Request[?], Messages): Result =
 
     val bankDetailsExist    = desFormatter.getBankDetailsExist(customerData)
     val bankDetails         = desFormatter.getBankDetails(customerData)
@@ -79,13 +76,12 @@ class ShowResultsFormatter @Inject() (
     val addressDetailsExist = desFormatter.getAddressDetailsExist(customerData)
     val inFlightBankDetails = desFormatter.bankDetailsInFlight(customerData)
 
-    bankDetails match {
+    bankDetails match
       case Some(bd) =>
-        if (bd.accountHolderName.isEmpty) logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
+        if bd.accountHolderName.isEmpty then logger.warn(s"VRT no account holder name for vrn : ${vrn.value}")
       case None     =>
-    }
 
-    if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
+    if allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.nonEmpty then
       Ok(
         inprogress_completed(
           allRepaymentData.hasSuspendedPayment,
@@ -100,7 +96,7 @@ class ShowResultsFormatter @Inject() (
           welshDate
         )
       )
-    } else if (allRepaymentData.inProgressRepaymentData.isEmpty && allRepaymentData.completedRepaymentData.nonEmpty) {
+    else if allRepaymentData.inProgressRepaymentData.isEmpty && allRepaymentData.completedRepaymentData.nonEmpty then
       Ok(
         completed(
           allRepaymentData.completedRepaymentData,
@@ -113,7 +109,7 @@ class ShowResultsFormatter @Inject() (
           welshDate
         )
       )
-    } else if (allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty) {
+    else if allRepaymentData.inProgressRepaymentData.nonEmpty && allRepaymentData.completedRepaymentData.isEmpty then
       Ok(
         inprogress(
           allRepaymentData.hasSuspendedPayment,
@@ -127,7 +123,7 @@ class ShowResultsFormatter @Inject() (
           welshDate
         )
       )
-    } else {
+    else
       Ok(
         no_vat_repayments(
           bankDetailsExist,
@@ -140,16 +136,9 @@ class ShowResultsFormatter @Inject() (
         )
       )
 
-    }
-  }
-
   def computeEngmt(
     allRepaymentData: AllRepaymentData
   ): String =
-    if (allRepaymentData.inProgressRepaymentData.nonEmpty || allRepaymentData.completedRepaymentData.nonEmpty) {
+    if allRepaymentData.inProgressRepaymentData.nonEmpty || allRepaymentData.completedRepaymentData.nonEmpty then
       `repayment-type`.one_in_progress_multiple_delayed
-    } else {
-      `repayment-type`.none_in_progress
-    }
-
-}
+    else `repayment-type`.none_in_progress

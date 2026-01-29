@@ -15,7 +15,7 @@
  *@
 
 @import config.ViewConfig
-@import model._
+@import model.*
 @import formaters.CommonFormatter
 
 @this(mainTemplate: views.html.main_template, viewConfig: ViewConfig)
@@ -28,7 +28,7 @@
   showHistoryUrl: Boolean,
   showPayUrl: Boolean,
   amountInPence: Long
-)(implicit request: Request[?], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 
 

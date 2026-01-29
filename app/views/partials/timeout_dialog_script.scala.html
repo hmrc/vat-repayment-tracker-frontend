@@ -19,7 +19,7 @@
 
 @this(viewConf: config.ViewConfig)
 
-@()(implicit messages:Messages, r: Request[?])
+@()(using messages:Messages, r: Request[?])
 
 
 @timeoutKeepAliveUrl = @{

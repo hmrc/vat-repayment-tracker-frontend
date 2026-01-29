@@ -28,17 +28,17 @@ import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-//@Singleton
+@Singleton
 class BankAccountCocConnector @Inject() (
   servicesConfig: ServicesConfig,
   httpClient:     HttpClientV2,
   configuration:  Configuration
-)(implicit ec: ExecutionContext) {
+)(using ExecutionContext):
 
-  import req.RequestSupport.*
+  import req.RequestSupport.hc
 
   private val logger = Logger(this.getClass)
 
@@ -46,8 +46,7 @@ class BankAccountCocConnector @Inject() (
   private val viewUrl: String    = configuration.get[String]("microservice.services.bank-account-coc.sj-url")
   private val bUrl: String       = configuration.get[String]("urls.bank-back-url")
 
-  def startJourney(vrn: Vrn, returnPage: ReturnPage)(using request: Request[?]): Future[NextUrl] = {
-
+  def startJourney(vrn: Vrn, returnPage: ReturnPage)(using Request[?]): Future[NextUrl] =
     val bkUrl: String                              = s"$bUrl${returnPage.value}"
     logger.debug(s"Using back url : $bkUrl")
     val viewRepaymentRequest: ViewRepaymentRequest =
@@ -56,7 +55,3 @@ class BankAccountCocConnector @Inject() (
     val startJourneyURL: String                    = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling bank-account-coc start journey for vrn with url $startJourneyURL)")
     httpClient.post(url"$startJourneyURL").withBody(Json.toJson(viewRepaymentRequest)).execute[NextUrl]
-
-  }
-
-}

@@ -16,12 +16,12 @@
 
 package req
 
-import javax.inject.Inject
 import play.api.i18n.*
 import play.api.mvc.{Request, RequestHeader, Result}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 /** Repeating the pattern which was brought originally by play-framework and putting some more data which can be derived
@@ -29,38 +29,31 @@ import scala.concurrent.Future
   *
   * Use it to provide HeaderCarrier, Lang, or Messages
   */
-class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I18nSupport {
+class RequestSupport @Inject() (override val messagesApi: MessagesApi) extends I18nSupport:
+  given hc(using Request[?]): HeaderCarrier                = RequestSupport.hc
+  given toFutureResult: Conversion[Result, Future[Result]] = result => Future.successful(result)
+  def lang(using messages: Messages): Lang = messages.lang
 
-  implicit def hc(using request:      Request[?]): HeaderCarrier = RequestSupport.hc
-  implicit def toFutureResult(result: Result): Future[Result]    = Future.successful(result)
-  def lang(using messages:            Messages): Lang            = messages.lang
-}
-
-object RequestSupport {
-
-  implicit def hc[A](using request: Request[A]): HeaderCarrier = HcProvider.headerCarrier
+object RequestSupport:
+  given hc(using Request[?]): HeaderCarrier = HcProvider.headerCarrier
 
   def isLoggedIn(using request: RequestHeader): Boolean = request.session.get(SessionKeys.authToken).isDefined
 
   /** This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code. If they
     * refactor how hc is created our code will pick it up automatically.
     */
-  private object HcProvider extends FrontendHeaderCarrierProvider {
-    def headerCarrier(using request: Request[?]): HeaderCarrier = super.hc(request) // check ***
-  }
+  private object HcProvider extends FrontendHeaderCarrierProvider:
+    def headerCarrier(using Request[?]): HeaderCarrier = super.hc
 
-  object timeoutDialog {
-    def message(using request: Request[?], messages: Messages): String =
-      if (RequestSupport.isLoggedIn) Messages("timeout_dialog.message.isloggedin")
+  object timeoutDialog:
+    def message(using Request[?], Messages): String =
+      if RequestSupport.isLoggedIn then Messages("timeout_dialog.message.isloggedin")
       else Messages("timeout_dialog.message.timeout")
 
-    def keepAlive(using request: Request[?], messages: Messages): String =
-      if (RequestSupport.isLoggedIn) Messages("stay_signed_in")
+    def keepAlive(using Request[?], Messages): String =
+      if RequestSupport.isLoggedIn then Messages("stay_signed_in")
       else Messages("continue")
 
-    def signOutOrDeleteYourAnswers(using request: Request[?], messages: Messages): String =
-      if (RequestSupport.isLoggedIn) Messages("govuk_wrapper.sign_out")
+    def signOutOrDeleteYourAnswers(using Request[?], Messages): String =
+      if RequestSupport.isLoggedIn then Messages("govuk_wrapper.sign_out")
       else Messages("govuk_wrapper.delete_your_answers")
-  }
-
-}

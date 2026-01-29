@@ -15,7 +15,7 @@
  *@
 
 @import config.ViewConfig
-@import model.des._
+@import model.des.*
 @import model.RepaymentDataNoRiskingStatus
 @import model.Vrn
 
@@ -39,7 +39,7 @@
   inFlightBankDetails: Boolean,
   date: Option[String],
   welshDate: Option[String]
-)(implicit request: Request[?], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @mainTemplate(title = Messages("inprogress_completed.title")) {
 

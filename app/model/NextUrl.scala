@@ -20,6 +20,5 @@ import play.api.libs.json.{Format, Json}
 
 case class NextUrl(nextUrl: String)
 
-object NextUrl {
-  implicit val format: Format[NextUrl] = Json.format[NextUrl]
-}
+object NextUrl:
+  given Format[NextUrl] = Json.format[NextUrl]

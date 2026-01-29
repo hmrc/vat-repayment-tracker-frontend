@@ -25,7 +25,7 @@ import play.api.libs.json.Json
 import play.api.libs.ws.writeableOf_JsValue
 import play.api.mvc.Request
 import play.utils.UriEncoding
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -33,24 +33,23 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatRepaymentTrackerBackendConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClientV2)(implicit
-  ec: ExecutionContext
-) {
+class VatRepaymentTrackerBackendConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClientV2)(using
+  ExecutionContext
+):
 
   private val serviceURL: String = servicesConfig.baseUrl("vat-repayment-tracker-backend")
 
   private val logger = Logger(this.getClass)
 
-  import req.RequestSupport._
+  import req.RequestSupport.hc
 
-  def store(vrtRepaymentDetailData: VrtRepaymentDetailData)(implicit request: Request[?]): Future[HttpResponse] = {
+  def store(vrtRepaymentDetailData: VrtRepaymentDetailData)(using Request[?]): Future[HttpResponse] =
     val storeVRDDUrl: String = s"$serviceURL/vat-repayment-tracker-backend/store"
     logger.debug(s"""calling vat-repayment-tracker-backend find with url $storeVRDDUrl""")
     logger.debug(s"storing: ${vrtRepaymentDetailData.toString}")
     httpClient.post(url"$storeVRDDUrl").withBody(Json.toJson(vrtRepaymentDetailData)).execute[HttpResponse]
-  }
 
-  def find(vrn: Vrn, periodKey: PeriodKey)(implicit request: Request[?]): Future[List[VrtRepaymentDetailData]] = {
+  def find(vrn: Vrn, periodKey: PeriodKey)(using Request[?]): Future[List[VrtRepaymentDetailData]] =
     logger.debug(
       s"Calling vat-repayment-tracker-backend find with vrn :${vrn.value} and periodKey:  ${periodKey.value}"
     )
@@ -60,6 +59,3 @@ class VatRepaymentTrackerBackendConnector @Inject() (servicesConfig: ServicesCon
     logger.debug(s"""calling vat-repayment-tracker-backend find with url $findRDDUrl""")
 
     httpClient.get(url"$findRDDUrl").execute[List[VrtRepaymentDetailData]]
-  }
-
-}

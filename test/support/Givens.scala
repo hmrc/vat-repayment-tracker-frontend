@@ -16,7 +16,6 @@
 
 package support
 
-import pages.ViewProgress.ProgressTimelineItem
 import play.api.libs.json.JsValue
 import play.api.mvc.Session
 

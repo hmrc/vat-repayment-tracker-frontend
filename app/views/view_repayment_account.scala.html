@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import model.des._
-@import model._
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import model.des.*
+@import model.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import config.ViewConfig
 @import play.twirl.api.HtmlFormat
 
@@ -34,7 +34,7 @@
   returnPage : ReturnPage,
   date: Option[String],
   welshDate: Option[String]
-)(implicit request: Request[?], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @title = @{
   if (inFlight) Messages("view_repayment_account.title.inFlight")

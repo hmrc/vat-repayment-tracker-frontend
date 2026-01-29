@@ -21,7 +21,7 @@ import controllers.routes
 import model.TypedVrn
 import play.api.Logger
 import play.api.mvc.Results.Redirect
-import play.api.mvc._
+import play.api.mvc.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,7 +29,7 @@ class Actions @Inject() (
   authoriseAction: AuthenticatedAction,
   loggedInAction:  LoggedInAction,
   shutteredAction: ShutteredAction
-)(implicit ec: ExecutionContext) {
+)(using ExecutionContext):
 
   private val logger = Logger(this.getClass)
 
@@ -44,20 +44,15 @@ class Actions @Inject() (
     authoriseAction.andThen(validateMtdVrn)
 
   private def validateMtdVrn: ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] =
-    new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest] {
-
+    new ActionRefiner[AuthenticatedRequest, AuthenticatedRequest]:
       override protected def refine[A](
         request: AuthenticatedRequest[A]
       ): Future[Either[Result, AuthenticatedRequest[A]]] =
-        request.typedVrn match {
+        request.typedVrn match
           case TypedVrn.MtdVrn(_) => Future.successful(Right(request))
           case _                  =>
             logger.debug(s"User logged in with ${request.typedVrn.vrn.value}, this is non-mtd")
-            if (request.isPartialMigration) logger.warn("Partially migrated user tried to access MTD authorised VRT")
+            if request.isPartialMigration then logger.warn("Partially migrated user tried to access MTD authorised VRT")
             Future.successful(Left(Redirect(routes.Controller.nonMtdUser.url)))
-        }
 
-      override protected def executionContext: ExecutionContext = ec
-    }
-
-}
+      override protected def executionContext: ExecutionContext = summon[ExecutionContext]

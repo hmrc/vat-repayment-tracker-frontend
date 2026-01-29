@@ -22,6 +22,5 @@ import play.api.libs.json.{Json, OFormat}
 
 case class CalendarPeriod(periodStartDate: LocalDate, periodEndDate: LocalDate, returnReceivedDate: Option[LocalDate])
 
-object CalendarPeriod {
-  implicit val formats: OFormat[CalendarPeriod] = Json.format[CalendarPeriod]
-}
+object CalendarPeriod:
+  given OFormat[CalendarPeriod] = Json.format[CalendarPeriod]

@@ -19,22 +19,23 @@ package controllers
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-
 import cats.data.NonEmptyList
 import config.ViewConfig
 import connectors.Auditor.`repayment-type`
-import connectors._
-import controllers.action.{Actions, AuthenticatedRequest}
+import connectors.*
+import controllers.action.{Actions, AuthenticatedRequest, LoggedInRequest}
 import formaters.{DesFormatter, ShowResultsFormatter, ViewProgressFormatter}
+
 import javax.inject.{Inject, Singleton}
-import model._
+import model.*
 import model.des.CustomerInformation
 import play.api.Logger
-import play.api.mvc.{Action, _}
+import play.api.mvc.*
 import req.RequestSupport
+
 import scala.util.Try
 import service.VrtService
-import util.WelshDateUtil.StringOps
+import util.WelshDateUtil.*
 
 import scala.concurrent.ExecutionContext
 
@@ -55,47 +56,43 @@ class Controller @Inject() (
   viewProgressFormatter:               ViewProgressFormatter,
   showResultsFormatter:                ShowResultsFormatter,
   vatConnector:                        VatConnector
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController(cc) {
+)(using ExecutionContext)
+    extends FrontendBaseController(cc):
 
-  import requestSupport._
+  import requestSupport.given
 
   private val logger = Logger(this.getClass)
 
-  val nonMtdUser: Action[AnyContent] = actions.loggedIn.async { implicit request =>
-    for {
-      _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress, request.typedVrn.map(_.vrn))
-    } yield Ok(views_non_mtd_user())
-  }
+  val nonMtdUser: Action[AnyContent] = actions.loggedIn.async: (request: LoggedInRequest[?]) =>
+    given LoggedInRequest[?] = request
+
+    for _ <- auditor.auditEngagement("nonMtdUser", `repayment-type`.none_in_progress, request.typedVrn.map(_.vrn))
+    yield Ok(views_non_mtd_user())
 
   val signout: Action[AnyContent] = Action.async { _ =>
     Redirect(viewConfig.feedbackUrlForLogout)
   }
 
-  val showVrt: Action[AnyContent] = actions.securedAction.async { implicit request: AuthenticatedRequest[?] =>
-    logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
-    request.typedVrn match {
+  val showVrt: Action[AnyContent] = actions.securedAction.async: (request: AuthenticatedRequest[?]) =>
+    given AuthenticatedRequest[?] = request
 
+    logger.debug(s"IsPartialMigration set to ${request.isPartialMigration}")
+    request.typedVrn match
       case TypedVrn.ClassicVrn(vrnNonMtd) =>
         logger.debug("Received a classic VRN")
-        val calendarDataF       = vatConnector.calendar(vrnNonMtd)
-        val designatoryDetailsF = vatConnector.designatoryDetails(vrnNonMtd)
-        for {
-          calendarData       <- calendarDataF
-          designatoryDetails <- designatoryDetailsF
+        for
+          calendarData       <- vatConnector.calendar(vrnNonMtd)
+          designatoryDetails <- vatConnector.designatoryDetails(vrnNonMtd)
           engmtType           = showResultsFormatter.computeEngmtClassic(calendarData)
           _                  <- auditor.auditEngagement("showVrt", engmtType, Some(request.typedVrn.vrn))
-        } yield showResultsFormatter.computeViewClassic(vrnNonMtd, calendarData, designatoryDetails)
+        yield showResultsFormatter.computeViewClassic(vrnNonMtd, calendarData, designatoryDetails)
 
       case TypedVrn.MtdVrn(vrnMtd) =>
         logger.debug("Received a MTD VRN")
-        val customerDataF     = paymentsOrchestratorConnector.getCustomerData(vrnMtd)
-        val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(vrnMtd)
-        val financialDataF    = paymentsOrchestratorConnector.getFinancialData(vrnMtd)
-        for {
-          customerData     <- customerDataF
-          repaymentDetails <- repaymentDetailsF
-          financialData    <- financialDataF
+        for
+          customerData     <- paymentsOrchestratorConnector.getCustomerData(vrnMtd)
+          repaymentDetails <- paymentsOrchestratorConnector.getRepaymentsDetails(vrnMtd)
+          financialData    <- paymentsOrchestratorConnector.getFinancialData(vrnMtd)
 
           allRepaymentData = vrtService.getAllRepaymentData(repaymentDetails, vrnMtd, financialData)
           _               <- auditor.auditViewRepaymentStatus(
@@ -104,9 +101,9 @@ class Controller @Inject() (
                                repaymentDetails,
                                customerData.exists(_.approvedInformationExists)
                              )
-        } yield {
+        yield
           val inFlight = desFormatter.bankDetailsInFlight(customerData)
-          if (inFlight) {
+          if inFlight then
             val dateToDisplay              = getDateToDisplay(customerData)
             val welshDateToDisplay: String = dateToDisplay.welshMonth
             showResultsFormatter.computeView(
@@ -116,54 +113,46 @@ class Controller @Inject() (
               Some(dateToDisplay),
               Some(welshDateToDisplay)
             )
-          } else {
-            showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd, None, None)
-          }
-        }
-    }
-
-  }
+          else showResultsFormatter.computeView(allRepaymentData, customerData, vrnMtd, None, None)
 
   def viewProgress(periodKey: PeriodKey): Action[AnyContent] =
-    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[?] =>
-      val customerDataF     = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
-      val financialDataF    = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
-      val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
-      logger.debug(s"""received vrn : ${request.typedVrn.vrn.value}, periodKey: ${periodKey.value}""")
+    actions.securedActionMtdVrnCheck.async: (request: AuthenticatedRequest[?]) =>
+      given AuthenticatedRequest[?] = request
 
-      for {
-        customerData     <- customerDataF
-        financialData    <- financialDataF
-        repaymentDetails <- repaymentDetailsF
+      logger.debug(s"""received vrn : ${request.typedVrn.vrn.value}, periodKey: ${periodKey.value}""")
+      val vrn = request.typedVrn.vrn
+      for
+        customerData     <- paymentsOrchestratorConnector.getCustomerData(vrn)
+        financialData    <- paymentsOrchestratorConnector.getFinancialData(vrn)
+        repaymentDetails <- paymentsOrchestratorConnector.getRepaymentsDetails(vrn)
 
         _ = vrtService.getAllRepaymentData(
               repaymentDetails,
-              request.typedVrn.vrn,
+              vrn,
               financialData,
               Some(periodKey)
             )
 
         vrd <- vatRepaymentTrackerBackendConnector.find(request.typedVrn.vrn, periodKey)
-      } yield vrd match {
+      yield vrd match
         case head :: tail =>
           viewProgressFormatter.computeViewProgress(periodKey, NonEmptyList(head, tail), customerData, financialData)
 
         case _ =>
           logger.info("No VAT repayment data found from backend: redirecting to manage or track page")
           Redirect(routes.ManageOrTrackController.manageOrTrackVrt)
-      }
-    }
 
-  val viewRepaymentAccount: Action[AnyContent] = actions.securedActionMtdVrnCheck.async {
-    implicit request: AuthenticatedRequest[?] =>
-      val customerDataF = paymentsOrchestratorConnector.getCustomerData(request.typedVrn.vrn)
+  val viewRepaymentAccount: Action[AnyContent] =
+    actions.securedActionMtdVrnCheck.async: (request: AuthenticatedRequest[?]) =>
+      given AuthenticatedRequest[?] = request
 
-      for {
-        customerData <- customerDataF
-      } yield {
+      val vrn = request.typedVrn.vrn
+
+      for customerData <- paymentsOrchestratorConnector.getCustomerData(vrn)
+      yield
         val inFlight    = desFormatter.bankDetailsInFlight(customerData)
         val bankDetails = desFormatter.getBankDetails(customerData)
-        if (inFlight) {
+        if inFlight then
           val dateToDisplay              = getDateToDisplay(customerData)
           val welshDateToDisplay: String = dateToDisplay.welshMonth
           Ok(
@@ -175,14 +164,10 @@ class Controller @Inject() (
               Some(welshDateToDisplay)
             )
           )
-        } else {
-          Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), None, None))
-        }
-      }
-  }
+        else Ok(view_repayment_account(bankDetails, inFlight, ReturnPage("view-repayment-account"), None, None))
 
   private def getDateToDisplay(customerData: Option[CustomerInformation]): String =
-    desFormatter.getInFlightDate(customerData) match {
+    desFormatter.getInFlightDate(customerData) match
       case Some(dateStr) =>
         Try(LocalDate.parse(dateStr).plusDays(40))
           .map(_.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK)))
@@ -191,15 +176,11 @@ class Controller @Inject() (
               s"[Controller][viewRepaymentAccount] Failed to parse or format receivedDate [$dateStr] for in-flight changes."
             )
           }
-
-      case None =>
+      case None          =>
         throw new RuntimeException(
           "[Controller][viewRepaymentAccount] No receivedDate for in-flight changes found for customer."
         )
-    }
 
-  val deregistered: Action[AnyContent] = actions.loggedIn.async { implicit request =>
-    Ok(vrt_vat_registration_cancelled())
-  }
-
-}
+  val deregistered: Action[AnyContent] = actions.loggedIn.async: (request: LoggedInRequest[?]) =>
+    given LoggedInRequest[?] = request
+    toFutureResult(Ok(vrt_vat_registration_cancelled()))

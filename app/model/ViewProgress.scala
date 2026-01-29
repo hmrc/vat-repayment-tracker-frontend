@@ -27,9 +27,6 @@ final case class ViewProgress(
   estimatedRepaymentDate: LocalDate,
   period:                 String,
   whatsHappenedSoFar:     NonEmptyList[WhatsHappendSoFar]
-) {
-
-  val isComplete: Boolean = whatsHappenedSoFar.exists(_.isComplete)
-
+):
+  val isComplete: Boolean         = whatsHappenedSoFar.exists(_.isComplete)
   val repaymentSuspended: Boolean = whatsHappenedSoFar.head.riskingStatus == RiskingStatus.REPAYMENT_SUSPENDED
-}

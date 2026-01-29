@@ -16,12 +16,10 @@
 
 package controllers
 
-import play.api.mvc._
+import play.api.mvc.*
 
-abstract class FrontendBaseController(cc: ControllerComponents) extends BaseControllerHelpers {
+abstract class FrontendBaseController(cc: ControllerComponents) extends BaseControllerHelpers:
 
   override val controllerComponents: ControllerComponents = cc
 
   val Action: ActionBuilder[Request, AnyContent] = controllerComponents.actionBuilder
-
-}

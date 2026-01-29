@@ -21,12 +21,12 @@ import play.api.Logger
 import play.api.i18n.Messages
 
 @Singleton
-class PeriodFormatter {
+class PeriodFormatter:
 
   private val logger = Logger(this.getClass)
 
-  def formatPeriodKey(periodKey: String)(implicit messages: Messages): String = {
-    if (periodKey.length != 4) throw new RuntimeException(s"Invalid length periodkey: $periodKey")
+  def formatPeriodKey(periodKey: String)(using Messages): String =
+    if periodKey.length != 4 then throw new RuntimeException(s"Invalid length periodkey: $periodKey")
 
     // starts at 0!
     val char3   = periodKey.charAt(2)
@@ -35,22 +35,17 @@ class PeriodFormatter {
 
     val year = periodKey.take(2)
 
-    if (char3 == 'Y') {
-      formatPeriodKeyYearly(char4, year)
-    } else if ((char3 == 'A') && char4.isLetter) {
-      formatPeriodKeyMonthly(char4, year)
-    } else if (char3.isLetter && char4.isDigit) {
-      formatPeriodKeyQuarterly(quarter, year)
-    } else ""
+    if char3 == 'Y' then formatPeriodKeyYearly(char4, year)
+    else if (char3 == 'A') && char4.isLetter then formatPeriodKeyMonthly(char4, year)
+    else if char3.isLetter && char4.isDigit then formatPeriodKeyQuarterly(quarter, year)
+    else ""
 
-  }
-
-  private def formatPeriodKeyMonthly(char4: Char, yearString: String)(implicit messages: Messages) = {
+  private def formatPeriodKeyMonthly(char4: Char, yearString: String)(using Messages): String =
 
     logger.debug(s"Called formatPeriodKeyMonthly with $char4, $yearString")
 
     val year                = ("20" + yearString).toInt
-    val monthString: String = char4 match {
+    val monthString: String = char4 match
       case 'A' => Messages("month.january")
       case 'B' => if (isLeapYear(year)) Messages("month.february_leap") else Messages("month.february")
       case 'C' => Messages("month.march")
@@ -66,19 +61,16 @@ class PeriodFormatter {
       case _   =>
         logger.warn(s"invalid periodKey for formatPeriodKeyMonthly, could not match month: $char4")
         ""
-
-    }
-    val returnStr = s"$monthString $year"
+    val returnStr           = s"$monthString $year"
     logger.debug(s"Translated to $returnStr")
     returnStr
-  }
 
-  private def formatPeriodKeyQuarterly(quarter: String, yearString: String)(implicit messages: Messages) = {
+  private def formatPeriodKeyQuarterly(quarter: String, yearString: String)(using Messages): String =
 
     logger.debug(s"Called formatPeriodKeyQuarterly with $quarter, $yearString")
     val year = ("20" + yearString).toInt
 
-    val monthString: String = quarter match {
+    val monthString: String = quarter match
       case "A4" => Messages("quarter.JanuaryQuarter")
       case "B4" =>
         if (isLeapYear(year)) Messages("quarter.FebruaryQuarter_leap") else Messages("quarter.FebruaryQuarter")
@@ -92,24 +84,22 @@ class PeriodFormatter {
       case "A3" => Messages("quarter.OctoberQuarter")
       case "B3" => Messages("quarter.NovemberQuarter")
       case "C4" => Messages("quarter.DecemberQuarter")
-    }
-    val returnStr           = s"$monthString $year"
+
+    val returnStr = s"$monthString $year"
     logger.debug(s"Translated to $returnStr")
     returnStr
 
-  }
-
-  private def formatPeriodKeyYearly(char4: Char, year: String)(implicit messages: Messages) = {
+  private def formatPeriodKeyYearly(char4: Char, year: String)(using Messages): String =
 
     logger.debug(s"Called formatPeriodKeyYearly with $char4, $year")
 
-    val yearString          =
-      if (char4 == 'A') s"20$year"
-      else {
+    val yearString =
+      if char4 == 'A' then s"20$year"
+      else
         val nextyear = year.toInt + 1
         s"20$nextyear"
-      }
-    val monthString: String = char4 match {
+
+    val monthString: String = char4 match
       case 'A' => Messages("date.JanToDec")
       case 'B' => Messages("date.FebToJan")
       case 'C' => Messages("date.MarToFeb")
@@ -125,14 +115,10 @@ class PeriodFormatter {
       case _   =>
         logger.warn(s"invalid periodKey for formatPeriodKeyYearly, could not match month: $char4")
         ""
-    }
     val returnStr           = s"$monthString $yearString"
     logger.debug(s"Translated to $returnStr")
     returnStr
-  }
 
   val isLeapYear: Int => Boolean = (year: Int) =>
     ((year % 4) == 0) && !(((year % 100) == 0) &&
       !((year % 400) == 0))
-
-}

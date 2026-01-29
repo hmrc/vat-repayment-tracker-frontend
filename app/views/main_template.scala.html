@@ -43,8 +43,7 @@
         navTitle: String = "heading_bta",
         fullWidth: Boolean = true,
         hasBackLink: Boolean = false,
-)(
-        mainContent: Html)(implicit messages: play.api.i18n.Messages, request: RequestHeader)
+)(mainContent: Html)(using messages: play.api.i18n.Messages, request: RequestHeader)
 
 @head = {
 

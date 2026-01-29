@@ -17,16 +17,20 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import req.RequestSupport
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 @Singleton
-class TimeoutController @Inject() (delete_answers: views.html.session.delete_answers, mcc: MessagesControllerComponents)
-    extends FrontendController(mcc) {
+class TimeoutController @Inject() (
+  delete_answers: views.html.session.delete_answers,
+  mcc:            MessagesControllerComponents,
+  requestSupport: RequestSupport
+) extends FrontendController(mcc):
 
+  import requestSupport.*
   val keepAliveSession: Action[AnyContent] = Action(NoContent)
 
-  val killSession: Action[AnyContent] = Action { implicit request =>
+  val killSession: Action[AnyContent] = Action: (request: Request[?]) =>
+    given Request[?] = request
     Ok(delete_answers())
-  }
-}
