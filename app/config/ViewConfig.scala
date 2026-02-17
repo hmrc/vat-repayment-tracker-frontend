@@ -40,7 +40,7 @@ case class ViewConfig(
   timeoutDialogCountdown:        Int,
   webchatUrl:                    String,
   basGatewayBaseUrl:             String
-) {
+):
 
   val feedbackUrlForLogout = s"$feedbackBaseUrl/feedback/$appName"
   val feedbackUrl          = s"$contactBaseUrl/contact/beta-feedback?service=$appName"
@@ -73,5 +73,3 @@ case class ViewConfig(
     webchatUrl = servicesConfig.getString("urls.webchatUrl"),
     basGatewayBaseUrl = servicesConfig.baseUrl("bas-gateway-frontend")
   )
-
-}

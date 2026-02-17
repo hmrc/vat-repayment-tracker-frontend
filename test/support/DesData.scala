@@ -20,15 +20,16 @@ import model.des.RiskingStatus.INITIAL
 
 import java.time.LocalDate
 import model.{PeriodKey, Vrn, VrtRepaymentDetailData}
-import model.des._
+import model.des.*
 import play.api.libs.json.{JsValue, Json}
 
 import java.time.format.DateTimeFormatter
 
-object DesData {
+object DesData:
 
-  private val bankDetails: BankDetails                 =
+  private val bankDetails: BankDetails =
     BankDetails(Some("Account holder"), Some("11112222"), Some("667788"), None, None)
+
   private val inFlightBankDetails: BankDetails         = BankDetails(
     Some("Account holder"),
     Some("11112222"),
@@ -84,7 +85,7 @@ object DesData {
   val vrtRepaymentDetailData: VrtRepaymentDetailData   =
     VrtRepaymentDetailData(None, LocalDate.now(), vrn, repaymentDetail)
 
-  object DeregistrationData {
+  object DeregistrationData:
     val deregistrationData: Deregistration = Deregistration(
       deregistrationReason = Some("0001"),
       effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
@@ -102,9 +103,8 @@ object DesData {
       effectDateOfCancellation = Some(LocalDate.parse("2001-01-01")),
       lastReturnDueDate = Some(LocalDate.parse("2001-01-01"))
     )
-  }
 
-  object DeregisteredCustomerInformation {
+  object DeregisteredCustomerInformation:
     val approvedCustomerInformationDeregistered: CustomerInformation = CustomerInformation(
       Some(approvedInformation.copy(deregistration = Some(DeregistrationData.deregistrationData))),
       None
@@ -119,7 +119,6 @@ object DesData {
       Some(approvedInformation.copy(deregistration = Some(DeregistrationData.deregistrationDataBlankReason))),
       None
     )
-  }
 
   // language=JSON
   val vrtRepaymentDetailDataJson: JsValue = Json.parse(
@@ -1381,8 +1380,8 @@ object DesData {
       ]""".stripMargin
     )
 
-  def financialDataSingleCredit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue = {
-    val financialTransactions = periodKeys.map { period =>
+  def financialDataSingleCredit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue =
+    val financialTransactions = periodKeys.map: period =>
       // language=JSON
       s"""{
         |
@@ -1415,7 +1414,6 @@ object DesData {
         |
         |}
         |""".stripMargin
-    }
 
     // language=JSON
     Json.parse(s"""
@@ -1426,7 +1424,6 @@ object DesData {
            "processingDate": "2019-08-20T10:44:05Z",
            "financialTransactions": [ ${financialTransactions.mkString(",\n")} ]
        }""".stripMargin)
-  }
 
   def financialDataEmptyItemsArray(vrn: Vrn): JsValue =
     Json.parse(s"""
@@ -1547,7 +1544,7 @@ object DesData {
            ]
        }""".stripMargin)
 
-  def financialDataSingleDebit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue = {
+  def financialDataSingleDebit(vrn: Vrn, periodKeys: Seq[String] = Seq("18AG")): JsValue =
     val financialTransactions = periodKeys.map { period =>
       // language=JSON
       s"""{
@@ -1589,6 +1586,3 @@ object DesData {
          "processingDate": "2019-08-20T10:44:05Z",
          "financialTransactions": [ ${financialTransactions.mkString(",\n")}  ]
      }""".stripMargin)
-  }
-
-}

@@ -16,29 +16,26 @@
 
 package controllers
 
-import connectors._
+import connectors.*
 import controllers.action.{Actions, AuthenticatedRequest}
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.mvc.{Action, _}
+import play.api.mvc.*
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PayApiController @Inject() (cc: ControllerComponents, actions: Actions, payApiConnector: PayApiConnector)(implicit
-  ec: ExecutionContext
-) extends FrontendBaseController(cc) {
+class PayApiController @Inject() (cc: ControllerComponents, actions: Actions, payApiConnector: PayApiConnector)(using
+  ExecutionContext
+) extends FrontendBaseController(cc):
 
   private val logger = Logger(this.getClass)
 
   def startPaymentsJourney(amountInPence: Long): Action[AnyContent] =
-    actions.securedActionMtdVrnCheck.async { implicit request: AuthenticatedRequest[_] =>
-      for {
-        response <- payApiConnector.startJourney(amountInPence, request.typedVrn.vrn)
-      } yield {
+    actions.securedActionMtdVrnCheck.async: (request: AuthenticatedRequest[?]) =>
+      given AuthenticatedRequest[?] = request
+
+      for response <- payApiConnector.startJourney(amountInPence, request.typedVrn.vrn)
+      yield
         logger.debug(s"received ${response.toString}")
         Redirect(response.nextUrl)
-      }
-    }
-
-}

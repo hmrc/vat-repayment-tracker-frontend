@@ -21,40 +21,38 @@ import org.scalatest.Assertion
 
 import scala.util.Try
 
-object InProgress extends CommonDetail {
+object InProgress extends CommonDetail:
 
-  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBAC(result: Boolean)(using WebDriver): Assertion =
     containsText("Add your bank account for future repayments") shouldBe result
     containsText("The quickest way to receive a repayment is straight into your bank account.") shouldBe result
     containsText("Add your bank account details for any future repayments.") shouldBe result
     containsText("Add bank details") shouldBe result
-  }
 
-  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsBankWarning(result: Boolean)(using WebDriver): Assertion =
     containsText("You have recently updated your bank account details.") shouldBe result
 
-  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsBankDetails(result: Boolean)(using WebDriver): Assertion =
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
 
-  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsNewBankDetailsText(result: Boolean)(using WebDriver): Assertion =
     containsText(
       "You’ll continue to receive repayments by cheque until we verify your bank account details."
     ) shouldBe result
 
-  def uniqueToPage(implicit wd: WebDriver): Assertion = {
+  def uniqueToPage(using WebDriver): Assertion =
     readTitle shouldBe "We are processing your VAT repayments - Business tax account - GOV.UK"
     readMainMessage shouldBe "We are processing your VAT repayments"
-  }
 
-  def noRepayments(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
-  def whenpay(implicit webDriver:      WebDriver): String = probing(_.findElement(By.id("whenpay")).getText)
-  def whenpay_desc(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("whenpay-desc")).getText)
+  def noRepayments(using WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
+  def whenpay(using WebDriver): String      = probing(_.findElement(By.id("whenpay")).getText)
+  def whenpay_desc(using WebDriver): String = probing(_.findElement(By.id("whenpay-desc")).getText)
 
-  def suspendedWarning(implicit webDriver: WebDriver): String = Try {
+  def suspendedWarning(using WebDriver): String = Try {
     probing(_.findElement(By.id("suspended-repayment-warning")).getText)
   }.getOrElse("")
 
-  def containsSuspendedWarning(result: Boolean)(implicit webDriver: WebDriver): Unit = {
+  def containsSuspendedWarning(result: Boolean)(using WebDriver): Unit =
     val actual = suspendedWarning
 
     actual.contains {
@@ -65,22 +63,15 @@ object InProgress extends CommonDetail {
       "You must submit your latest VAT return"
     } shouldBe result
 
-    ()
-  }
-
-  def completedLink(implicit wd: WebDriver): Assertion = {
+  def completedLink(using WebDriver): Assertion =
     clickCompleted
     noRepayments shouldBe "You have no completed repayments"
-  }
 
-  def checktabs(implicit wd: WebDriver): Assertion = {
+  def checktabs(using WebDriver): Assertion =
     idPresent("completed-exist") shouldBe false
     idPresent("inprogress-exist") shouldBe true
     idPresent("completed-none") shouldBe true
     idPresent("inprogress-none") shouldBe false
-  }
 
-  def countRows(count: Int)(implicit wd: WebDriver): Assertion =
+  def countRows(count: Int)(using WebDriver): Assertion =
     cssCount(".govuk-table__body > .govuk-table__row") shouldBe count
-
-}

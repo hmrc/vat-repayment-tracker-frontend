@@ -17,53 +17,47 @@
 package pages
 
 import model.Language
-import model.Language._
+import model.Language.*
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertion
 
-object VrtVatRegistrationCancelledPage extends CommonPage {
+object VrtVatRegistrationCancelledPage extends CommonPage:
 
   val path: String          = "/vat-repayment-tracker/vrt-vat-registration-cancelled"
   val backButtonUrl: String = ""
 
-  def expectedTitle(language: Language): String = language match {
+  def expectedTitle(language: Language): String = language match
     case English => "Call us to track your VAT repayments - Business tax account - GOV.UK"
     case Welsh   => "Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW - Cyfrif treth busnes - GOV.UK"
-  }
 
-  def expectedMainMessage(language: Language): String = language match {
+  def expectedMainMessage(language: Language): String = language match
     case English => "Call us to track your VAT repayments"
     case Welsh   => "Ffoniwch ni i ddilyn hynt eich ad-daliadau TAW"
-  }
 
-  def assertPageIsDisplayed(language: Language = English)(implicit wd: WebDriver): Unit = {
+  def assertPageIsDisplayed(language: Language)(using WebDriver): Unit =
     currentPath shouldBe path
     readTitle shouldBe expectedTitle(language)
     readMainMessage shouldBe expectedMainMessage(language)
-    assertContentMatchesExpectedLines(Expected.MainText()(language))
-  }
+    assertContentMatchesExpectedLines(Expected.MainText()(using language))
 
-  def assertHyperLinkedTextDisplayed(language: Language = English)(implicit wd: WebDriver): Assertion = {
+  def assertHyperLinkedTextDisplayed(language: Language = English)(using WebDriver): Assertion =
     hasTextHyperLinkedTo(
-      language match {
+      language match
         case English => "deal with HMRC if you need some help"
         case Welsh   => "ddelio â CThEF os oes angen help arnoch chi"
-      },
+      ,
       "https://www.gov.uk/get-help-hmrc-extra-support"
     )
     hasTextHyperLinkedTo(
       "Relay UK",
       "https://www.relayuk.bt.com/"
     )
-  }
 
-  object Expected {
-
-    object MainText {
-      def apply()(implicit language: Language): List[String] = language match {
+  object Expected:
+    object MainText:
+      def apply()(using language: Language): List[String] = language match
         case English => mainTextEnglish
         case Welsh   => mainTextWelsh
-      }
 
       val mainTextEnglish: List[String] = List(
         "Call us to track your VAT repayments",
@@ -89,6 +83,3 @@ object VrtVatRegistrationCancelledPage extends CommonPage {
         "Dysgwch am y ffyrdd gwahanol o ddelio â CThEF os oes angen help arnoch chi.",
         "Gallwch hefyd defnyddio Relay UK os na allwch glywed na siarad dros y ffôn: deialwch 18001 ac yna 0300 200 3700. Sylwer – dim ond galwadau ffôn Saesneg eu hiaith y mae Relay UK yn gallu ymdrin â nhw."
       )
-    }
-  }
-}

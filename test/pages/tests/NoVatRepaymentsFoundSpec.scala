@@ -23,7 +23,7 @@ import model.{EnrolmentKeys, PeriodKey, Vrn}
 import pages.NoVatRepaymentsFoundPage
 import support.{AuditWireMockResponses, AuthWireMockResponses, BrowserSpec, PaymentsOrchestratorStub}
 
-class NoVatRepaymentsFoundSpec extends BrowserSpec {
+class NoVatRepaymentsFoundSpec extends BrowserSpec:
 
   val vrn: Vrn = Vrn("234567890")
   val path     = s"""/vat-repayment-tracker/show-vrt"""
@@ -148,6 +148,5 @@ class NoVatRepaymentsFoundSpec extends BrowserSpec {
     goToViaPath(path)
     NoVatRepaymentsFoundPage.assertPageIsDisplayed()
 
-    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value, noRepaymentsFound = false)
+    AuditWireMockResponses.viewRepaymentStatusAudited("showVrt", vrn.value)
   }
-}

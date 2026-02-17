@@ -43,8 +43,7 @@
         navTitle: String = "heading_bta",
         fullWidth: Boolean = true,
         hasBackLink: Boolean = false,
-)(
-        mainContent: Html)(implicit messages: play.api.i18n.Messages, request: RequestHeader)
+)(mainContent: Html)(using messages: play.api.i18n.Messages, request: RequestHeader)
 
 @head = {
 
@@ -96,5 +95,5 @@
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(scripts),
     footerBlock = Some(hmrcStandardFooter()),
-    mainContentLayout = (if (!fullWidth) Some(twoThirdsMainContent.apply _) else None)
+    mainContentLayout = (if (!fullWidth) Some(twoThirdsMainContent.apply) else None)
 )(contentBlock)

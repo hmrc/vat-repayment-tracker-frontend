@@ -28,8 +28,8 @@
   receivedOn: String,
   address : String
  )(
-  implicit
-  request: Request[_],
+  using
+  request: Request[?],
   messages: Messages
 )
 
@@ -39,7 +39,7 @@
       <h1 id="main-message" class="govuk-heading-xl">@Messages("vat_repayments_classic.scala.title")</h1>
         <p class="govuk-body">@Messages("vat_repayments_classic.scala.title.returns_line1")
             <span>
-                <strong id="receivedOn">@{receivedOn}</strong>
+                <strong id="receivedOn">@receivedOn</strong>
             </span>
         </p>
 

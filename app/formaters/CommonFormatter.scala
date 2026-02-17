@@ -20,7 +20,7 @@ import java.text.DecimalFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-object CommonFormatter {
+object CommonFormatter:
 
   private val pattern1                    = DateTimeFormatter.ofPattern("dd MMM yyyy")
   def formatDate(date: LocalDate): String =
@@ -29,5 +29,3 @@ object CommonFormatter {
   private val df                               = new DecimalFormat("#,##0.00")
   def formatAmount(amount: BigDecimal): String =
     df.format(amount.abs)
-
-}

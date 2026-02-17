@@ -20,9 +20,9 @@ import connectors._
 import controllers.action.{Actions, AuthenticatedRequest}
 
 import javax.inject.{Inject, Singleton}
-import model._
+import model.*
 import play.api.Logger
-import play.api.mvc.{Action, _}
+import play.api.mvc.*
 import service.VrtService
 import req.RequestSupport
 
@@ -37,20 +37,22 @@ class BankAccountCocController @Inject() (
   auditor:                       Auditor,
   vrtService:                    VrtService,
   requestSupport:                RequestSupport
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController(cc) {
+)(using ExecutionContext)
+    extends FrontendBaseController(cc):
 
   private val logger = Logger(this.getClass)
 
+  import requestSupport.*
+
   def startBankAccountCocJourney(returnPage: ReturnPage): Action[AnyContent] =
-    actions.securedActionMtdVrnCheckWithoutShutterCheck.async { implicit request: AuthenticatedRequest[_] =>
-      import requestSupport._
+    actions.securedActionMtdVrnCheckWithoutShutterCheck.async: (request: AuthenticatedRequest[?]) =>
+      given AuthenticatedRequest[?] = request
 
       logger.debug("startBankAccountCocJourney... trying to audit")
       val repaymentDetailsF = paymentsOrchestratorConnector.getRepaymentsDetails(request.typedVrn.vrn)
       val financialDataF    = paymentsOrchestratorConnector.getFinancialData(request.typedVrn.vrn)
 
-      for {
+      for
         repaymentDetails <- repaymentDetailsF
         financialData    <- financialDataF
         allRepayments     = vrtService.getAllRepaymentData(repaymentDetails, request.typedVrn.vrn, financialData)
@@ -61,7 +63,4 @@ class BankAccountCocController @Inject() (
                               request.typedVrn.vrn
                             )
         nextUrl          <- bankAccountCocConnector.startJourney(request.typedVrn.vrn, returnPage)
-      } yield Redirect(nextUrl.nextUrl)
-    }
-
-}
+      yield Redirect(nextUrl.nextUrl)

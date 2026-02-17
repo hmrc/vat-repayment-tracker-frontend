@@ -19,45 +19,36 @@ package pages
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.Assertion
 
-object Completed extends CommonDetail {
-
-  def uniqueToPage(implicit wd: WebDriver): Assertion = {
+object Completed extends CommonDetail:
+  def uniqueToPage(using WebDriver): Assertion =
     readTitle shouldBe "We are processing your VAT repayments - Business tax account - GOV.UK"
     readMainMessage shouldBe "We are processing your VAT repayments"
-  }
 
-  def noRepayments(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
+  def noRepayments(using WebDriver): String = probing(_.findElement(By.id("no-repayments")).getText)
 
-  def viewProgressLink(implicit wd: WebDriver): Assertion = {
+  def viewProgressLink(using WebDriver): Assertion =
     clickInProgress
     noRepayments shouldBe "No repayments in progress"
-  }
 
-  def checktabs(implicit wd: WebDriver): Assertion = {
-
+  def checktabs(using WebDriver): Assertion =
     idPresent("inprogress-exist") shouldBe false
     idPresent("completed-exist") shouldBe true
     idPresent("completed-none") shouldBe false
     idPresent("inprogress-none") shouldBe true
 
-  }
-
-  def containsBAC(result: Boolean)(implicit wd: WebDriver): Assertion = {
+  def containsBAC(result: Boolean)(using WebDriver): Assertion =
     containsText("Add your bank account for future repayments") shouldBe result
     containsText("The quickest way to receive a repayment is straight into your bank account.") shouldBe result
     containsText("Add your bank account details for any future repayments.") shouldBe result
     containsText("Add bank details") shouldBe result
-  }
 
-  def containsBankWarning(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsBankWarning(result: Boolean)(using WebDriver): Assertion =
     containsText("You have recently updated your bank account details.") shouldBe result
 
-  def containsBankDetails(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsBankDetails(result: Boolean)(using WebDriver): Assertion =
     containsText("You are currently paid by bank transfer to the following account:") shouldBe result
 
-  def containsNewBankDetailsText(result: Boolean)(implicit wd: WebDriver): Assertion =
+  def containsNewBankDetailsText(result: Boolean)(using WebDriver): Assertion =
     containsText(
       "You’ll continue to receive repayments by cheque until we verify your bank account details."
     ) shouldBe result
-
-}

@@ -26,6 +26,5 @@ final case class SpjRequestBtaVat(
   vrn:           Vrn
 )
 
-object SpjRequestBtaVat {
-  implicit val format: Format[SpjRequestBtaVat] = Json.format[SpjRequestBtaVat]
-}
+object SpjRequestBtaVat:
+  given Format[SpjRequestBtaVat] = Json.format[SpjRequestBtaVat]

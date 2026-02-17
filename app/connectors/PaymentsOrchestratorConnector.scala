@@ -22,7 +22,7 @@ import model.des.{CustomerInformation, DirectDebitData, FinancialData, Repayment
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -33,7 +33,7 @@ class PaymentsOrchestratorConnector @Inject() (
   servicesConfig: ServicesConfig,
   httpClient:     HttpClientV2,
   configuration:  Configuration
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext):
 
   private val serviceURL: String          = servicesConfig.baseUrl("payments-orchestrator")
   private val financialsUrl: String       =
@@ -44,36 +44,30 @@ class PaymentsOrchestratorConnector @Inject() (
   private val repaymentDetailsUrl: String =
     configuration.get[String]("microservice.services.payments-orchestrator.repayment-details-url")
 
-  import req.RequestSupport._
+  import req.RequestSupport.hc
 
   private val logger = Logger(this.getClass)
 
-  def getFinancialData(vrn: Vrn)(implicit request: Request[_]): Future[Option[FinancialData]] = {
+  def getFinancialData(vrn: Vrn)(using Request[?]): Future[Option[FinancialData]] =
     logger.debug(s"Calling payments orchestrator for des api 1166 for vrn $vrn")
     val getFinancialURL: String = s"$serviceURL$financialsUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1166 with url $getFinancialURL""")
     httpClient.get(url"$getFinancialURL").execute[Option[FinancialData]]
-  }
 
-  def getCustomerData(vrn: Vrn)(implicit request: Request[_]): Future[Option[CustomerInformation]] = {
+  def getCustomerData(vrn: Vrn)(using Request[?]): Future[Option[CustomerInformation]] =
     logger.debug(s"Calling payments orchestrator for des api 1363 for vrn $vrn")
     val getCustomerURL: String = s"$serviceURL$customerUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1363 with url $getCustomerURL""")
     httpClient.get(url"$getCustomerURL").execute[Option[CustomerInformation]]
-  }
 
-  def getDDData(vrn: Vrn)(implicit request: Request[_]): Future[Option[DirectDebitData]] = {
+  def getDDData(vrn: Vrn)(using Request[?]): Future[Option[DirectDebitData]] =
     logger.debug(s"Calling payments orchestrator for des api 1396 for vrn $vrn")
     val getDDURL: String = s"$serviceURL$ddUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1396 with url $getDDURL""")
     httpClient.get(url"$getDDURL").execute[Option[DirectDebitData]]
-  }
 
-  def getRepaymentsDetails(vrn: Vrn)(implicit request: Request[_]): Future[Option[Seq[RepaymentDetailData]]] = {
+  def getRepaymentsDetails(vrn: Vrn)(using Request[?]): Future[Option[Seq[RepaymentDetailData]]] =
     logger.debug(s"Calling payments orchestrator for des api 1533 for vrn $vrn")
     val getRDURL: String = s"$serviceURL$repaymentDetailsUrl/${vrn.value}"
     logger.debug(s"""Calling payments orchestrator for des api 1533 with url $getRDURL""")
     httpClient.get(url"$getRDURL").execute[Option[Seq[RepaymentDetailData]]]
-  }
-
-}

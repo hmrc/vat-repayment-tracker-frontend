@@ -21,21 +21,21 @@ import org.scalatest.Assertion
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-trait CommonDetail extends CommonPage {
+trait CommonDetail extends CommonPage:
 
   val path = "/vat-repayment-tracker/show-vrt"
 
-  def breadCrumbsExists(implicit driver: WebDriver): Assertion = idPresent("viewVatAccount") shouldBe true
+  def breadCrumbsExists(using WebDriver): Assertion = idPresent("viewVatAccount") shouldBe true
 
-  def clickManageAccount(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
+  def clickManageAccount(using WebDriver): Unit = probing(_.findElement(By.id("manage-account")).click())
 
-  def clickCallBac(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
+  def clickCallBac(using WebDriver): Unit = probing(_.findElement(By.id("call-bac")).click())
 
-  def clickAddBankDetails(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("add-bank-details")).click())
+  def clickAddBankDetails(using WebDriver): Unit = probing(_.findElement(By.id("add-bank-details")).click())
 
-  def clickInProgress(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())
+  def clickInProgress(using WebDriver): Unit = probing(_.findElement(By.id("tab_inProgress")).click())
 
-  def clickCompleted(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
+  def clickCompleted(using WebDriver): Unit = probing(_.findElement(By.id("tab_completed")).click())
 
   def assertPageIsDisplayed(
     checkBank:      Boolean = true,
@@ -43,48 +43,40 @@ trait CommonDetail extends CommonPage {
     amount:         String,
     partialAccount: Boolean = false,
     period:         String = "1 July to 31 July 2018"
-  )(implicit wd: WebDriver): Assertion = {
+  )(using WebDriver): Assertion =
     currentPath shouldBe path
     readAmount() shouldBe amount
-    if (checkBank) {
-      if (partialAccount)
-        readAccName shouldBe "Name on account:"
-      else
-        readAccName shouldBe "Name on account: Account holder"
+    if checkBank then
+      if partialAccount then readAccName shouldBe "Name on account:"
+      else readAccName shouldBe "Name on account: Account holder"
 
       readAccNumber shouldBe "Account number: ****2222"
       readAccSortCode shouldBe "Sort code: 66 77 88"
-    }
-    if (checkAddress) {
-      readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
-    }
+
+    if checkAddress then readAddress shouldBe "VAT PPOB Line1\nVAT PPOB Line2\nVAT PPOB Line3\nVAT PPOB Line4\nTF3 4ER"
     readPeriod() shouldBe period
 
-  }
+  def readAddress(using WebDriver): String = probing(_.findElement(By.id("address")).getText)
 
-  def readAddress(implicit webDriver: WebDriver): String = probing(_.findElement(By.id("address")).getText)
-
-  def readAmount()(implicit webDriver: WebDriver): String =
+  def readAmount()(using WebDriver): String =
     probing(
       _.findElement(By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section/table/tbody/tr[1]/td[3]")).getText
     )
 
-  def readReceivedDate(appender: String)(implicit webDriver: WebDriver): String = probing(
+  def readReceivedDate(appender: String)(using WebDriver): String = probing(
     _.findElement(By.id(s"received-date$appender")).getText
   )
 
-  def readPeriod()(implicit webDriver: WebDriver): String = probing(
+  def readPeriod()(using WebDriver): String = probing(
     _.findElement(
       By.xpath(s"/html/body/div/main/div/article/div[3]/div/div/section[1]/table/tbody/tr[1]/td[2]")
     ).getText
   )
 
-  def readRowForPeriod(periodKey: String)(implicit webDriver: WebDriver): Seq[String] =
+  def readRowForPeriod(periodKey: String)(using WebDriver): Seq[String] =
     probing(
       _.findElement(
         By.cssSelector(s"""tr > td > a.govuk-link[href="/vat-repayment-tracker/view-progress/$periodKey"]""")
       )
         .findElement(By.xpath("./../.."))
     ).findElements(By.cssSelector("td")).asScala.toSeq.map(_.getText)
-
-}

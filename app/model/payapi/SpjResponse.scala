@@ -23,6 +23,5 @@ final case class SpjResponse(
   nextUrl:   String
 )
 
-object SpjResponse {
-  implicit val format: OFormat[SpjResponse] = Json.format[SpjResponse]
-}
+object SpjResponse:
+  given OFormat[SpjResponse] = Json.format[SpjResponse]

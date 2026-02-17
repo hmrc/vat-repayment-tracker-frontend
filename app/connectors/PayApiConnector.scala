@@ -19,9 +19,10 @@ package connectors
 import model.Vrn
 import model.payapi.{SpjRequestBtaVat, SpjResponse}
 import play.api.libs.json.Json
+import play.api.libs.ws.writeableOf_JsValue
 import play.api.mvc.Request
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -34,9 +35,9 @@ class PayApiConnector @Inject() (
   servicesConfig: ServicesConfig,
   httpClient:     HttpClientV2,
   configuration:  Configuration
-)(implicit ec: ExecutionContext) {
+)(using ExecutionContext):
 
-  import req.RequestSupport._
+  import req.RequestSupport.hc
 
   private val logger = Logger(this.getClass)
 
@@ -44,7 +45,7 @@ class PayApiConnector @Inject() (
   private val viewUrl: String    = configuration.get[String]("microservice.services.pay-api.sj-url")
   private val payBackUrl: String = configuration.get[String]("urls.pay-back-url")
 
-  def startJourney(amountInPence: Long, vrn: Vrn)(implicit request: Request[_]): Future[SpjResponse] = {
+  def startJourney(amountInPence: Long, vrn: Vrn)(using Request[?]): Future[SpjResponse] =
 
     val journeyRequest: SpjRequestBtaVat = SpjRequestBtaVat(amountInPence, payBackUrl, payBackUrl, vrn)
     logger.debug(s"Using back url : $payBackUrl")
@@ -52,5 +53,3 @@ class PayApiConnector @Inject() (
     val startJourneyURL: String          = s"$serviceUrl$viewUrl"
     logger.debug(s"Calling pay-api start journey for vrn with url $startJourneyURL)")
     httpClient.post(url"$startJourneyURL").withBody(Json.toJson(journeyRequest)).execute[SpjResponse]
-  }
-}

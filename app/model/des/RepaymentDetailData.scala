@@ -16,7 +16,7 @@
 
 package model.des
 
-import model.des.RiskingStatus._
+import model.des.RiskingStatus.*
 
 import java.time.LocalDate
 import play.api.libs.json.{Json, OFormat}
@@ -30,34 +30,26 @@ final case class RepaymentDetailData(
   vatToPay_BOX5:          BigDecimal,
   supplementDelayDays:    Option[Int],
   originalPostingAmount:  BigDecimal
-) {
+) derives CanEqual:
 
-  @SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
   def getAmountForDisplay(status: RiskingStatus): BigDecimal =
-    if (
-      Seq(
+    if Seq(
         CLAIM_QUERIED,
         REPAYMENT_APPROVED,
         INITIAL,
         SENT_FOR_RISKING
       ).contains(status)
-    ) {
-      originalPostingAmount
-    } else {
-      vatToPay_BOX5
-    }
+    then originalPostingAmount
+    else vatToPay_BOX5
 
   // For a status of initial or sent_for_risking , we might not have a  lastUpdateReceived date
   val sorted: Int =
-    riskingStatus match {
+    riskingStatus match
       case INITIAL                                                        => 5
       case SENT_FOR_RISKING                                               => 4
       case CLAIM_QUERIED                                                  => 3
       case REPAYMENT_SUSPENDED                                            => 2
       case REPAYMENT_ADJUSTED | ADJUSMENT_TO_TAX_DUE | REPAYMENT_APPROVED => 1
-    }
-}
 
-object RepaymentDetailData {
-  implicit val format: OFormat[RepaymentDetailData] = Json.format[RepaymentDetailData]
-}
+object RepaymentDetailData:
+  given OFormat[RepaymentDetailData] = Json.format[RepaymentDetailData]

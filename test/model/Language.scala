@@ -16,12 +16,5 @@
 
 package model
 
-sealed trait Language
-
-object Language {
-
-  case object English extends Language
-
-  case object Welsh extends Language
-
-}
+enum Language derives CanEqual:
+  case English, Welsh

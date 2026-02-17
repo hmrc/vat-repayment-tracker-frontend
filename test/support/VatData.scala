@@ -22,7 +22,7 @@ import java.time.LocalDate
 import model.vat.{CalendarData, CalendarPeriod, VatDesignatoryDetailsAddress}
 import play.api.libs.json.{JsValue, Json}
 
-object VatData {
+object VatData:
   val vrn: Vrn             = Vrn("2345678890")
   val periodKey: PeriodKey = PeriodKey("18AG")
 
@@ -124,5 +124,3 @@ object VatData {
     },
     "name":{}
   }""".stripMargin)
-
-}

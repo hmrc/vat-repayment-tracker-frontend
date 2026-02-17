@@ -19,7 +19,7 @@ package connectors
 import model.{EnrolmentKeys, Vrn}
 import support.{AuditWireMockResponses, AuthWireMockResponses, ItSpec, PayApiWireMockResponses}
 
-class PayApiSpec extends ItSpec {
+class PayApiSpec extends ItSpec:
 
   val vrn: Vrn = Vrn("2345678890")
 
@@ -36,4 +36,3 @@ class PayApiSpec extends ItSpec {
     val response = payApiConnector.startJourney(10000, vrn).futureValue
     response.nextUrl shouldBe "https://www.tax.service.gov.uk/pay/TestJourneyId-44f9-ad7f-01e1d3d8f151/start"
   }
-}

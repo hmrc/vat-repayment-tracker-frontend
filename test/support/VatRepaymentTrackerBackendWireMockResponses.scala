@@ -16,13 +16,13 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.des.RiskingStatus
 import model.{PeriodKey, Vrn}
 import play.api.http.Status
 
-object VatRepaymentTrackerBackendWireMockResponses {
+object VatRepaymentTrackerBackendWireMockResponses:
 
   def storeOk(): StubMapping =
     stubFor(
@@ -125,5 +125,3 @@ object VatRepaymentTrackerBackendWireMockResponses {
             .withBody(DesData.storedRepaymentDetails4(date, status1, status2, status3, status4).toString().stripMargin)
         )
     )
-
-}

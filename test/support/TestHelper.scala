@@ -16,17 +16,14 @@
 
 package support
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat}
 import support.TestHelper.ErrorResponse
 
-trait TestHelper {
-
-  def errorResponse(url: String) =
+trait TestHelper:
+  def errorResponse(url: String): JsValue =
     Json.toJson(ErrorResponse(404, "URI not found", requested = Some(url)))
 
-}
-
-object TestHelper {
+object TestHelper:
   case class ErrorResponse(
     statusCode:  Int,
     message:     String,
@@ -34,7 +31,5 @@ object TestHelper {
     requested:   Option[String] = None
   )
 
-  object ErrorResponse {
-    implicit val format: OFormat[ErrorResponse] = Json.format[ErrorResponse]
-  }
-}
+  object ErrorResponse:
+    given OFormat[ErrorResponse] = Json.format[ErrorResponse]

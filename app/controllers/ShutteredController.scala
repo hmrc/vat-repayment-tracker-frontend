@@ -18,24 +18,23 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.mvc.{Action, _}
+import play.api.mvc.*
+import req.RequestSupport
 
 import scala.concurrent.Future
 
 @Singleton
 class ShutteredController @Inject() (
-  cc:   ControllerComponents,
-  view: views.html.shuttered
-)(implicit message: MessagesApi)
-    extends FrontendBaseController(cc) {
-
+  cc:             ControllerComponents,
+  view:           views.html.shuttered,
+  requestSupport: RequestSupport
+) extends FrontendBaseController(cc):
   private val logger = Logger(this.getClass)
 
-  def shuttered: Action[AnyContent] = Action.async { implicit request =>
-    logger.debug("shutter")
-    implicit val m: Messages = message.preferred(request)
-    Future.successful(Ok(view()))
-  }
+  import requestSupport.*
 
-}
+  def shuttered: Action[AnyContent] = Action.async: (request: Request[?]) =>
+    given Request[?] = request
+
+    logger.debug("shutter")
+    Future.successful(Ok(view()))

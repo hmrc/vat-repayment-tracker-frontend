@@ -18,11 +18,9 @@ package model.vat
 
 import support.{UnitSpec, VatData}
 
-class VatDesignatoryDetailsAddressSpec extends UnitSpec {
+class VatDesignatoryDetailsAddressSpec extends UnitSpec:
 
   "from json" in {
     VatData.vatDesignatoryDetailsAddressJson
       .as[VatDesignatoryDetailsAddress] shouldBe VatData.vatDesignatoryDetailsAddress
   }
-
-}

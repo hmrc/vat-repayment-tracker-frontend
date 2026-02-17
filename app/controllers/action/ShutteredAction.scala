@@ -20,27 +20,24 @@ import com.google.inject.Inject
 import config.ViewConfig
 import controllers.routes
 import play.api.Logger
-import play.api.mvc.Results._
-import play.api.mvc._
+import play.api.mvc.Results.*
+import play.api.mvc.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ShutteredAction @Inject() (viewConfig: ViewConfig, cc: MessagesControllerComponents)
-    extends ActionBuilder[Request, AnyContent] {
+    extends ActionBuilder[Request, AnyContent]:
 
   private val logger = Logger(this.getClass)
 
   def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (viewConfig.isShuttered) {
+    if viewConfig.isShuttered then
       logger.debug("Shuttered")
       Future.successful(Redirect(routes.ShutteredController.shuttered.url))
-    } else {
+    else
       logger.debug("Not shuttered")
       block(request)
-    }
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def executionContext: ExecutionContext = cc.executionContext
-
-}

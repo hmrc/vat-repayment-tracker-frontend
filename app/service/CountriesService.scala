@@ -21,8 +21,7 @@ import javax.inject.Singleton
 final case class Country(countryCode: String, countryName: String)
 
 @Singleton
-class CountriesService {
-
+class CountriesService:
   private val countries = List(
     Country("AD", "Andorra"),
     Country("AE", "United Arab Emirates"),
@@ -284,4 +283,3 @@ class CountriesService {
     countries
       .find(f => f.countryCode == countryCode)
       .fold(throw new RuntimeException(s"Unrecognised country code: $countryCode"))(_.countryName)
-}

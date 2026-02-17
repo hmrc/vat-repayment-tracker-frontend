@@ -19,10 +19,9 @@ package formaters
 import play.api.i18n.{Lang, MessagesApi, MessagesImpl, MessagesProvider}
 import support.ItSpec
 
-class PeriodFormatterSpec extends ItSpec {
+class PeriodFormatterSpec extends ItSpec:
 
-  implicit val messagesProvider: MessagesProvider =
-    MessagesImpl(Lang.defaultLang, injector.instanceOf[MessagesApi])
+  given MessagesProvider = MessagesImpl(Lang.defaultLang, injector.instanceOf[MessagesApi])
 
   val periodFormatter: PeriodFormatter = injector.instanceOf[PeriodFormatter]
 
@@ -74,22 +73,17 @@ class PeriodFormatterSpec extends ItSpec {
     ("19YL", "December to November 2020")
   )
 
-  monthly foreach (period =>
+  monthly.foreach: period =>
     s"$period monthly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
-  )
 
-  quarterly foreach (period =>
+  quarterly.foreach: period =>
     s"$period quarterly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
-  )
 
-  yearly foreach (period =>
+  yearly.foreach: period =>
     s"$period yearly check " in {
       periodFormatter.formatPeriodKey(period._1) shouldBe period._2
     }
-  )
-
-}

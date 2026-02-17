@@ -20,29 +20,28 @@ import javax.inject.Inject
 import model.Vrn
 import model.vat.{CalendarData, VatDesignatoryDetailsAddress}
 import play.api.Logger
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import play.api.mvc.Request
+import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class VatConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
+class VatConnector @Inject() (servicesConfig: ServicesConfig, httpClient: HttpClientV2)(using ExecutionContext):
 
   lazy private val vatUrl: String = servicesConfig.baseUrl("vat")
 
   private val logger = Logger(this.getClass)
 
-  def calendar(vrn: Vrn)(implicit hc: HeaderCarrier): Future[Option[CalendarData]] = {
+  import req.RequestSupport.hc
+
+  def calendar(vrn: Vrn)(using Request[?]): Future[Option[CalendarData]] =
     val url: String = vatUrl + s"/vat/${vrn.value}/calendar"
     logger.debug(s"calling vat service with url $url")
     httpClient.get(url"$url").execute[Option[CalendarData]]
-  }
 
-  def designatoryDetails(vrn: Vrn)(implicit hc: HeaderCarrier): Future[VatDesignatoryDetailsAddress] = {
+  def designatoryDetails(vrn: Vrn)(using Request[?]): Future[VatDesignatoryDetailsAddress] =
     val url: String = vatUrl + s"/vat/${vrn.value}/designatoryDetails"
     logger.debug(s"calling vat service with url $url")
     httpClient.get(url"$url").execute[VatDesignatoryDetailsAddress]
-  }
-
-}

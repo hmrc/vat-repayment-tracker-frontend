@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import model.des._
-@import model._
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import model.des.*
+@import model.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
 @import config.ViewConfig
 @import play.twirl.api.HtmlFormat
 
@@ -34,7 +34,7 @@
   returnPage : ReturnPage,
   date: Option[String],
   welshDate: Option[String]
-)(implicit request: Request[_], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @title = @{
   if (inFlight) Messages("view_repayment_account.title.inFlight")
@@ -45,12 +45,12 @@
  <div class="govuk-grid-row govuk-!-padding-bottom-2">
     <div class="govuk-grid-column-two-thirds">
         <h1 id="main-message" class="govuk-heading-xl">@title</h1>
-
-    @if(inFlight) {
-        @govukWarningText(WarningText(content = Text(Messages(
-          "view_repayment_account.warning", if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")}
-        ))))
-    }
+        @if(inFlight) {
+            @govukWarningText(WarningText(content = Text(Messages(
+              "view_repayment_account.warning",
+              if(messages.lang.code == "en") {date.getOrElse("")} else if(messages.lang.code == "cy") {welshDate.getOrElse("")} else ""
+            ))))
+        }
 
     @bankDetailsOption.map { bankDetails =>
 

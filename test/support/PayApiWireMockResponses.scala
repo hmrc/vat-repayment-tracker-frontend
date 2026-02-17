@@ -16,11 +16,11 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import model.payapi.SpjRequestBtaVat
 
-object PayApiWireMockResponses {
+object PayApiWireMockResponses:
 
   private val expectedStartJourneyUrl = "/pay-api/bta/vat/journey/start"
 
@@ -41,7 +41,7 @@ object PayApiWireMockResponses {
         )
     )
 
-  def verifyStartJourneyCalled(expectedRequest: SpjRequestBtaVat) =
+  def verifyStartJourneyCalled(expectedRequest: SpjRequestBtaVat): Unit =
     verify(
       exactly(1),
       postRequestedFor(urlEqualTo(expectedStartJourneyUrl))
@@ -57,5 +57,3 @@ object PayApiWireMockResponses {
           )
         )
     )
-
-}
