@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
 
   val bootstrapVersion = "10.5.0"
-  val enumeratumVersion = "1.9.4"
+  val enumeratumVersion = "1.9.5"
 
   val compile: Seq[ModuleID] = Seq(
     // FORMAT: OFF
