@@ -36,7 +36,7 @@
  <h2 class="govuk-heading-l">@Messages("repayment_details.repayment_bank_details")</h2>
  @if(inFlightBankDetails) {
   @govukWarningText(WarningText(content = Text(Messages(
-  "repayment_details.in_flight", if(message.lang.code == "en") {date.getOrElse("")} else if(message.lang.code == "cy") {welshDate.getOrElse("")}
+  "repayment_details.in_flight", if(message.lang.code == "en") {date.getOrElse("")} else if(message.lang.code == "cy") {welshDate.getOrElse("")} else ""
   ))))
  }
  <p class="govuk-body"  >@Messages("repayment_details.currently_paid_bank_transfer")</p>

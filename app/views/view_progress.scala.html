@@ -57,10 +57,10 @@
                             CommonFormatter.formatAmount(viewProgress.amount)
                         }</p>
                         @if(showHistoryUrl) {
-                                    <p id="history-url"><a class="govuk-link" href={viewConfig.viewVatAccount}>{Messages("view_progress.view_payments_history")}</a></p>
+                                    <p id="history-url"><a class="govuk-link" href=@{viewConfig.viewVatAccount}>@{Messages("view_progress.view_payments_history")}</a></p>
                             }
                         @if(showPayUrl) {
-                                    <p id="pay-url"><a class="govuk-link" href={routes.PayApiController.startPaymentsJourney(amountInPence).url}>{Messages("view_progress.pay_now")}</a></p>
+                                    <p id="pay-url"><a class="govuk-link" href=@{routes.PayApiController.startPaymentsJourney(amountInPence).url}>@{Messages("view_progress.pay_now")}</a></p>
                             }
                     </div>
 
