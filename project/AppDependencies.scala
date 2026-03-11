@@ -2,12 +2,12 @@ import sbt.*
 
 object AppDependencies {
 
-  val bootstrapVersion = "10.6.0"
-  val enumeratumVersion = "1.9.5"
+  val bootstrapVersion = "10.7.0"
+  val enumeratumVersion = "1.9.6"
 
   val compile: Seq[ModuleID] = Seq(
     // FORMAT: OFF
-    "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "12.31.0",
+    "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "12.32.0",
     "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapVersion,
     "com.beachape"  %% "enumeratum"                 % enumeratumVersion,
     "com.beachape"  %% "enumeratum-play"            % enumeratumVersion,
