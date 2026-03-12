@@ -14,11 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.Aliases.{Text, BackLink}
-@import uk.gov.hmrc.hmrcfrontend.views.Aliases.Header
+@import uk.gov.hmrc.govukfrontend.views.Aliases.*
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.*
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcReportTechnicalIssueHelper
-
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.v2.{HeaderParams, HeaderUrls}
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcHeader
 @import req.RequestSupport.isLoggedIn
 
 @this(
@@ -31,7 +33,6 @@
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         standardBetaBanner: StandardBetaBanner,
         hmrcStandardFooter: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter,
-        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
         hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcScripts,
         viewConfig: config.ViewConfig
 )
@@ -65,7 +66,6 @@
 }
 
 @beforeContentBlock = {
-@hmrcLanguageSelectHelper()
 @if(hasBackLink){@govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)}
 }
 
@@ -81,17 +81,26 @@
     @hmrcReportTechnicalIssueHelper()
 }
 
+@header = @{
+    hmrcHeader(
+        HeaderParams(
+            headerUrls = HeaderUrls(
+                homepageUrl = "https://www.gov.uk",
+                serviceUrl = viewConfig.frontendBaseUrl + request.path,
+                signOutHref = if (isLoggedIn) Some(viewConfig.signOutWithRedirect(routes.Controller.signout.url)) else None
+            ),
+            banners = Banners(phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl))),
+            serviceNavigation = Some(
+                ServiceNavigation(serviceName = Some(Messages(navTitle))).withLanguageToggle()
+            )
+        )
+    )
+}
+
 @govukLayout(
     pageTitle = Some(s"$title - ${Messages("heading_bta")} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = Some(hmrcHeader(
-        Header(
-        homepageUrl = "https://www.gov.uk",
-        serviceName = Some(Messages(navTitle)),
-        serviceUrl = viewConfig.frontendBaseUrl + request.path,
-        signOutHref = if (isLoggedIn) Some(viewConfig.signOutWithRedirect(routes.Controller.signout.url)) else None,
-        phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl)),
-    ))),
+    headerBlock = Some(header),
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(scripts),
     footerBlock = Some(hmrcStandardFooter()),

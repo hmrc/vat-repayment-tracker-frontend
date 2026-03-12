@@ -41,6 +41,9 @@ trait CommonPage extends WebBrowser with RichMatchers:
 
   def currentPath(using webDriver: WebDriver): String =
     val url = new java.net.URL(webDriver.getCurrentUrl)
+    println(s"wd.getCurrentUrl: ${webDriver.getCurrentUrl}")
+    println(s"java wrapper: $url")
+    println(s"Returned result: ${url.getPath}")
     url.getPath
 
   def clickFinish()(using WebDriver): Unit = probing(_.findElement(By.id("finish")).click())
@@ -50,11 +53,11 @@ trait CommonPage extends WebBrowser with RichMatchers:
   def clickContinue()(using WebDriver): Unit = probing(_.findElement(By.id("next")).click())
 
   def clickOnEnglishLink()(using WebDriver): Unit = probing(
-    _.findElement(By.partialLinkText("English")).click()
+    _.findElement(By.partialLinkText("ENG")).click()
   )
 
   def clickOnWelshLink()(using WebDriver): Unit = probing(
-    _.findElement(By.partialLinkText("Cymraeg")).click()
+    _.findElement(By.partialLinkText("CYM")).click()
   )
 
   def clickViewProgress()(using WebDriver): Unit =
