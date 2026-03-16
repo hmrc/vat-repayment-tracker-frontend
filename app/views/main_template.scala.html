@@ -44,7 +44,7 @@
         navTitle: String = "heading_bta",
         fullWidth: Boolean = true,
         hasBackLink: Boolean = false,
-)(mainContent: Html)(using messages: play.api.i18n.Messages, request: RequestHeader)
+)(mainContent: Html)(implicit messages: play.api.i18n.Messages, request: RequestHeader)
 
 @head = {
 
@@ -91,8 +91,12 @@
             ),
             banners = Banners(phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl))),
             serviceNavigation = Some(
-                ServiceNavigation(serviceName = Some(Messages(navTitle))).withLanguageToggle()
-            )
+                ServiceNavigation(
+                    serviceName = Some(Messages(navTitle)),
+                    serviceUrl = Some(viewConfig.frontendBaseUrl + request.path)
+                ).withLanguageToggle()
+            ),
+            language = if (messages.lang.code == "cy") Cy else En
         )
     )
 }
