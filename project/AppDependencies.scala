@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
 
   val bootstrapVersion = "10.7.0"
-  val enumeratumVersion = "1.9.6"
+  val enumeratumVersion = "1.9.7"
 
   val compile: Seq[ModuleID] = Seq(
     // FORMAT: OFF
@@ -18,8 +18,8 @@ object AppDependencies {
   val test: Seq[ModuleID] = Seq(
     // FORMAT: OFF
     "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion,
-    "org.scalatest"          %% "scalatest"              % "3.2.19",
-    "org.jsoup"              % "jsoup"                   % "1.22.1",
+    "org.scalatest"          %% "scalatest"              % "3.2.20",
+    "org.jsoup"              % "jsoup"                   % "1.22.2",
     "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.2",
     "org.wiremock"           % "wiremock-standalone"     % "3.13.2"
     // FORMAT: ON
