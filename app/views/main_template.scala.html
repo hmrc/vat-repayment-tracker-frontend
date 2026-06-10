@@ -86,7 +86,6 @@
         HeaderParams(
             headerUrls = HeaderUrls(
                 homepageUrl = "https://www.gov.uk",
-                serviceUrl = viewConfig.frontendBaseUrl + request.path,
                 signOutHref = if (isLoggedIn) Some(viewConfig.signOutWithRedirect(routes.Controller.signout.url)) else None
             ),
             banners = Banners(phaseBanner = Some(standardBetaBanner(url = viewConfig.feedbackUrl))),

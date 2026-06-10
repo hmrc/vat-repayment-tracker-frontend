@@ -36,21 +36,21 @@
 .payments .table-label:hover,
 .app-step-nav__button:focus,
 html {
-    background-color: #f3f2f1;
+    background-color: #f3f3f3;
 }
 
 .button--secondary:active {
-    -webkit-box-shadow: 0px 0px 0px #f3f2f1;
-    box-shadow: 0px 0px 0px #f3f2f1
+    -webkit-box-shadow: 0px 0px 0px #f3f3f3;
+    box-shadow: 0px 0px 0px #f3f3f3
 }
 
 .block-label,
 .block-label--stacked {
-    border-color: #f3f2f1;
+    border-color: #f3f3f3;
 }
 
 .dynamically-displayed {
-    border-left: 5px solid #f3f2f1;
+    border-left: 5px solid #f3f3f3;
 }
 
 .explore a,
@@ -63,17 +63,17 @@ html {
 .explore--inside-government .button--link-style,
 .explore--inline .button--link-style,
 .explore--inline__links {
-    color: #f3f2f1;
+    color: #f3f3f3;
 }
 
 .indent {
-    border-left-color: #f3f2f1;
+    border-left-color: #f3f3f3;
 }
 
 .services-dashboard .service-option--links:first-child .service-option--item,
 .account-menu__link:hover,
 .is-smaller .account-menu__link--back {
-    border-bottom-color: #f3f2f1;
+    border-bottom-color: #f3f3f3;
 }
 
 .heading--underlined,
@@ -214,20 +214,20 @@ button[disabled]:hover,
 .toggle__button--active:hover,
 .toggle__button--active:focus,
 .button[disabled="disabled"] {
-    background-color: #00703c;
+    background-color: #0f7a52;
 }
 
 button:active,
 .button:active,
 .button--small:active {
-    -webkit-box-shadow: 0px 0px 0px #00703c;
-    box-shadow: 0px 0px 0px #00703c;
+    -webkit-box-shadow: 0px 0px 0px #0f7a52;
+    box-shadow: 0px 0px 0px #0f7a52;
 }
 
 .list--ticks li::before,
 .tick,
 .form-hint-list-item--valid {
-    color: #00703c;
+    color: #0f7a52;
 }
 
 .button--alert,
@@ -246,12 +246,12 @@ button:active,
 .highlight-block--red,
 .main-nav .count,
 .badge {
-    background-color: #d4351c;
+    background-color: #ca3535;
 }
 
 .button--alert:active {
-    -webkit-box-shadow: 0px 0px 0px #d4351c;
-    box-shadow: 0px 0px 0px #d4351c;
+    -webkit-box-shadow: 0px 0px 0px #ca3535;
+    box-shadow: 0px 0px 0px #ca3535;
 }
 
 .email-form-errors .error-notification,
@@ -262,14 +262,14 @@ button:active,
 .error-summary .error-summary-list a,
 .error-summary .error-summary-list .link-style,
 .error-summary .error-summary-list .button--link-style {
-    color: #d4351c;
+    color: #ca3535;
 }
 
 .email-form-errors .error-notification,
 .attorneyBanner--client-request-rejected,
 .business-tax .content__body .flag.flag--urgent,
 .form-group-error {
-    border-left-color: #d4351c;
+    border-left-color: #ca3535;
 }
 
 .business-tax .alert--failure,
@@ -278,11 +278,11 @@ textarea.form-control-error,
 input.form-control-error[type="text"],
 input.form-control-error[type="password"],
 .error-summary {
-    border-color: #d4351c;
+    border-color: #ca3535;
 }
 
 .form-control-error.form-control-error.form-control-error {
-    border-color: #d4351c;
+    border-color: #ca3535;
 }
 
 
@@ -483,7 +483,7 @@ textarea:focus {
     margin-top: 20px;
     margin-bottom: 20px;
     clear: both;
-    border-left: 10px solid #b1b4b6;
+    border-left: 10px solid #cecece;
 }
 
 @media (min-width: 40.0625em) {
@@ -573,7 +573,7 @@ textarea:focus {
     transform: rotate(225deg);
     border: solid;
     border-width: 1px 1px 0px 0px;
-    border-color: #505a5f;
+    border-color: #484949;
     clip-path: none;
 }
 .govuk-back-link:link, .govuk-back-link:visited, .govuk-back-link:hover, .govuk-back-link:active, .govuk-back-link:focus {
