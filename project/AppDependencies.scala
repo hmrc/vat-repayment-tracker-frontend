@@ -7,7 +7,7 @@ object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     // FORMAT: OFF
-    "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "13.11.0",
+    "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "13.16.0",
     "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapVersion,
     "com.beachape"  %% "enumeratum"                 % enumeratumVersion,
     "com.beachape"  %% "enumeratum-play"            % enumeratumVersion,
@@ -19,7 +19,7 @@ object AppDependencies {
     // FORMAT: OFF
     "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion,
     "org.scalatest"          %% "scalatest"              % "3.2.20",
-    "org.jsoup"              % "jsoup"                   % "1.23.2",
+    "org.jsoup"              % "jsoup"                   % "1.24.1",
     "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.2",
     "org.wiremock"           % "wiremock-standalone"     % "3.13.2"
     // FORMAT: ON
